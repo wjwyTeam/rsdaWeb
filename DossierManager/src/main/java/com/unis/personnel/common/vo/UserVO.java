@@ -112,5 +112,24 @@ public class UserVO extends BaseEntity{
 	 private  String filed5;   //备用字段
 	@ApiModelProperty("备用字段")
 	 private  String filed6;   //备用字段
+	public String getPassWord() {
+		return passWord;
+	}
+	public void setPassWord(String passWord) {
+		this.passWord = passWord;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 	
 }
