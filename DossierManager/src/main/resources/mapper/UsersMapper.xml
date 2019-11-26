@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unis.personnel.server.dao.UserMapper">
+	<resultMap id="BaseResultMap" type="com.unis.personnel.server.entity.UserDO">
+		<id column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="pass_word" property="passWord" jdbcType="VARCHAR" />
+		<result column="user_real_name" property="userRealName" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="dept_id" property="deptId" jdbcType="VARCHAR" />
+		<result column="work_dept" property="workDept" 	jdbcType="VARCHAR" />
+		<result column="duty" property="duty" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="user_ip" property="userIp" jdbcType="VARCHAR" />
+		<result column="user_type" property="userType" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="uorder" property="uorder" jdbcType="INTEGER" />
+		<result column="filed1" property="filed1" jdbcType="VARCHAR" />
+		<result column="filed2" property="filed2" jdbcType="VARCHAR" />
+		<result column="filed3" property="filed3" jdbcType="VARCHAR" />
+		<result column="filed4" property="filed4" jdbcType="VARCHAR" />
+		<result column="filed5" property="filed5" jdbcType="VARCHAR" />
+		<result column="filed6" property="filed6" jdbcType="VARCHAR" />
+		<result column="del_flag" property="delFlag" jdbcType="CHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_code" property="creatorCode" 	jdbcType="VARCHAR" />
+		<result column="refresh_date" property="refreshDate" jdbcType="TIMESTAMP" />
+		<result column="refresher" property="refresher" jdbcType="VARCHAR" />
+		<result column="refresher_code" property="refresherCode" jdbcType="VARCHAR" />
+		<result column="base64_photo" property="base64Photo" jdbcType="VARCHAR" />
+		<result column="user_email" property="userEmail" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		user_id, user_name, pass_word, user_real_name, phone, dept_id, work_dept,
+		duty, remark,
+		user_ip, user_type, create_time, uorder, filed1, filed2, filed3, filed4,
+		filed5,
+		filed6, del_flag, status, creator, creator_code, refresh_date, refresher,
+		refresher_code,base64_photo
+	</sql>
+	
+	<select id="findPageList" resultMap="BaseResultMap"  parameterType="com.unis.personnel.common.vo.UserQueryVO">
+		select
+		<include refid="Base_Column_List" />
+		from user
+	   <where>
+	        status =0
+	      <if test="userName != null and userName != ''">
+	         AND user_name = #{userName}
+	     </if>
+	   </where>
+	</select>
+	
+	
+	<!-- 登录验证 -->
+	<select id="selectOne" parameterType="java.lang.String" resultMap="BaseResultMap" useCache="false">
+     	 ${value}
+   </select>
+	
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from user
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="insert" parameterType="com.unis.personnel.server.entity.UserDO">
+		insert into user (user_id, user_name, pass_word,
+		user_real_name, phone, dept_id,
+		work_dept, duty, remark,
+		user_ip, user_type, create_time,
+		uorder, filed1, filed2,
+		filed3, filed4, filed5,
+		filed6, del_flag, status,
+		creator, creator_code, refresh_date,
+		refresher, refresher_code, base64_photo
+		)
+		values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+		#{passWord,jdbcType=VARCHAR},
+		#{userRealName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{deptId,jdbcType=VARCHAR},
+		#{workDept,jdbcType=VARCHAR}, #{duty,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{userIp,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{uorder,jdbcType=INTEGER}, #{filed1,jdbcType=VARCHAR},
+		#{filed2,jdbcType=VARCHAR},
+		#{filed3,jdbcType=VARCHAR}, #{filed4,jdbcType=VARCHAR}, #{filed5,jdbcType=VARCHAR},
+		#{filed6,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR},
+		#{status,jdbcType=CHAR},
+		#{creator,jdbcType=VARCHAR}, #{creatorCode,jdbcType=VARCHAR}, #{refreshDate,jdbcType=TIMESTAMP},
+		#{refresher,jdbcType=VARCHAR}, #{refresherCode,jdbcType=VARCHAR},
+		#{base64Photo,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	
+	<insert id="insertSelective" parameterType="com.unis.personnel.server.entity.UserDO">
+		insert into user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="passWord != null">
+				pass_word,
+			</if>
+			<if test="userRealName != null">
+				user_real_name,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="deptId != null">
+				dept_id,
+			</if>
+			<if test="workDept != null">
+				work_dept,
+			</if>
+			<if test="duty != null">
+				duty,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="userIp != null">
+				user_ip,
+			</if>
+			<if test="userType != null">
+				user_type,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="uorder != null">
+				uorder,
+			</if>
+			<if test="filed1 != null">
+				filed1,
+			</if>
+			<if test="filed2 != null">
+				filed2,
+			</if>
+			<if test="filed3 != null">
+				filed3,
+			</if>
+			<if test="filed4 != null">
+				filed4,
+			</if>
+			<if test="filed5 != null">
+				filed5,
+			</if>
+			<if test="filed6 != null">
+				filed6,
+			</if>
+			<if test="delFlag != null">
+				del_flag,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="creatorCode != null">
+				creator_code,
+			</if>
+			<if test="refreshDate != null">
+				refresh_date,
+			</if>
+			<if test="refresher != null">
+				refresher,
+			</if>
+			<if test="refresherCode != null">
+				refresher_code,
+			</if>
+			<if test="base64Photo != null">
+				base64_photo,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="passWord != null">
+				#{passWord,jdbcType=VARCHAR},
+			</if>
+			<if test="userRealName != null">
+				#{userRealName,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="deptId != null">
+				#{deptId,jdbcType=VARCHAR},
+			</if>
+			<if test="workDept != null">
+				#{workDept,jdbcType=VARCHAR},
+			</if>
+			<if test="duty != null">
+				#{duty,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="userIp != null">
+				#{userIp,jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null">
+				#{userType,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="uorder != null">
+				#{uorder,jdbcType=INTEGER},
+			</if>
+			<if test="filed1 != null">
+				#{filed1,jdbcType=VARCHAR},
+			</if>
+			<if test="filed2 != null">
+				#{filed2,jdbcType=VARCHAR},
+			</if>
+			<if test="filed3 != null">
+				#{filed3,jdbcType=VARCHAR},
+			</if>
+			<if test="filed4 != null">
+				#{filed4,jdbcType=VARCHAR},
+			</if>
+			<if test="filed5 != null">
+				#{filed5,jdbcType=VARCHAR},
+			</if>
+			<if test="filed6 != null">
+				#{filed6,jdbcType=VARCHAR},
+			</if>
+			<if test="delFlag != null">
+				#{delFlag,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=CHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorCode != null">
+				#{creatorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="refreshDate != null">
+				#{refreshDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="refresher != null">
+				#{refresher,jdbcType=VARCHAR},
+			</if>
+			<if test="refresherCode != null">
+				#{refresherCode,jdbcType=VARCHAR},
+			</if>
+			<if test="base64Photo != null">
+				#{base64Photo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.unis.personnel.server.entity.UserDO">
+		update user
+		<set>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="passWord != null">
+				pass_word = #{passWord,jdbcType=VARCHAR},
+			</if>
+			<if test="userRealName != null">
+				user_real_name = #{userRealName,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="deptId != null">
+				dept_id = #{deptId,jdbcType=VARCHAR},
+			</if>
+			<if test="workDept != null">
+				work_dept = #{workDept,jdbcType=VARCHAR},
+			</if>
+			<if test="duty != null">
+				duty = #{duty,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="userIp != null">
+				user_ip = #{userIp,jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null">
+				user_type = #{userType,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="uorder != null">
+				uorder = #{uorder,jdbcType=INTEGER},
+			</if>
+			<if test="filed1 != null">
+				filed1 = #{filed1,jdbcType=VARCHAR},
+			</if>
+			<if test="filed2 != null">
+				filed2 = #{filed2,jdbcType=VARCHAR},
+			</if>
+			<if test="filed3 != null">
+				filed3 = #{filed3,jdbcType=VARCHAR},
+			</if>
+			<if test="filed4 != null">
+				filed4 = #{filed4,jdbcType=VARCHAR},
+			</if>
+			<if test="filed5 != null">
+				filed5 = #{filed5,jdbcType=VARCHAR},
+			</if>
+			<if test="filed6 != null">
+				filed6 = #{filed6,jdbcType=VARCHAR},
+			</if>
+			<if test="delFlag != null">
+				del_flag = #{delFlag,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=CHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorCode != null">
+				creator_code = #{creatorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="refreshDate != null">
+				refresh_date = #{refreshDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="refresher != null">
+				refresher = #{refresher,jdbcType=VARCHAR},
+			</if>
+			<if test="refresherCode != null">
+				refresher_code = #{refresherCode,jdbcType=VARCHAR},
+			</if>
+			<if test="base64Photo != null">
+				base64_photo = #{base64Photo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateByPrimaryKeyWithBLOBs"
+		parameterType="com.unis.personnel.server.entity.UserDO">
+		update user
+		set user_name = #{userName,jdbcType=VARCHAR},
+		pass_word = #{passWord,jdbcType=VARCHAR},
+		user_real_name = #{userRealName,jdbcType=VARCHAR},
+		phone = #{phone,jdbcType=VARCHAR},
+		dept_id = #{deptId,jdbcType=VARCHAR},
+		work_dept = #{workDept,jdbcType=VARCHAR},
+		duty = #{duty,jdbcType=VARCHAR},
+		remark = #{remark,jdbcType=VARCHAR},
+		user_ip = #{userIp,jdbcType=VARCHAR},
+		user_type = #{userType,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		uorder = #{uorder,jdbcType=INTEGER},
+		filed1 = #{filed1,jdbcType=VARCHAR},
+		filed2 = #{filed2,jdbcType=VARCHAR},
+		filed3 = #{filed3,jdbcType=VARCHAR},
+		filed4 = #{filed4,jdbcType=VARCHAR},
+		filed5 = #{filed5,jdbcType=VARCHAR},
+		filed6 = #{filed6,jdbcType=VARCHAR},
+		del_flag = #{delFlag,jdbcType=CHAR},
+		status = #{status,jdbcType=CHAR},
+		creator = #{creator,jdbcType=VARCHAR},
+		creator_code = #{creatorCode,jdbcType=VARCHAR},
+		refresh_date = #{refreshDate,jdbcType=TIMESTAMP},
+		refresher = #{refresher,jdbcType=VARCHAR},
+		refresher_code = #{refresherCode,jdbcType=VARCHAR},
+		base64_photo = #{base64Photo,jdbcType=LONGVARCHAR}
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.unis.personnel.server.entity.UserDO">
+		update user
+		set user_name = #{userName,jdbcType=VARCHAR},
+		pass_word = #{passWord,jdbcType=VARCHAR},
+		user_real_name = #{userRealName,jdbcType=VARCHAR},
+		phone = #{phone,jdbcType=VARCHAR},
+		dept_id = #{deptId,jdbcType=VARCHAR},
+		work_dept = #{workDept,jdbcType=VARCHAR},
+		duty = #{duty,jdbcType=VARCHAR},
+		remark = #{remark,jdbcType=VARCHAR},
+		user_ip = #{userIp,jdbcType=VARCHAR},
+		user_type = #{userType,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		uorder = #{uorder,jdbcType=INTEGER},
+		filed1 = #{filed1,jdbcType=VARCHAR},
+		filed2 = #{filed2,jdbcType=VARCHAR},
+		filed3 = #{filed3,jdbcType=VARCHAR},
+		filed4 = #{filed4,jdbcType=VARCHAR},
+		filed5 = #{filed5,jdbcType=VARCHAR},
+		filed6 = #{filed6,jdbcType=VARCHAR},
+		del_flag = #{delFlag,jdbcType=CHAR},
+		status = #{status,jdbcType=CHAR},
+		creator = #{creator,jdbcType=VARCHAR},
+		creator_code = #{creatorCode,jdbcType=VARCHAR},
+		refresh_date = #{refreshDate,jdbcType=TIMESTAMP},
+		refresher = #{refresher,jdbcType=VARCHAR},
+		refresher_code = #{refresherCode,jdbcType=VARCHAR}
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</update>
+</mapper>
