@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title th:text="${name}"></title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="layuiadmin/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" href="layuiadmin/style/login.css" media="all">
+<script src="layuiadmin/js/jsencrypt.min.js"></script>
+</head>
+<body class="bodybg">
+	<textarea hidden id="privkey" rows="15" cols="65">
+	MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIn2zWqU7K/2qm5pOpq5bp9R+3MTnStWTfJU9nC/Vo7UKH9dITPvrELCTK+qlqpx5Fes+l0GY7n6u4n4jyiw4ejsvkZYQ5ww477yLOn2FcoEGuZEwPgSCmfTST0OFUgQqn+/J11k9L92jEHyieE3qmhMkMt0UsVUSJwx/nZxo30ZAgMBAAECgYBD3YHigeuEC4R+14iaf8jo2j0kuGtB3Cxvnlez0otTqw1YyYkBsU49cLKkXvfKVEgM0Ow/QltgKvSBxCE31PrrDka5TygVMqqA/IM7NrDvjUcGLjyoeNmLA8660fWcDxUTlAGN5kxIvUATayVwKVflpWPWu0FPKsWrZustnEo+4QJBAMCmYsWqAKWYMVRXFP3/XGRfio8DV793TOckyBSN9eh8UhgoZyT3u7oeHmDJEwm4aNMHlg1Pcdc6tNsvi1FRCiUCQQC3VNzfF4xOtUgX7vWPL8YVljLuXmy12iVYmg6ofu9l31nwM9FLQ1TRFglvF5LWrIXTQb07PgGd5DJMAQWGsqLlAkAPE7Z9M73TN+L8b8hDzJ1leZi1cpSGdoa9PEKwYR/SrxAZtefEm+LEQSEtf+8OfrEtetWCeyo0pvKKiOEFXytFAkEAgynL/DC0yXsZYUYtmYvshHU5ayFTVagFICbYZeSrEo+BoUDxdI9vl0fU6A5NmBlGhaZ65G+waG5jLc1tTrlvoQJAXBEoPcBNAosiZHQfYBwHqU6mJ9/ZacJh3MtJzGGebfEwJgtln5b154iANqNWXpySBLvkK+Boq7FYRiD83pqmUg==
+	</textarea>
+	<textarea hidden id="pubkey" rows="15" cols="65">
+	MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJ9s1qlOyv9qpuaTqauW6fUftzE50rVk3yVPZwv1aO1Ch/XSEz76xCwkyvqpaqceRXrPpdBmO5+ruJ+I8osOHo7L5GWEOcMOO+8izp9hXKBBrmRMD4Egpn00k9DhVIEKp/vyddZPS/doxB8onhN6poTJDLdFLFVEicMf52caN9GQIDAQAB
+	</textarea>
+	<div class="layadmin-user-login layadmin-user-display-show"
+		id="LAY-user-login" style="display: none;">
+		<div class="layadmin-user-login-main">
+			<div class="layadmin-user-login-box layadmin-user-login-header">
+				<h2>人事档案阅档系统</h2>
+				<p>DEVELOP BY WIWY</p>
+			</div>
+			<div
+				class="layadmin-user-login-box layadmin-user-login-body layui-form">
+				<div class="layui-form-item">
+					<label
+						class="layadmin-user-login-icon layui-icon layui-icon-username"
+						for="LAY-user-login-username"></label> <input type="text"
+						name="userName" id="LAY-user-login-username" lay-verify="required"
+						placeholder="用户名" class="layui-input">
+				</div>
+				<div class="layui-form-item">
+					<label
+						class="layadmin-user-login-icon layui-icon layui-icon-password"
+						for="LAY-user-login-password"></label> <input type="password"
+						name="passWord" id="LAY-user-login-password" lay-verify="required"
+						placeholder="密码" class="layui-input">
+				</div>
+				<div class="layui-form-item">
+					<button class="layui-btn layui-btn-fluid" lay-submit
+						lay-filter="LAY-user-login-submit">登陆</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-trans layadmin-user-login-footer">
+			<p>
+				© 2019 <a href="#">COM.WJWY</a>
+			</p>
+		</div>
+
+	</div>
+
+	<script src="layuiadmin/layui/layui.js"></script>
+	<script>
+	
+		layui.config({
+			base : 'layuiadmin/' //静态资源所在路径
+		}).extend({
+			index : 'lib/index' //主入口模块
+		}).use([ 'index', 'user' ], function() {
+			var $ = layui.$,
+				setter = layui.setter,
+				form = layui.form,
+				router = layui.router(),
+				search = router.search;
+			form.render();
+	
+			//提交
+			form.on('submit(LAY-user-login-submit)', function(obj) {
+				// 加密前的原文
+				var passWord = $("#LAY-user-login-password").val();
+				console.log('这是原文' + passWord);
+				
+				// 进行RSA加密
+				var encrypt = new JSEncrypt();
+				encrypt.setPublicKey($("#pubkey").val());
+				var encrypted = encrypt.encrypt(passWord);
+				
+				// 加密后的密文
+				console.log('这是加密之后的' + encrypted);
+				
+				  var jsonData = {
+				           "userName" : $("#LAY-user-login-username").val(),
+                           "passWord"  : encrypted
+                      };
+				$.ajax({
+					url : "/Login",
+					data : JSON.stringify(jsonData),
+					type : "post",
+					dataType : "json",
+					contentType : "application/json; charset=UTF-8",
+					success : function(data) {
+						layer.msg(data.msg, {
+							offset : '15px',
+							icon : 1,
+							time : 2000
+						}, function() {
+							if (data.status) {
+								location.href = '/LoginHome' ; //后台主页
+							}
+						});
+					},
+					error : function(data) {
+						layer.msg('错误', data.msg);
+					}
+				});
+	
+			});
+	
+	
+			//实际使用时记得删除该代码
+			layer.msg('系统登陆！', {
+				offset : '15px',
+				icon : 1
+			});
+	
+		});
+	</script>
+</body>
+</html>
