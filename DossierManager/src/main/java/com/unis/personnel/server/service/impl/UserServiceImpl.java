@@ -46,22 +46,55 @@ public class UserServiceImpl implements UserService{
 		return userDomain.getPersonInfo(userId);
 	}
 
-	/* (non-Javadoc)
-	 * 分页列表
-	 * @see com.unis.personnel.server.service.UserService#getUserPageListInfo(java.util.Map)
+
+	/* 根据ID 删除数据
+	 * @see com.unis.personnel.server.service.UserService#delete(com.unis.personnel.common.vo.UserVO)
 	 */
 	@Override
-	public List<UserVO> getUserPageListInfo(Map<String, Object> paramMap) {
-		return userDomain.getUserPageListInfo(paramMap);
+	public int delete(UserVO userVO) {
+		return userDomain.delete(userVO);
 	}
 
-	/* (non-Javadoc)
-	 * 分页条数
-	 * @see com.unis.personnel.server.service.UserService#getUserPageTotalCount(java.util.Map)
+	/* 根据ID 查找 数据
+	 * @see com.unis.personnel.server.service.UserService#getUserSql(java.lang.String)
 	 */
 	@Override
-	public int getUserPageTotalCount(Map<String, Object> paramMap) {
-		return userDomain.getUserPageTotalCount(paramMap);
+	public UserVO getUserSql(String userId) {
+		return userDomain.getUserSql(userId);
 	}
+
+	/* 更新用户
+	 * @see com.unis.personnel.server.service.UserService#update(com.unis.personnel.common.vo.UserVO)
+	 */
+	@Override
+	public int update(UserVO userVO) {
+		return userDomain.update(userVO);
+	}
+
+	/* 新增
+	 * @see com.unis.personnel.server.service.UserService#insert(com.unis.personnel.common.vo.UserVO)
+	 */
+	@Override
+	public int insert(UserVO userVO) {
+		return userDomain.insert(userVO);
+	}
+
+	/* 批量删除
+	 * @see com.unis.personnel.server.service.UserService#deleteAll(java.lang.String[])
+	 */
+	@Override
+	public int deleteAll(String[] ids) {
+		return userDomain.deleteAll(ids);
+	}
+
+	/* 根据用户名查询基本信息
+	 * @see com.unis.personnel.server.service.UserService#getUserByName(java.lang.String)
+	 */
+	@Override
+	public UserVO getUserByName(String userName) {
+		return userDomain.getUserByName(userName);
+	}
+
+
 
 }

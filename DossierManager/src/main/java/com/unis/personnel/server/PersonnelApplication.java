@@ -22,7 +22,8 @@ import tk.mybatis.spring.annotation.MapperScan;
  public class PersonnelApplication {
     public static void main( String[] args ){
         SpringApplication.run(PersonnelApplication.class, args);
-        System.out.println("-----------------------------启动成功--------------------------");
+        System.err.println(""
+        		+ "====================================================启动成功=================================================================================");
     }
     
 //    public void onStartup(ServletContext servletContext)throws ServletException {

@@ -39,7 +39,7 @@ public class DruidConfig {
 
     @Autowired
     private Environment environment;
-
+ 
     @Bean
     @ConfigurationProperties(prefix = DB_PREFIX)
     public DataSource druidDataSource() {

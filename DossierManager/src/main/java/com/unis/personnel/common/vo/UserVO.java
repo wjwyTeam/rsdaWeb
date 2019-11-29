@@ -1,4 +1,8 @@
 package com.unis.personnel.common.vo;
+import java.util.Set;
+
+import com.unis.personnel.server.entity.RoleDO;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -119,5 +123,8 @@ public class UserVO extends BaseEntity{
 	@ApiModelProperty("备用字段")
 	 private  String filed6;   //备用字段
 
-	
+	/**
+     * 用户对应的角色集合
+     */
+    private Set<RoleDO> roles;
 }

@@ -46,26 +46,71 @@ public interface UserService  {
 	*/
 	UserVO getPersonInfo(String userId);
 
-	/**
-	 * @Description: 获取列表分页
-	 * @param @param paramMap
-	 * @param @return   
-	 * @return List<UserVO>  
-	 * @throws
-	 * @author ZHANGQI
-	 * @date 2019年11月27日
-	 */
-	List<UserVO> getUserPageListInfo(Map<String, Object> paramMap);
+
 
 	/**
-	 * @Description: 获取数据条数
-	 * @param @param paramMap
+	 * @Description: 根据ID删除用户
+	 * @param @param userVO
 	 * @param @return   
 	 * @return int  
 	 * @throws
 	 * @author ZHANGQI
-	 * @date 2019年11月27日
+	 * @date 2019年11月28日
 	 */
-	int getUserPageTotalCount(Map<String, Object> paramMap);
+	int delete(UserVO userVO);
+
+	/**
+	 * @Description: 更具ID查数据
+	 * @param @param userId   
+	 * @return void  
+	 * @throws
+	 * @author ZHANGQI
+	 * @date 2019年11月28日
+	 */
+	UserVO getUserSql(String userId);
+
+	/**
+	 * @Description: 更新用户
+	 * @param @param userVO
+	 * @param @return   
+	 * @return int  
+	 * @throws
+	 * @author ZHANGQI
+	 * @date 2019年11月28日
+	 */
+	int update(UserVO userVO);
+
+	/**
+	 * @Description: 新增
+	 * @param @param userVO
+	 * @param @return   
+	 * @return int  
+	 * @throws
+	 * @author ZHANGQI
+	 * @date 2019年11月28日
+	 */
+	int insert(UserVO userVO);
+
+	/**
+	 * @Description: 批量删除
+	 * @param @param ids
+	 * @param @return   
+	 * @return int  
+	 * @throws
+	 * @author ZHANGQI
+	 * @date 2019年11月29日
+	 */
+	int deleteAll(String[] ids);
+
+	/**
+	 * @Description: 根据用户名查询个人信息
+	 * @param @param userName
+	 * @param @return   
+	 * @return UserVO  
+	 * @throws
+	 * @author ZHANGQI
+	 * @date 2019年11月29日
+	 */
+	UserVO getUserByName(String userName);
 
 }

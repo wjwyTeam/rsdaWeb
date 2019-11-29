@@ -19,7 +19,7 @@ public enum EnumEntitys {
 	SCUUESS("1", "成功"), 
 	FAILED("2", "失败"),
 	
-	RETURN_MSG("msg","提示"),
+	RETURN_MSG("msg","查询成功"),
 	RETURN_CODE("code","编号"),
 	
 	LOGIN("login", "登录页");

@@ -1,5 +1,7 @@
 package com.unis.personnel.server.entity;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Table;
 
@@ -47,4 +49,9 @@ public class RoleDO extends BaseEntity{
 	
 	@Column(name = "filed6")  
 	private  String filed6; //备用字段6
+	
+	/**
+     * 角色对应权限集合
+     */
+    private Set<Permissions> permissions;
 }

@@ -1,8 +1,7 @@
 package com.unis.personnel.server.dao;
 
 import java.util.List;
-import java.util.Map;
-
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,11 +28,11 @@ public interface UserMapper {
 
     int insert(UserDO record);
 
-    int insertSelective(UserDO record);
+    int insertSelective(UserVO userVO);
 
     UserDO selectByPrimaryKey(String userId);
 
-    int updateByPrimaryKeySelective(UserDO record);
+    int updateByPrimaryKeySelective(UserVO userVO);
 
     int updateByPrimaryKeyWithBLOBs(UserDO record);
 
@@ -60,24 +59,25 @@ public interface UserMapper {
 	public UserDO selectOne(String sql);
 
 	/**
-	 * @Description: 列表
-	 * @param @param paramMap
+	 * @Description: 主键策略生成
+	 * @param @param date
 	 * @param @return   
-	 * @return List<UserVO>  
+	 * @return String  
 	 * @throws
 	 * @author ZHANGQI
-	 * @date 2019年11月27日
+	 * @date 2019年11月28日
 	 */
-	public List<UserVO> getUserPageListInfo(Map<String, Object> paramMap);
+	String getMaxCodeById(@Param("pstr")String pstr);
 
 	/**
-	 * @Description: 数量
-	 * @param @param paramMap
+	 * @Description: 批量删除
+	 * @param @param ids
 	 * @param @return   
 	 * @return int  
 	 * @throws
 	 * @author ZHANGQI
-	 * @date 2019年11月27日
+	 * @date 2019年11月29日
 	 */
-	public int getUserPageTotalCount(Map<String, Object> paramMap);
+	public int deleteAll(String[] ids);
+
 }

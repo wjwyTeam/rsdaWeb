@@ -25,12 +25,12 @@ public abstract class BaseEntity implements Serializable {
      * 状态默认为1
      */
     @Column(name="status")
-    private Integer status = 0;
+    private Integer status;
     /**
      * 状态默认为1
      */
     @Column(name="del_flag")
-    private Integer delFlag = 0;
+    private Integer delFlag;
     
     /**
      * 创建人

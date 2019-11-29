@@ -78,8 +78,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
           <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
         </div>
         
-        <table id="LAY-user-manage" lay-filter="LAY-user-manage">
-        </table>
+        <table id="LAY-user-manage"   lay-filter="LAY-user-manage"> </table>
         <script type="text/html" id="imgTpl"> 
           <img style="display: inline-block; width: 50%; height: 100%;" src= {{ d.avatar }}>
         </script> 
@@ -101,21 +100,109 @@ Date.prototype.Format = function (fmt) { //author: meizz
     var $ = layui.$
     ,form = layui.form
     ,table = layui.table;
+    
+     //监听工具条删除
+  table.on('tool(LAY-user-manage)', function(obj){
+     var data = obj.data;
+     console.log(data)
+     var urlData={userId:data.userId};
+    if(obj.event === 'detail'){
+      layer.msg('ID：'+ data.id + ' 的查看操作');
+    } else if(obj.event === 'del'){
+       layer.confirm('真的删除行么', function(index){
+
+        layer.close(index);
+         $.post("/deleteUser", urlData, function (resultJSONObject) {
+         console.log(resultJSONObject)
+         if(resultJSONObject.success){
+                 obj.del();
+         	     layer.msg("删除成功");
+         }else{
+         		 layer.msg("删除失败");
+         }
+                },"json");
+      });
+    } else if(obj.event === 'edit'){
+                //open 方法合作共用json串
+				$.ajax({
+					url : "/findoneUser",
+					data : JSON.stringify(data),
+					type : "post",
+					dataType : "json",
+				    timeout: 5000,
+					contentType : "application/json; charset=UTF-8",
+					success : function(msgLog) {
+						layer.msg(msgLog.msg, {
+							offset : '15px',
+							icon : 1,
+							time : 1000
+						}, function() {
+							if (msgLog.status) {
+									layer.open({
+								    type: 2,
+								    title: '网站用户修改界面',
+								    maxmin: true
+									,area: ['500px', '450px']
+									,btn: ['确定', '取消']
+									,shadeClose: false,
+									shade: 0.5,
+									content: '/updateInfo?type=2',
+								    yes: function(index, layero){
+							 	    console.log(data)
+						            var iframeWindow = window['layui-layer-iframe'+ index]
+						            ,submitID = 'LAY-user-front-submit'
+						            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+						
+						            //监听提交
+						            iframeWindow.layui.form.on('submit('+ submitID +')', function(dataLog){
+						              var field = dataLog.field; 
+						               console.log("监听提交 ==================="+data)
+						              //获取提交的字段
+						              //提交 Ajax 成功后，静态更新表格中的数据
+						                     $.post("/toUpdateUser", field, function (resultJSONObject) {
+										         console.log(resultJSONObject)
+										         if(resultJSONObject.success){
+										         	     layer.msg("更新成功");
+										         }else{
+										         		 layer.msg("更新失败");
+										         }
+										    },"json");
+						                   table.reload('LAY-user-manage'); //数据刷新
+						              layer.close(index); //关闭弹层
+						            });  
+						            
+						            submit.trigger('click');
+						          }
+							});
+							}
+						});
+					},
+					error : function(msgLog) {
+						layer.msg('错误', msgLog.msg);
+					}
+				});
+    }
+  });
+  
+  
      //第一个实例
           table.render({
               elem: '#LAY-user-manage'
              , even: true
-             ,skin: 'line'
+              ,skin: 'blue'
              , height: 'full-200'
+              ,title: '用户数据表'
+              ,method: 'post'
+			  ,totalRow: true
               ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
              , url: '/userPageInfoList' //数据接口
              , page: false //开启分页 
              , cols: [[ //表头
-               {type:'checkbox'}
-              , { type: 'numbers', title: '序号' }
-              , { field: 'userId', title: 'ID', sort: true, width: 70, hide: true }
-              , { field: 'userName', title: '用户名', sort: true }
-              , { field: 'base64Photo', title: '头像', sort: true }
+                 {checkbox:true,align:'center',LAY_CHECKED:false,filter:'test'}
+               , { type: 'numbers', title: '序号' }
+               , { field: 'userId', title: 'ID', sort: true, width: 70, hide: true }
+               , { field: 'userName', title: '用户名', sort: true }
+               , { field: 'base64Photo', title: '头像', sort: true }
                , { field: 'phone', title: '手机', sort: true }
                , { field: 'userEmail', title: '邮箱', sort: true }
                , { field: 'userSex', title: '性别', sort: true }
@@ -127,13 +214,16 @@ Date.prototype.Format = function (fmt) { //author: meizz
            , { fixed: 'right', title: '操作', width: 178, align: 'center', toolbar: '#table-useradmin-webuser' }
         ]]
          ,page: true
+//          ,id:'testReload'  影响重载
+         ,response: {
+	      	statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+	   	 }
          ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
              layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
 	      //,curr: 5 //设定初始在第 5 页
 	        ,groups: 1 //只显示 1 个连续页码
 	      	,first: false //不显示首页
-	     	 ,last: false //不显示尾页
- 
+	     	,last: false //不显示尾页
             }
       });
     
@@ -144,13 +234,15 @@ Date.prototype.Format = function (fmt) { //author: meizz
       
       //执行重载
       table.reload('LAY-user-manage', {
-        where: field
+       	where: field
       });
     });
   
     //事件
     var active = {
-      batchdel: function(){
+    
+       batchdel: function(){
+       //两种方式
         var checkStatus = table.checkStatus('LAY-user-manage')
         ,checkData = checkStatus.data; //得到选中的数据
 
@@ -158,31 +250,37 @@ Date.prototype.Format = function (fmt) { //author: meizz
           return layer.msg('请选择数据');
         }
         
-        layer.prompt({
-          formType: 1
-          ,title: '敏感操作，请验证口令'
-        }, function(value, index){
-          layer.close(index);
-          
+        //捉到所有被选中的，发异步进行删除
+        var ids = "";
+        if(checkData.length>0){
+        	for(var  i = 0; i < checkData.length;i++){
+        		ids +=  checkData[i].userId+",";
+        	}
+        }
           layer.confirm('确定删除吗？', function(index) {
-            
             //执行 Ajax 后重载
-            /*
-            admin.req({
-              url: 'xxx'
-              //,……
+            $.ajax({
+            	type: "post",
+            	url: "/deleteUserAlls",
+            	data:{"ids":ids},
+            	success: function(data){
+	            	if(data.success){
+	            	 layer.msg('已删除');
+                       table.reload('LAY-user-manage'); //数据刷新
+	            	}else{
+	            	 layer.msg('删除失败');
+	            	}
+            	      console.log(data)
+            	}
             });
-            */
-            table.reload('LAY-user-manage');
-            layer.msg('已删除');
           });
-        });
+	        
       }
       ,add: function(){
         layer.open({
           type: 2
           ,title: '添加用户'
-          ,content: 'userform.html'
+          ,content: '/updateInfo?type=1'
           ,maxmin: true
           ,area: ['500px', '450px']
           ,btn: ['确定', '取消']
@@ -196,8 +294,18 @@ Date.prototype.Format = function (fmt) { //author: meizz
               var field = data.field; //获取提交的字段
               
               //提交 Ajax 成功后，静态更新表格中的数据
-              //$.ajax({});
-              table.reload('LAY-user-front-submit'); //数据刷新
+               console.log("监听提交 ==================="+data)
+              //获取提交的字段
+              //提交 Ajax 成功后，静态更新表格中的数据
+                     $.post("/toUpdateUser", field, function (resultJSONObject) {
+				         console.log(resultJSONObject)
+				         if(resultJSONObject.success){
+				         	     layer.msg("新增成功");
+				         }else{
+				         		 layer.msg("新增失败");
+				         }
+				   },"json");
+              table.reload('LAY-user-manage'); //数据刷新
               layer.close(index); //关闭弹层
             });  
             
@@ -205,6 +313,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
           }
         }); 
       }
+      
     };
     
     $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){

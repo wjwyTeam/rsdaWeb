@@ -18,7 +18,7 @@ public class BaseEntity{
      * 状态默认为1
      */
 	@ApiModelProperty("状态")
-    private Integer status = 1;
+    private Integer status ;
     
     /**
      * 创建人
@@ -43,7 +43,7 @@ public class BaseEntity{
      */
 	
 	@ApiModelProperty("刷新时间")
-    private Date refreshTime;
+    private Date refreshDate;
     
     /**
      * 刷新人
@@ -62,4 +62,10 @@ public class BaseEntity{
      */
 	@ApiModelProperty(" 备注")
     private String remark;
+	
+	/**
+	 * 备注
+	 */
+	@ApiModelProperty(" 标志")
+    private Integer delFlag;
 }
