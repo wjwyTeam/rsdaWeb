@@ -4,14 +4,12 @@
  * @Author: zgr
  * @Date: 2019-11-30 23:18:29
  * @LastEditors: zgr
- * @LastEditTime: 2019-12-03 14:54:29
+ * @LastEditTime: 2019-12-03 18:42:44
  */
 package com.wjwy.rsda.mapper;
 
 import java.util.List;
-
 import com.wjwy.rsda.entity.User;
-
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,7 +18,7 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
-    @Select("select * from sys_user status = 0")
+    @Select("select * from sys_user where status = 0")
     List<User> getAllUsers();
 
     @Select("select * from sys_user where status = 0  and username=#{userName}")

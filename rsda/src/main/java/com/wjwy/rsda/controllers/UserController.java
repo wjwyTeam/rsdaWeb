@@ -11,7 +11,7 @@ import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.entity.resultEntity.ResultJson;
 import com.wjwy.rsda.enums.EnumEntitys;
-import com.wjwy.rsda.service.UserService;
+import com.wjwy.rsda.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;

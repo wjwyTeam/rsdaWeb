@@ -4,9 +4,9 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors: zgr
- * @LastEditTime: 2019-12-03 14:53:49
+ * @LastEditTime: 2019-12-04 07:41:37
  */
-package com.wjwy.rsda.domain;
+package com.wjwy.rsda.services;
 
 import java.util.List;
 import com.github.pagehelper.PageHelper;
@@ -14,14 +14,14 @@ import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 /**
  * @author ZHANGQI
  * @date 2019年11月20日
  * @Description 
  */
-@Component
-public class UserDomain extends BaseDomain{
+@Service("userService")
+public class UserService{
 	@Autowired
 	private UserMapper userDao;
 	/**
@@ -85,11 +85,10 @@ public class UserDomain extends BaseDomain{
 	 * @param @return   
 	 * @return int  
 	 * @throws
-	 * @author ZHANGQI
+	 * @author ZHANGQ
 	 * @date 2019年11月28日
 	 */
 	public int insert(User User) {
-		User.setUserId(this.getMaxCodeById(userDao.getMaxCodeById(""), "", 3));
-		return userDao.insertSelective(User);
+		return userDao.insertSelective(User); 
 	}
 }

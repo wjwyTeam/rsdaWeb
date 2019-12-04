@@ -4,13 +4,12 @@
  * @Author: zgr
  * @Date: 2019-11-30 18:24:05
  * @LastEditors: zgr
- * @LastEditTime: 2019-12-01 20:46:08
+ * @LastEditTime: 2019-12-03 17:47:06
  */
 package com.wjwy.rsda.controllers;
 
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.entity.resultEntity.SimpleResult;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
@@ -22,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import lombok.Data;
+
 /**
  * @author 张广睿
  * @Description: 登录相关mvc及相关util方法
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @Description
  */
 @RestController
+@Data
 public class LoginController {
 	private SimpleResult _simpleResult;
 	LoginController(){
