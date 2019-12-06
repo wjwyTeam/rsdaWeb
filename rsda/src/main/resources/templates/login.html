@@ -82,19 +82,21 @@
 					timeout:3000,
 					dataType : "json",
 					success : function(data) {
-						var icontype = 2;
-						if(data.loginType === 1)
-							icontype = 1;
+						if(data.status == "ERROR")
+							icontype = 2;
+						else  
+						    icontype = 1;
 						layer.msg(data.msg, {
 							offset : '15px',
 							icon : icontype,
 							time : 2000
 						}, function() {
-							if (data.loginType) {
+							if (data.status == "SUCCESS" ) {
 								location.href = data.indexUrl; //后台主页
 							}
 						});
 					},
+				
 					error : function(data) {
 						layer.msg("登录超时，请重新登录或联系系统管理员！",{icon:2});
 					},complete:function(){

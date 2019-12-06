@@ -4,11 +4,10 @@
  * @Author: zgr
  * @Date: 2019-11-30 18:24:05
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-06 09:54:22
+ * @LastEditTime: 2019-12-06 18:58:35
  */
 package com.wjwy.rsda.controller;
-
-import com.wjwy.rsda.common.resultEntity.SimpleResult;
+import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,13 +15,15 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
-import lombok.Data;
 
 /**
  * @author 张广睿
@@ -32,14 +33,8 @@ import lombok.Data;
  */
 @Api(value = "登录配置", tags = "登录配置维护")
 @RestController
-@Data
 public class LoginController {
-	private SimpleResult _simpleResult;
-
-	LoginController() {
-		this._simpleResult = new SimpleResult();
-	}
-
+	public Logger logger = LoggerFactory.getLogger(DepartmentController.class);
 	/**
 	 * 
 	 * @Title: Login
@@ -98,28 +93,24 @@ public class LoginController {
 	}
 
 	@PostMapping("/login")
-	public Object UserLogin(String loginName, String passwordMd5, HttpServletRequest request) {
-		// jdbc案例
-		// JdbcTemplate _jdbc = new JdbcTemplate();
-		// User u =_jdbc.queryForObject("select top 1 * from da_user", new Object[]{},
-		// new BeanPropertyRowMapper<>(User.class));
-		// String a = u.getUsername();
-		Subject subject = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken(loginName, passwordMd5);
+	public ResponseWrapper UserLogin(String loginName, String passwordMd5, HttpServletRequest request) {
 		try {
+			Subject subject = SecurityUtils.getSubject();
+			UsernamePasswordToken token = new UsernamePasswordToken(loginName, passwordMd5);
+
 			subject.login(token);
 			User user = subject.getPrincipals().oneByType(User.class);
+			if(user == null) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "获取失败，用户数据为空", null, "/login");
+			}
 			HttpSession session = request.getSession(true);// 获取库内session
 			session.setAttribute("userInfo", user);
-			_simpleResult.setLoginType(1);
-			_simpleResult.setMsg("登录成功，即将跳转页面");
-			_simpleResult.setIndexUrl("/index");
-		} catch (UnknownAccountException uae) {
-			_simpleResult.setLoginType(0);
-			_simpleResult.setMsg("登录失败，密码错误或用户名不存在");
-			_simpleResult.setIndexUrl("/login");
-		}
-		return _simpleResult;
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功",user, "/index");
+		} catch (UnknownAccountException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+        return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),"服务错误，请联系管理员");
 	}
 
 	// /**

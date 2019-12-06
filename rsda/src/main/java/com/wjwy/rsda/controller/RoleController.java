@@ -1,12 +1,9 @@
 package com.wjwy.rsda.controller;
-
 import java.util.List;
-
 import com.alibaba.fastjson.JSONObject;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.RoleService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -172,5 +168,9 @@ public class RoleController {
 			logger.error(e.toString(), e);
 		}
 		return resultJSONObject;
-	}
+    }
+
+
+
+    
 }

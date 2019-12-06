@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-06 11:33:00
+ * @LastEditTime: 2019-12-06 17:53:50
  */
 package com.wjwy.rsda.services;
 
@@ -14,9 +14,13 @@ import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.MD5Util;
 import com.wjwy.rsda.common.util.UUIDUtils;
 import com.wjwy.rsda.entity.User;
+import com.wjwy.rsda.entity.UserRole;
 import com.wjwy.rsda.mapper.UserMapper;
+import com.wjwy.rsda.mapper.UserRoleMapper;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +38,11 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 public class UserService {
 	@Autowired
 	private UserMapper userDao;
+
+	@Autowired
+	private UserRoleMapper userRoleDao;
+
+	public Logger logger = LoggerFactory.getLogger(UserService.class);
 
 	/**
 	 * @param userQueryVO
@@ -167,5 +176,33 @@ public class UserService {
 		}
 
 		return userDao.selectByExample(example);
+	}
+
+	/**
+	 * 用户添加多个角色
+	 * 
+	 * @param userId
+	 * @param ids
+	 * @return
+	 */
+	public boolean userSelRole(String userId, String[] ids) {
+		if (userId.isEmpty() || userId == null) {
+			return false;
+		}
+		UserRole userRole = new UserRole();
+		userRole.setUserId(userId);
+		Example example = new Example(UserRole.class);
+		Criteria criteria = example.createCriteria();
+		// 将当前用户所选角色全部清除，新增
+		criteria.andEqualTo(userId);
+		logger.info(userId, userRoleDao.deleteByExample(example));
+		for (String roleId : ids) {
+			criteria.andEqualTo("roleId", roleId);
+			userRole.setRId(UUIDUtils.uuid().toLowerCase());
+			userRole.setRoleId(roleId);
+			logger.info(roleId, userRoleDao.insertSelective(userRole));
+		}
+
+		return true;
 	}
 }

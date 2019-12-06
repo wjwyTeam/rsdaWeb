@@ -293,4 +293,23 @@ public class UserController {
 		model.setViewName("webview/user/info");
 		return model;
 	}
+
+
+	@ApiOperation(value = "根据用户选择角色", notes = "参数：userId-用户主键,ids-角色数组")
+	@GetMapping("/userSelRole")
+	public  void  userSelRole(String userId,String ids[]){
+
+		try {
+			boolean flag = userService.userSelRole(userId, ids);
+			if (flag) {
+				
+			}
+		} catch (Exception e) {
+			
+		}
+		
+
+	}
+
+
 }
