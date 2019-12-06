@@ -1,4 +1,4 @@
-package com.wjwy.rsda.config;
+package com.wjwy.rsda.common.config;
 
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;

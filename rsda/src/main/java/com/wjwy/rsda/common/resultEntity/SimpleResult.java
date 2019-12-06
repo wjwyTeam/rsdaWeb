@@ -6,7 +6,7 @@
  * @LastEditors: zgr
  * @LastEditTime: 2019-11-30 22:48:51
  */
-package com.wjwy.rsda.entity.resultEntity;
+package com.wjwy.rsda.common.resultEntity;
 
 import java.io.Serializable;
 import lombok.Data;

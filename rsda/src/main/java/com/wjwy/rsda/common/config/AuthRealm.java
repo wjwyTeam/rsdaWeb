@@ -3,10 +3,10 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-12-01 18:43:19
- * @LastEditors: zgr
- * @LastEditTime: 2019-12-01 20:29:57
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-04 15:35:42
  */
-package com.wjwy.rsda.config;
+package com.wjwy.rsda.common.config;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.wjwy.rsda.entity.User;
-import com.wjwy.rsda.mapper.UserMapper;
+import com.wjwy.rsda.services.UserService;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -43,7 +43,7 @@ import org.springframework.context.annotation.Configuration;
 public class AuthRealm extends AuthorizingRealm {
 
     @Autowired
-	private UserMapper userMapper;
+	private UserService userService;
     /**
      * 认证回调函数,登录时调用
      * 首先根据传入的用户名获取User信息；然后如果user为空，那么抛出没找到帐号异常UnknownAccountException；
@@ -61,7 +61,7 @@ public class AuthRealm extends AuthorizingRealm {
                 for (char p : (char [])token.getCredentials()) {
                     passWord.append(p);
                 }
-        User user = Optional.ofNullable(userMapper.getUserByLogin(token.getPrincipal().toString(),passWord.toString())).orElseThrow(UnknownAccountException::new);
+        User user = Optional.ofNullable(userService.getUserByLogin(token.getPrincipal().toString(),passWord.toString())).orElseThrow(UnknownAccountException::new);
         //锁定账户先空着， 暂时用不上
         // if (!user.isLocked()) {
         //     throw new LockedAccountException();

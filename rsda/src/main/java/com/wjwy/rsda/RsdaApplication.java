@@ -3,19 +3,31 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-11-29 20:39:17
- * @LastEditors: zgr
- * @LastEditTime: 2019-12-03 17:59:02
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-06 10:36:34
  */
 package com.wjwy.rsda;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import com.wjwy.rsda.common.TkMapper;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import tk.mybatis.spring.annotation.MapperScan;
+//启动注解事务管理
 @SpringBootApplication
-public class RsdaApplication {
+@EnableTransactionManagement
+@MapperScan(basePackages = { "com.wjwy.rsda.mapper" },markerInterface = TkMapper.class)
+public class RsdaApplication {//启动注解事务管理,等同于xml配置方式的<tk:annotation-driven/> 解析--创建并注册事务advisor；
 	private static Logger logger = LogManager.getLogger(RsdaApplication.class);
+
 	public static void main(String[] args) {
+		// 放到自定义的res目录下的方式
+		// PropertyConfigurator.configure(System.getProperty("logging.config",
+		// "log4j.properties"));
 		SpringApplication.run(RsdaApplication.class, args);
 		logger.info("=====-----------------------------启动成功--------------------------====");
 	}

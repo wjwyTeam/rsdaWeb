@@ -2,18 +2,17 @@
  * @Descripttion: 
  * @version: v0.0.1
  * @Author: ZHANGQI
- * @Date: 2019-12-06 11:22:13
+ * @Date: 2019-12-06 11:18:35
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-06 11:33:18
+ * @LastEditTime: 2019-12-06 11:20:28
  */
 package com.wjwy.rsda.mapper;
 
 import com.wjwy.rsda.common.TkMapper;
-import com.wjwy.rsda.entity.User;
+import com.wjwy.rsda.entity.Role;
 
 import org.apache.ibatis.annotations.Mapper;
-
 @Mapper
-public interface UserMapper extends TkMapper<User> {
+public interface RoleMapper extends TkMapper<Role> {
 
 }
