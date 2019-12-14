@@ -1,12 +1,13 @@
 package com.wjwy.rsda.controller;
+
 import java.util.List;
-import com.alibaba.fastjson.JSONObject;
+import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Role;
-import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RequestMapping("/role")
 @RestController
-@Api(value = "用户所属角色", tags = "用户所属角色维护")
+@Api(value = "用户所属角色", tags = "用户所属角色配置")
 public class RoleController {
     /**
      * 所属角色业务层注入
@@ -35,31 +36,26 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    public Logger logger = LoggerFactory.getLogger(DepartmentController.class);
+    public Logger logger = LoggerFactory.getLogger(RoleController.class);
 
     /**
      * 列表查询
      * 
      * @param id
      * @param name
+     * @return ResponseWrapper
      */
     @ApiOperation(value = "角色列表", notes = "参数:id-主键, name-角色名称")
     @GetMapping("/roleFindList")
-    public void roleFindList(String id, String name) {
-        JSONObject json = new JSONObject();
+    public ResponseWrapper roleFindList(String id, String name) {
         try {
             List<Role> roleList = roleService.findList(id, name);
-            json.put("count", roleList.size());
-            json.put("data", roleList);
-            json.put("msg", "success");
-            if (!roleList.isEmpty()) {
-                json.put("code", 200);
-            }
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList, null, roleList.size());
         } catch (Exception e) {
-            logger.error(e.toString(), e);
-            json.put(String.valueOf(EnumEntitys.RETURN_MSG.getValue()), "error");
-            json.put(String.valueOf(EnumEntitys.RETURN_CODE.getValue()), "400");
+            logger.error(e.getMessage());
         }
+        return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 
     }
 
@@ -67,110 +63,139 @@ public class RoleController {
      * 角色新增
      * 
      * @param role
-     * @return
+     * @return ResponseWrapper
      */
     @ApiOperation(value = "角色新增", notes = "参数:Role-JSON对象")
     @PostMapping("/roleInsert")
-    public JSONObject insertRole(@RequestBody Role role) {
-        JSONObject resultJSONObject = new JSONObject();
+    public ResponseWrapper insertRole(@RequestBody Role role) {
+
         try {
-            int resultTotal = 0;// 操作的记录数
-            resultTotal = roleService.insertRole(role);
-            boolean flag = false;
-            if (resultTotal > 0) {
-                flag = true;
+            int resultTotal = roleService.insertRole(role);
+            if (resultTotal == 0) {
+                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
             }
-            resultJSONObject.put("success", flag);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
         } catch (Exception e) {
-            logger.error(e.toString(), e);
+            logger.error(e.getMessage());
         }
-        return resultJSONObject;
+        return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
 
-
-     /**
+    /**
      * 角色更新
      * 
      * @param role
-     * @return
+     * @return ResponseWrapper
      */
     @ApiOperation(value = "角色更新", notes = "参数:Role-JSON对象")
     @PostMapping("/updateRole")
-    public JSONObject updateRole(@RequestBody Role role) {
-        JSONObject resultJSONObject = new JSONObject();
+    public ResponseWrapper updateRole(@RequestBody Role role) {
         try {
-            int resultTotal = 0;// 操作的记录数
-            resultTotal = roleService.updateRole(role);
-            boolean flag = false;
-            if (resultTotal > 0) {
-                flag = true;
+            int resultTotal = roleService.updateRole(role);
+            if (resultTotal == 0) {
+                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
             }
-            resultJSONObject.put("success", flag);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
         } catch (Exception e) {
-            logger.error(e.toString(), e);
+            logger.error(e.getMessage());
         }
-        return resultJSONObject;
+        return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
 
-
+    /**
+     * 根据用户ID批量删除角色
+     * 
+     * @param ids
+     * @return ResponseWrapper
+     */
     @ResponseBody
-	@ApiOperation(value = "根据用户ID批量删除角色", notes = "根据用户ID批量删除角色")
-	@PostMapping("/deleteRoleAlls")
-	public JSONObject deleteRoleAlls(String[] ids) {
+    @ApiOperation(value = "根据用户ID批量删除角色", notes = "根据用户ID批量删除角色")
+    @PostMapping("/deleteRoleAlls")
+    public ResponseWrapper deleteRoleAlls(String[] ids) {
+        ResponseWrapper rmAll = null;
+        for (String id : ids) {
+            if (!id.isEmpty()) {
+                rmAll = deleteRole(id);
+            }
+        }
+        return rmAll;
+    }
 
-		JSONObject resultJSONObject = new JSONObject();
-		try {
-			int resultTotal = 0;
-			Role role = new Role();
-			for (String id : ids) {
-				if (!id.isEmpty()) {
-					role.setId(id);
-					resultTotal = roleService.delete(role);
-				}
-			}
-			boolean flag = false;
-			if (resultTotal > 0) {
-				flag = true;
-			}
-			resultJSONObject.put("success", flag);
+    /**
+     * 根据用户ID删除角色
+     * 
+     * @param id
+     * @return ResponseWrapper
+     */
+    @ApiOperation(value = "根据用户ID删除角色", notes = "参数:id-主键")
+    @PostMapping("/deleteRole")
+    public ResponseWrapper deleteRole(String id) {
 
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-		}
+        try {
+            Role role = new Role();
+            role.setId(id);
+            int resultTotal = roleService.delete(role);
+            if (resultTotal == 0) {
+                return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前角色]", null, null, null);
+            } else if (resultTotal == HttpStatus.GONE.value()) {
+                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "数据中不存在当前角色", null, null, null);
+            }
+            return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
 
-		return resultJSONObject;
-	}
+        return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+    }
 
-	/**
-	 * @Description: 根据用户ID删除用户
-	 * @param
-	 * @return
-	 * @return void
-	 * @throws JSONException
-	 * @throws @author       ZHANGQI
-	 * @date 2019年11月28日
+
+    /**
+	 * 根据角色选择功能
+	 * 
+	 * @param id
+	 * @param ids
+	 * @return ResponseWrapper
 	 */
-	@ApiOperation(value = "根据用户ID删除角色", notes = "参数:id-主键")
-	@PostMapping("/deleteRole")
-	public JSONObject deleteRole(String id) {
-		JSONObject resultJSONObject = new JSONObject();
-		try {
-			Role role = new Role();
-			role.setId(id);
-			int resultTotal = roleService.delete(role);
+	@ApiOperation(value = "根据角色选择功能", notes = "参数：id-角色主键,ids-功能数组")
+	@GetMapping("/roleSelFunction")
+	public ResponseWrapper roleSelFunction(String id, String ids[]) {
 
-			boolean flag = false;
-			if (resultTotal > 0) {
-				flag = true;
+		try {
+			boolean flag = roleService.roleSelFunction(id, ids);
+			if (!flag) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
 			}
-			resultJSONObject.put("success", flag);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
 		} catch (Exception e) {
-			logger.error(e.toString(), e);
+			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		return resultJSONObject;
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+    }
+    
+
+    @ApiOperation(value = "根据角色查询功能", notes = "参数：id-角色主键")
+	@GetMapping("/getFunction")
+	public ResponseWrapper getFunction(String id) {
+
+		try {
+			boolean flag = roleService.getFunction(id);
+			if (!flag) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "查询失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "查询成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
 
 
 
-    
 }

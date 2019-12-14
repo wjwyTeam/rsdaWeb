@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-01 18:43:19
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-04 15:35:42
+ * @LastEditTime: 2019-12-09 16:18:35
  */
 package com.wjwy.rsda.common.config;
 
@@ -31,7 +31,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-
 /**
  * 认证领域
  *
@@ -43,7 +42,8 @@ import org.springframework.context.annotation.Configuration;
 public class AuthRealm extends AuthorizingRealm {
 
     @Autowired
-	private UserService userService;
+    private UserService userService;
+
     /**
      * 认证回调函数,登录时调用
      * 首先根据传入的用户名获取User信息；然后如果user为空，那么抛出没找到帐号异常UnknownAccountException；
@@ -55,16 +55,17 @@ public class AuthRealm extends AuthorizingRealm {
      * CredentialsMatcher使用盐加密传入的明文密码和此处的密文密码进行匹配。
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
-            throws AuthenticationException {
-                StringBuffer passWord=new StringBuffer();
-                for (char p : (char [])token.getCredentials()) {
-                    passWord.append(p);
-                }
-        User user = Optional.ofNullable(userService.getUserByLogin(token.getPrincipal().toString(),passWord.toString())).orElseThrow(UnknownAccountException::new);
-        //锁定账户先空着， 暂时用不上
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+        StringBuffer passWord = new StringBuffer();
+        for (char p : (char[]) token.getCredentials()) {
+            passWord.append(p);
+        }
+        User user = Optional
+                .ofNullable(userService.getUserByLogin(token.getPrincipal().toString(), passWord.toString()))
+                .orElseThrow(UnknownAccountException::new);
+        // 锁定账户先空着， 暂时用不上
         // if (!user.isLocked()) {
-        //     throw new LockedAccountException();
+        // throw new LockedAccountException();
         // }
         // 从数据库查询出来的账号名和密码,与用户输入的账号和密码对比
         // 当用户执行登录时,在方法处理上要实现 user.login(token)
@@ -72,10 +73,11 @@ public class AuthRealm extends AuthorizingRealm {
         // 交给 AuthenticatingRealm 使用 CredentialsMatcher 进行密码匹配，如果觉得人家的不好可以自定义实现
         //
         // 存入用户信息
-		List<Object> principals = new ArrayList<Object>();
-		principals.add(user.getUserName());
-		principals.add(user);
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principals, user.getPassWord(), getName());
+        List<Object> principals = new ArrayList<Object>();
+        principals.add(user.getUserName());
+        principals.add(user);
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principals, user.getPassWord(),
+                getName());
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("USER_SESSION", user);
         return authenticationInfo;
@@ -87,7 +89,7 @@ public class AuthRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-         SecurityUtils.getSubject().getPrincipal();
+        SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> stringSet = new HashSet<>();
         stringSet.add("user:show");

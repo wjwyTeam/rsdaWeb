@@ -4,9 +4,10 @@
  * @Author: zgr
  * @Date: 2019-11-30 18:24:05
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-06 18:58:35
+ * @LastEditTime: 2019-12-10 18:30:06
  */
 package com.wjwy.rsda.controller;
+
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.User;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,8 @@ import io.swagger.annotations.Api;
 @Api(value = "登录配置", tags = "登录配置维护")
 @RestController
 public class LoginController {
-	public Logger logger = LoggerFactory.getLogger(DepartmentController.class);
+	public Logger logger = LoggerFactory.getLogger(LoginController.class);
+
 	/**
 	 * 
 	 * @Title: Login
@@ -100,17 +102,15 @@ public class LoginController {
 
 			subject.login(token);
 			User user = subject.getPrincipals().oneByType(User.class);
-			if(user == null) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "获取失败，用户数据为空", null, "/login");
+			if (user == null) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "账号/密码不能为空", null, "/login", null);
 			}
 			HttpSession session = request.getSession(true);// 获取库内session
 			session.setAttribute("userInfo", user);
-            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功",user, "/index");
+			return ResponseWrapper.success(HttpStatus.OK.value(), "登陆中,请稍候...", user, "/index", null);
 		} catch (UnknownAccountException e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }
-        return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),"服务错误，请联系管理员");
+			return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "此用户不存在", null, "/login", null);
+		}
 	}
 
 	// /**

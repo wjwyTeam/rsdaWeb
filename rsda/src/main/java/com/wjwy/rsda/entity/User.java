@@ -4,10 +4,11 @@
  * @Author: zgr
  * @Date: 2019-11-30 22:58:25
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-06 19:01:49
+ * @LastEditTime: 2019-12-13 09:17:46
  */
 package com.wjwy.rsda.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -24,11 +25,16 @@ import lombok.ToString;
 
 @Data
 @ToString
-@AllArgsConstructor 
-@NoArgsConstructor 
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel("用户=>实体")
 @Table(name = "sys_user")
-public class User {
+public class User implements Serializable{
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@ApiModelProperty("ID")
 	@Column(name = "user_id")
@@ -72,7 +78,7 @@ public class User {
 
 	@ApiModelProperty("性别")
 	@Column(name = "user_sex")
-	private Boolean userSex; // 性别
+	private String userSex; // 性别
 
 	@ApiModelProperty("类型   U001 启用   U002  停用   U003  注销  U004  临时账户（管理不体现，临时管理再提现）")
 	@Column(name = "user_type")
@@ -80,7 +86,7 @@ public class User {
 
 	@ApiModelProperty("排序")
 	@Column(name = "u_order")
-	private Integer uOrder; // 排序
+	private Integer uorder; // 排序
 
 	@ApiModelProperty("备注")
 	@Column(name = "remark")
@@ -101,9 +107,9 @@ public class User {
 
 	@ApiModelProperty("指定路径")
 	@Column(name = "index_url")
-    private String indexUrl;
+	private String indexUrl;
 
-	@ApiModelProperty("角色列表")
+	@ApiModelProperty(name = "角色列表")
 	private List<Role> roles;
 
 }

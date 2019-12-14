@@ -1,4 +1,14 @@
+/*
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2019-12-06 15:02:00
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-11 08:59:45
+ */
 package com.wjwy.rsda.entity;
+
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -18,13 +28,18 @@ import lombok.ToString;
  * @LastEditTime: 2019-12-06 08:07:23
  */
 
-
 @Data
 @ToString
-@AllArgsConstructor 
-@NoArgsConstructor 
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "sys_user_role_r")
-public class UserRole {
+public class UserRole implements Serializable{
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
 
     @ApiModelProperty("主键")
     @Column(name = "r_id")

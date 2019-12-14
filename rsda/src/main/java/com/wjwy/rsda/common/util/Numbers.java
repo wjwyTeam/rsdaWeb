@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Numbers {
-	final static char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
-			'9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-			'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
-			'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-			'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
-			'Z' };
+	final static char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+			'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B',
+			'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+			'X', 'Y', 'Z' };
 
 	final static Map<Character, Integer> digitMap = new HashMap<Character, Integer>();
 
@@ -72,10 +70,8 @@ public class Numbers {
 	/**
 	 * 将字符串转换为长整型数字
 	 * 
-	 * @param s
-	 *            数字字符串
-	 * @param radix
-	 *            进制数
+	 * @param s     数字字符串
+	 * @param radix 进制数
 	 * @return
 	 */
 	public static long toNumber(String s, int radix) {
@@ -84,12 +80,10 @@ public class Numbers {
 		}
 
 		if (radix < MIN_RADIX) {
-			throw new NumberFormatException("radix " + radix
-					+ " less than Numbers.MIN_RADIX");
+			throw new NumberFormatException("radix " + radix + " less than Numbers.MIN_RADIX");
 		}
 		if (radix > MAX_RADIX) {
-			throw new NumberFormatException("radix " + radix
-					+ " greater than Numbers.MAX_RADIX");
+			throw new NumberFormatException("radix " + radix + " greater than Numbers.MAX_RADIX");
 		}
 
 		long result = 0;
@@ -138,7 +132,7 @@ public class Numbers {
 	}
 
 	public static Integer parseInteger(Object obj) {
-		if(null == obj) {
+		if (null == obj) {
 			return null;
 		}
 		return Integer.parseInt(String.valueOf(obj));

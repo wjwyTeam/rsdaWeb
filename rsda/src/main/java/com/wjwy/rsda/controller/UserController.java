@@ -2,17 +2,15 @@ package com.wjwy.rsda.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.wjwy.rsda.common.resultEntity.ResultJson;
+import com.wjwy.rsda.common.util.IpUtils;
+import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.User;
-
 import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,8 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 @RequestMapping("/user")
 @RestController
-@Api(value = "用户中心", tags = "信息中心维护")
-
+@Api(value = "用户中心", tags = "用户信息库中心")
 
 public class UserController {
 	/**
@@ -41,7 +38,7 @@ public class UserController {
 	 */
 	@Autowired
 	private UserService userService;
-	public Logger logger = LoggerFactory.getLogger(DepartmentController.class);
+	public Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	/**
 	 * @Description: 网站用户界面
@@ -51,210 +48,24 @@ public class UserController {
 	 * @throws @author ZHANGQI
 	 * @date 2019年11月27日
 	 */
-	@ApiOperation(value = "用户列表 ")
+
 	@GetMapping(value = "/userInfo")
 	public ModelAndView userInfo(User user, ModelAndView model) {
-		model.setViewName("webview/user/user/list");
+		model.setViewName("webview/system/user/userList");
 		return model;
 	}
 
 	/**
-	 * @Description: 根据ID查询单条数据
-	 * @param
-	 * @return
-	 * @return void
-	 * @throws @author ZHANGQI
-	 * @date 2019年11月28日
-	 */
-	@ApiOperation(value = "根据用户ID查询单条数据", notes = "根据用户ID查询用户")
-	@PostMapping("/findoneUser")
-	public ResultJson findoneUser(@RequestBody User user, HttpServletRequest request) {
-		ResultJson resJsonModel = new ResultJson();
-		try {
-			boolean flag = false;
-			if (user == null) {
-				resJsonModel.setMsg(EnumEntitys.FAILED.getDesc());
-			} else {
-				flag = true;
-
-				// 存放到Session
-				HttpSession session = request.getSession();
-				session.setAttribute("userOne", user);
-				resJsonModel.setData(user);
-				resJsonModel.setMsg(EnumEntitys.SCUUESS.getDesc());
-			}
-			resJsonModel.status = flag;
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-		}
-		return resJsonModel;
-	}
-
-	/**
 	 * 
-	 * @Description: 网站用户
-	 * @param @param  userId
-	 * @param @param  pageNum
-	 * @param @param  pageSize
-	 * @param @return
-	 * @return JSONObject
-	 * @throws JSONException
-	 * @throws @author       ZHANGQI
-	 * @date 2019年11月27日
+	 * @Title: hello1 @Description: TODO方法描述:(个人信息) @param @return 设定文件 @return
+	 *         String 返回类型 @throws
 	 */
-
-	@PostMapping("/userPageInfoList")
-	@ApiOperation(value = "根据用户ID获取用户分页列表", notes = "根据用户ID获取用户分页分页列表")
-	public JSONObject userPageInfoList(String userId, String userName, String deptId, String workDept, Boolean delFlag,
-			Boolean isPage, String pageNum, String pageSize) {
-		int count = 0;
-		List<User> userList;
-		JSONObject json = new JSONObject();
-		try {
-			if (isPage != null && isPage.equals(EnumEntitys.YES.getValue())) {
-				PageInfo<User> pageInfos = userService.getPageList(userId, userName, deptId, workDept, delFlag,
-						Integer.parseInt(pageNum.trim()), Integer.parseInt(pageSize.trim()));
-				userList = pageInfos.getList();
-			    count = (int) pageInfos.getTotal();
-			} else {
-				userList = userService.getList(userId, userName, deptId, workDept, delFlag);
-				count = userList.size();
-			}
-			json.put("count", count);
-			json.put("data", userList);
-			json.put("msg", "success");
-			if (!userList.isEmpty()) {
-				json.put("code", 200);
-			}
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-			json.put(String.valueOf(EnumEntitys.RETURN_MSG.getValue()), "error");
-			json.put(String.valueOf(EnumEntitys.RETURN_CODE.getValue()), "400");
-		}
-		return json;
-	}
-
-	/**
-	 * @Description: 批量删除
-	 * @param
-	 * @return
-	 * @return void
-	 * @throws JSONException
-	 * @throws @author       ZHANGQI
-	 * @date 2019年11月29日
-	 */
-	@ResponseBody
-	@ApiOperation(value = "根据用户ID批量删除用户", notes = "根据用户ID批量删除用户")
-	@PostMapping("/deleteUserAlls")
-	public JSONObject deleteUserAlls(String[] ids, HttpServletResponse response) {
-
-		JSONObject resultJSONObject = new JSONObject();
-		try {
-			int resultTotal = 0;
-			User user = new User();
-			for (String userId : ids) {
-				if (!userId.isEmpty()) {
-					user.setUserId(userId);
-					resultTotal = userService.delete(user);
-				}
-			}
-			boolean flag = false;
-			if (resultTotal > 0) {
-				flag = true;
-			}
-			resultJSONObject.put("success", flag);
-			response.setContentType("text/html;charset=utf-8");
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-		}
-
-		return resultJSONObject;
-	}
-
-	/**
-	 * @Description: 根据用户ID删除用户
-	 * @param
-	 * @return
-	 * @return void
-	 * @throws JSONException
-	 * @throws @author       ZHANGQI
-	 * @date 2019年11月28日
-	 */
-	@ApiOperation(value = "根据用户ID删除用户", notes = "根据用户ID删除用户")
-	@PostMapping("/deleteUser")
-	public JSONObject deleteUser(String userId) {
-		JSONObject resultJSONObject = new JSONObject();
-		try {
-			User user = new User();
-
-			user.setUserId(userId);
-			int resultTotal = userService.delete(user);
-
-			boolean flag = false;
-			if (resultTotal > 0) {
-				flag = true;
-			}
-			resultJSONObject.put("success", flag);
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-		}
-		return resultJSONObject;
-	}
-
-	/**
-	 * @Description: 更新用户
-	 * @param
-	 * @return
-	 * @return void
-	 * @throws JSONException
-	 * @throws @author       ZHANGQI
-	 * @date 2019年11月28日
-	 */
-	@ApiOperation(value = "新增用户", notes = "新增用户")
-	@PostMapping("/insertUser")
-	public JSONObject insertUser(@RequestBody User User) {
-
-		JSONObject resultJSONObject = new JSONObject();
-		try {
-			int resultTotal = 0;// 操作的记录数
-			resultTotal = userService.insert(User);
-			boolean flag = false;
-			if (resultTotal > 0) {
-				flag = true;
-			}
-			resultJSONObject.put("success", flag);
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-		}
-		return resultJSONObject;
-	}
-
-	/**
-	 * @Description: 更新用户
-	 * @param
-	 * @return
-	 * @return void
-	 * @throws JSONException
-	 * @throws @author       ZHANGQI
-	 * @date 2019年11月28日
-	 */
-	@ApiOperation(value = "更新", notes = "更新")
-	@PostMapping("/updateUser")
-	public JSONObject toUpdateUser(@RequestBody User User) {
-
-		JSONObject resultJSONObject = new JSONObject();
-		try {
-			int resultTotal = 0;// 操作的记录数
-			resultTotal = userService.update(User);
-			boolean flag = false;
-			if (resultTotal > 0) {
-				flag = true;
-			}
-			resultJSONObject.put("success", flag);
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-		}
-		return resultJSONObject;
+	@GetMapping("/personInfo")
+	public ModelAndView PersonInfo(String userId, ModelAndView model) {
+		User user = userService.getPersonInfo(userId);
+		model.addObject("user", user);
+		model.setViewName("webview/system/user/userInfo");
+		return model;
 	}
 
 	/**
@@ -265,51 +76,197 @@ public class UserController {
 	 * @throws @author ZHANGQI
 	 * @date 2019年11月28日
 	 */
-	@ApiOperation(value = "跳转修改界面", notes = "参数：VO")
 	@GetMapping(value = "/updateInfo")
-	public ModelAndView updateInfo(User user, HttpServletRequest request, ModelAndView model, String type) {
+	public ModelAndView updateInfo(User user, HttpServletRequest request, ModelAndView model) {
 
 		HttpSession session = request.getSession();
-		if (!EnumEntitys.SCUUESS.getValue().equals(type)) {
+		if (!request.getParameter("type").equals(String.valueOf(EnumEntitys.SCUUESS.getValue()))) {
 			// 获取登录的session存入的user对象
 			user = (User) session.getAttribute("userOne");
 		}
-
+		user.setUserIp(IpUtils.getIpAddress(request));
 		model.addObject("userOne", user);
-		model.setViewName("webview/user/user/userform");
+		model.setViewName("webview/system/user/userForm");
 		return model;
 	}
 
 	/**
-	 * 
-	 * @Title: hello1 @Description: TODO方法描述:(个人信息) @param @return 设定文件 @return
-	 *         String 返回类型 @throws
+	 * @Description: 根据ID查询单条数据
+	 * @param
+	 * @return
+	 * @return
+	 * @return void
+	 * @throws @author ZHANGQI
+	 * @date 2019年11月28日
 	 */
-	@ApiOperation(value = "基本资料", notes = "参数：用户信息")
-	@GetMapping("/personInfo")
-	public ModelAndView PersonInfo(String userId, ModelAndView model) {
-		User user = userService.getPersonInfo(userId);
-		model.addObject("user", user);
-		model.setViewName("webview/user/info");
-		return model;
+	@ApiOperation(value = "获取当前用户Session数据", notes = "获取当前用户Session数据")
+	@PostMapping("/findoneUser")
+	public ResponseWrapper findoneUser(@RequestBody User user, HttpServletRequest request) {
+		try {
+			if (user == null) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "获取失败", null, null,null);
+			}
+			// 存放到Session
+			HttpSession session = request.getSession();
+			session.setAttribute("userOne", user);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", user, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
+	/**
+	 * 根据ID获取用户分页列表
+	 * 
+	 * @param userId
+	 * @param userName
+	 * @param deptId
+	 * @param workDept
+	 * @param delFlag
+	 * @param isPage
+	 * @param pageNum
+	 * @param pageSize
+	 * @return ResponseWrapper
+	 */
 
+	@PostMapping("/userPageInfoList")
+	@ApiOperation(value = "根据ID获取用户分页列表", notes = "参数：userId-用户ID,userName-用户名,deptId-部门ID,workDept-部门工号,delFlag-删除标志,isPage-是否开启分页,pageNum-当前页,pageSize-每页条数")
+	public ResponseWrapper userPageInfoList(String userId, String userName, String deptId, String workDept,
+			Boolean delFlag, Boolean isPage, String pageNum, String pageSize) {
+		try {
+			if (isPage != null && isPage.equals(EnumEntitys.YES.getValue())) {
+				PageInfo<User> pageInfos = userService.getPageList(userId, userName, deptId, workDept, delFlag,
+						Integer.parseInt(pageNum.trim()), Integer.parseInt(pageSize.trim()));
+				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos, null, Integer.parseInt(String.valueOf(pageInfos.getTotal())));
+			} else {
+				List<User> userList = userService.getList(userId, userName, deptId, workDept, delFlag);
+				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", userList, null, userList.size());
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
+
+	/**
+	 * 根据用户ID批量删除用户
+	 * 
+	 * @param ids
+	 * @return ResponseWrapper
+	 */
+	@ResponseBody
+	@ApiOperation(value = "根据ID批量删除用户", notes = "参数:ids")
+	@PostMapping("/deleteUserAlls")
+	public ResponseWrapper deleteUserAlls(String[] ids) {
+		ResponseWrapper rmAll = null;
+		for (String userId : ids) {
+			if (!userId.isEmpty()) {
+				rmAll = deleteUser(userId);
+			}
+		}
+		return rmAll;
+	}
+
+	/**
+	 * 根据ID删除用户
+	 * 
+	 * @param userId
+	 * @return ResponseWrapper
+	 */
+	@ApiOperation(value = "根据ID删除用户", notes = "参数:userId")
+	@PostMapping("/deleteUser")
+	public ResponseWrapper deleteUser(String userId) {
+		try {
+			User user = new User();
+			user.setUserId(userId);
+			int resultTotal = userService.delete(user);
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前用户]", null, null, null);
+			} else if (resultTotal == HttpStatus.GONE.value()) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "数据中不存在当前用户", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
+
+	/**
+	 * 新增用户
+	 * 
+	 * @param User
+	 * @return ResponseWrapper
+	 */
+	@ApiOperation(value = "新增用户", notes = "新增用户")
+	@PostMapping("/insertUser")
+	public ResponseWrapper insertUser(@RequestBody User user) {
+		try {
+			int resultTotal = userService.insert(user);
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
+
+	/**
+	 * 更新
+	 * 
+	 * @param User
+	 * @return ResponseWrapper
+	 */
+	@ApiOperation(value = "更新", notes = "更新")
+	@PostMapping("/updateUser")
+	public ResponseWrapper toUpdateUser(@RequestBody User User) {
+		try {
+			int resultTotal = userService.update(User);
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
+
+	/**
+	 * 根据用户选择角色
+	 * 
+	 * @param userId
+	 * @param ids
+	 * @return ResponseWrapper
+	 */
 	@ApiOperation(value = "根据用户选择角色", notes = "参数：userId-用户主键,ids-角色数组")
 	@GetMapping("/userSelRole")
-	public  void  userSelRole(String userId,String ids[]){
+	public ResponseWrapper userSelRole(String userId, String ids[]) {
 
 		try {
 			boolean flag = userService.userSelRole(userId, ids);
-			if (flag) {
-				
+			if (!flag) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
 			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
 		} catch (Exception e) {
-			
+			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		
-
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
-
 
 }

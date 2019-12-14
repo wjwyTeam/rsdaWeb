@@ -1,0 +1,127 @@
+<!--
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2019-12-12 08:17:42
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-12 08:56:06
+ -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>机构</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+  
+</head>
+<body>
+
+  <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;" th:object="${deptOne}">
+  <div class="layui-form-item  layui-hide">
+      <label class="layui-form-label">ID</label>
+      <div class="layui-input-inline" style=" width:calc(100% - 125px)">
+        <input type="text" name="id"  placeholder="请输入ID" autocomplete="off" class="layui-input"  th:value=" *{id}">
+      </div>
+    </div>
+
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">机构名称</label>
+      <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+        <input type="text" name="name" lay-verify="required" placeholder="请输入机构名称" autocomplete="off" class="layui-input"  th:value=" *{name}">
+      </div>
+    </div>
+    <div class="layui-form-item" lay-filter="type">
+        <label class="layui-form-label">机构类别</label>
+        <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+           <select name="type">
+               <option value="" selected= "true">请选择</option>
+               <option value="0">法人单位</option>
+               <option value="1">内设部门</option>
+               <option value="2">机构分组</option>
+           </select>
+       
+        </div>
+      </div>
+      <div class="layui-form-item pipeType" lay-filter="pipeType">
+          <label class="layui-form-label">管档类别</label>
+          <div class="layui-input-inline"  style=" width:calc(100% - 125px)" >
+             <select name="pipeType">
+                 <option value="" selected= "true">请选择</option>
+                 <option value="0">主管部门</option>
+                 <option value="1">档案自管</option>
+                 <option value="2">其他</option>
+             </select>
+         
+          </div>
+     </div>
+
+     <div class="layui-form-item" lay-filter="isPipe">
+        <div class="layui-inline">
+          <label class="layui-form-label">是否管档</label>
+          <div class="layui-input-block">
+            <input type="checkbox" name="isPipe" id="isPipe" lay-skin="switch"  lay-text="NO|YES" lay-filter="autoplay" th:value=" *{isPipe}">
+          </div>
+        </div>
+      </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">简称</label>
+      <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+        <input type="text" name="shortName" lay-verify="shortName" placeholder="请输入简称" autocomplete="off" class="layui-input"  th:value=" *{shortName}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">排序</label>
+      <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+        <input type="text" name="dorder" lay-verify="dorder" placeholder="请输入排序" autocomplete="off" class="layui-input"  th:value=" *{dorder}">
+      </div>
+    </div>
+   
+    <div class="layui-form-item layui-hide">
+       <div class="layui-input-block">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认" class="layui-btn">
+   	  </div>
+    </div>
+  </div>
+
+  <script src="../../../layuiadmin/layui/layui.js" th:inline="none"></script>  
+  <script>
+  layui.config({
+    base: '../../../layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form'], function(){
+    var $ = layui.$
+    ,form = layui.form;
+    layer.ready(function () {
+    if ( $("#isPipe").val() == 'true'|| $("#isPipe").val() == "") {
+        $(".pipeType").show();
+        $("#isPipe").attr("checked",true);
+      }else{
+        $(".pipeType").hide();
+    
+      }
+    });
+    //监听指定开关
+  form.on('switch(autoplay)', function(data){
+     $("#isPipe").val(this.checked);
+    if (this.checked ? 'true' : 'false' == 'true') {
+      layer.tips('管档已启用',data.othis);
+      $(".pipeType").show();
+    }else{
+      layer.tips('管档已禁用',data.othis);
+      $(".pipeType").hide();
+    }
+  
+  });
+  })
+  </script>
+   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+</body>
+</html>

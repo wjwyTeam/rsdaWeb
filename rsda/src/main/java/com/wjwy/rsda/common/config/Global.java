@@ -4,12 +4,12 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 16:50:18
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-06 17:06:13
+ * @LastEditTime: 2019-12-10 08:26:09
  */
 package com.wjwy.rsda.common.config;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-
 
 @Component
 @ConfigurationProperties(prefix = "wjwy")
@@ -19,7 +19,7 @@ public class Global {
     private static String name;
 
     /** 版本 */
-    private static String version;
+    private static String version="1.0";
 
     /** 版权年份 */
     private static String copyrightYear;

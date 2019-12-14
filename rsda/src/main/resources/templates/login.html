@@ -10,45 +10,61 @@
 <link rel="stylesheet" href="layuiadmin/layui/css/layui.css" media="all">
 <link rel="stylesheet" href="layuiadmin/style/admin.css" media="all">
 <link rel="stylesheet" href="layuiadmin/style/login.css" media="all">
+<link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon" />
 <script src="js/MD5.js"></script>
+<script src="js/particles.min.js"></script>
+
 </head>
-<body class="bodybg">
-	<div class="layadmin-user-login layadmin-user-display-show"
-		id="LAY-user-login" style="display: none;">
-		<div class="layadmin-user-login-main">
-			<div class="layadmin-user-login-box layadmin-user-login-header">
-				<h2>人事档案阅档系统</h2>
-				<p>DEVELOP BY WIWY</p>
-			</div>
-			<div
-				class="layadmin-user-login-box layadmin-user-login-body layui-form">
-				<div class="layui-form-item">
-					<label
-						class="layadmin-user-login-icon layui-icon layui-icon-username"
-						for="LAY-user-login-username"></label> <input type="text"
-						name="userName" id="LAY-user-login-username" lay-verify="required"
-						placeholder="用户名" class="layui-input">
-				</div>
-				<div class="layui-form-item">
-					<label
-						class="layadmin-user-login-icon layui-icon layui-icon-password"
-						for="LAY-user-login-password"></label> <input type="password"
-						name="passWord" id="LAY-user-login-password" lay-verify="required"
-						placeholder="密码" class="layui-input">
-				</div>
-				<div class="layui-form-item">
-					<button class="layui-btn layui-btn-fluid" lay-submit
-						lay-filter="LAY-user-login-submit">登陆</button>
-				</div>
-			</div>
+<body class="login" style="background-color:#0d76ca !important;overflow:-Scroll;overflow-y:hidden">
+		<div style="margin: 0px auto;width:1000px;">
+        <div class="jianbian">
+            <div class="Toplog">
+                <h1>数字化干部人事档案系统</h1>
+            </div>            
+        </div>
 		</div>
+		<div class="backgroudBg" id="particles-js">
+        <!-- BEGIN LOGIN -->
+        <div class="content" style="float:right;margin-right:70px;margin-top:105px; width:300px;height:300px;padding:0px">
+            <!-- BEGIN LOGIN FORM -->
+						<div class="layadmin-user-login layadmin-user-display-show"
+						id="LAY-user-login" style="display: none;">
+						<div class="layadmin-user-login-main">
+							<div
+								class="layadmin-user-login-box layadmin-user-login-body layui-form">
+								<div class="layui-form-item" >
+									<label
+										class="layadmin-user-login-icon layui-icon layui-icon-username"
+										for="LAY-user-login-username"></label> <input type="text" autocomplete="off"
+										name="userName" id="LAY-user-login-username" lay-verify="required"
+										placeholder="用户名" class="layui-input">
+								</div>
+								<div class="layui-form-item">
+									<label
+										class="layadmin-user-login-icon layui-icon layui-icon-password"
+										for="LAY-user-login-password"></label> <input type="password"
+										name="passWord" id="LAY-user-login-password" lay-verify="required" autocomplete="off"
+										placeholder="密码" class="layui-input">
+								</div>
+								<div class="layui-form-item">
+									<button class="layui-btn layui-btn-fluid" lay-submit
+										lay-filter="LAY-user-login-submit">登陆</button>
+								</div>
+							</div>
+						</div>
+        </div>
+    
+    </div>
+
+
+
 
 		<div class="layui-trans layadmin-user-login-footer">
 			<p>
-				© 2019 <a href="#">COM.WJWY</a>
+					2019 ©  ArchiveMS V1.0.5, 本机IP： 192.168.1.58
 			</p>
 		</div>
-
+		<canvas class="particles-js-canvas-el" width="1147" height="952" style="width: 100%; height: 100%;"></canvas></div>
 	</div>
 
 	<script src="layuiadmin/layui/layui.js"></script>
@@ -82,14 +98,16 @@
 					timeout:3000,
 					dataType : "json",
 					success : function(data) {
+				
 						if(data.status == "ERROR")
-							icontype = 2;
+						  	icontype = 2;
 						else  
-						    icontype = 1;
+						    icontype = 16;
 						layer.msg(data.msg, {
-							offset : '15px',
+							offset: ['10%', '45%'],//设置位移
 							icon : icontype,
-							time : 2000
+							time : 2000,
+							shade : [0.7 , '#000' , true]
 						}, function() {
 							if (data.status == "SUCCESS" ) {
 								location.href = data.indexUrl; //后台主页

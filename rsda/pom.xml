@@ -17,6 +17,7 @@
 		<java.version>1.8</java.version>
 		<shiro.version>1.4.2</shiro.version>
 		<tk.mybatis.version>2.0.0</tk.mybatis.version>
+		<swagger-models.version>1.5.2</swagger-models.version>
 	</properties> 
  
 	<dependencies>
@@ -96,6 +97,12 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency> 
+		<!-- https://mvnrepository.com/artifact/io.swagger/swagger-models 解决报错 java.lang.NumberFormatException: For input string: ""-->
+		<!-- <dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-models</artifactId>
+			<version>${swagger-models.version}</version>
+		</dependency> -->
 
 		<!--pagehelper -->
 		<dependency>

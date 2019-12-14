@@ -4,12 +4,13 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:51:31
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-06 11:26:07
+ * @LastEditTime: 2019-12-11 10:02:56
  */
 package com.wjwy.rsda.entity;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -21,75 +22,117 @@ import javax.persistence.Transient;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
 @Data
 @ToString
-@AllArgsConstructor 
-@NoArgsConstructor 
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel("单位=>实体")
 @Table(name = "sys_dapartment")
-public class Department{
+public class Department implements Serializable{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-     /**
-     * 父级编号
-     */
-    @Column(name = "parent_id")
-    private String parentId;
 
-    
-     /**
-     * 名称
-     */
-    @Column(name = "name")
-    private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @ApiModelProperty("主键")
+  private String id;
 
-    /**
-     * 排序
-     */
-    @Column(name = "d_order")
-    private BigDecimal dOrder;
+  /**
+   * 父级编号
+   */
+  @ApiModelProperty("父级编号")
+  @Column(name = "parent_id")
+  private String parentId;
 
-    /**
-     * 单位类别
-     */
-    @Column(name = "type")
-    private Integer type;
+  /**
+   * 名称
+   */
+  @ApiModelProperty("名称")
+  @Column(name = "name")
+  private String name;
 
-     /**
-     * 是否存档
-     */
-    @Column(name = "is_pipe")
-    private Boolean isPipe;
+  /**
+   * 排序
+   */
+  @ApiModelProperty("排序")
+  @Column(name = "d_order")
+  private Integer dorder;
 
-    /**
-     * 是否删除
-     */
-    @Column(name = "del_flag")
-    private Boolean delFlag;
+  /**
+   * 单位类别
+   */
+  @ApiModelProperty("单位类别")
+  @Column(name = "type")
+  private Integer type;
 
-      /**
-     * 能都删除
-     */
-    @Column(name = "is_candel")
-    private Boolean isCandel;
-    
-    /**
-     * 创建时间
-     */
-    @Column(name = "create_time")
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+  /**
+   * 是否存档
+   */
+  @ApiModelProperty("是否存档")
+  @Column(name = "is_pipe")
+  private Boolean isPipe;
 
-    /**
-     * 是否有节点
-     */
+  /**
+   * 是否删除
+   */
+  @ApiModelProperty("是否删除")
+  @Column(name = "del_flag")
+  private Boolean delFlag;
+
+  /**
+   * 能都删除
+   */
+  @ApiModelProperty("是否能都删除")
+  @Column(name = "is_candel")
+  private Boolean isCandel;
+
+
+ /**
+   * 管档类别
+   */
+  @ApiModelProperty("管档类别")
+  @Column(name = "pipe_type")
+  private String pipeType;
+
+  
+   /**
+   * 简称
+   */
+  @ApiModelProperty("简称")
+  @Column(name = "short_name")
+  private String shortName;
+  
+  /**
+   * 创建时间
+   */
+  @ApiModelProperty("创建时间")
+  @Column(name = "create_time")
+  @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+  private Date createTime;
+
+
+  @Transient
+  private Integer childNum;
+
+  @ApiModelProperty("是否有节点")
+  @Column(name = "is_parent")
+  private Boolean isParent;
+
+  /**
+   * 子节点
+   */
     @Transient
-    private Integer childNum;
+  private List<Department> children;
+
+  
 }

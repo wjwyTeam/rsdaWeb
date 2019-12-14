@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>layuiAdmin 网站用户 iframe 框</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+</head>
+
+<body>
+
+  <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
+    style="padding: 20px 0 0 0;" th:object="${userOne}">
+    <div class="layui-form-item  layui-hide">
+      <label class="layui-form-label">ID</label>
+      <div class="layui-input-inline">
+        <input type="text" name="userId" placeholder="请输入ID" autocomplete="off" class="layui-input"
+          th:value=" *{userId}">
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>姓名</label>
+          <div class="layui-input-inline">
+            <div class="layui-input">
+              <div style="float:left;">
+                <input type="text" id="PsnName" name="UserRealName" lay-verify="required" autocomplete="off"
+                  placeholder="双击进行选择" th:value=" *{UserRealName}" style="border:none;margin-top:10px;width:150px;"
+                  ondblclick="PersWin()">
+
+              </div>
+              <div style="float:left;padding-top:10px;">
+                <a onclick="RemoveSelected()" style="cursor:pointer;"><i class="layui-icon"></i></a>
+                <input type="hidden" id="PersID" name="PersID" autocomplete="off" class="layui-input" value="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>用户名</label>
+          <div class="layui-input-inline">
+            <input type="text" name="userName" lay-verify="required" autocomplete="off" placeholder="请输入用户名"
+              class="layui-input" th:value=" *{userName}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>角色</label>
+          <div class="layui-input-inline">
+            <select name="UserRole" id="UserRole" lay-verify="required">
+              <option></option>
+              <option value="00">管档中心管理员</option>
+              <option value="01">A1级角色（管档人员分管领导）</option>
+              <option value="02">A2级角色（其他领导）</option>
+              <option value="03">B级角色（管档人员）</option>
+              <option value="04">C级角色（单位内部阅档人）</option>
+              <option value="05">D级角色（外单位阅档人）</option>
+              <option value="07">管档中心分管领导</option>
+              <option value="10">系统管理员</option>
+              <option value="11">目录维护人员</option>
+              <option value="12">高扫人员</option>
+              <option value="13">平扫人员</option>
+              <option value="14">审核人员</option>
+              <option value="50">系统操作员</option>
+            </select>
+            <div class="layui-unselect layui-form-select">
+              <div class="layui-select-title"><input type="text" placeholder="请选择" value="" readonly=""
+                  class="layui-input layui-unselect"><i class="layui-edge"></i></div>
+              <dl class="layui-anim layui-anim-upbit" >
+                <dd lay-value="" class="layui-select-tips">请选择</dd>
+                <dd lay-value="00" class="">管档中心管理员</dd>
+                <dd lay-value="01" class="">A1级角色（管档人员分管领导）</dd>
+                <dd lay-value="02" class="">A2级角色（其他领导）</dd>
+                <dd lay-value="03" class="">B级角色（管档人员）</dd>
+                <dd lay-value="04" class="">C级角色（单位内部阅档人）</dd>
+                <dd lay-value="05" class="">D级角色（外单位阅档人）</dd>
+                <dd lay-value="07" class="">管档中心分管领导</dd>
+                <dd lay-value="10" class="">系统管理员</dd>
+                <dd lay-value="11" class="">目录维护人员</dd>
+                <dd lay-value="12" class="">高扫人员</dd>
+                <dd lay-value="13" class="">平扫人员</dd>
+                <dd lay-value="14" class="">审核人员</dd>
+                <dd lay-value="50" class="">系统操作员</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>密码</label>
+          <div class="layui-input-inline">
+            <input type="password" name="passWord" th:value=" *{passWord}" lay-verify="required" autocomplete="off"
+              placeholder="请输入密码" class="layui-input">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>职务情况</label>
+          <div class="layui-input-inline">
+            <input type="text" name="duty" th:value=" *{duty}" id="WorkUnitDuties" lay-verify="required"
+              autocomplete="off" placeholder="" class="layui-input">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>重复密码</label>
+          <div class="layui-input-inline">
+            <input type="password" name="repassword" value="" lay-verify="required" autocomplete="off"
+              placeholder="再次输入密码" class="layui-input">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">绑定IP</label>
+          <div class="layui-input-inline">
+            <input type="text" name="userIp" th:value=" *{userIp}" id="UserIP" autocomplete="off" placeholder=""
+              class="layui-input">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>所在单位</label>
+          <div class="layui-input-inline">
+            <input type="text" name="workDept" id="DeptName" onclick="openWin()" readonly="readonly"
+              lay-verify="required" autocomplete="off" placeholder="选择机构" class="layui-input">
+            <input type="hidden" name="deptId" id="DeptID" lay-verify="required">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+      <div class="layui-input-block">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认"
+          class="layui-btn">
+      </div>
+    </div>
+  </div>
+
+  <script src="../../../layuiadmin/layui/layui.js"></script>
+  <script>
+    layui.config({
+      base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'upload'], function () {
+      var $ = layui.$
+        , form = layui.form
+        , upload = layui.upload;
+
+      //普通图片上传
+      var uploadInst = upload.render({
+        elem: '#layuiadmin-upload-useradmin'
+        , url: '/upload/'
+        , before: function (obj) {
+          //预读本地文件示例，不支持ie8
+          obj.preview(function (index, file, result) {
+            $('#demoUser').attr('src', result); //图片链接（base64）
+          });
+        }
+        , done: function (res) {
+          //如果上传失败
+          if (res.code > 0) {
+            return layer.msg('上传失败');
+          }
+          //上传成功
+        }
+        , error: function () {
+          //演示失败状态，并实现重传
+          var demoText = $('#demoText');
+          demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+          demoText.find('.demo-reload').on('click', function () {
+            uploadInst.upload();
+          });
+        }
+      });
+
+      upload.render({
+        elem: '#layuiadmin-upload-useradmin'
+        , url: layui.setter.base + 'json/upload/demo.js'
+        , accept: 'images'
+        , method: 'get'
+        , acceptMime: 'image/*'
+        , done: function (res) {
+          $(this.item).prev("div").children("input").val(res.data.src)
+        }
+      });
+    })
+
+
+
+    function PersWin() {
+            layer.ready(function () {
+                layer.open({
+                    title: '   ',
+                    type: 2,
+                    content: "/Person/Select",
+                    area: ['750px', '520px'],
+                    zIndex: layer.zIndex //重点1
+                });
+            });
+    }
+
+
+    function openWin() {
+            layui.use('layer', function () {
+                var layer = layui.layer;
+                layer.ready(function () {
+                    layer.open({
+                        type: 2,
+                        closeBtn: 0,
+                        title: "选择单位", //不显示标题
+                        scrollbar: false, // 父页面 滚动条 禁止
+                        content: "/dept/departmentInfo?hideshowType=false",
+                        area: ['300px', '350px'],
+                        btn: ['确定', '取消'] , 
+                        anim: 2,
+                        resize:false,
+                        shadeClose: false,
+                        skin: 'layer-ext-moon', //加上边框
+                        id: 'LAY_layuipro', //设定一个id，防止重复弹出
+                        shade: 0.9,
+                        yes: function (index, layero) {
+                           $("#DeptID").val(layer.getChildFrame('body', 0).find(".deptId").val());
+                           $("#DeptName").val( layer.getChildFrame('body', 0).find(".deptName").val());
+                           layer.close(index);
+                        }
+                    });
+                 
+                });
+            });
+        }
+    </script>
+   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+</body>
+
+</html>

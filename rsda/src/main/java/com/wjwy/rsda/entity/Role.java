@@ -1,5 +1,14 @@
+/*
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2019-12-06 15:02:00
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-11 08:59:55
+ */
 package com.wjwy.rsda.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -22,11 +31,17 @@ import lombok.ToString;
  */
 @Data
 @ToString
-@AllArgsConstructor 
-@NoArgsConstructor 
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel("角色=>实体")
 @Table(name = "sys_role")
-public class Role {
+public class Role implements Serializable{
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
 
     @ApiModelProperty("主键")
     @Column(name = "id")
@@ -34,12 +49,11 @@ public class Role {
 
     @ApiModelProperty("角色名称")
     @Column(name = "name")
-    private String  name;
+    private String name;
 
-    
     @ApiModelProperty("角色英文名称")
     @Column(name = "en_name")
-    private String  enName;
+    private String enName;
 
     @ApiModelProperty("是否可删除")
     @Column(name = "is_candel")
@@ -47,11 +61,11 @@ public class Role {
 
     @ApiModelProperty("创建时间")
     @Column(name = "create_time")
-    private Date    createTime;
-
+    private Date createTime;
 
     @ApiModelProperty("删除标志")
     @Column(name = "del_flag")
     private Boolean delFlag;
-    
+
+
 }

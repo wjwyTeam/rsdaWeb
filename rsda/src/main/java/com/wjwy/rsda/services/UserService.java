@@ -4,17 +4,21 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-06 17:53:50
+ * @LastEditTime: 2019-12-11 19:04:24
  */
 package com.wjwy.rsda.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.MD5Util;
-import com.wjwy.rsda.common.util.UUIDUtils;
+import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.entity.UserRole;
+import com.wjwy.rsda.mapper.RoleMapper;
 import com.wjwy.rsda.mapper.UserMapper;
 import com.wjwy.rsda.mapper.UserRoleMapper;
 
@@ -22,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +47,9 @@ public class UserService {
 	@Autowired
 	private UserRoleMapper userRoleDao;
 
+	@Autowired
+	private RoleMapper roleDao;
+
 	public Logger logger = LoggerFactory.getLogger(UserService.class);
 
 	/**
@@ -54,9 +62,11 @@ public class UserService {
 			Integer pageNum, Integer pageSize) {
 
 		PageHelper.startPage(pageNum, pageSize);
-		List<User> Users = getList(userId, userName, deptId, workDept, delFlag);
-		PageInfo<User> PageInfoDO = new PageInfo<User>(Users);
-
+		List<User> users = getList(userId, userName, deptId, workDept, delFlag);
+		if (users == null) {
+			return null;
+		}
+		PageInfo<User> PageInfoDO = new PageInfo<User>(users);
 		return PageInfoDO;
 	}
 
@@ -91,10 +101,13 @@ public class UserService {
 		Criteria criteria = example.createCriteria();
 
 		criteria.andEqualTo("userId", user.getUserId());
-		criteria.andEqualTo("isCandel", true);
-
-		user.setDelFlag(false);
+		List<User> userNew = userDao.selectByExample(example);
+		criteria.andEqualTo("isCandel", false);
+		user.setDelFlag(true);
 		int count = userDao.updateByExampleSelective(user, example);
+		if (userNew.size() == 0) {
+			count = HttpStatus.GONE.value();
+		}
 		return count;
 	}
 
@@ -121,6 +134,21 @@ public class UserService {
 		Example example = new Example(User.class);
 		Criteria criteria = example.createCriteria();
 		criteria.andEqualTo("userId", user.getUserId());
+		// 更新角色
+
+		List<Role> roles = user.getRoles();
+		if (roles == null) {
+			return 0;
+		}
+
+		String roleLStrings[] = new String[roles.size()];
+		for (int i = 0; i < roles.size(); i++) {
+			roleLStrings[i] = roles.get(i).getId();
+		}
+
+		// 调用角色更新接口
+		userSelRole(user.getUserId(), roleLStrings);
+		user.setPassWord(MD5Util.md5ToHex(user.getPassWord()));
 		return userDao.updateByExampleSelective(user, example);
 	}
 
@@ -133,10 +161,22 @@ public class UserService {
 	 * @date 2019年11月28日
 	 */
 	public int insert(User user) {
-		user.setDelFlag(true);
-		user.setIsCandel(true);
+		// 更新角色
+		// List<Role> roles = user.getRoles();
+		// if (roles == null) {
+		// 	return 0;
+		// }
+
+		// String roleLStrings[] = new String[roles.size()];
+		// for (int i = 0; i < roles.size(); i++) {
+		// 	roleLStrings[i] = roles.get(i).getId();
+		// }
+
 		user.setPassWord(MD5Util.md5ToHex("123456"));
-		user.setUserId(UUIDUtils.uuid().toLowerCase());
+		user.setUserId(UUID.randomUUID().toString().toLowerCase());
+
+		// 调用角色更新接口
+		// userSelRole(user.getUserId(), roleLStrings);
 		return userDao.insertSelective(user);
 	}
 
@@ -175,7 +215,34 @@ public class UserService {
 			criteria.andEqualTo("workDept", workDept);
 		}
 
-		return userDao.selectByExample(example);
+		List<User> users = userDao.selectByExample(example);
+		if (users == null) {
+			return null;
+		}
+		List<User> userNew = new ArrayList<User>();
+		for (User user : users) {
+
+			Example exampleUserRole = new Example(UserRole.class);
+			Criteria criteriaUserRole = exampleUserRole.createCriteria();
+			criteriaUserRole.andEqualTo("userId", user.getUserId());
+			List<UserRole> userRoleNew = userRoleDao.selectByExample(exampleUserRole);
+
+			List<Role> roleNewList = new ArrayList<Role>();
+			if (!userRoleNew.isEmpty()) {
+				for (UserRole userRole : userRoleNew) {
+					Role role = new Role();
+					Example exampleRole = new Example(Role.class);
+					Criteria criteriaRole = exampleRole.createCriteria();
+					criteriaRole.andEqualTo("id", userRole.getRoleId());
+					role = roleDao.selectOneByExample(exampleRole);
+					roleNewList.add(role);
+				}
+				user.setRoles(roleNewList);
+			}
+			
+			userNew.add(user);
+		}
+		return userNew;
 	}
 
 	/**
@@ -194,15 +261,17 @@ public class UserService {
 		Example example = new Example(UserRole.class);
 		Criteria criteria = example.createCriteria();
 		// 将当前用户所选角色全部清除，新增
-		criteria.andEqualTo(userId);
+		criteria.andEqualTo("userId", userId);
 		logger.info(userId, userRoleDao.deleteByExample(example));
 		for (String roleId : ids) {
 			criteria.andEqualTo("roleId", roleId);
-			userRole.setRId(UUIDUtils.uuid().toLowerCase());
+			userRole.setRId(UUID.randomUUID().toString().toLowerCase());
 			userRole.setRoleId(roleId);
 			logger.info(roleId, userRoleDao.insertSelective(userRole));
 		}
 
 		return true;
 	}
+
+	
 }

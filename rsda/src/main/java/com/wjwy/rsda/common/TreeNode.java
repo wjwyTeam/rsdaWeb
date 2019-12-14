@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:52:38
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-04 16:55:44
+ * @LastEditTime: 2019-12-11 10:49:18
  */
 package com.wjwy.rsda.common;
 
@@ -24,22 +24,22 @@ public class TreeNode {
 
 	private Object id;
 	@JsonProperty("parentId")
-	private Object pid;
+	private Object parentId;
 	private String title;
 	private String icon;
 	private String href;
 	private Boolean spread;
 	private String filed;
 	private List<TreeNode> children = new ArrayList<TreeNode>();
-	private String checkArr="0";//0代表不选中  1代表选中 
-	
+	private String checked = "0";// 0代表不选中 1代表选中
+
 	/**
 	 * 首页左边导航树的构造器
 	 */
-	public TreeNode(Object id, Object pid, String title, String icon, String href, Boolean spread) {
+	public TreeNode(Object id, Object parentId, String title, String icon, String href, Boolean spread) {
 		super();
 		this.id = id;
-		this.pid = pid;
+		this.parentId = parentId;
 		this.title = title;
 		this.icon = icon;
 		this.href = href;
@@ -48,35 +48,37 @@ public class TreeNode {
 
 	/**
 	 * dtree的数据格式
+	 * 
 	 * @param id
 	 * @param pid
 	 * @param title
 	 * @param spread
 	 */
-	public TreeNode(Object id, Object pid, String title, Boolean spread) {
+	public TreeNode(Object id, Object parentId, String title, Boolean spread) {
 		super();
 		this.id = id;
-		this.pid = pid;
+		this.parentId = parentId;
 		this.title = title;
 		this.spread = spread;
+
 	}
 
 	/**
 	 * dTree复选树的构造器
+	 * 
 	 * @param id
 	 * @param pid
 	 * @param title
 	 * @param spread
 	 * @param checkArr
 	 */
-	public TreeNode(Object id, Object pid, String title, Boolean spread, String checkArr) {
+	public TreeNode(Object id, Object parentId, String title, Boolean spread, String checked) {
 		super();
 		this.id = id;
-		this.pid = pid;
+		this.parentId = parentId;
 		this.title = title;
 		this.spread = spread;
-		this.checkArr = checkArr;
+		this.checked = checked;
 	}
 
-	
 }

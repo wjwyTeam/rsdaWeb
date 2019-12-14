@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>机构列表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+  <link rel="stylesheet" href="/css/zTreeStyle.css" media="all">
+  <link rel="stylesheet" href="/css/metroStyle.css" type="text/css">
+  <style>
+      /* 防止下拉框的下拉列表被隐藏---必须设置---
+      .layui-table-cell {
+          overflow: visible !important;
+      }*/
+  
+    /* 单位工具栏样式 */
+      .toolbarButton{display: flex;position: relative; top: 6px;border-left: solid 3px gray;}
+      .toolbarInp{
+        height: 38px;
+        background-color: rgb(255, 255, 255);
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px;
+        border-color: #e6e6e6;
+      }
+      /*工具栏右置位样式*/
+      .toorbar-right{float: right;}
+      /*工具栏左置位样式*/
+      .toorbar-left{position: relative;left: 20px;}
+  </style>
+
+
+</head>
+
+<body style="overflow-x:hidden">
+     <div style="background-color: #c9c9c9;">
+          <div class="layui-row layui-col-space">
+            <div class="layui-col-md2">
+              <div class="layui-card">
+                <div class="layui-card-header" > 机构管理</div>
+              </div>
+            </div>
+            <div class="layui-col-md10">
+              <div class="layui-card">
+         
+                  <div class="layui-card-header">
+                    <div class="tableButton">
+                      <div class="toorbar-left">
+                        <button class="layui-btn layui-btn-sm" data-type="add">添加</button>
+                        <button class="layui-btn layui-btn-sm" data-type="batchdel">删除</button>
+                        <button class="layui-btn layui-btn-sm" title="上移" data-type="up"  >上移</button>
+                        <button class="layui-btn layui-btn-sm" title="下移" data-type="down">下移</button>
+                      </div>
+                      <div class="toorbar-right">
+                        <input type="text" name="name" placeholder="请输入机构名称" autocomplete="off" class="toolbarInp">
+                        <input type="text" name="type" placeholder="请输入机构类别" autocomplete="off" class="toolbarInp">
+                        <button class="layui-btn layui-btn-sm" lay-submit lay-filter="dept-front-search"> 搜索</button>
+                      </div>
+                    </div>
+                  </div>
+
+                
+              </div>
+
+            </div>
+          </div>
+    </div> 
+
+  <div class="layui-row layui-col-space15">
+
+    <div class="layui-col-md2">
+      <div class="zTreeDemoBackground left">
+        <ul id="deptTree" class="ztree"></ul>
+      </div>
+    </div>
+    <input type="hidden" class="deptId" >
+    <input type="hidden" class="deptName" >
+    <div class="layui-col-md10" th:if="${hiddenType}">
+
+        <div class="layui-card-body">
+         
+              
+              
+                 
+              
+        
+          <table id="deptList" lay-filter="deptList" class="layui-hide"> </table>
+          <script type="text/html" id="imgTpl">
+          <img style="display: inline-block; width: 50%; height: 100%;" src= {{ d.avatar }}>
+           </script>
+          <script type="text/html" id="barDemo" th:inline="none">
+          <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+          <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        </script>
+        </div>
+      
+    </div>
+  </div>
+  <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+  <script src="/js/jquery.ztree.core.js" type="text/javascript" th:inline="none"></script>
+  <script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
+  <script type="text/javascript" th:inline="javascript">
+
+    //Ztree
+    function filter(treeId, parentNode, childNodes) {
+      if (!childNodes) return null;
+      for (var i = 0, l = childNodes.length; i < l; i++) {
+        childNodes[i].name = childNodes[i].name;
+      }
+      return childNodes;
+    }
+
+    function zTreeOnClick(event, treeId, treeNode) {
+      if (treeNode.id != '' || treeNode.id != 'undefined') {
+     
+        window.tableObj.reload('bindpersons', {
+          where: {
+            id: treeNode.id
+          },
+        }, 'data');
+        $(".deptId").val(treeNode.id);
+        $(".deptName").val(treeNode.name);
+      }
+    }
+    var newCount = 1;
+    function addHoverDom(treeId, treeNode) {
+      var sObj = $("#" + treeNode.tId + "_span");
+      if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+      var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+        + "' title='add node' onfocus='this.blur();'></span>";
+      sObj.after(addStr);
+      var btn = $("#addBtn_" + treeNode.tId);
+      if (btn) btn.bind("click", function () {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+        zTree.addNodes(treeNode, { id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++) });
+        return false;
+      });
+    };
+    function removeHoverDom(treeId, treeNode) {
+      $("#addBtn_" + treeNode.tId).unbind().remove();
+    };
+
+
+
+    $(document).ready(function () {
+    
+      var setting = {
+        async: {
+          enable: true,
+          url: "/dept/unitTree",
+          autoParam: ["id=id"],
+          contentType: "application/json"
+        },
+        data: {
+          key: {
+            name: "name",//节点显示的值
+            isParent: "isParent"
+          }
+        },
+        simpleData: {
+          enable: true,//如果为true，可以直接把从数据库中得到的List集合自动转换为Array格式。而不必转换为json传递
+          idKey: "id",//节点的id
+          rootPId: 0,
+          
+
+          pIdKey: "parentId"//节点的父节点id
+        },
+        edit: {
+          enable: true
+        },
+        view: {
+          addHoverDom: addHoverDom,
+          removeHoverDom: removeHoverDom,
+          selectedMulti: false
+        },
+        callback: {
+          onClick: zTreeOnClick
+        }
+
+      };
+
+
+      window.zTreeObj = $.fn.zTree.init($("#deptTree"), setting);
+    });
+    layui.use(['table', 'form', 'util'], function () {
+      var $ = layui.$
+        , table = layui.table
+        , util = layui.util
+        , form = layui.form;
+  window.tableObj= layui.table;
+
+      //第一个实例
+      table.render({
+        elem: '#deptList'
+        , height: "full-120"
+        , width:'1000px'
+        , even: true
+        , title: '用户数据表'
+        , method: 'post'
+        , id: 'bindpersons'
+        , url: '/dept/findUnitList' //数据接口
+        , cols: [[ //表头
+            { checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
+          , { type: 'numbers', title: '序号' }
+          , { field: 'name', title: '机构名称', sort: true, width: 200,edit:'text'}
+          , { field: 'shortName', title: '简称', sort: true, width: 200,edit:'text'}
+          , { field: 'type', title: '机构类别', sort: true, width: 200,edit:'text' }
+          , { field: 'pipeType', title: '管档类别', sort: true, width: 200,edit:'text' }
+          , {
+            field: 'createTime', title: '创建时间', width: 230, sort: true, templet: function (time) {
+              return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
+            }
+          }
+          , { fixed: 'right', title: '操作', width: 250, align: 'center', toolbar: '#barDemo' }
+        ]]
+        , page: false
+        , response: {
+          statusName: 'code' //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+          , statusCode: 200 //成功的状态码，默认：0
+          , msgName: 'msg' //状态信息的字段名称，默认：msg
+          , countName: 'count' //数据总数的字段名称，默认：count
+          , dataName: 'data' //数据列表的字段名称，默认：data
+        }
+        , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+          layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+          //,curr: 5 //设定初始在第 5 页
+          , groups: 5 //只显示 1 个连续页码
+          , first: false //不显示首页
+          , last: false //不显示尾页
+        }
+      });
+
+    
+
+      //监听工具条删除
+      table.on('tool(deptList)', function (obj) {
+        var data = obj.data;
+        console.log(data)
+        var urlData = { id: data.id };
+        if (obj.event === 'detail') {
+          layer.msg('ID：' + data.id + ' 的查看操作');
+        } else if (obj.event === 'del') {
+          layer.confirm('真的删除行么', function (index) {
+
+            layer.close(index);
+            $.post("/dept/deleteUnitTree", urlData, function (resultJSONObject) {
+              console.log(resultJSONObject)
+              if (resultJSONObject.success) {
+                obj.del();
+                layer.msg("删除成功");
+              } else {
+                layer.msg("禁止删除");
+              }
+            }, "json");
+          });
+        } else if (obj.event === 'edit') {
+          //open 方法合作共用json串
+          $.ajax({
+            url: "/dept/geTdeptSe",
+            data: JSON.stringify(data),
+            type: "post",
+            dataType: "json",
+            timeout: 3000,
+            contentType: "application/json; charset=UTF-8",
+            success: function (msgLog) {
+             
+                if (msgLog.status) {
+                  layer.open({
+                    type: 2,
+                    title: '机构修改',
+                    maxmin: true
+                    , area: ['500px', '500px']
+                    , btn: ['确定', '取消']
+                    , shadeClose: false,
+                    shade: 0.9,
+                    content: '/dept/departmentUpdateInfo?types=2',
+                    yes: function (index, layero) {
+                      console.log(data)
+                      var iframeWindow = window['layui-layer-iframe' + index]
+                        , submitID = 'LAY-user-front-submit'
+                        , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                      //监听提交
+                      iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                        var field = dataLog.field;
+                        // if ($(".deptId").val()==''||$(".deptId").val()== 'undefined') {
+                        //   parentId = $(".deptId").val();
+                        //   field.parentId = parentId;
+                        //   console.log("监听提交 ===================" + field)
+                        // }
+                     
+                        //获取提交的字段
+                        //提交 Ajax 成功后，静态更新表格中的数据
+                        $.ajax({
+                            url: "/dept/updateUnitTree",
+                            data: JSON.stringify(field),
+                            type: "post",
+                            dataType: "json",
+                            timeout: 3000,
+                            contentType: "application/json; charset=UTF-8",
+                            success: function (resultJSONObject) {
+                              if (resultJSONObject.success) {
+                                layer.msg("更新成功");
+                              } else {
+                                layer.msg("更新失败");
+                              }
+                            }
+                          });
+                        table.reload('deptList'); //数据刷新
+                        layer.close(index); //关闭弹层
+                      });
+
+                      submit.trigger('click');
+                    }
+                  });
+                }
+          
+            },
+            error: function (msgLog) {
+              layer.msg('错误', msgLog.msg);
+            }
+          });
+        } else if (obj.event === 'userAndrole') {
+          $.ajax({
+            url: "/role/findRolePage",
+            data: JSON.stringify(data),
+            type: "post",
+            dataType: "json",
+            timeout: 5000,
+            contentType: "application/json; charset=UTF-8",
+            success: function (msgLog) {
+              layer.msg(msgLog.msg, {
+                offset: '15px',
+                icon: 6,
+                time: 1000
+              }, function () {
+                if (msgLog.status) {
+                  layer.open({
+                    type: 2,
+                    title: '角色',
+                    maxmin: true
+                    , area: ['500px', '450px']
+                    , btn: ['确定', '取消']
+                    , shadeClose: false,
+                    shade: 0.5,
+                    content: '/role/assignRoles',
+                    yes: function (index, layero) {
+                      console.log(data)
+                      var iframeWindow = window['layui-layer-iframe' + index]
+                        , submitID = 'LAY-user-front-submit'
+                        , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                      //监听提交
+                      iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                        var field = dataLog.field;
+                        console.log("监听提交 ===================" + data)
+                        //获取提交的字段
+                        //提交 Ajax 成功后，静态更新表格中的数据
+                        $.post("/user/updateUser", field, function (resultJSONObject) {
+                          console.log(resultJSONObject)
+                          if (resultJSONObject.success) {
+                            layer.msg("更新成功");
+                          } else {
+                            layer.msg("更新失败");
+                          }
+                        }, "json");
+                        table.reload('deptList'); //数据刷新
+                        layer.close(index); //关闭弹层
+                      });
+
+                      submit.trigger('click');
+                    }
+                  });
+                }
+              });
+            },
+            error: function (msgLog) {
+              layer.msg('错误', msgLog.msg);
+            }
+          });
+        }
+      });
+
+
+      //监听搜索
+      form.on('submit(dept-front-search)', function (data) {
+        // var field = data.field;
+
+        // //执行重载
+        // table.reload('deptList', {
+        //   where: field
+        // });
+
+        // var a = window.zTreeObj.getSelectedNodes();
+      });
+
+
+      
+
+
+      //事件
+      var active = {
+
+        batchdel: function () {
+          //两种方式
+          var checkStatus = table.checkStatus('deptList')
+            , checkData = checkStatus.data; //得到选中的数据
+
+          if (checkData.length === 0) {
+            return layer.msg('请选择数据');
+          }
+
+          //捉到所有被选中的，发异步进行删除
+          var ids = "";
+          if (checkData.length > 0) {
+            for (var i = 0; i < checkData.length; i++) {
+              ids += checkData[i].userId + ",";
+            }
+          }
+          layer.confirm('确定删除吗？', function (index) {
+            //执行 Ajax 后重载
+            $.ajax({
+              type: "post",
+              url: "/dept/deleteUserAlls",
+              data: { "ids": ids },
+              success: function (data) {
+                if (data.success) {
+                  layer.msg('已删除');
+                  table.reload('deptList'); //数据刷新
+                } else {
+                  layer.msg('禁止删除');
+                }
+                console.log(data)
+              }
+            });
+
+          });
+
+        }
+        , add: function () {
+          layer.open({
+            type: 2
+            , title: '新增'
+            , content: '/dept/departmentUpdateInfo?types=1'
+            , maxmin: true
+            , moveType: 1 //拖拽模式，0或者1
+            , area: ['500px', '500px']
+            , skin: 'layer_bg' //layer_bg是自定义的css样式
+            , shade: 0.9
+            , fixed: true
+            , shadeClose: true//开启遮罩关
+            , btn: ['确定', '取消']
+            , yes: function (index, layero) {
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'LAY-user-front-submit'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                var field = data.field; //获取提交的字段
+                console.log("监听提交 ===================" + JSON.stringify(field))
+                parentId = $(".deptId").val();
+                field.parentId = parentId;
+
+                //提交 Ajax 成功后，静态更新表格中的数据
+          
+                //获取提交的字段
+                //提交 Ajax 成功后，静态更新表格中的数据
+                $.ajax({
+                  type: "post",
+                  url: "/dept/insertUnit",
+                  data: JSON.stringify(field),
+                  dataType: "json",
+                  contentType: "application/json;charset-UTF-8",
+                  success: function (resultJSONObject) {
+                    if (resultJSONObject.success) {
+                      layer.msg("新增成功");
+                    } else {
+                      layer.msg("新增失败");
+                    }
+                    console.log(data)
+                  }
+                });
+                table.reload('deptList'); //数据刷新
+                layer.close(index); //关闭弹层
+              });
+
+              submit.trigger('click');
+            }
+          });
+        }
+
+      };
+
+      $('.layui-btn.layui-btn-sm').on('click', function () {
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+      });
+    });
+
+
+    function up() {
+            debugger
+            var tree = $('#treeview1').jstree(true);
+            var nodeid = $("#treeview1").jstree().get_selected()[0];
+
+            var selectedNode = tree.get_node(nodeid)     //选择的节点
+            if (selectedNode != null) {
+                var parentID = selectedNode.parent;
+                var parentNode = tree.get_node(parentID);
+                var childNodesDom = tree.get_children_dom(parentNode);
+                if (childNodesDom.length > 0) {
+                    var nodeIndex = 0;
+                    for (var i = 0; i < childNodesDom.length; i++) {
+                        var childNode = tree.get_node(childNodesDom[i].id);
+                        if (childNode.id == nodeid) {
+                            nodeIndex = i;
+                            break;
+                        }
+                    }
+                    if (childNodesDom.length > 1 && nodeIndex != 0) {
+                        var lastNode = tree.get_node(childNodesDom[nodeIndex - 1].id);
+                        tree.move_node(selectedNode, parentNode, nodeIndex - 1);
+
+
+                    }
+                }
+                getDeptInfo(nodeid);
+            }
+        }
+        //下移方法
+        function down() {
+            debugger
+            var tree = $('#treeview1').jstree(true);
+            var nodeid = $("#treeview1").jstree().get_selected()[0];
+
+            var selectedNode = tree.get_node(nodeid)     //选择的节点
+            if (selectedNode != null) {
+                var parentID = selectedNode.parent;
+                var parentNode = tree.get_node(parentID);
+                var childNodesDom = tree.get_children_dom(parentNode);
+                if (childNodesDom.length > 0) {
+                    var nodeIndex = 0;
+                    for (var i = 0; i < childNodesDom.length; i++) {
+                        var childNode = tree.get_node(childNodesDom[i].id);
+                        if (childNode.id == nodeid) {
+                            nodeIndex = i;
+                            break;
+                        }
+                    }
+                    if (childNodesDom.length > 0 && nodeIndex < childNodesDom.length) {
+                        var lastNode = tree.get_node(childNodesDom[nodeIndex + 1].id);
+                        var newIndex = nodeIndex + 2;
+                        tree.move_node(selectedNode, parentNode, newIndex);
+                    }
+                }
+                getDeptInfo(nodeid);
+            }
+        }
+
+   
+      
+  </script>
+</body>
+
+</html>

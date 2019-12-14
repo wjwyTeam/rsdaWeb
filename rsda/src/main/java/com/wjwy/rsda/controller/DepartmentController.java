@@ -4,24 +4,31 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-04 17:06:13
+ * @LastEditTime: 2019-12-13 10:17:35
  */
 package com.wjwy.rsda.controller;
 
+import java.util.ArrayList;
+
 import java.util.List;
 
-import com.alibaba.fastjson.JSONObject;
-import com.wjwy.rsda.common.TreeNode;
-import com.wjwy.rsda.common.resultEntity.ResultJson;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Department;
+import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.swagger.annotations.Api;
@@ -37,75 +44,167 @@ public class DepartmentController {
 	public Logger logger = LoggerFactory.getLogger(DepartmentController.class);
 
 	/**
+	 * 机构数展示列表页
+	 * 
+	 * @param department
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "/departmentInfo")
+	public ModelAndView departmentInfo(Department department, ModelAndView model,HttpServletRequest request) {
+		boolean flag = true;
+		if(StringUtils.isNotEmpty(request.getParameter("hideshowType"))){
+			flag = false;
+		}
+		model.addObject("hiddenType", flag);
+		model.setViewName("webview/system/dept/deptList");
+		return model;
+	}
+
+	/**
+	 * 机构数展示添加页
+	 * @param department
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "/departmentUpdateInfo")
+	public ModelAndView updateInfo(Department department, HttpServletRequest request, ModelAndView model) {
+		HttpSession session = request.getSession();
+		System.out.println(request.getParameter("types"));
+		if (!request.getParameter("types").equals(String.valueOf(EnumEntitys.SCUUESS.getValue()))) {
+			department = (Department) session.getAttribute("deptOne");
+		}
+		model.addObject("deptOne", department);
+		model.setViewName("webview/system/dept/deptForm");
+		return model;
+	}
+
+
+	@ApiOperation(value = "获取当前Session数据", notes = "获取当前Session数据")
+	@PostMapping("/geTdeptSe")
+	public ResponseWrapper findoneUser(@RequestBody Department department, HttpServletRequest request) {
+		try {
+			if (department == null) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "获取失败", null, null,null);
+			}
+			// 存放到Session
+			HttpSession session = request.getSession();
+			session.setAttribute("deptOne", department);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", department, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
+
+	/**
 	 * 加载部门管理左边的部门树的json
+	 * 
+	 * @param parentId
+	 * @return ResponseWrapper
+	 */
+	@ApiOperation(value = "机构树展示 ")
+	@PostMapping(value = "/unitTree")
+	public List<Department> loadDepartmentLeftTreeJson(@RequestBody Department id) {
+		List<Department> treeNodes = new ArrayList<Department>();
+		try {
+			  treeNodes = deptService.list(id.getId());
+		
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return treeNodes;
+	}
+
+	/**
 	 * 
 	 * @param department
 	 * @return
 	 */
-	@ApiOperation(value = "机构树展示 ")
-	@GetMapping(value = "/unitTree")
-	public ResultJson loadDepartmentLeftTreeJson(String parentId) {
-
-		ResultJson resultJson = new ResultJson();
-		List<TreeNode> treeNodes;
+	@ApiOperation(value = "机构列表", notes = "参数:department")
+	@PostMapping(value = "/departmentPageInfoList")
+	public ResponseWrapper departmentPageInfoList(Department department) {
 		try {
-			treeNodes = deptService.list(parentId);
-			resultJson.status = true;
-			resultJson.msg = "获取成功";
-			resultJson.setData(treeNodes);
+ 
+			List<Department> treeNodes = deptService.findList(department);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", treeNodes, null, treeNodes.size());
 		} catch (Exception e) {
-			logger.error(e.toString(), e);
+			logger.error(e.getMessage());
 		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
 
-		return resultJson;
+
+		/**
+	 * 
+	 * @param department
+	 * @return
+	 */
+	@ApiOperation(value = "机构单点查询列表", notes = "参数:id")
+	@PostMapping(value = "/findUnitList")
+	public ResponseWrapper findUnitList(String id) {
+		try {
+			if (StringUtils.isEmpty(id)) {
+				id = String.valueOf(EnumEntitys.GIDPARENT.getValue());
+			} 
+			List<Department> treeNodes = deptService.findTreeList(id);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", treeNodes, null, treeNodes.size());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
 	/**
 	 * 新增机构
 	 * 
 	 * @param department
-	 * @return
+	 * @return ResponseWrapper
 	 */
 	@ApiOperation(value = "新增机构")
 	@PostMapping(value = "/insertUnit")
-	public JSONObject insertUnitTree(@RequestBody Department department) {
-		JSONObject resultJSONObject = new JSONObject();
+	public ResponseWrapper insertUnitTree(@RequestBody Department department) {
 		try {
-			int resultTotal = 0;// 操作的记录数
-			resultTotal = deptService.insertUnitTree(department);
-			boolean flag = false;
-			if (resultTotal > 0) {
-				flag = true;
+			int resultTotal = deptService.insertUnitTree(department);
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
 			}
-			resultJSONObject.put("success", flag);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
 		} catch (Exception e) {
-			logger.error(e.toString(), e);
+			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		return resultJSONObject;
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
 	/**
 	 * 更新机构
 	 * 
 	 * @param department
-	 * @return
+	 * @return ResponseWrapper
 	 */
 	@ApiOperation(value = "更新机构")
 	@PostMapping(value = "/updateUnitTree")
-	public JSONObject updateUnitTree(@RequestBody Department department) {
-		JSONObject resultJSONObject = new JSONObject();
+	@ResponseBody
+	public ResponseWrapper updateUnitTree(@RequestBody Department department) {
 		try {
-			int resultTotal = 0;// 操作的记录数
-			resultTotal = deptService.updateUnitTree(department);
-			boolean flag = false;
-			if (resultTotal > 0) {
-				flag = true;
+			int resultTotal = deptService.updateUnitTree(department);
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
 			}
-			resultJSONObject.put("success", flag);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
 		} catch (Exception e) {
-			logger.error(e.toString(), e);
+			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		return resultJSONObject;
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
 	/**
@@ -116,23 +215,65 @@ public class DepartmentController {
 	 */
 	@ApiOperation(value = "删除机构")
 	@PostMapping(value = "/deleteUnitTree")
-	public JSONObject deleteUser(String id) {
-		JSONObject resultJSONObject = new JSONObject();
+	public ResponseWrapper deleteUser(String id) {
 		try {
 			Department department = new Department();
-
 			department.setId(id);
 			int resultTotal = deptService.deleteUnitTree(department);
-
-			boolean flag = false;
-			if (resultTotal > 0) {
-				flag = true;
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前用户]", null, null, null);
+			} else if (resultTotal == HttpStatus.GONE.value()) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "数据中不存在当前用户", null, null, null);
 			}
-			resultJSONObject.put("success", flag);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
 		} catch (Exception e) {
-			logger.error(e.toString(), e);
+			logger.error(e.getMessage());
 		}
-		return resultJSONObject;
+
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
+	/**
+	 * 通过ID查找父数据对象+通过ID查找子数据集合
+	 * 
+	 * @param id
+	 * @return
+	 */
+
+	@ApiOperation(value = "机构树展示")
+	@PostMapping(value = "/getTree")
+	public List<Department> getTree(String id) {
+		List<Department> departments = new ArrayList<Department>();
+		try {
+			if (StringUtils.isEmpty(id)) {
+				departments = deptService.getChildren(String.valueOf(EnumEntitys.GJD.getValue()));
+			} else {
+				departments = deptService.getChildren(id); // 查询
+			}
+
+			if (departments != null) {
+				for (Department departmentList : departments) {
+					List<Department> departmentChilds = deptService.getChildren(departmentList.getId());// 查询省下面的所有市
+					inDigui(departmentChilds); // 调用递归算法查询子集合
+					departmentList.setChildren(departmentChilds);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return departments;
+	}
+
+	public void inDigui(List<Department> departmentChilds) {
+		List<Department> list = new ArrayList<>();
+		for (Department c : departmentChilds) {
+			list = deptService.getChildren(c.getId());
+			if (list.size() > 0) {
+				c.setChildren(list);
+				inDigui(list); // 循环调用自己
+			}
+		}
+	}
 }

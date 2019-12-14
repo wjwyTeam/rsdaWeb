@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 16:48:51
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-06 16:56:24
+ * @LastEditTime: 2019-12-11 08:46:27
  */
 package com.wjwy.rsda.common.config;
 
@@ -57,9 +57,9 @@ public class SwaggerConfig
         // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
                 // 设置标题
-                .title("公司主题：维佳伟业管理系统_接口文档")
+                .title("维佳伟业公司：数字化干部人事档案网上查询系统_接口文档")
                 // 描述
-                .description("档案管理系统")
+                .description("数字化干部人事档案网上查询系统")
                 // 作者信息
                 .contact(new Contact(Global.getName(), null, null))
                 // 版本

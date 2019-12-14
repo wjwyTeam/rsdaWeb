@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-05 14:39:26
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-05 14:41:11
+ * @LastEditTime: 2019-12-09 16:18:23
  */
 package com.wjwy.rsda.common.util;
 
@@ -22,6 +22,7 @@ public class MD5Util {
 
     /**
      * 将源字符串使用MD5加密为字节数组
+     * 
      * @param source
      * @return
      */
@@ -43,6 +44,7 @@ public class MD5Util {
 
     /**
      * 将源字符串使用MD5加密为32位16进制数
+     * 
      * @param source
      * @return
      */
