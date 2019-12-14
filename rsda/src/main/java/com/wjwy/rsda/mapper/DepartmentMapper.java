@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 09:43:55
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 19:06:45
+ * @LastEditTime: 2019-12-14 12:27:08
  */
 package com.wjwy.rsda.mapper;
 import java.util.List;
@@ -21,7 +21,7 @@ public interface DepartmentMapper extends TkMapper<Department> {
      * @param parentId
      * @return List<Department>
      */
-    @Select("SELECT a.*,(select count(1) from sys_dapartment where parent_id=a.id) as child_num FROM sys_dapartment a where a.parent_id = #{parentId} and a.del_flag = false")
+    @Select("SELECT a.*,(select count(1) from sys_dapartment where parent_id=a.id AND del_flag=false) as child_num FROM sys_dapartment a where a.parent_id = #{parentId} and a.del_flag = false")
     List<Department> selectTreeList(String parentId);
 
     /**
