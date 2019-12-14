@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:51:31
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 10:02:56
+ * @LastEditTime: 2019-12-14 11:56:40
  */
 package com.wjwy.rsda.entity;
 
@@ -124,8 +124,7 @@ public class Department implements Serializable{
   @Transient
   private Integer childNum;
 
-  @ApiModelProperty("是否有节点")
-  @Column(name = "is_parent")
+  @Transient
   private Boolean isParent;
 
   /**

@@ -4,12 +4,15 @@
  * @Author: zgr
  * @Date: 2019-11-30 18:24:05
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-10 18:30:06
+ * @LastEditTime: 2019-12-14 11:57:17
  */
 package com.wjwy.rsda.controller;
 
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.User;
+
+import java.net.InetAddress;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
@@ -67,6 +70,7 @@ public class LoginController {
 		HttpSession session = request.getSession(false);// 获取库内session
 		if (session != null) {
 			session.removeAttribute("userInfo");// 剔除对应缓存
+		
 		}
 		SecurityUtils.getSubject().logout();
 		model.setViewName("login");// 返回到登录界面
@@ -147,4 +151,34 @@ public class LoginController {
 	// }
 	// return ip;
 	// }
+	private String getIpAddr(HttpServletRequest request) {
+    String ip = request.getHeader ("x-forwarded-for");
+    if (ip == null || ip.length () == 0 || "unknown".equalsIgnoreCase (ip)) {
+        ip = request.getHeader ("Proxy-Client-IP");
+    }
+    if (ip == null || ip.length () == 0 || "unknown".equalsIgnoreCase (ip)) {
+        ip = request.getHeader ("WL-Proxy-Client-IP");
+    }
+    if (ip == null || ip.length () == 0 || "unknown".equalsIgnoreCase (ip)) {
+        ip = request.getRemoteAddr ();
+        if (ip.equals ("127.0.0.1")) {
+            //根据网卡取本机配置的IP
+            InetAddress inet = null;
+            try {
+                inet = InetAddress.getLocalHost ();
+            } catch (Exception e) {
+                e.printStackTrace ();
+            }
+            ip = inet.getHostAddress ();
+        }
+    }
+    // 多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+    if (ip != null && ip.length () > 15) {
+        if (ip.indexOf (",") > 0) {
+            ip = ip.substring (0, ip.indexOf (","));
+        }
+    }
+    return ip;
+}
+
 }

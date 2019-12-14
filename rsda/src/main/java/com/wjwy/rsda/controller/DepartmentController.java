@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-13 10:17:35
+ * @LastEditTime: 2019-12-14 11:53:23
  */
 package com.wjwy.rsda.controller;
 
@@ -108,11 +108,14 @@ public class DepartmentController {
 	 */
 	@ApiOperation(value = "机构树展示 ")
 	@PostMapping(value = "/unitTree")
-	public List<Department> loadDepartmentLeftTreeJson(@RequestBody Department id) {
+	public List<Department> loadDepartmentLeftTreeJson(@RequestBody Department department) {
 		List<Department> treeNodes = new ArrayList<Department>();
 		try {
-			  treeNodes = deptService.list(id.getId());
-		
+			List<Department>  departmentList = deptService.list(department.getId());
+			for (Department departments : departmentList) {
+					departments.setIsParent(departments.getChildNum() > 0 ? true:false);
+					treeNodes.add(departments);
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
