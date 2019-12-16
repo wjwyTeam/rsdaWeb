@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - RsdaApplicationServer",
+            "request": "launch",
+            "mainClass": "com.wjwy.rsda.RsdaApplicationServer",
+            "projectName": "rsda"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - TreeUtils",
             "request": "launch",
             "mainClass": "com.wjwy.rsda.common.util.TreeUtils",

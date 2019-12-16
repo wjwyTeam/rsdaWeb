@@ -3,11 +3,9 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-12 08:17:42
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-12 08:56:06
+ * @LastEditors: zgr
+ * @LastEditTime: 2019-12-15 18:55:19
  -->
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,23 +15,25 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-  
 </head>
 <body>
 
-  <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;" th:object="${deptOne}">
+  <div class="layui-form" lay-filter="deptform" id="deptform" style="padding: 20px 0 0 0;" >
   <div class="layui-form-item  layui-hide">
-      <label class="layui-form-label">ID</label>
       <div class="layui-input-inline" style=" width:calc(100% - 125px)">
-        <input type="text" name="id"  placeholder="请输入ID" autocomplete="off" class="layui-input"  th:value=" *{id}">
+        <input type="text" name="id"  autocomplete="off" class="layui-input" >
       </div>
     </div>
-
-
     <div class="layui-form-item">
       <label class="layui-form-label">机构名称</label>
       <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
-        <input type="text" name="name" lay-verify="required" placeholder="请输入机构名称" autocomplete="off" class="layui-input"  th:value=" *{name}">
+        <input type="text" name="name" lay-verify="required" placeholder="请输入机构名称" autocomplete="off" class="layui-input" >
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">简称</label>
+      <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+        <input type="text" name="shortName" lay-verify="shortName" placeholder="请输入简称" autocomplete="off" class="layui-input" >
       </div>
     </div>
     <div class="layui-form-item" lay-filter="type">
@@ -48,10 +48,16 @@
        
         </div>
       </div>
-      <div class="layui-form-item pipeType" lay-filter="pipeType">
+      <div class="layui-form-item" lay-filter="isPipe">
+        <label class="layui-form-label">是否管档</label>
+        <div class="layui-inline">
+            <input type="checkbox" name="isPipe" id="isPipe" lay-skin="switch" value="true"  lay-text="YES|NO" lay-filter="isPipeval" >
+        </div>
+      </div>
+      <div class="layui-form-item pipeType" lay-filter="pipeType" style="display: none;" >
           <label class="layui-form-label">管档类别</label>
           <div class="layui-input-inline"  style=" width:calc(100% - 125px)" >
-             <select name="pipeType">
+             <select name="pipeType" >
                  <option value="" selected= "true">请选择</option>
                  <option value="0">主管部门</option>
                  <option value="1">档案自管</option>
@@ -61,37 +67,23 @@
           </div>
      </div>
 
-     <div class="layui-form-item" lay-filter="isPipe">
-        <div class="layui-inline">
-          <label class="layui-form-label">是否管档</label>
-          <div class="layui-input-block">
-            <input type="checkbox" name="isPipe" id="isPipe" lay-skin="switch"  lay-text="NO|YES" lay-filter="autoplay" th:value=" *{isPipe}">
-          </div>
-        </div>
-      </div>
-
-    <div class="layui-form-item">
-      <label class="layui-form-label">简称</label>
-      <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
-        <input type="text" name="shortName" lay-verify="shortName" placeholder="请输入简称" autocomplete="off" class="layui-input"  th:value=" *{shortName}">
-      </div>
-    </div>
     <div class="layui-form-item">
       <label class="layui-form-label">排序</label>
       <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
-        <input type="text" name="dorder" lay-verify="dorder" placeholder="请输入排序" autocomplete="off" class="layui-input"  th:value=" *{dorder}">
+        <input type="text" name="dorder" lay-verify="dorder" placeholder="请输入排序" autocomplete="off" class="layui-input" >
       </div>
     </div>
    
     <div class="layui-form-item layui-hide">
        <div class="layui-input-block">
-      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认" class="layui-btn">
+      <input type="button" lay-submit lay-filter="deptconfirm" id="deptconfirm" value="确认">
    	  </div>
     </div>
   </div>
 
   <script src="../../../layuiadmin/layui/layui.js" th:inline="none"></script>  
-  <script>
+  <script th:inline="javascript">
+  var deptOne =  [[${deptOne}]];
   layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
   }).extend({
@@ -100,22 +92,20 @@
     var $ = layui.$
     ,form = layui.form;
     layer.ready(function () {
-    if ( $("#isPipe").val() == 'true'|| $("#isPipe").val() == "") {
-        $(".pipeType").show();
-        $("#isPipe").attr("checked",true);
+    form.val('deptform', deptOne);
+    if (!deptOne.isPipe) {
+      $(".pipeType").hide();
+        $("#isPipe").attr("checked",false);
       }else{
-        $(".pipeType").hide();
-    
+        $(".pipeType").show();
       }
     });
     //监听指定开关
-  form.on('switch(autoplay)', function(data){
+  form.on('switch(isPipeval)', function(data){
      $("#isPipe").val(this.checked);
-    if (this.checked ? 'true' : 'false' == 'true') {
-      layer.tips('管档已启用',data.othis);
+    if (this.checked) {
       $(".pipeType").show();
     }else{
-      layer.tips('管档已禁用',data.othis);
       $(".pipeType").hide();
     }
   

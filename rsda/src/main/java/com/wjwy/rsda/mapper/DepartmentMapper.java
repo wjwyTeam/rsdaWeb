@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-04 09:43:55
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-14 12:27:08
+ * @LastEditors: zgr
+ * @LastEditTime: 2019-12-15 19:14:21
  */
 package com.wjwy.rsda.mapper;
 import java.util.List;
@@ -21,7 +21,7 @@ public interface DepartmentMapper extends TkMapper<Department> {
      * @param parentId
      * @return List<Department>
      */
-    @Select("SELECT a.*,(select count(1) from sys_dapartment where parent_id=a.id AND del_flag=false) as child_num FROM sys_dapartment a where a.parent_id = #{parentId} and a.del_flag = false")
+    @Select("SELECT a.*,case (select count(1) from sys_dapartment where parent_id=a.id AND del_flag=false) when 0 then FALSE else TRUE end as is_parent FROM sys_dapartment a where a.parent_id = #{parentId} and a.del_flag = false")
     List<Department> selectTreeList(String parentId);
 
     /**
@@ -29,7 +29,7 @@ public interface DepartmentMapper extends TkMapper<Department> {
      * @param id
      * @return List<Department>
      */
-    @Select("select * from sys_dapartment where id=#{id} and del_flag=false UNION select * from sys_dapartment where parent_id=#{id} and del_flag=false ORDER BY d_order ASC")
+    @Select("select * from sys_dapartment where id=#{id} and del_flag=false UNION ALL select * from sys_dapartment where parent_id=#{id} and del_flag=false ORDER BY d_order ASC")
 	List<Department> selectTreeOne(String id);
    
 }

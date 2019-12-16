@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-03 16:08:57
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 19:09:36
+ * @LastEditors: zgr
+ * @LastEditTime: 2019-12-15 17:50:15
  */
 package com.wjwy.rsda.services;
 
@@ -45,20 +45,7 @@ public class DepartmentService {
         if(StringUtil.isEmpty(parentId)|| parentId.equalsIgnoreCase("{}")){
             parentId=String.valueOf(EnumEntitys.GJD.getValue());
         }
-
         List<Department> departmentlists = departmentMapper.selectTreeList(parentId);
-        if(departmentlists == null){
-            return null;
-        }
-        for (Department department : departmentlists) {
-            if(department.getChildNum() > 0){
-                department.setIsParent(true);
-            }else{
-                department.setIsParent(false);
-            }
-            updateUnitTree(department);
-        }
-
         return departmentlists;
     }
 
@@ -137,11 +124,11 @@ public class DepartmentService {
     }
 
     /**
-     * 通过ID查找父数据对象
+     * 通过ID查找数据对象
      * @param id
      * @return
      */
-	public Department getTree(String id) {
+	public Department getDept(String id) {
         Example example = new Example(Department.class);
         Criteria criteria = example.createCriteria();
         if (!StringUtil.isEmpty(id)) {
@@ -162,7 +149,7 @@ public class DepartmentService {
             criteria.andEqualTo("parentId", id);
         }
         criteria.andEqualTo("delFlag", false);
-		return departmentMapper.selectByExample(example);
+		return departmentMapper.selectByExample(example); 
     } 
     
 
@@ -172,6 +159,9 @@ public class DepartmentService {
      * @return List<Department>
      */
 	public List<Department> findTreeList(String id) {
+        if (StringUtil.isEmpty(id)) {
+            id = String.valueOf(EnumEntitys.GIDPARENT.getValue());
+        } 
         return departmentMapper.selectTreeOne(id);
     }
 }

@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-14 12:16:28
+ * @LastEditors: zgr
+ * @LastEditTime: 2019-12-15 17:53:14
  */
 package com.wjwy.rsda.controller;
 
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Department;
@@ -62,42 +61,21 @@ public class DepartmentController {
 	}
 
 	/**
-	 * 机构数展示添加页
+	 * 机构单位展示添加页
 	 * @param department
 	 * @param request
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "/departmentUpdateInfo")
-	public ModelAndView updateInfo(Department department, HttpServletRequest request, ModelAndView model) {
-		HttpSession session = request.getSession();
-		System.out.println(request.getParameter("types"));
-		if (!request.getParameter("types").equals(String.valueOf(EnumEntitys.SCUUESS.getValue()))) {
-			department = (Department) session.getAttribute("deptOne");
+	@GetMapping(value = "/deptInfo")
+	public ModelAndView updateInfo(String  departmentid, ModelAndView model) {
+		Department department = new Department();
+		if(StringUtils.isNotEmpty(departmentid)){
+			department = deptService.getDept(departmentid);
 		}
 		model.addObject("deptOne", department);
 		model.setViewName("webview/system/dept/deptForm");
 		return model;
-	}
-
-
-	@ApiOperation(value = "获取当前Session数据", notes = "获取当前Session数据")
-	@PostMapping("/geTdeptSe")
-	public ResponseWrapper findoneUser(@RequestBody Department department, HttpServletRequest request) {
-		try {
-			if (department == null) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "获取失败", null, null,null);
-			}
-			// 存放到Session
-			HttpSession session = request.getSession();
-			session.setAttribute("deptOne", department);
-			return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", department, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
 	/**
@@ -109,17 +87,13 @@ public class DepartmentController {
 	@ApiOperation(value = "机构树展示 ")
 	@PostMapping(value = "/unitTree")
 	public List<Department> loadDepartmentLeftTreeJson(@RequestBody Department department) {
-		List<Department> treeNodes = new ArrayList<Department>();
+		List<Department> departmentList = new ArrayList<Department>();
 		try {
-			List<Department>  departmentList = deptService.list(department.getId());
-			for (Department departments : departmentList) {
-					departments.setIsParent(departments.getChildNum() > 0 ? true:false);
-					treeNodes.add(departments);
-			}
+			departmentList = deptService.list(department.getId());
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		return treeNodes;
+		return departmentList;
 	}
 
 	/**
@@ -151,9 +125,6 @@ public class DepartmentController {
 	@PostMapping(value = "/findUnitList")
 	public ResponseWrapper findUnitList(String id) {
 		try {
-			if (StringUtils.isEmpty(id)) {
-				id = String.valueOf(EnumEntitys.GIDPARENT.getValue());
-			} 
 			List<Department> treeNodes = deptService.findTreeList(id);
 			return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", treeNodes, null, treeNodes.size());
 		} catch (Exception e) {
