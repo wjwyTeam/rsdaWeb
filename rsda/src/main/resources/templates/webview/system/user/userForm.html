@@ -92,7 +92,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>密码</label>
           <div class="layui-input-inline">
-            <input type="password" name="passWord" lay-verify="required" autocomplete="off" placeholder="请输入密码"
+            <input type="password" name="passWord" id="firstPassword"  lay-verify="passfirst" required autocomplete="off" placeholder="请输入密码"
               class="layui-input">
           </div>
         </div>
@@ -103,7 +103,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>职务情况</label>
           <div class="layui-input-inline">
-            <input type="text" name="duty" id="WorkUnitDuties" lay-verify="required" autocomplete="off" placeholder=""
+            <input type="text" name="duty" id="WorkUnitDuties"  lay-verify="required" autocomplete="off" placeholder=""
               class="layui-input">
 
           </div>
@@ -114,9 +114,9 @@
     <div class="layui-col-xs6">
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>重复密码</label>
+          <label class="layui-form-label"><i style="color:red">* </i>确认密码</label>
           <div class="layui-input-inline">
-            <input type="password" name="repassword" value="" lay-verify="required" autocomplete="off"
+            <input type="password" name="repassword" value="" required lay-verify="confirmPass" autocomplete="off"
               placeholder="再次输入密码" class="layui-input">
           </div>
         </div>
@@ -157,12 +157,12 @@
   <script src="../../../layuiadmin/layui/layui.js"></script>
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
   <script  th:inline="javascript">
-      var userOne = [[${ userOne }]];
+    var userOne = [[${ userOne }]];
     layui.config({
       base: '../../../layuiadmin/' //静态资源所在路径
     }).extend({
       index: 'lib/index' //主入口模块
-    }).use(['index', 'form', 'upload'], function () {
+    }).use(['index', 'form', 'upload'], function () { 
       var $ = layui.$
         , form = layui.form
         , upload = layui.upload;
@@ -204,10 +204,26 @@
           $(this.item).prev("div").children("input").val(res.data.src)
         }
       });
+       
+      form.verify({
+         passfirst:[ /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/, '密码必须6到12位字母和数字的组合'],
+         confirmPass : function (value){
+              var firstPass = $("#firstPassword").val();
+              if(value != firstPass){
+                return "两次输入的密码不一致"
+              }
+         }
+     });
+    
+
+
+
     })
+    
+    
 
-
-
+   
+     
     function PersWin() {
       layer.ready(function () {
         layer.open({
@@ -219,6 +235,8 @@
         });
       });
     }
+
+    
 
 
     function openWin() {
