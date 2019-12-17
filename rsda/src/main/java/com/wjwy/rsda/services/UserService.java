@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 11:42:33
+ * @LastEditTime: 2019-12-17 17:21:44
  */
 package com.wjwy.rsda.services;
 
@@ -79,7 +79,7 @@ public class UserService {
 	 */
 	public User getUserByLogin(String userName, String passWord) {
 		User user = new User();
-		user.setDelFlag(true);
+		user.setDelFlag(false);
 		user.setUserName(userName);
 		user.setPassWord(passWord);
 		return userDao.selectOne(user);

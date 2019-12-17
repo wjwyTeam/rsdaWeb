@@ -2,253 +2,187 @@ package com.wjwy.rsda.common.util;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
+/**
+ * 获取IP方法
+ * 
+ * @author ruoyi
+ */
+public class IpUtils
+{
+    public static String getIpAddr(HttpServletRequest request)
+    {
+        if (request == null)
+        {
+            return "unknown";
+        }
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+        {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+        {
+            ip = request.getHeader("X-Forwarded-For");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+        {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+        {
+            ip = request.getHeader("X-Real-IP");
+        }
 
-public class IpUtils {
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+        {
+            ip = request.getRemoteAddr();
+        }
 
-  /**
-	 * 默认IP地址
-	 */
-	public final static String ERROR_IP = "127.0.0.1";
- 
-	/**
-	 * IP地址正则表达式
-	 */
-	public final static Pattern pattern = Pattern.compile(
-			"(2[5][0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})");
- 
-	/**
-	 * 
-	 * @author ZHANGQI
-	 * @param request
-	 * @return boolean
-	 *
-	 * @version : V1.0.0
-	 */
-	public static boolean isValidIP(HttpServletRequest request)
-	{
-		// 获取用户真实的IP地址
-		String ip = getUserIP(request);
-		// 验证IP地址是否符合规则
-		return isValidIP(ip);
-	}
- 
-	/**
-	 *
-	 * @description 获取远程IP地址
-	 * @param request
-	 * @return String
-	 *
-	 * @version : V1.0.0
-	 */
-	public static String getRemoteIp(HttpServletRequest request)
-	{
-		String ip = request.getHeader("x-real-ip");
-		if (ip == null)
-		{
-			ip = request.getRemoteAddr();
-		}
-		// 过滤反向代理的ip
-		String[] stemps = ip.split(",");
-		if (stemps != null && stemps.length >= 1)
-		{
-			// 得到第一个IP，即客户端真实IP
-			ip = stemps[0];
-		}
- 
-		ip = ip.trim();
-		if (ip.length() > 23)
-		{
-			ip = ip.substring(0, 23);
-		}
- 
-		return ip;
-	}
- 
-	/**
-	 * @description 获取用户真实的IP地址
-	 * @param request
-	 * @return String
-	 *
-	 * @version : V1.0.0
-	 */
-	public static String getUserIP(HttpServletRequest request)
-	{
-		// 优先取 X-Real-IP
-		String ip = request.getHeader("X-Real-IP");
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
-		{
-			ip = request.getHeader("x-forwarded-for");
-		}
- 
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
-		{
-			ip = request.getRemoteAddr();
-			if ("0:0:0:0:0:0:0:1".equals(ip))
-			{
-				ip = ERROR_IP;
-			}
-		}
-		if ("unknown".equalsIgnoreCase(ip))
-		{
-			ip = ERROR_IP;
-			return ip;
-		}
-		int index = ip.indexOf(',');
-		if (index >= 0)
-		{
-			ip = ip.substring(0, index);
-		}
- 
-		return ip;
-	}
- 
-	/**
-	 *
-	 * @description 获取末尾IP地址段，{@linkplain IP地址简介}
-	 * @param request
-	 * @return String
-	 *
-	 * @version : V1.0.0
-	 */
-	public static String getLastIpSegment(HttpServletRequest request)
-	{
-		// 获取用户真实的IP地址
-		String ip = getUserIP(request);
-		if (ip != null)
-		{
-			ip = ip.substring(ip.lastIndexOf('.') + 1);
-		} else
-		{
-			ip = "0";
-		}
-		return ip;
-	}
- 
-	/**
-	 *
-	 * @description 验证IP地址是否符合规则
-	 * @param ip
-	 * @return boolean
-	 *
-	 * @version : V1.0.0
-	 */
-	public static boolean isValidIP(String ip)
-	{
-		if (StringUtils.isEmpty(ip))
-		{
-			return false;
-		}
-		Matcher matcher = pattern.matcher(ip);
-		boolean isValid = matcher.matches();
-		return isValid;
-	}
- 
-	/**
-	 * @description 获取服务器的会后一个地址段
-	 * @return String
-	 *
-	 * @version : V1.0.0
-	 */
-	public static String getLastServerIpSegment()
-	{
-		String ip = getServerIP();
-		if (ip != null)
-		{
-			ip = ip.substring(ip.lastIndexOf('.') + 1);
-		} else
-		{
-			ip = "0";
-		}
-		return ip;
-	}
- 
-	/**
-	 * 
-	 * @description 获取服务器IP地址
-	 * @return String
-	 *
-	 * @version : V1.0.0
-	 */
-	public static String getServerIP()
-	{
-		InetAddress inetAddress;
-		try
-		{
-			inetAddress = InetAddress.getLocalHost();
-			String hostAddress = inetAddress.getHostAddress();
-			return hostAddress;
-		} catch (UnknownHostException e)
-		{
-			e.printStackTrace();
-		}
-		return ERROR_IP;
-	}
- 
-	/**
-	 * 
-	 *              <li>获取IP地址
-	 *              <li><strong>注意：</strong>IP地址经过多次反向代理后会有多个IP值，
-	 *              <li>其中第一个IP才是真实IP，所以不能通过request.getRemoteAddr()获取IP地址，
-	 *              <li>如果使用了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP地址，
-	 *              <li>X-Forwarded-For中第一个非unknown的有效IP才是用户真实IP地址。
+        return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
+    }
 
-	 * @param request
-	 * @return String
-	 *
-	 * @version : V1.0.0
-	 */
-	public static String getIpAddress(HttpServletRequest request)
-	{
-		String ip = null;
-		try
-		{
-			// 获取用户真是的地址
-			String Xip = request.getHeader("X-Real-IP");
-			// 获取多次代理后的IP字符串值
-			String XFor = request.getHeader("X-Forwarded-For");
-			if (StringUtils.isNotEmpty(XFor) && !"unKnown".equalsIgnoreCase(XFor))
-			{
-				// 多次反向代理后会有多个IP值，第一个用户真实的IP地址
-				int index = XFor.indexOf(",");
-				if (index >= 0)
-				{
-					return XFor.substring(0, index);
-				} else
-				{
-					return XFor;
-				}
-			}
-			ip = Xip;
-			if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
-			{
-				ip = request.getHeader("Proxy-Client-IP");
-			}
-			if (StringUtils.isEmpty(ip) || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
-			{
-				ip = request.getHeader("WL-Proxy-Client-IP");
-			}
-			if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
-			{
-				ip = request.getHeader("HTTP_CLIENT_IP");
-			}
-			if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
-			{
-				ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-			}
-			if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
-			{
-				ip = request.getRemoteAddr();
-			}
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return ip;
-	}
+    public static boolean internalIp(String ip)
+    {
+        byte[] addr = textToNumericFormatV4(ip);
+        return internalIp(addr) || "127.0.0.1".equals(ip);
+    }
+
+    private static boolean internalIp(byte[] addr)
+    {
+        if (StringUtils.isNull(addr) || addr.length < 2)
+        {
+            return true;
+        }
+        final byte b0 = addr[0];
+        final byte b1 = addr[1];
+        // 10.x.x.x/8
+        final byte SECTION_1 = 0x0A;
+        // 172.16.x.x/12
+        final byte SECTION_2 = (byte) 0xAC;
+        final byte SECTION_3 = (byte) 0x10;
+        final byte SECTION_4 = (byte) 0x1F;
+        // 192.168.x.x/16
+        final byte SECTION_5 = (byte) 0xC0;
+        final byte SECTION_6 = (byte) 0xA8;
+        switch (b0)
+        {
+            case SECTION_1:
+                return true;
+            case SECTION_2:
+                if (b1 >= SECTION_3 && b1 <= SECTION_4)
+                {
+                    return true;
+                }
+            case SECTION_5:
+                switch (b1)
+                {
+                    case SECTION_6:
+                        return true;
+                }
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * 将IPv4地址转换成字节
+     * 
+     * @param text IPv4地址
+     * @return byte 字节
+     */
+    public static byte[] textToNumericFormatV4(String text)
+    {
+        if (text.length() == 0)
+        {
+            return null;
+        }
+
+        byte[] bytes = new byte[4];
+        String[] elements = text.split("\\.", -1);
+        try
+        {
+            long l;
+            int i;
+            switch (elements.length)
+            {
+                case 1:
+                    l = Long.parseLong(elements[0]);
+                    if ((l < 0L) || (l > 4294967295L))
+                        return null;
+                    bytes[0] = (byte) (int) (l >> 24 & 0xFF);
+                    bytes[1] = (byte) (int) ((l & 0xFFFFFF) >> 16 & 0xFF);
+                    bytes[2] = (byte) (int) ((l & 0xFFFF) >> 8 & 0xFF);
+                    bytes[3] = (byte) (int) (l & 0xFF);
+                    break;
+                case 2:
+                    l = Integer.parseInt(elements[0]);
+                    if ((l < 0L) || (l > 255L))
+                        return null;
+                    bytes[0] = (byte) (int) (l & 0xFF);
+                    l = Integer.parseInt(elements[1]);
+                    if ((l < 0L) || (l > 16777215L))
+                        return null;
+                    bytes[1] = (byte) (int) (l >> 16 & 0xFF);
+                    bytes[2] = (byte) (int) ((l & 0xFFFF) >> 8 & 0xFF);
+                    bytes[3] = (byte) (int) (l & 0xFF);
+                    break;
+                case 3:
+                    for (i = 0; i < 2; ++i)
+                    {
+                        l = Integer.parseInt(elements[i]);
+                        if ((l < 0L) || (l > 255L))
+                            return null;
+                        bytes[i] = (byte) (int) (l & 0xFF);
+                    }
+                    l = Integer.parseInt(elements[2]);
+                    if ((l < 0L) || (l > 65535L))
+                        return null;
+                    bytes[2] = (byte) (int) (l >> 8 & 0xFF);
+                    bytes[3] = (byte) (int) (l & 0xFF);
+                    break;
+                case 4:
+                    for (i = 0; i < 4; ++i)
+                    {
+                        l = Integer.parseInt(elements[i]);
+                        if ((l < 0L) || (l > 255L))
+                            return null;
+                        bytes[i] = (byte) (int) (l & 0xFF);
+                    }
+                    break;
+                default:
+                    return null;
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            return null;
+        }
+        return bytes;
+    }
+
+    public static String getHostIp()
+    {
+        try
+        {
+            return InetAddress.getLocalHost().getHostAddress();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        return "127.0.0.1";
+    }
+
+    public static String getHostName()
+    {
+        try
+        {
+            return InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        return "未知";
+    }
 }

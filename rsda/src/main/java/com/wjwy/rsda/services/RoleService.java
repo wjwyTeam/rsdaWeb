@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 19:04:05
+ * @LastEditTime: 2019-12-17 14:27:54
  */
 package com.wjwy.rsda.services;
 
@@ -154,8 +154,7 @@ public class RoleService {
      * 根据角色查询功能
      */
 	public boolean getFunction(String id) {
-
-        
+   
     //      List<Role> roles = roleMapper.selectByExample(example);
     //     if (roles == null) {
     //        return false;

@@ -4,10 +4,9 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 16:48:51
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 08:46:27
+ * @LastEditTime: 2019-12-17 15:48:50
  */
 package com.wjwy.rsda.common.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import io.swagger.annotations.ApiOperation;
