@@ -4,13 +4,12 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:51:31
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-14 11:56:40
+ * @LastEditTime: 2019-12-16 17:38:01
  */
 package com.wjwy.rsda.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -72,9 +71,15 @@ public class Department implements Serializable{
    * 单位类别
    */
   @ApiModelProperty("单位类别")
-  @Column(name = "type")
-  private Integer type;
+  @Column(name = "unit_type")
+  private Integer unitType;
 
+    /**
+   * 单位类别
+   */
+  @ApiModelProperty("单位类别名称")
+  @Column(name = "unit_type_name")
+  private String unitTypeName;
   /**
    * 是否存档
    */
@@ -102,8 +107,14 @@ public class Department implements Serializable{
    */
   @ApiModelProperty("管档类别")
   @Column(name = "pipe_type")
-  private String pipeType;
+  private Integer pipeType;
 
+   /**
+   * 管档类别名称
+   */
+  @ApiModelProperty("管档类别名称")
+  @Column(name = "pipe_type_name")
+  private String pipeTypeName;
   
    /**
    * 简称
@@ -120,18 +131,10 @@ public class Department implements Serializable{
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
   private Date createTime;
 
-
-  @Transient
-  private Integer childNum;
-
   @Transient
   private Boolean isParent;
 
-  /**
-   * 子节点
-   */
-    @Transient
-  private List<Department> children;
+
 
   
 }

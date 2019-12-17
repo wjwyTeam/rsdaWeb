@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-04 09:43:55
- * @LastEditors: zgr
- * @LastEditTime: 2019-12-15 19:14:21
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-16 14:21:44
  */
 package com.wjwy.rsda.mapper;
 import java.util.List;
@@ -26,10 +26,17 @@ public interface DepartmentMapper extends TkMapper<Department> {
 
     /**
      * 查询当前二级数据
-     * @param id
+     * @param id 单位主键ID
+     * @param unitType
+     * @param name
+     * @param limit
+     * @param page
      * @return List<Department>
      */
-    @Select("select * from sys_dapartment where id=#{id} and del_flag=false UNION ALL select * from sys_dapartment where parent_id=#{id} and del_flag=false ORDER BY d_order ASC")
-	List<Department> selectTreeOne(String id);
-   
+    @Select("  select * from sys_dapartment where  (#{id} <> ''  and id = #{id} )   and  (#{name} = ''  or name like concat('%', #{name} ,'%'))  and (#{unitType} is null or unit_type=#{unitType}) and del_flag=false "
+            + " union all   "
+            + " (select * from sys_dapartment where  (#{id} = ''  or parent_id= #{id})   and  (#{name} = ''  or name like concat('%', #{name} ,'%')) and (#{unitType} is null or unit_type=#{unitType}) and del_flag=false "
+            + " ORDER BY  d_order ASC) ")
+    List<Department> selectTreeOne(String id, String name, Integer unitType);
+
 }

@@ -1,10 +1,6 @@
 package com.wjwy.rsda.controller;
-
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import com.github.pagehelper.PageInfo;
-import com.wjwy.rsda.common.util.IpUtils;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.enums.EnumEntitys;
@@ -20,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,45 +75,13 @@ public class UserController {
 	 * @date 2019年11月28日
 	 */
 	@GetMapping(value = "/updateInfo")
-	public ModelAndView updateInfo(User user, HttpServletRequest request, ModelAndView model) {
-
-		HttpSession session = request.getSession();
-		if (!request.getParameter("type").equals(String.valueOf(EnumEntitys.SCUUESS.getValue()))) {
-			// 获取登录的session存入的user对象
-			user = (User) session.getAttribute("userOne");
+	public ModelAndView updateInfo(User user,ModelAndView model) {
+		if(StringUtils.isNotEmpty(user.getUserId())){
+			user = userService.getPersonInfo(user.getUserId());
 		}
-		user.setUserIp(IpUtils.getIpAddress(request));
 		model.addObject("userOne", user);
 		model.setViewName("webview/system/user/userForm");
 		return model;
-	}
-
-	/**
-	 * @Description: 根据ID查询单条数据
-	 * @param
-	 * @return
-	 * @return
-	 * @return void
-	 * @throws @author ZHANGQI
-	 * @date 2019年11月28日
-	 */
-	@ApiOperation(value = "获取当前用户Session数据", notes = "获取当前用户Session数据")
-	@PostMapping("/findoneUser")
-	public ResponseWrapper findoneUser(@RequestBody User user, HttpServletRequest request) {
-		try {
-			if (user == null) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "获取失败", null, null,null);
-			}
-			// 存放到Session
-			HttpSession session = request.getSession();
-			session.setAttribute("userOne", user);
-			return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", user, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
 	/**

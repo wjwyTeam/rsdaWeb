@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-03 16:08:57
- * @LastEditors: zgr
- * @LastEditTime: 2019-12-15 17:50:15
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-16 15:08:43
  */
 package com.wjwy.rsda.services;
 
@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.entity.Department;
 import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.mapper.DepartmentMapper;
@@ -90,8 +93,8 @@ public class DepartmentService {
 
         List<Department> departmentNew = departmentMapper.selectByExample(example);
         criteria.andEqualTo("isCandel", false);
-        department.setDelFlag(true);
-        int count = departmentMapper.updateByExampleSelective(department, example);
+
+        int count = departmentMapper.deleteByExample(example);
       
         if (departmentNew.size() == 0) {
             count = HttpStatus.GONE.value();
@@ -154,14 +157,31 @@ public class DepartmentService {
     
 
     /**
-     * 二级查询
+     * 单位分页列表查询
      * @param id
+     * @param unitType
+     * @param name
+     * @param limit
+     * @param page
      * @return List<Department>
      */
-	public List<Department> findTreeList(String id) {
-        if (StringUtil.isEmpty(id)) {
-            id = String.valueOf(EnumEntitys.GIDPARENT.getValue());
-        } 
-        return departmentMapper.selectTreeOne(id);
+	public PageInfo<Department> findTreeList(String id, String name, Integer unitType, Integer page, Integer limit) {
+        PageHelper.startPage(page , limit);
+        
+        if(StringUtil.isEmpty(id)){
+            id = "";
+        }
+           
+        if(StringUtil.isEmpty(name)){
+            name = "";
+       }
+
+        List<Department> department = departmentMapper.selectTreeOne(id,name,unitType);
+    
+		if (department == null) {
+			return null;
+		}
+		PageInfo<Department> PageInfoDO = new PageInfo<Department>(department);
+		return PageInfoDO;
     }
 }

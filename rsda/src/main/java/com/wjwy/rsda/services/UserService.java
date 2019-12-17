@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 19:04:24
+ * @LastEditTime: 2019-12-17 11:42:33
  */
 package com.wjwy.rsda.services;
 
@@ -103,8 +103,7 @@ public class UserService {
 		criteria.andEqualTo("userId", user.getUserId());
 		List<User> userNew = userDao.selectByExample(example);
 		criteria.andEqualTo("isCandel", false);
-		user.setDelFlag(true);
-		int count = userDao.updateByExampleSelective(user, example);
+		int count = userDao.deleteByExample(example);
 		if (userNew.size() == 0) {
 			count = HttpStatus.GONE.value();
 		}
@@ -134,20 +133,7 @@ public class UserService {
 		Example example = new Example(User.class);
 		Criteria criteria = example.createCriteria();
 		criteria.andEqualTo("userId", user.getUserId());
-		// 更新角色
-
-		List<Role> roles = user.getRoles();
-		if (roles == null) {
-			return 0;
-		}
-
-		String roleLStrings[] = new String[roles.size()];
-		for (int i = 0; i < roles.size(); i++) {
-			roleLStrings[i] = roles.get(i).getId();
-		}
-
-		// 调用角色更新接口
-		userSelRole(user.getUserId(), roleLStrings);
+	
 		user.setPassWord(MD5Util.md5ToHex(user.getPassWord()));
 		return userDao.updateByExampleSelective(user, example);
 	}
@@ -161,22 +147,9 @@ public class UserService {
 	 * @date 2019年11月28日
 	 */
 	public int insert(User user) {
-		// 更新角色
-		// List<Role> roles = user.getRoles();
-		// if (roles == null) {
-		// 	return 0;
-		// }
-
-		// String roleLStrings[] = new String[roles.size()];
-		// for (int i = 0; i < roles.size(); i++) {
-		// 	roleLStrings[i] = roles.get(i).getId();
-		// }
 
 		user.setPassWord(MD5Util.md5ToHex("123456"));
 		user.setUserId(UUID.randomUUID().toString().toLowerCase());
-
-		// 调用角色更新接口
-		// userSelRole(user.getUserId(), roleLStrings);
 		return userDao.insertSelective(user);
 	}
 

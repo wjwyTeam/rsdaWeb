@@ -13,99 +13,116 @@
   <link rel="stylesheet" href="/css/zTreeStyle.css" media="all">
   <link rel="stylesheet" href="/css/metroStyle.css" type="text/css">
   <style>
-.ztree li a{
-  height: 25px;
-}
-.ztree *{
-  font-size: 16px;
-}
+    .ztree li a {
+      height: 25px;
+    }
 
-.layui-table-cell {
-  height: 30px;
-  line-height: 30px;
-  padding: 0 15px;
-  position: relative;
-  box-sizing: border-box;
-}
-.layui-table, .layui-table-view{
-  margin:unset;
-}
-    html,body{
+    .ztree * {
+      font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+    }
+
+    .layui-table-cell {
+      height: 30px;
+      line-height: 30px;
+      padding: 0 15px;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .layui-table,
+    .layui-table-view {
+      margin: unset;
+    }
+
+    html,
+    body {
       width: 100%;
       height: 100%;
     }
-    .container{
+
+    .container {
       width: 100%;
       height: 100%;
       background-color: #ffffff;
       display: inline-flex;
     }
-     .leftTree{
-       width:320px;
-       height: 100%;
-       border-right: solid 1px #efefef;;
-     }
-     .rightGrid{
+
+    .leftTree {
+      width: 320px;
+      height: 100%;
+      border-right: solid 1px #efefef;
+      ;
+    }
+
+    .ztree {
+      height: calc(100% - 51px);
+      overflow: auto;
+    }
+
+    .rightGrid {
       width: calc(100% - 320px);
       height: 100%;
-     }
-     .deptTableSearch{
-      width: calc(100% - 145px);
-    text-align: right;
-     }
+    }
+
+    .deptTableSearch {
+      width: calc(100% - 180px);
+      text-align: right;
+    }
   </style>
 
 
 </head>
 
 <body>
-    <div class="container">
-      <div class="leftTree">
-        <div style="width: 100%;
+  <div class="container">
+
+    <div class="leftTree">
+      <div th:if="${hiddenType}"  style="width: 100%;
                                 height: 40px;
                                 text-align: center;
                                 border-bottom: solid 1px #efefef;
                             "><span style="
                                 line-height: 40px;
-                                font-size: 20px;
-                                color: black;
+                                font-size: 16px;
                             ">单位机构树</span></div>
-        <ul id="deptTree" class="ztree"></ul>
-        </div>
-      <div class="rightGrid">
-          <div style="width: 100%;
+      <ul id="deptTree" class="ztree"></ul>
+    </div>
+
+    <div class="rightGrid" th:if="${hiddenType}">
+      <div style="width: 100%;
           height: 40px;
           text-align: center;
           display: inline-flex;
           align-items: center;
       ">
-      <div class="deptTableToolbar">
+        <div class="deptTableToolbar">
           <button class="layui-btn" data-type="add">添加</button>
-          <button class="layui-btn" data-type="batchdel">删除</button>
+          <button class="layui-btn" data-type="batchdel">批量删除</button>
         </div>
         <div class="deptTableSearch layui-form">
-          <input type="text" name="name" placeholder="请输入机构名称" autocomplete="off" class="layui-input" style="display: inline-block;width: auto;">
-          <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;" >
-            <select name="unittype">
-            <option value="" selected= "true">请选择</option>
-            <option value="0">法人单位</option>
-            <option value="1">内设部门</option>
-            <option value="2">机构分组</option>
-        </select>
+          <input type="text" name="name" id="unitName" placeholder="请输入机构名称" autocomplete="off" class="layui-input"
+            style="display: inline-block;width: auto;">
+          <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
+            <select name="unitType">
+              <option value="" selected="true">请选择</option>
+              <option value="0">法人单位</option>
+              <option value="1">内设部门</option>
+              <option value="2">机构分组</option>
+            </select>
           </div>
 
           <button class="layui-btn" lay-submit lay-filter="dept-front-search"> 搜索</button>
         </div>
       </div>
-          <table id="deptList" lay-filter="deptList" class="layui-hide"> </table>
-          <script type="text/html" id="barDemo" th:inline="none">
+      <table id="deptList" lay-filter="deptList" class="layui-hide"> </table>
+      <script type="text/html" id="barDemo" th:inline="none">
                  <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
           </script>
-      </div>  
     </div>
-    <input type="hidden" class="deptId" >
-    <input type="hidden" class="deptName" >
+  </div>
+  <input type="hidden" id="deptId">
+  <input type="hidden" id="deptName">
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
   <script src="/js/jquery.ztree.core.js" type="text/javascript" th:inline="none"></script>
   <script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
@@ -118,8 +135,8 @@
             id: treeNode.id
           },
         }, 'data');
-        $(".deptId").val(treeNode.id);
-        $(".deptName").val(treeNode.name);
+        $("#deptId").val(treeNode.id);
+        $("#deptName").val(treeNode.name);
       }
     }
     var newCount = 1;
@@ -159,7 +176,7 @@
         simpleData: {
           enable: true,//如果为true，可以直接把从数据库中得到的List集合自动转换为Array格式。而不必转换为json传递
           idKey: "id",//节点的id
-          rootPId: 0,         
+          rootPId: 0,
           pIdKey: "parentId"//节点的父节点id
         },
         edit: {
@@ -182,7 +199,7 @@
         , table = layui.table
         , util = layui.util
         , form = layui.form;
-  window.tableObj= layui.table;
+      window.tableObj = layui.table;
 
       //第一个实例
       table.render({
@@ -194,12 +211,12 @@
         , id: 'deptList'
         , url: '/dept/findUnitList' //数据接口
         , cols: [[ //表头
-            {  fixed: 'left',checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
-          , { fixed: 'left',type: 'numbers',width: 80, title: '序号' }
-          , { fixed: 'left',field: 'name', title: '机构名称', width: 220}
-          , { field: 'shortName', title: '简称', width: 160}
-          , { field: 'type', title: '机构类别', width: 120 }
-          , { field: 'pipeType', title: '管档类别', width: 120}
+          { fixed: 'left', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
+          , { fixed: 'left', type: 'numbers', width: 80, title: '序号' }
+          , { fixed: 'left', field: 'name', title: '机构名称', width: 220 }
+          , { field: 'shortName', title: '简称', width: 160 }
+          , { field: 'unitTypeName', title: '机构类别', width: 120 }
+          , { field: 'pipeTypeName', title: '管档类别', width: 120 }
           , {
             field: 'createTime', title: '创建时间', templet: function (time) {
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
@@ -219,49 +236,66 @@
           layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
           //,curr: 5 //设定初始在第 5 页
           , groups: 5 //只显示 1 个连续页码
-          , first: false //不显示首页
-          , last: false //不显示尾页
+          , limit: 20
+          , first: true //不显示首页
+          , last: true //不显示尾页
         }
       });
 
-    
+
 
       //监听工具条删除
       table.on('tool(deptList)', function (obj) {
         var data = obj.data;
-        var urlData = { id: data.id };
-        if (obj.event === 'detail') {
-          layer.msg('ID：' + data.id + ' 的查看操作');
-        } else if (obj.event === 'del') {
+
+        //列表删除方法
+        if (obj.event === 'del') {
+
           layer.confirm('真的删除行么', function (index) {
             layer.close(index);
-            $.post("/dept/deleteUnitTree", urlData, function (resultJSONObject) {
+            $.post("/dept/deleteUnit", { id: data.id }, function (resultJSONObject) {
               if (resultJSONObject.success) {
+
                 obj.del();
-                layer.msg("删除成功");
-              } else {
-                layer.msg("禁止删除");
-              }
+                var node;
+                if ($("#deptId").val() == data.id || $("#deptId").val() == data.parentId) {
+                  node = zTreeObj.getNodeByParam("id", data.parentId, null);
+                } else {
+                  node = zTreeObj.getNodeByParam("id", 0, null);
+                }
+                zTreeObj.reAsyncChildNodes(node, "refresh"); 
+                tableLoad(table);
+              } 
+              layer.msg(resultJSONObject.msg);
             }, "json");
           });
+
+
         } else if (obj.event === 'edit') {
           //open 方法合作共用json串
           layer.open({
             type: 2,
-            title: '机构修改',
+            title: '更新机构',
             maxmin: true
             , area: ['500px', '450px']
             , btn: ['确定', '取消']
             , shadeClose: false,
             shade: 0.2,
-            content: '/dept/deptInfo?departmentid='+data.id,
+            content: '/dept/deptInfo?id=' + data.id,
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
                 , submitID = 'deptconfirm'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
+              //机构类型名称
+              var unitTypeName = layero.find('iframe').contents().find('#unitType option:selected').text();
+              //机构类别名称
+              var pipeTypeName = layero.find('iframe').contents().find('#pipeType option:selected').text();
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 var field = dataLog.field;
+                field.unitTypeName = unitTypeName;
+                field.pipeTypeName = pipeTypeName;
+
                 if (field.isPipe == "true")
                   field.isPipe = true;
                 else
@@ -276,83 +310,25 @@
                   contentType: "application/json; charset=UTF-8",
                   success: function (resultJSONObject) {
                     if (resultJSONObject.success) {
-                      layer.msg("更新成功");
-                    } else {
-                      layer.msg("更新失败");
-                    }
+                      var node = zTreeObj.getNodeByParam("id", field.parentId, null);
+                      zTreeObj.reAsyncChildNodes(node, "refresh");
+                      tableLoad(table);
+                    } 
+                    layer.msg(resultJSONObject.msg);
                   }
                 });
-                table.reload('deptList', {
-                  where: {
-                    id: $(".deptId").val()
-                  },
-                }, 'data'); //数据刷新
+
                 layer.close(index); //关闭弹层
               });
               submit.trigger('click');
             }
           });
-        } else if (obj.event === 'userAndrole') {
-          $.ajax({
-            url: "/role/findRolePage",
-            data: JSON.stringify(data),
-            type: "post",
-            dataType: "json",
-            contentType: "application/json; charset=UTF-8",
-            success: function (msgLog) {
-              layer.msg(msgLog.msg, {
-                offset: '15px',
-                icon: 6,
-                time: 1000
-              }, function () {
-                if (msgLog.status) {
-                  layer.open({
-                    type: 2,
-                    title: '角色',
-                    maxmin: true
-                    , area: ['500px', '450px']
-                    , btn: ['确定', '取消']
-                    , shadeClose: false,
-                    shade: 0.5,
-                    content: '/role/assignRoles',
-                    yes: function (index, layero) {
-                      console.log(data)
-                      var iframeWindow = window['layui-layer-iframe' + index]
-                        , submitID = 'deptconfirm'
-                        , submit = layero.find('iframe').contents().find('#' + submitID);
-
-                      //监听提交
-                      iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
-                        var field = dataLog.field;
-                        console.log("监听提交 ===================" + data)
-                        //获取提交的字段
-                        //提交 Ajax 成功后，静态更新表格中的数据
-                        $.post("/user/updateUser", field, function (resultJSONObject) {
-                          console.log(resultJSONObject)
-                          if (resultJSONObject.success) {
-                            layer.msg("更新成功");
-                          } else {
-                            layer.msg("更新失败");
-                          }
-                        }, "json");
-                        table.reload('deptList'); //数据刷新
-                        layer.close(index); //关闭弹层
-                      });
-
-                      submit.trigger('click');
-                    }
-                  });
-                }
-              });
-            },
-            error: function (msgLog) {
-              layer.msg('错误', msgLog.msg);
-            }
-          });
         }
       });
-  
-      //事件
+
+
+
+      //批量删除事件
       var active = {
         batchdel: function () {
           //两种方式
@@ -365,23 +341,24 @@
           var ids = "";
           if (checkData.length > 0) {
             for (var i = 0; i < checkData.length; i++) {
-              ids += checkData[i].userId + ",";
+              ids += checkData[i].id + ",";
             }
           }
           layer.confirm('确定删除吗？', function (index) {
             //执行 Ajax 后重载
             $.ajax({
               type: "post",
-              url: "/dept/deleteUserAlls",
+              url: "/dept/deleteUnitAll",
               data: { "ids": ids },
               success: function (data) {
                 if (data.success) {
-                  layer.msg('已删除');
-                  table.reload('deptList'); //数据刷新
-                } else {
-                  layer.msg('禁止删除');
-                }
-                console.log(data)
+                  var node = zTreeObj.getNodeByParam("id", 0, null);
+                  zTreeObj.reAsyncChildNodes(node, "refresh");
+                  tableLoad(table);
+                
+                }      
+                 layer.msg(data.msg);
+                
               }
             });
           });
@@ -390,7 +367,7 @@
         , add: function () {
           layer.open({
             type: 2
-            , title: '新增'
+            , title: $("#deptName").val() + "新增机构"
             , content: '/dept/deptInfo'
             , maxmin: true
             , moveType: 1 //拖拽模式，0或者1
@@ -404,17 +381,10 @@
               var iframeWindow = window['layui-layer-iframe' + index]
                 , submitID = 'deptconfirm'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
-
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                 var field = data.field; //获取提交的字段
-                console.log("监听提交 ===================" + JSON.stringify(field))
-                parentId = $(".deptId").val();
-                field.parentId = parentId;
-
-                //提交 Ajax 成功后，静态更新表格中的数据
-          
-                //获取提交的字段
+                field.parentId = $("#deptId").val();
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
                   type: "post",
@@ -424,15 +394,22 @@
                   contentType: "application/json;charset-UTF-8",
                   success: function (resultJSONObject) {
                     if (resultJSONObject.success) {
-                      layer.msg("新增成功");
-                    } else {
-                      layer.msg("新增失败");
-                    }
-                    console.log(data)
+                      var node = zTreeObj.getNodeByParam("id", field.parentId, null);
+                      if (node !== null) {
+                        var grandPanode = zTreeObj.getNodeByParam("id", node.parentId, null);
+                        zTreeObj.reAsyncChildNodes(grandPanode, "refresh", false, function () {
+                          zTreeObj.expandNode(zTreeObj.getNodeByParam("id", field.parentId, null), true, true, true);
+                        });
+                      } else {
+                        zTreeObj.reAsyncChildNodes(null, "refresh");
+                      }
+                      tableLoad(table);
+                    }      
+                    layer.msg(resultJSONObject.msg);
+                  }, complete: function () {
+                    layer.close(index); //关闭弹层
                   }
                 });
-                table.reload('deptList'); //数据刷新
-                layer.close(index); //关闭弹层
               });
 
               submit.trigger('click');
@@ -442,11 +419,34 @@
 
       };
 
+      //监听搜索查询条件
+      form.on('submit(dept-front-search)', function (data) {
+        var field = data.field;
+        field.id = "";
+
+        //执行重载
+        table.reload('deptList', {
+          where: field
+        });
+      });
+
+
+
       $('.layui-btn').on('click', function () {
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
       });
     });
+
+
+    function tableLoad(table) {
+      table.reload('deptList', {
+        where: {
+          id: $("#deptId").val(),
+          name: $("#unitName").val(),
+        },
+      }, 'data');
+    }
   </script>
 </body>
 

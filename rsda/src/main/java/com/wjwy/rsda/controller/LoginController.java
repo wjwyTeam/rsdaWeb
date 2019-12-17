@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-11-30 18:24:05
- * @LastEditors: zgr
- * @LastEditTime: 2019-12-16 08:10:52
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-17 08:49:35
  */
 package com.wjwy.rsda.controller;
 
@@ -20,6 +20,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +39,8 @@ import io.swagger.annotations.Api;
 @RestController
 public class LoginController {
 	public Logger logger = LoggerFactory.getLogger(LoginController.class);
-
+	@Autowired
+	private HttpServletRequest request;
 	/**
 	 * 
 	 * @Title: Login
@@ -46,7 +48,7 @@ public class LoginController {
 	 * @return string 返回类型--文件名login页面
 	 */
 	@GetMapping("/login")
-	public ModelAndView Login(ModelAndView model, HttpServletRequest request) {
+	public ModelAndView Login(ModelAndView model) {
 		HttpSession session = request.getSession(false);// 获取库内session
 		if (session != null) {// 判断session区分是否登录
 			Object userobj = session.getAttribute("userInfo");// 若获取到session内容，说明此端已经登录，跳转到index页面
@@ -65,7 +67,7 @@ public class LoginController {
 	 * @return string 返回类型--文件名login页面
 	 */
 	@GetMapping("/logout")
-	public ModelAndView Logout(ModelAndView model, HttpServletRequest request) {
+	public ModelAndView Logout(ModelAndView model) {
 		HttpSession session = request.getSession(false);// 获取库内session
 		if (session != null) {
 			session.removeAttribute("userInfo");// 剔除对应缓存
@@ -82,7 +84,7 @@ public class LoginController {
 	 * @return string 返回类型--文件名login页面
 	 */
 	@GetMapping("/index")
-	public ModelAndView Index(ModelAndView model, HttpServletRequest request) {
+	public ModelAndView Index(ModelAndView model) {
 		HttpSession session = request.getSession(false);// 获取库内session
 		if (session != null) {
 			User userobj = (User) session.getAttribute("userInfo");// 若获取到session内容，说明此端已经登录，跳转到index页面
@@ -98,7 +100,7 @@ public class LoginController {
 	}
 
 	@PostMapping("/login")
-	public ResponseWrapper UserLogin(String loginName, String passwordMd5, HttpServletRequest request) {
+	public ResponseWrapper UserLogin(String loginName, String passwordMd5) {
 		try {
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(loginName, passwordMd5);

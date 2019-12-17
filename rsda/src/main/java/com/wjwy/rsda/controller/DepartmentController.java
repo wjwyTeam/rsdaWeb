@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
- * @LastEditors: zgr
- * @LastEditTime: 2019-12-15 17:53:14
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-17 08:51:56
  */
 package com.wjwy.rsda.controller;
 
@@ -14,9 +14,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Department;
-import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,10 +68,9 @@ public class DepartmentController {
 	 * @return
 	 */
 	@GetMapping(value = "/deptInfo")
-	public ModelAndView updateInfo(String  departmentid, ModelAndView model) {
-		Department department = new Department();
-		if(StringUtils.isNotEmpty(departmentid)){
-			department = deptService.getDept(departmentid);
+	public ModelAndView updateInfo(	Department department, ModelAndView model) {
+		if(StringUtils.isNotEmpty(department.getId())){
+			department = deptService.getDept(department.getId());
 		}
 		model.addObject("deptOne", department);
 		model.setViewName("webview/system/dept/deptForm");
@@ -116,17 +115,18 @@ public class DepartmentController {
 	}
 
 
-		/**
-	 * 
+	/**
+	 * 界面列表展示主页
 	 * @param department
 	 * @return
 	 */
-	@ApiOperation(value = "机构单点查询列表", notes = "参数:id")
+	@ApiOperation(value = "机构单点查询列表", notes = "参数:id-机构ID,name-机构名称,unitType-机构类型,page-当前页,limit-条数")
 	@PostMapping(value = "/findUnitList")
-	public ResponseWrapper findUnitList(String id) {
+	public ResponseWrapper findUnitList(String id,String name,Integer unitType,Integer page,Integer limit) {
 		try {
-			List<Department> treeNodes = deptService.findTreeList(id);
-			return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", treeNodes, null, treeNodes.size());
+
+			PageInfo<Department> treeNodesPageInfos = deptService.findTreeList(id,name,unitType,page,limit);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", treeNodesPageInfos.getList(), null,Integer.parseInt(String.valueOf(treeNodesPageInfos.getTotal())));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -188,8 +188,8 @@ public class DepartmentController {
 	 * @return
 	 */
 	@ApiOperation(value = "删除机构")
-	@PostMapping(value = "/deleteUnitTree")
-	public ResponseWrapper deleteUser(String id) {
+	@PostMapping(value = "/deleteUnit")
+	public ResponseWrapper deleteUnit(String id) {
 		try {
 			Department department = new Department();
 			department.setId(id);
@@ -207,47 +207,21 @@ public class DepartmentController {
 		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
-
 	/**
-	 * 通过ID查找父数据对象+通过ID查找子数据集合
+	 * 批量删除
 	 * 
-	 * @param id
+	 * @param ids
 	 * @return
 	 */
-
-	@ApiOperation(value = "机构树展示")
-	@PostMapping(value = "/getTree")
-	public List<Department> getTree(String id) {
-		List<Department> departments = new ArrayList<Department>();
-		try {
-			if (StringUtils.isEmpty(id)) {
-				departments = deptService.getChildren(String.valueOf(EnumEntitys.GJD.getValue()));
-			} else {
-				departments = deptService.getChildren(id); // 查询
-			}
-
-			if (departments != null) {
-				for (Department departmentList : departments) {
-					List<Department> departmentChilds = deptService.getChildren(departmentList.getId());// 查询省下面的所有市
-					inDigui(departmentChilds); // 调用递归算法查询子集合
-					departmentList.setChildren(departmentChilds);
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return departments;
-	}
-
-	public void inDigui(List<Department> departmentChilds) {
-		List<Department> list = new ArrayList<>();
-		for (Department c : departmentChilds) {
-			list = deptService.getChildren(c.getId());
-			if (list.size() > 0) {
-				c.setChildren(list);
-				inDigui(list); // 循环调用自己
+	@ApiOperation(value = "批量删除机构")
+	@PostMapping(value = "/deleteUnitAll")
+	public ResponseWrapper deleteUnitAll(String[] ids) {
+		ResponseWrapper rmAll = null;
+		for (String deptId : ids) {
+			if (!deptId.isEmpty()) {
+				rmAll = deleteUnit(deptId);
 			}
 		}
+		return rmAll;
 	}
 }

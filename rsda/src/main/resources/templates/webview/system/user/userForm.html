@@ -13,13 +13,11 @@
 
 <body>
 
-  <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
-    style="padding: 20px 0 0 0;" th:object="${userOne}">
+  <div class="layui-form" lay-filter="userForm" id="userForm"  style="padding: 20px 0 0 0;">
     <div class="layui-form-item  layui-hide">
       <label class="layui-form-label">ID</label>
       <div class="layui-input-inline">
-        <input type="text" name="userId" placeholder="请输入ID" autocomplete="off" class="layui-input"
-          th:value=" *{userId}">
+        <input type="text" name="userId" placeholder="请输入ID" autocomplete="off" class="layui-input">
       </div>
     </div>
     <div class="layui-col-xs6">
@@ -27,18 +25,8 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>姓名</label>
           <div class="layui-input-inline">
-            <div class="layui-input">
-              <div style="float:left;">
-                <input type="text" id="PsnName" name="UserRealName" lay-verify="required" autocomplete="off"
-                  placeholder="双击进行选择" th:value=" *{UserRealName}" style="border:none;margin-top:10px;width:150px;"
-                  ondblclick="PersWin()">
-
-              </div>
-              <div style="float:left;padding-top:10px;">
-                <a onclick="RemoveSelected()" style="cursor:pointer;"><i class="layui-icon"></i></a>
-                <input type="hidden" id="PersID" name="PersID" autocomplete="off" class="layui-input" value="">
-              </div>
-            </div>
+                <input type="text" id="userRealName" name="userRealName" lay-verify="required" autocomplete="off"  class="layui-input"
+                   >
           </div>
         </div>
       </div>
@@ -49,17 +37,17 @@
           <label class="layui-form-label"><i style="color:red">* </i>用户名</label>
           <div class="layui-input-inline">
             <input type="text" name="userName" lay-verify="required" autocomplete="off" placeholder="请输入用户名"
-              class="layui-input" th:value=" *{userName}">
+              class="layui-input">
           </div>
         </div>
       </div>
     </div>
     <div class="layui-col-xs6">
-      <div class="layui-form-item">
+      <div class="layui-form-item" lay-filter="userRole">
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>角色</label>
           <div class="layui-input-inline">
-            <select name="UserRole" id="UserRole" lay-verify="required">
+            <select name="userRole" id="userRole" lay-verify="required">
               <option></option>
               <option value="00">管档中心管理员</option>
               <option value="01">A1级角色（管档人员分管领导）</option>
@@ -78,7 +66,7 @@
             <div class="layui-unselect layui-form-select">
               <div class="layui-select-title"><input type="text" placeholder="请选择" value="" readonly=""
                   class="layui-input layui-unselect"><i class="layui-edge"></i></div>
-              <dl class="layui-anim layui-anim-upbit" >
+              <dl class="layui-anim layui-anim-upbit">
                 <dd lay-value="" class="layui-select-tips">请选择</dd>
                 <dd lay-value="00" class="">管档中心管理员</dd>
                 <dd lay-value="01" class="">A1级角色（管档人员分管领导）</dd>
@@ -104,8 +92,8 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>密码</label>
           <div class="layui-input-inline">
-            <input type="password" name="passWord" th:value=" *{passWord}" lay-verify="required" autocomplete="off"
-              placeholder="请输入密码" class="layui-input">
+            <input type="password" name="passWord" lay-verify="required" autocomplete="off" placeholder="请输入密码"
+              class="layui-input">
           </div>
         </div>
       </div>
@@ -115,8 +103,8 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>职务情况</label>
           <div class="layui-input-inline">
-            <input type="text" name="duty" th:value=" *{duty}" id="WorkUnitDuties" lay-verify="required"
-              autocomplete="off" placeholder="" class="layui-input">
+            <input type="text" name="duty" id="WorkUnitDuties" lay-verify="required" autocomplete="off" placeholder=""
+              class="layui-input">
 
           </div>
         </div>
@@ -137,9 +125,9 @@
     <div class="layui-col-xs6">
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label">绑定IP</label>
+          <label class="layui-form-label"><i style="color:red">* </i>绑定IP</label>
           <div class="layui-input-inline">
-            <input type="text" name="userIp" th:value=" *{userIp}" id="UserIP" autocomplete="off" placeholder=""
+            <input type="text" name="userIp"  id="UserIP" autocomplete="off" placeholder=""
               class="layui-input">
 
           </div>
@@ -160,14 +148,16 @@
     </div>
     <div class="layui-form-item layui-hide">
       <div class="layui-input-block">
-        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认"
+        <input type="button" lay-submit lay-filter="userFormSubmit" id="userFormSubmit" value="确认"
           class="layui-btn">
       </div>
     </div>
   </div>
 
   <script src="../../../layuiadmin/layui/layui.js"></script>
-  <script>
+  <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+  <script  th:inline="javascript">
+      var userOne = [[${ userOne }]];
     layui.config({
       base: '../../../layuiadmin/' //静态资源所在路径
     }).extend({
@@ -176,10 +166,10 @@
       var $ = layui.$
         , form = layui.form
         , upload = layui.upload;
-
+        form.val('userForm', userOne);
       //普通图片上传
       var uploadInst = upload.render({
-        elem: '#layuiadmin-upload-useradmin'
+        elem: '#userUploadImg'
         , url: '/upload/'
         , before: function (obj) {
           //预读本地文件示例，不支持ie8
@@ -205,7 +195,7 @@
       });
 
       upload.render({
-        elem: '#layuiadmin-upload-useradmin'
+        elem: '#userUploadImg'
         , url: layui.setter.base + 'json/upload/demo.js'
         , accept: 'images'
         , method: 'get'
@@ -219,48 +209,48 @@
 
 
     function PersWin() {
-            layer.ready(function () {
-                layer.open({
-                    title: '   ',
-                    type: 2,
-                    content: "/Person/Select",
-                    area: ['750px', '520px'],
-                    zIndex: layer.zIndex //重点1
-                });
-            });
+      layer.ready(function () {
+        layer.open({
+          title: '   ',
+          type: 2,
+          content: "/Person/Select",
+          area: ['750px', '520px'],
+          zIndex: layer.zIndex //重点1
+        });
+      });
     }
 
 
     function openWin() {
-            layui.use('layer', function () {
-                var layer = layui.layer;
-                layer.ready(function () {
-                    layer.open({
-                        type: 2,
-                        closeBtn: 0,
-                        title: "选择单位", //不显示标题
-                        scrollbar: false, // 父页面 滚动条 禁止
-                        content: "/dept/departmentInfo?hideshowType=false",
-                        area: ['300px', '350px'],
-                        btn: ['确定', '取消'] , 
-                        anim: 2,
-                        resize:false,
-                        shadeClose: false,
-                        skin: 'layer-ext-moon', //加上边框
-                        id: 'LAY_layuipro', //设定一个id，防止重复弹出
-                        shade: 0.9,
-                        yes: function (index, layero) {
-                           $("#DeptID").val(layer.getChildFrame('body', 0).find(".deptId").val());
-                           $("#DeptName").val( layer.getChildFrame('body', 0).find(".deptName").val());
-                           layer.close(index);
-                        }
-                    });
-                 
-                });
-            });
-        }
-    </script>
-   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+      layui.use('layer', function () {
+        var layer = layui.layer;
+        layer.ready(function () {
+          layer.open({
+            type: 2,
+            closeBtn: 0,
+            title: "选择单位", //不显示标题
+            scrollbar: false, // 父页面 滚动条 禁止
+            content: "/dept/departmentInfo?hideshowType=false",
+            area: ['300px', '350px'],
+            btn: ['确定', '取消'],
+            anim: 2,
+            resize: false,
+            shadeClose: false,
+            skin: 'layer-ext-moon', //加上边框
+            id: 'LAY_layuipro', //设定一个id，防止重复弹出
+            shade: 0.2,
+            yes: function (index, layero) {
+              $("#DeptID").val(layer.getChildFrame('body', 0).find("#deptId").val());
+              $("#DeptName").val(layer.getChildFrame('body', 0).find("#deptName").val());
+              layer.close(index);
+            }
+          });
+
+        });
+      });
+    }
+  </script>
+
 </body>
 
 </html>
