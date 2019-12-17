@@ -162,7 +162,7 @@ public class Server
         sys.setComputerName(IpUtils.getHostName());
         sys.setComputerIp(IpUtils.getHostIp());
         sys.setOsName(props.getProperty("os.name"));
-        sys.setOsArch(props.getProperty("os.arch"));
+        sys.setOsArch("Springboot-SSM");
         sys.setUserDir(props.getProperty("user.dir"));
     }
 

@@ -116,7 +116,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>确认密码</label>
           <div class="layui-input-inline">
-            <input type="password" name="repassword" value="" required lay-verify="confirmPass" autocomplete="off"
+            <input type="password" name="repassword"  th:value="${userOne.passWord}" required lay-verify="confirmPass" autocomplete="off"
               placeholder="再次输入密码" class="layui-input">
           </div>
         </div>

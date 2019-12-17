@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 08:51:56
+ * @LastEditTime: 2019-12-17 19:04:49
  */
 package com.wjwy.rsda.controller;
 
@@ -40,6 +40,8 @@ public class DepartmentController {
 
 	@Autowired
 	private DepartmentService deptService;
+	@Autowired
+	private HttpServletRequest request;
 	public Logger logger = LoggerFactory.getLogger(DepartmentController.class);
 
 	/**
@@ -50,7 +52,7 @@ public class DepartmentController {
 	 * @return
 	 */
 	@GetMapping(value = "/departmentInfo")
-	public ModelAndView departmentInfo(Department department, ModelAndView model,HttpServletRequest request) {
+	public ModelAndView departmentInfo(Department department, ModelAndView model) {
 		boolean flag = true;
 		if(StringUtils.isNotEmpty(request.getParameter("hideshowType"))){
 			flag = false;

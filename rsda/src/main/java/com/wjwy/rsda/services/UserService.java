@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 17:21:44
+ * @LastEditTime: 2019-12-17 18:54:56
  */
 package com.wjwy.rsda.services;
 
@@ -116,7 +116,7 @@ public class UserService {
 	 */
 	public User getPersonInfo(String userId) {
 		User user = new User();
-		user.setDelFlag(true);
+		user.setDelFlag(false);
 		user.setUserId(userId);
 		return userDao.selectOne(user);
 	}
