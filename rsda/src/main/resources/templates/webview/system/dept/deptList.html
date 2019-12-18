@@ -95,11 +95,9 @@
           display: inline-flex;
           align-items: center;
       ">
-        <div class="deptTableToolbar" style="width:28%;">
+        <div class="deptTableToolbar">
           <button class="layui-btn" data-type="add">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
-          <!-- <button class="layui-btn" data-type="upMove">上移</button>
-          <button class="layui-btn" data-type="downMove">下移</button> -->
         </div>
         <div class="deptTableSearch layui-form">
           <input type="text" name="name" id="unitName" placeholder="请输入机构名称" autocomplete="off" class="layui-input"
@@ -218,7 +216,7 @@
            { fixed: 'left', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
           , { fixed: 'left', type: 'numbers', width: 80, title: '序号' }
           , { fixed: 'left', field: 'name', title: '机构名称', width: 220 }
-          , { field: 'id', title: 'id'}
+          , { field: 'id', title: 'id',hide:true}
           , { field: 'shortName', title: '简称', width: 160 }
           , { field: 'unitTypeName', title: '机构类别', width: 120 }
           , { field: 'pipeTypeName', title: '管档类别', width: 120 }
@@ -336,7 +334,7 @@
           var os = se.substring(se.indexOf('"') + 1, se.lastIndexOf('"'))
           var nse = se.replace(os, parseInt(os) - 1);
           var res = "";
-          if(data.)
+          // if(data.)
 
 
           $(nse + " td:not(.layui-table-col-special)").each(function (k,v) {
