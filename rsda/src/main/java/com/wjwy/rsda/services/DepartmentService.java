@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-03 16:08:57
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-18 11:12:22
+ * @LastEditTime: 2019-12-18 11:33:22
  */
 package com.wjwy.rsda.services;
 
@@ -232,23 +232,24 @@ public class DepartmentService {
              return 0;
         }
 
-        Example example = new Example(Department.class);
-        Criteria criteria = example.createCriteria();
+  
         List<Department> departmentM = new ArrayList<Department>();
         Department departUp =  departmentMapper.selectByPrimaryKey(id);
        
         for (String idUps : ids) {
-          criteria.andEqualTo("id", idUps);
-          Department departDown = departmentMapper.selectOneByExample(example);
-          departUp.setDorder(departDown.getDorder());
-          if(option){
-            departDown.setDorder(departUp.getDorder()-1);
-          }else{
-            departDown.setDorder(departUp.getDorder()+1);
-          }
-         
-          departmentM.add(departDown);
-          departmentM.add(departUp);
+            Example example = new Example(Department.class);
+            Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("id", idUps);
+            Department departDown = departmentMapper.selectOneByExample(example);
+            departUp.setDorder(departDown.getDorder());
+            if(option){
+                departDown.setDorder(departUp.getDorder()-1);
+            }else{
+                departDown.setDorder(departUp.getDorder()+1);
+            }
+            
+            departmentM.add(departDown);
+            departmentM.add(departUp);
         }
 
         for (Department departmentsUpdate : departmentM) {
