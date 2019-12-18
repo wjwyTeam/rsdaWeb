@@ -98,7 +98,7 @@
         <div class="deptTableToolbar" style="width:28%;">
           <button class="layui-btn" data-type="add">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
-          <button class="layui-btn" data-type="upMove">上移</button>
+          <button class="layui-btn" data-type="upMove" >上移</button>
           <button class="layui-btn" data-type="downMove">下移</button>
         </div>
         <div class="deptTableSearch layui-form">
@@ -213,9 +213,10 @@
         , id: 'deptList'
         , url: '/dept/findUnitList' //数据接口
         , cols: [[ //表头
-          { fixed: 'left', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
-          , { fixed: 'left', type: 'numbers', width: 80, title: '序号' }
-          , { fixed: 'left', field: 'name', title: '机构名称', width: 220 }
+            { fixed: 'id', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' },
+            { fixed: 'select', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
+          , { fixed: 'serial', type: 'numbers', width: 80, title: '序号' }
+          , { fixed: 'institution', field: 'name', title: '机构名称', width: 220 }
           , { field: 'shortName', title: '简称', width: 160 }
           , { field: 'unitTypeName', title: '机构类别', width: 120 }
           , { field: 'pipeTypeName', title: '管档类别', width: 120 }
@@ -328,16 +329,31 @@
         }
       });
 
+
+       
+
+      var current_tr_id = "";
       // 监听选中事件
+      table.on("checkbox(deptList)",function(obj){
+          current_tr_id = obj.data.id;
+          se = obj.tr.selector;
+          var os = se.substring(se.indexOf('"') + 1, se.lastIndexOf('"'))
+          console.log(os);
+          var nse = se.replace(os, parseInt(os) - 1);
+          console.log(nse); 
+          var res = "";
+          $(nse + " td:not(.layui-table-col-special)").each(function (k,v) {
+            console.log(v)
+              // if ($(this).attr("data-field") == filedName) {
+              //     res = $(this).children(":first").html()
+              // }
+          });     
+         
 
-      table.on("")
-
-
-
-
-
-      //批量删除事件
+      });
+      
       var active = {
+        //批量删除事件
         batchdel: function () {
           //两种方式
           var checkStatus = table.checkStatus('deptList')
@@ -371,8 +387,9 @@
             });
           });
 
-        }
-        , add: function () {
+        }, 
+        // 添加
+        add: function () {
           layer.open({
             type: 2
             , title: $("#deptName").val() + "新增机构"
@@ -389,11 +406,19 @@
               var iframeWindow = window['layui-layer-iframe' + index]
                 , submitID = 'deptconfirm'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
+<<<<<<< HEAD
+                   //机构类型名称
+              var unitTypeName = layero.find('iframe').contents().find('#unitType option:selected').text();
+              //机构类别名称
+              var pipeTypeName = layero.find('iframe').contents().find('#pipeType option:selected').text();
+              //监听提交
+=======
                   //机构类型名称
                   var unitTypeName = layero.find('iframe').contents().find('#unitType option:selected').text();
                   //机构类别名称
                   var pipeTypeName = layero.find('iframe').contents().find('#pipeType option:selected').text();
                    //监听提交
+>>>>>>> 7fad24ea6b36ba972286c51d642f3f97edb1cb31
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                 var field = data.field; //获取提交的字段
                 field.parentId = $("#deptId").val();
@@ -429,6 +454,17 @@
               submit.trigger('click');
             }
           });
+        },
+        // 上移
+        upMove:function(){
+          if(current_tr_id == ""){
+            alert("请选择对应的机构");
+          }else {
+            
+            
+
+
+          }
         }
 
       };
