@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-18 11:17:06
+ * @LastEditTime: 2019-12-18 11:49:47
  */
 package com.wjwy.rsda.controller;
 
@@ -234,7 +234,11 @@ public class DepartmentController {
 	 * @param id
 	 * @return 
 	 */
-	@ApiOperation(value = "机构上移/下移" ,notes = "参数:ids-机构选中移动的数组ID,id-移动参考数据行ID,option-true 上移/false 下移")
+	@ApiOperation(value = "机构上移/下移" ,notes = "参数:+"
+	+"ids:机构选中移动的数组ID,"
+	+"id-移动参考数据行ID,"
+	+"option-true 上移/false 下移"
+	+"注意:上/下移数组中按照列表顺序传递组织ID拼接 以移动参考行为标准 就近数组重组"+"/")
 	@PostMapping(value = "/moveUpOrDown")
 	public ResponseWrapper moveUpOrDown(@RequestParam String[] ids,@RequestParam String id,@RequestParam boolean option){
 		try {
