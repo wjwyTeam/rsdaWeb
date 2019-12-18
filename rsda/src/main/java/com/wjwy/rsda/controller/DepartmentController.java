@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-18 11:49:47
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-18 16:45:54
  */
 package com.wjwy.rsda.controller;
 
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -240,13 +239,19 @@ public class DepartmentController {
 	+"option-true 上移/false 下移"
 	+"注意:上/下移数组中按照列表顺序传递组织ID拼接 以移动参考行为标准 就近数组重组"+"/")
 	@PostMapping(value = "/moveUpOrDown")
-	public ResponseWrapper moveUpOrDown(@RequestParam String[] ids,@RequestParam String id,@RequestParam boolean option){
+	public ResponseWrapper moveUpOrDown(@RequestBody Department department){
 		try {
-			int resultTotal = deptService.moveUpOrDown(ids,id,option);
-			if (resultTotal == 0) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "上移失败", null, null, null);
+			String msg = "";
+			int resultTotal = deptService.moveUpOrDown(department.getIds(),department.getId(),department.getOption());
+			if (department.getOption()) {
+				msg = "上移";
+			} else {
+				msg = "下移";
 			}
-			return ResponseWrapper.success(HttpStatus.OK.value(), "上移成功", null, null, null);
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), msg+"失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), msg+"成功", null, null, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());

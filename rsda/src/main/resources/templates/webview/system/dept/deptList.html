@@ -98,8 +98,8 @@
         <div class="deptTableToolbar" style="width:28%;">
           <button class="layui-btn" data-type="add">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
-          <button class="layui-btn" data-type="upMove" >上移</button>
-          <button class="layui-btn" data-type="downMove">下移</button>
+          <!-- <button class="layui-btn" data-type="upMove">上移</button>
+          <button class="layui-btn" data-type="downMove">下移</button> -->
         </div>
         <div class="deptTableSearch layui-form">
           <input type="text" name="name" id="unitName" placeholder="请输入机构名称" autocomplete="off" class="layui-input"
@@ -120,6 +120,8 @@
       <script type="text/html" id="barDemo" th:inline="none">
                  <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                 <a class="layui-btn layui-btn-sm" lay-event="up"><i class="layui-icon layui-icon-up"></i>上移</a>
+                 <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="down"><i class="layui-icon layui-icon-down"></i>下移</a> 
       </script>
     </div>
   </div>
@@ -213,10 +215,10 @@
         , id: 'deptList'
         , url: '/dept/findUnitList' //数据接口
         , cols: [[ //表头
-            { fixed: 'id', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' },
-            { fixed: 'select', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
-          , { fixed: 'serial', type: 'numbers', width: 80, title: '序号' }
-          , { fixed: 'institution', field: 'name', title: '机构名称', width: 220 }
+           { fixed: 'left', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
+          , { fixed: 'left', type: 'numbers', width: 80, title: '序号' }
+          , { fixed: 'left', field: 'name', title: '机构名称', width: 220 }
+          , { field: 'id', title: 'id'}
           , { field: 'shortName', title: '简称', width: 160 }
           , { field: 'unitTypeName', title: '机构类别', width: 120 }
           , { field: 'pipeTypeName', title: '管档类别', width: 120 }
@@ -225,7 +227,7 @@
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
             }
           }
-          , { fixed: 'right', title: '操作', width: 250, align: 'center', toolbar: '#barDemo' }
+          , { fixed: 'right', title: '操作', width: 350, align: 'center', toolbar: '#barDemo' }
         ]]
         , page: false
         , response: {
@@ -326,34 +328,77 @@
               submit.trigger('click');
             }
           });
+        }else if(obj.event == "up"){
+          // 上移事件
+          var arrids = [];
+          arrids.push(obj.data.id)
+          var se = obj.tr.selector;
+          var os = se.substring(se.indexOf('"') + 1, se.lastIndexOf('"'))
+          var nse = se.replace(os, parseInt(os) - 1);
+          var res = "";
+          if(data.)
+
+
+          $(nse + " td:not(.layui-table-col-special)").each(function (k,v) {
+            console.log(v)
+              if ($(this).attr("data-field") == "id") {
+                  var obj = {
+                    id:$(this).children(":first").html(),
+                    ids:arrids,   //选中的id    
+                    option:true
+                  }
+                  $.ajax({
+                      type: "post",
+                      url: "/dept/moveUpOrDown",
+                      data: JSON.stringify(obj),
+                      contentType: "application/json;charset-UTF-8",
+                      success: function (resultJSconsole) {
+                        layer.msg(resultJSconsole.msg);
+                        tableLoad(table);
+                      } 
+                  });
+              }
+          });     
+        }else if(obj.event == "down"){
+          // 向下移动
+          var arridsDown = [];
+          arridsDown.push(obj.data.id)
+          var seDown = obj.tr.selector;
+          var osDown = seDown.substring(seDown.indexOf('"') + 1, seDown.lastIndexOf('"'))
+          var nseDown = seDown.replace(osDown, parseInt(osDown) + 1);
+          console.log(nseDown);
+          console.log(parseInt(osDown)) 
+          var resDown = "";
+          $(nseDown + " td:not(.layui-table-col-special)").each(function (k,v) {
+              if ($(this).attr("data-field") == "id") {
+                  var objDown = {
+                    id:$(this).children(":first").html(),
+                    ids:arridsDown,   //选中的id    
+                    option:false
+                  }
+                  console.log(obj);
+                  $.ajax({
+                      type: "post",
+                      url: "/dept/moveUpOrDown",
+                      data: JSON.stringify(objDown),
+                      contentType: "application/json;charset-UTF-8",
+                      success: function (resultJSconsole) {
+                        layer.msg(resultJSconsole.msg);
+                        tableLoad(table);
+                      } 
+                  });
+              }
+          });     
+
+
         }
       });
 
 
-       
 
-      var current_tr_id = "";
-      // 监听选中事件
-      table.on("checkbox(deptList)",function(obj){
-          current_tr_id = obj.data.id;
-          se = obj.tr.selector;
-          var os = se.substring(se.indexOf('"') + 1, se.lastIndexOf('"'))
-          console.log(os);
-          var nse = se.replace(os, parseInt(os) - 1);
-          console.log(nse); 
-          var res = "";
-          $(nse + " td:not(.layui-table-col-special)").each(function (k,v) {
-            console.log(v)
-              // if ($(this).attr("data-field") == filedName) {
-              //     res = $(this).children(":first").html()
-              // }
-          });     
-         
 
-      });
-      
+      //批量删除事件
       var active = {
-        //批量删除事件
         batchdel: function () {
           //两种方式
           var checkStatus = table.checkStatus('deptList')
@@ -387,9 +432,8 @@
             });
           });
 
-        }, 
-        // 添加
-        add: function () {
+        }
+        , add: function () {
           layer.open({
             type: 2
             , title: $("#deptName").val() + "新增机构"
@@ -447,17 +491,6 @@
             }
           });
         },
-        // 上移
-        upMove:function(){
-          if(current_tr_id == ""){
-            alert("请选择对应的机构");
-          }else {
-            
-            
-
-
-          }
-        }
 
       };
 

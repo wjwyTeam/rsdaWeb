@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:51:31
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-16 17:38:01
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-18 16:52:34
  */
 package com.wjwy.rsda.entity;
 
@@ -134,7 +134,11 @@ public class Department implements Serializable{
   @Transient
   private Boolean isParent;
 
+  @Transient
+  private String[] ids;
 
+  @Transient
+  private Boolean option;
 
   
 }
