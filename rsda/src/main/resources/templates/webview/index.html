@@ -272,10 +272,13 @@
                   <a href="javascript:;">系统设置</a>
                 </dd>
                 <dd class="layui-nav-itemed">
+                    <a th:attr="lay-href=@{/user/userInfo}">字典管理</a>
+               </dd>
+                <dd class="layui-nav-itemed">
                   <a th:attr="lay-href=@{/user/userInfo}">用户管理</a>
                 </dd>
                 <dd class="layui-nav-itemed">
-                  <a href="javascript:;">权限管理</a>
+                  <a th:attr="lay-href=@{/role/roleFindList}">角色管理</a>
                 </dd>
                 <dd class="layui-nav-itemed">
                   <a th:attr="lay-href=@{/log/operlogList}">日志浏览</a>
