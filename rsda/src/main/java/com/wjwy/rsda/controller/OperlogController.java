@@ -1,11 +1,17 @@
+/*
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2019-12-17 18:13:24
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-18 08:35:39
+ */
 package com.wjwy.rsda.controller;
 
 import com.wjwy.rsda.entity.OperLog;
-import com.wjwy.rsda.services.OperLogService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

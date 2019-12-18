@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 19:04:49
+ * @LastEditTime: 2019-12-18 11:17:06
  */
 package com.wjwy.rsda.controller;
 
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -226,4 +227,27 @@ public class DepartmentController {
 		}
 		return rmAll;
 	}
-}
+
+	/**
+	 * 
+	 * @param ids
+	 * @param id
+	 * @return 
+	 */
+	@ApiOperation(value = "机构上移/下移" ,notes = "参数:ids-机构选中移动的数组ID,id-移动参考数据行ID,option-true 上移/false 下移")
+	@PostMapping(value = "/moveUpOrDown")
+	public ResponseWrapper moveUpOrDown(@RequestParam String[] ids,@RequestParam String id,@RequestParam boolean option){
+		try {
+			int resultTotal = deptService.moveUpOrDown(ids,id,option);
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "上移失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "上移成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+ 	 }
+	}

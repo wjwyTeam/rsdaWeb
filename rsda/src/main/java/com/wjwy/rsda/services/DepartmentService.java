@@ -4,10 +4,11 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-03 16:08:57
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-16 15:08:43
+ * @LastEditTime: 2019-12-18 11:12:22
  */
 package com.wjwy.rsda.services;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,8 @@ import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.entity.Department;
 import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.mapper.DepartmentMapper;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -64,6 +67,8 @@ public class DepartmentService {
             department.setParentId(String.valueOf(EnumEntitys.GJD.getValue()));
         } 
         department.setCreateTime(new Date());
+        department.setDorder(Integer.parseInt(this.getMaxCodeById(departmentMapper.getMaxCodeById("1"),"1",1)));
+      
         return departmentMapper.insertSelective(department);
     }
 
@@ -184,4 +189,71 @@ public class DepartmentService {
 		PageInfo<Department> PageInfoDO = new PageInfo<Department>(department);
 		return PageInfoDO;
     }
+
+
+    /**
+	 *   根据id获取最大信息编号
+	 * @param maxId  当前最大编号
+	 * @param preStr 数据前缀
+	 * @param length 拼接长度
+	 * @return
+	 */
+ 
+	public String getMaxCodeById(String maxId,String preStr,int length) {
+		String serialNumberStr = "";
+		if (StringUtils.isEmpty(maxId)) {
+			maxId = "0000000000000";
+		}
+		int serialNumber = 0;
+		int maxSerialNumber = Integer.valueOf(maxId.substring(
+				maxId.length() - length, maxId.length()));
+		serialNumber = maxSerialNumber + 1;
+		
+		NumberFormat nf = NumberFormat.getInstance();
+        //设置是否使用分组
+        nf.setGroupingUsed(false);
+        //设置最大整数位数
+        nf.setMaximumIntegerDigits(length);
+        //设置最小整数位数   
+        nf.setMinimumIntegerDigits(length);
+		serialNumberStr = nf.format(serialNumber);
+		StringBuilder emailIdBuilder = new StringBuilder(preStr).append(serialNumberStr);
+		return emailIdBuilder.toString();
+    }
+    /**
+     * 上移数据
+     * @param ids
+     * @param id
+     * @return
+     */
+	public int moveUpOrDown( String[] ids, String id,boolean option) {
+
+        if(ids == null || StringUtil.isEmpty(id)){
+             return 0;
+        }
+
+        Example example = new Example(Department.class);
+        Criteria criteria = example.createCriteria();
+        List<Department> departmentM = new ArrayList<Department>();
+        Department departUp =  departmentMapper.selectByPrimaryKey(id);
+       
+        for (String idUps : ids) {
+          criteria.andEqualTo("id", idUps);
+          Department departDown = departmentMapper.selectOneByExample(example);
+          departUp.setDorder(departDown.getDorder());
+          if(option){
+            departDown.setDorder(departUp.getDorder()-1);
+          }else{
+            departDown.setDorder(departUp.getDorder()+1);
+          }
+         
+          departmentM.add(departDown);
+          departmentM.add(departUp);
+        }
+
+        for (Department departmentsUpdate : departmentM) {
+            departmentMapper.updateByPrimaryKeySelective(departmentsUpdate);
+        }
+		return 1;
+	}
 }
