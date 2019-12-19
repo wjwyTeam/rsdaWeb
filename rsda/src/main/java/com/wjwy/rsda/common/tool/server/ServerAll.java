@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 16:06:38
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-19 08:47:49
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-19 14:13:35
  */
 package com.wjwy.rsda.common.tool.server;
 
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/monitor")
-public class ServerController {
+public class ServerAll {
 
     /**
      * 本机配置
@@ -45,7 +45,7 @@ public class ServerController {
      */
     @GetMapping("/data")
     public String druid() {
-        return  StringUtils.format("redirect:{}", "/druid/index");
+        return  StringUtils.format("redirect:{}", "/druid");
     }
 
 

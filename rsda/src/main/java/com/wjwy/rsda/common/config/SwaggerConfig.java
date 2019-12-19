@@ -3,10 +3,12 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-06 16:48:51
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-19 08:52:32
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-19 13:16:07
  */
 package com.wjwy.rsda.common.config;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +25,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
+@ConfigurationProperties
 public class SwaggerConfig
 {
     /**

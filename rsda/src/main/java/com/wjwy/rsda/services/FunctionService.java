@@ -2,6 +2,7 @@ package com.wjwy.rsda.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.mapper.FunctionMapper;
@@ -101,5 +102,9 @@ public class FunctionService {
 
         return functionMapper.selectByExample(example);
     }
+
+	public Set<String> listPerms(String userId) {
+		return null;
+	}
 
 }

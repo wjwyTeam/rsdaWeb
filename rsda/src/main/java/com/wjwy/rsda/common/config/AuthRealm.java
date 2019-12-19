@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-12-01 18:43:19
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-09 16:18:35
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-19 11:14:24
  */
 package com.wjwy.rsda.common.config;
 
@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.entity.User;
+import com.wjwy.rsda.services.FunctionService;
 import com.wjwy.rsda.services.UserService;
 
 import org.apache.shiro.SecurityUtils;
@@ -30,6 +32,8 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+
+import tk.mybatis.mapper.util.StringUtil;
 
 /**
  * 认证领域
@@ -87,14 +91,45 @@ public class AuthRealm extends AuthorizingRealm {
      * 只有需要验证权限时才会调用, 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.在配有缓存的情况下，只加载一次.
      * 如果需要动态权限,但是又不想每次去数据库校验,可以存在ehcache中.自行完善
      */
+
+    /**
+     * 只有需要验证权限时才会调用, 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.在配有缓存的情况下，只加载一次.
+     * 如果需要动态权限,但是又不想每次去数据库校验,可以存在ehcache中.自行完善
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-        SecurityUtils.getSubject().getPrincipal();
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        Set<String> stringSet = new HashSet<>();
-        stringSet.add("user:show");
-        stringSet.add("user:admin");
-        info.setStringPermissions(stringSet);
-        return info;
+        User userDO = (User) SecurityUtils.getSubject().getPrincipal();
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        // 给予Myadmin超级权限
+
+        if (userDO.getUserName().equals("myadmin")) {
+            FunctionService functionService = ApplicationContextRegister.getBean(FunctionService.class);
+            List<Function> listFunction = functionService.findList("", "");
+            Set<String> permsSet = new HashSet<>();
+            for (Function sysFunction : listFunction) {
+                if (!StringUtil.isEmpty(sysFunction.getUrl())) {
+                    permsSet.add(sysFunction.getUrl());
+                }
+            }
+            authorizationInfo.addStringPermissions(permsSet);
+        } else {
+            FunctionService functionService = ApplicationContextRegister.getBean(FunctionService.class);
+            List<Function> listFunction = functionService.findList("", "");
+            Set<String> permsSet = new HashSet<>();
+            for (Function sysFunction : listFunction) {
+                if (!StringUtil.isEmpty(sysFunction.getUrl())) {
+                    permsSet.add(sysFunction.getUrl());
+                }
+            }
+            authorizationInfo.addStringPermissions(permsSet);
+        }
+        return authorizationInfo;
+    }
+
+    /**
+     * 清理缓存权限
+     */
+    public void clearCachedAuthorizationInfo() {
+        this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
     }
 }

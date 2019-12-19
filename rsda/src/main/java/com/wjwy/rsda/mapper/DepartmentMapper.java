@@ -3,18 +3,16 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-04 09:43:55
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-18 11:08:48
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-19 12:06:59
  */
 package com.wjwy.rsda.mapper;
 
 import java.util.List;
 import com.wjwy.rsda.common.TkMapper;
 import com.wjwy.rsda.entity.Department;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-@Mapper
 public interface DepartmentMapper extends TkMapper<Department> {
 
     /**

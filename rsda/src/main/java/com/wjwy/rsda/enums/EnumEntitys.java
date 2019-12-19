@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:27:14
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 09:45:40
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-19 13:55:40
  */
 package com.wjwy.rsda.enums;
 
@@ -12,12 +12,23 @@ import io.swagger.annotations.ApiModel;
 
 @ApiModel("枚举>大全")
 public enum EnumEntitys {
+    /**
+     * 主库
+     */
+    MASTER("MASTER", "主库"),
 
-    GJD("0","根节点"),GIDPARENT("85609d4e-5e69-44fd-b356-6e81cae52671","父节点"),
+    /**
+     * 从库
+     */
+    SLAVE("SLAVE", "从库"),
+
+    GJD("0", "根节点"), GIDPARENT("85609d4e-5e69-44fd-b356-6e81cae52671", "父节点"),
 
     YES(true, "启动分页"), NO(false, "停用分页"),
-    
+
     BOY(0, "男"), GIRL(1, "女"),
+
+    ONLINE("0","在线"), OFFLINE("1","离线"),
 
     SCUUESS(1, "成功"), FAILED(2, "失败");
 
