@@ -83,7 +83,7 @@ public class RoleController {
     public ResponseWrapper roleFindList(String id, String name,Integer page,Integer limit) {
         try {
             PageInfo<Role> roleList = roleService.findList(id, name,page,limit);
-            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList, null, Integer.parseInt(String.valueOf(roleList.getTotal())));
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList.getList(), null, Integer.parseInt(String.valueOf(roleList.getTotal())));
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

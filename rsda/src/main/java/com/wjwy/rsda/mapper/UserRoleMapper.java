@@ -1,6 +1,7 @@
 package com.wjwy.rsda.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+
 import com.wjwy.rsda.common.TkMapper;
 import com.wjwy.rsda.entity.UserRole;
 
@@ -10,7 +11,7 @@ import com.wjwy.rsda.entity.UserRole;
  * @Author: ZHANGQI
  * @Date: 2019-12-06 17:23:27
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-09 16:16:02
+ * @LastEditTime: 2019-12-19 08:54:20
  */
 @Mapper
 public interface UserRoleMapper extends TkMapper<UserRole> {

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 16:48:51
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 15:48:50
+ * @LastEditTime: 2019-12-19 08:52:32
  */
 package com.wjwy.rsda.common.config;
 import org.springframework.context.annotation.Bean;
@@ -14,15 +14,12 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Swagger2的接口配置
- * 
- * @author ruoyi
  */
 @Configuration
 @EnableSwagger2
@@ -56,13 +53,11 @@ public class SwaggerConfig
         // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
                 // 设置标题
-                .title("维佳伟业公司：数字化干部人事档案网上查询系统_接口文档")
+                .title("维佳伟业科技公司：数字化干部人事档案网上查询系统_接口文档")
                 // 描述
                 .description("数字化干部人事档案网上查询系统")
-                // 作者信息
-                .contact(new Contact(Global.getName(), null, null))
                 // 版本
-                .version("版本号:" + Global.getVersion())
+                .version("版本号:" + "1.0")
                 .build();
     }
 }

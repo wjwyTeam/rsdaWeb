@@ -1,4 +1,4 @@
-package com.wjwy.rsda.tool.server;
+package com.wjwy.rsda.common.tool.server;
 
 /**
  * 系统文件相关信息

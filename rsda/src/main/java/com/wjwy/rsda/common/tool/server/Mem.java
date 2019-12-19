@@ -4,9 +4,9 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 16:08:06
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 16:13:56
+ * @LastEditTime: 2019-12-19 08:47:34
  */
-package com.wjwy.rsda.tool.server;
+package com.wjwy.rsda.common.tool.server;
 
 import com.wjwy.rsda.common.util.Arith;
 

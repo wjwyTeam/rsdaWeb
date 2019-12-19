@@ -3,10 +3,12 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-11-29 20:39:17
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-14 11:26:07
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-19 09:46:01
  */
 package com.wjwy.rsda;
+
+import javax.annotation.PostConstruct;
 
 import com.wjwy.rsda.common.TkMapper;
 import org.slf4j.Logger;
@@ -30,4 +32,10 @@ public class RsdaApplicationServer {// 启动注解事务管理,等同于xml配�
 		SpringApplication.run(RsdaApplicationServer.class, args);
 		logger.info("=====-----------------------------启动成功--------------------------====");
 	}
+
+	@PostConstruct    //在初始化的时候初始化静态对象和它的静态成员变量bean对象，静态存储下来，防止被释放
+	public void init() {
+		logger.info("=====-----------------------------初始化加载--------------------------====");
+	}
+
 }

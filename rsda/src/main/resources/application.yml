@@ -1,0 +1,32 @@
+debug: true
+logging:
+    level:
+        '*': info
+mapper:
+    identity: MYSQL
+    mappers: com.wjwy.rsda.common.TkMapper
+    not-empty: false
+mybatis:
+    configuration:
+        map-underscore-to-camel-case: true
+        mapUnderscoreToCamelCase: true
+        useColumnLabel: true
+    mapper-locations: classpath:mapper/**/*.xml
+    type-aliases-package: com.wjwy.rsda.entity
+pagehelper:
+    helperDialect: mysql
+    params: count=countSql
+    reasonable: true
+    supportMethodsArguments: true
+server:
+    port: 8081
+    tomcat:
+        uri-encoding: UTF-8
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://192.168.1.58:3306/crebas?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+        username: root
+        password: root
+    thymeleaf:
+        cache: false
