@@ -1,9 +1,11 @@
 package com.wjwy.rsda.controller;
 
-import java.util.List;
+import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.services.RoleService;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -38,6 +42,35 @@ public class RoleController {
 
     public Logger logger = LoggerFactory.getLogger(RoleController.class);
 
+	/**
+	 * 角色展示列表页
+	 * 
+	 * @param department
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "/roleInfo")
+	public ModelAndView roleInfo(Role role, ModelAndView model) {
+		model.setViewName("webview/system/role/roleList");
+		return model;
+	}
+
+	/**
+	 * 机构单位展示添加页
+	 * @param department
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "/roleUpdateInfo")
+	public ModelAndView roleUpdateInfo(Role role, ModelAndView model) {
+		if(StringUtils.isNotEmpty(role.getId())){
+			role = roleService.getId(role.getId());
+		}
+		model.addObject("roleOne", role);
+		model.setViewName("webview/system/role/roleForm");
+		return model;
+	}
     /**
      * 列表查询
      * 
@@ -47,10 +80,10 @@ public class RoleController {
      */
     @ApiOperation(value = "角色列表", notes = "参数:id-主键, name-角色名称")
     @GetMapping("/roleFindList")
-    public ResponseWrapper roleFindList(String id, String name) {
+    public ResponseWrapper roleFindList(String id, String name,Integer page,Integer limit) {
         try {
-            List<Role> roleList = roleService.findList(id, name);
-            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList, null, roleList.size());
+            PageInfo<Role> roleList = roleService.findList(id, name,page,limit);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList, null, Integer.parseInt(String.valueOf(roleList.getTotal())));
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

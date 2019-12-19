@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 14:27:54
+ * @LastEditTime: 2019-12-19 08:17:12
  */
 package com.wjwy.rsda.services;
 
@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.RoleFunction;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 
@@ -44,16 +47,19 @@ public class RoleService {
     @Autowired
     private RoleFunctionMapper roleFunctionMapper;
 
+    public Logger logger = LoggerFactory.getLogger(RoleService.class);
 
-	public Logger logger = LoggerFactory.getLogger(RoleService.class);
     /**
      * 列表查询
      * 
      * @param name
      * @param id
+     * @param limit
+     * @param page
      * @return List<Role>
      */
-    public List<Role> findList(String id, String name) {
+    public PageInfo<Role> findList(String id, String name, Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
         Example example = new Example(Role.class);
         Criteria criteria = example.createCriteria();
         if (!StringUtil.isEmpty(id)) {
@@ -62,10 +68,13 @@ public class RoleService {
         if (!StringUtil.isEmpty(name)) {
             criteria.andEqualTo("name", name);
         }
+        List<Role> roles = roleMapper.selectByExample(example);
 
-       
-
-        return roleMapper.selectByExample(example);
+        if (roles == null) {
+            return null;
+        }
+        PageInfo<Role> PageInfoDO = new PageInfo<Role>(roles);
+        return PageInfoDO;
     }
 
     /**
@@ -75,7 +84,7 @@ public class RoleService {
      * @return int
      */
     public int insertRole(Role role) {
-		// 调用功能更新接口
+        // 调用功能更新接口
         role.setId(UUID.randomUUID().toString().toLowerCase());
         role.setCreateTime(new Date());
         return roleMapper.insert(role);
@@ -122,69 +131,87 @@ public class RoleService {
         return count;
     }
 
-
     /**
      * 根据角色选择功能
+     * 
      * @param id
      * @param ids
      * @return boolean
      */
-	public boolean roleSelFunction(String id, String[] ids) {
-		if (id.isEmpty() || id == null) {
-			return false;
-		}
-		RoleFunction roleFunction = new RoleFunction();
-		roleFunction.setRoleId(id);
-		Example example = new Example(RoleFunction.class);
-		Criteria criteria = example.createCriteria();
-		// 将当前用户所选角色全部清除，新增
-		criteria.andEqualTo("roleId", id);
-		logger.info(id, roleFunctionMapper.deleteByExample(example));
-		for (String functionId : ids) {
-			criteria.andEqualTo("functionId", functionId);
-			roleFunction.setRId(UUID.randomUUID().toString().toLowerCase());
-			roleFunction.setFunctionId(functionId);
-			logger.info(functionId, roleFunctionMapper.insertSelective(roleFunction));
-		}
+    public boolean roleSelFunction(String id, String[] ids) {
+        if (id.isEmpty() || id == null) {
+            return false;
+        }
+        RoleFunction roleFunction = new RoleFunction();
+        roleFunction.setRoleId(id);
+        Example example = new Example(RoleFunction.class);
+        Criteria criteria = example.createCriteria();
+        // 将当前用户所选角色全部清除，新增
+        criteria.andEqualTo("roleId", id);
+        logger.info(id, roleFunctionMapper.deleteByExample(example));
+        for (String functionId : ids) {
+            criteria.andEqualTo("functionId", functionId);
+            roleFunction.setRId(UUID.randomUUID().toString().toLowerCase());
+            roleFunction.setFunctionId(functionId);
+            logger.info(functionId, roleFunctionMapper.insertSelective(roleFunction));
+        }
 
-		return true;
-	}
+        return true;
+    }
 
     /**
      * 根据角色查询功能
      */
-	public boolean getFunction(String id) {
-   
-    //      List<Role> roles = roleMapper.selectByExample(example);
-    //     if (roles == null) {
-    //        return false;
-    //    }
+    public boolean getFunction(String id) {
 
+        // List<Role> roles = roleMapper.selectByExample(example);
+        // if (roles == null) {
+        // return false;
+        // }
 
-    //     List<Role> roleNew = new ArrayList<Role>();
-    //     for (Role role : roles) {
+        // List<Role> roleNew = new ArrayList<Role>();
+        // for (Role role : roles) {
 
-    //         Example exampleRoleFunction = new Example(RoleFunction.class);
-    //         Criteria criteriaRoleFunction = exampleRoleFunction.createCriteria();
-    //        criteriaRoleFunction.andEqualTo("roleId", role.getId());
-    //          List<RoleFunction> roleFunctionNew = roleFunctionMapper.selectByExample(exampleRoleFunction);
+        // Example exampleRoleFunction = new Example(RoleFunction.class);
+        // Criteria criteriaRoleFunction = exampleRoleFunction.createCriteria();
+        // criteriaRoleFunction.andEqualTo("roleId", role.getId());
+        // List<RoleFunction> roleFunctionNew =
+        // roleFunctionMapper.selectByExample(exampleRoleFunction);
 
-    //         List<Function> functionNewList = new ArrayList<Function>();
-    //         if (!roleFunctionNew.isEmpty()) {
-    //             for (RoleFunction roleFunction : roleFunctionNew) {
-    //                 Function function = new Function();
-    //                 Example exampleFunction = new Example(Function.class);
-    //                 Criteria criteriaFunction = exampleFunction.createCriteria();
-    //                criteriaFunction.andEqualTo("functionId", roleFunction.getFunctionId());
-    //                 function = functionMapper.selectOneByExample(exampleFunction);
-    //                 functionNewList.add(function);
-    //            }
-    //            role.setFunctions(functionNewList);
-    //             roleNew.add(role);
-    //  }
+        // List<Function> functionNewList = new ArrayList<Function>();
+        // if (!roleFunctionNew.isEmpty()) {
+        // for (RoleFunction roleFunction : roleFunctionNew) {
+        // Function function = new Function();
+        // Example exampleFunction = new Example(Function.class);
+        // Criteria criteriaFunction = exampleFunction.createCriteria();
+        // criteriaFunction.andEqualTo("functionId", roleFunction.getFunctionId());
+        // function = functionMapper.selectOneByExample(exampleFunction);
+        // functionNewList.add(function);
+        // }
+        // role.setFunctions(functionNewList);
+        // roleNew.add(role);
+        // }
 
         // }
-		return true;
-	}
+        return true;
+    }
+
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    public Role getId(String id) {
+
+        Example example = new Example(Role.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("id", id);
+
+        Role roleNew = roleMapper.selectOneByExample(example);
+        if (roleNew == null) {
+            return null;
+        }
+        return roleNew;
+    }
 
 }
