@@ -10,6 +10,7 @@ package com.wjwy.rsda.entity;
 
 import javax.persistence.Table;
 
+import com.wjwy.rsda.common.util.BaseEntity;
 import com.wjwy.rsda.common.util.Excel;
 import com.wjwy.rsda.common.util.Excel.ColumnType;
 
@@ -18,17 +19,24 @@ import com.wjwy.rsda.common.util.Excel.ColumnType;
  */
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
-@Data
+@Getter
+@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("字典类型=>实体")
 @Table(name = "sys_dict_data")
-public class DictData {
+public class DictData extends BaseEntity{
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     /** 字典编码 */
     @Excel(name = "字典编码", cellType = ColumnType.NUMERIC)

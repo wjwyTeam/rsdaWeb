@@ -3,46 +3,240 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-18 17:11:01
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-20 16:19:54
  -->
- <!DOCTYPE html>
- <html>
- 
- <head>
-	 <meta charset="utf-8">
-	 <title>日志浏览</title>
-	 <meta name="renderer" content="webkit">
-	 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	 <meta name="viewport"
-		 content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	 <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
-	 <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
-	 <link rel="stylesheet" href="/css/zTreeStyle.css" media="all">
-	 <link rel="stylesheet" href="/css/metroStyle.css" type="text/css">
-</head>
-<body>
-   	<div class="container">
-			<table id="logTable" lay-filter="logTable" class="layui-hide"> </table>
-		</div>
-	<script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <th:block th:include="include :: header('服务器监控')" />
+    <style>
+      .userTableSearch {
+        width: 100%;
+        text-align: left;
+        position: relative;
+        top: 6px;
+      }
+    </style>
+  </head>
 
-	<script type="text/javascript" th:inline="none">
-		layui.config({
-			base: '/layuiadmin/' //静态资源所在路径
-		}).extend({
-			index: 'lib/index' //主入口模块
-		}).use(['table', 'form', 'util'], function () {
-			var $ = layui.$
-				, form = layui.form
-				, table = layui.table
-				, util = layui.util;
+  <body>
+    <div class="col-xs-12 ">
+      <div class="userTableSearch layui-form">
+       
 
-	
-		
-		});
+        <input
+          type="text"
+          class="layui-input"
+          id="startTime"
+          placeholder="开始时间"
+          name="beginTime"  style="display: inline-block;width: auto;"
+        />
+        <span>-</span>
+        <input
+          type="text"
+          class="layui-input"
+          id="endTime"
+          placeholder="结束时间"
+          name="endTime"  style="display: inline-block;width: auto;"
+        />
 
-	</script>
-</body>
+        <input
+        type="text"
+        name="userName"
+        id="userName"
+        placeholder="请输入用户名"
+        autocomplete="off"
+        class="layui-input"
+        style="display: inline-block;width: auto;"
+      />
 
+      
+        <div
+          class="layui-form-item"
+          style="display: inline-block;width: auto;text-align: left;margin:0;"
+        >
+          <select name="userType">
+            <option value="" selected="true">请选择</option>
+            <option value="0">固定账号</option>
+            <option value="1">临时账号</option>
+            <option value="2">游客</option>
+          </select>
+        </div>
+
+        <button class="layui-btn" lay-submit lay-filter="user-front-search">
+          搜索
+        </button>
+      </div>
+      <table id="logTable" lay-filter="logTable" class="layui-hide"></table>
+      <script type="text/html" id="table-toolbar" th:inline="none">
+        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="findOne"><i class="layui-icon layui-icon-search"></i>查看</a>
+      </script>
+    </div>
+
+    <script type="text/javascript" th:inline="none">
+      layui.use(["table", "form", "util", "laydate"], function() {
+        var $ = layui.$,
+          form = layui.form,
+          table = layui.table,
+          laydate = layui.laydate,
+          util = layui.util;
+
+        //第一个实例
+        table.render({
+          elem: "#logTable",
+          even: true,
+          height: "full-60",
+
+          title: "用户数据表",
+          width: "100%",
+          method: "post",
+          id: "logTable",
+          totalRow: true,
+          url: "/log/logPageInfoList", //数据接口
+          cols: [
+            [
+              //表头
+              {
+                fixed: "left",
+                type: "numbers",
+                title: "序号"
+              },
+              {
+                field: "operId",
+                title: "日志编号",
+                sort: true,
+                width: 112
+              },
+              {
+                field: "title",
+                title: "系统模块",
+                sort: true,
+                width: 150
+              },
+              {
+                field: "businessType",
+                title: "操作类型",
+                sort: true,
+                width: 150
+              },
+              {
+                field: "operName",
+                title: "操作人员",
+                sort: true,
+                width: 150
+              },
+              {
+                field: "deptName",
+                title: "部门名称",
+                sort: true,
+                width: 150
+              },
+              {
+                field: "operIp",
+                title: "主机",
+                sort: true,
+                width: 150
+              },
+              {
+                field: "operLocation",
+                title: "操作地点",
+                sort: true,
+                width: 150
+              },
+              {
+                field: "status",
+                title: "操作状态",
+                sort: true,
+                width: 150
+              },
+              {
+                field: "operTime",
+                title: "操作时间",
+                width: 250,
+                sort: true,
+                templet: function(time) {
+                  return (
+                    "<div>" +
+                    layui.util.toDateString(
+                      Date(time.operTime, "yyyy-MM-dd HH:mm:ss")
+                    ) +
+                    "</div>"
+                  );
+                }
+              },
+              {
+                fixed: "right",
+                title: "操作",
+                width: 200,
+                align: "center",
+                toolbar: "#table-toolbar"
+              }
+            ]
+          ],
+          page: false,
+          response: {
+            statusName: "code", //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+            statusCode: 200, //成功的状态码，默认：0
+            msgName: "msg", //状态信息的字段名称，默认：msg
+            countName: "count", //数据总数的字段名称，默认：count
+            dataName: "data" //数据列表的字段名称，默认：data
+          },
+          page: {
+            //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+            layout: ["limit", "count", "prev", "page", "next", "skip"], //自定义分页布局
+            //,curr: 5 //设定初始在第 5 页
+            groups: 5, //只显示 1 个连续页码
+            first: false, //不显示首页
+            last: false, //不显示尾页
+            limit: 20
+          }
+        });
+
+        //日期时间选择器
+        laydate.render({
+          elem: "#startTime",
+          type: "datetime"
+        });
+
+        laydate.render({
+          elem: "#endTime",
+          type: "datetime"
+        });
+
+
+        //监听搜索
+        form.on("submit(user-front-search)", function (data) {
+          var field = data.field;
+
+          //执行重载
+          table.reload("logTable", {
+            where: field
+          });
+        });
+         //监听工具条删除
+         table.on("tool(logTable)", function (obj) {
+             var data = obj.data;
+             if (obj.event === "findOne") {
+              layer.open({
+              type: 2,
+              title: "日志浏览",
+              maxmin: true,
+              area: ["700px", "550px"],
+              btn: ["取消"],
+              fixed: true,
+              shadeClose: false,
+              shade: 0.2,
+              moveType: 1, //拖拽模式，0或者1
+              content: "/log/operlogForm?operId=" + data.operId,
+              yes: function (index, layero) {
+                layer.close(index); //关闭弹层
+                submit.trigger("click");
+              }
+            });
+           }
+         });
+      });
+    </script>
+  </body>
 </html>

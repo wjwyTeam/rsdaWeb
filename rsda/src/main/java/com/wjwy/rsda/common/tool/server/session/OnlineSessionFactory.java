@@ -10,7 +10,7 @@ package com.wjwy.rsda.common.tool.server.session;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.wjwy.rsda.common.tool.server.OnlineSession;
+import com.wjwy.rsda.common.tool.server.system.OnlineSession;
 import com.wjwy.rsda.common.util.IpUtils;
 import com.wjwy.rsda.common.util.ServletUtils;
 

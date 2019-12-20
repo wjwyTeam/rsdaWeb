@@ -5,8 +5,6 @@ import java.io.StringWriter;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
-import com.wjwy.rsda.common.tool.JSON;
-
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

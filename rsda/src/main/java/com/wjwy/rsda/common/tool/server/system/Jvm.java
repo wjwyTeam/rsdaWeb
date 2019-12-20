@@ -1,4 +1,4 @@
-package com.wjwy.rsda.common.tool.server;
+package com.wjwy.rsda.common.tool.server.system;
 
 import java.lang.management.ManagementFactory;
 

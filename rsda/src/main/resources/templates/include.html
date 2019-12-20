@@ -1,16 +1,30 @@
 <!--
  * @Descripttion: 
  * @version: v0.0.1
- * @Author: zgr
- * @Date: 2019-12-18 15:15:54
+ * @Author: ZHANGQI
+ * @Date: 2019-12-17 17:48:03
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 17:42:51
+ * @LastEditTime : 2019-12-20 17:09:41
  -->
 <!-- 通用CSS -->
 <head th:fragment=header(title)>
 	<meta charset="utf-8">
 	<title th:text="${title}"></title>
-	<link rel="shortcut icon" href="image/favicon.ico">
-	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport"  content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="shortcut icon" href="./image/favicon.ico">
+	<link th:href="@{/css/layui.css}" rel="stylesheet"/>
 	<link th:href="@{/css/style.css}" rel="stylesheet"/>
+	<link th:href="@{/layuiadmin/layui/css/layui.css}"  rel="stylesheet" >
+	<link th:href="@{/layuiadmin/style/admin.css}"  rel="stylesheet">
+	<script  th:src="@{/layuiadmin/layui/layui.js}"></script>
+	<script  th:src="@{/js/jquery-1.4.4.min.js}"></script>
 </head>
+<!-- jsonview格式化和语法高亮JSON格式数据查看插件 -->
+<div th:fragment="jsonview-css">
+	<link th:href="@{/js/jsonview/jquery.jsonview.css}" rel="stylesheet"/>
+</div>
+<div th:fragment="jsonview-js">
+	<script th:src="@{/js/jsonview/jquery.jsonview.js}"></script>
+</div>

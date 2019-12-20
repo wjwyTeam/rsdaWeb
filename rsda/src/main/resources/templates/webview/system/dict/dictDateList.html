@@ -1,0 +1,48 @@
+<!--
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2019-12-17 19:08:33
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2019-12-18 17:11:01
+ -->
+ <!DOCTYPE html>
+ <html>
+ 
+ <head>
+	 <meta charset="utf-8">
+	 <title>日志浏览</title>
+	 <meta name="renderer" content="webkit">
+	 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	 <meta name="viewport"
+		 content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	 <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+	 <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+	 <link rel="stylesheet" href="/css/zTreeStyle.css" media="all">
+	 <link rel="stylesheet" href="/css/metroStyle.css" type="text/css">
+</head>
+<body>
+   	<div class="container">
+			<table id="logTable" lay-filter="logTable" class="layui-hide"> </table>
+		</div>
+	<script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
+
+	<script type="text/javascript" th:inline="none">
+		layui.config({
+			base: '/layuiadmin/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['table', 'form', 'util'], function () {
+			var $ = layui.$
+				, form = layui.form
+				, table = layui.table
+				, util = layui.util;
+
+	
+		
+		});
+
+	</script>
+</body>
+
+</html>

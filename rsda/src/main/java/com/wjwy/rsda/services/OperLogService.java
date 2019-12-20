@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 18:17:36
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 17:25:13
+ * @LastEditTime : 2019-12-20 16:15:00
  */
 package com.wjwy.rsda.services;
 
@@ -56,5 +56,18 @@ public class OperLogService {
 		public void insertOperlog(OperLog operLog) {
 			operLoguserDao.insertOperlog(operLog);
 		}
+
+		/**
+			* 根据ID查询详情数据
+			* @param operId
+			* @return
+		 */
+	public OperLog getId(Long operId) {
+		Example example = new Example(OperLog.class);
+		Criteria criteria = example.createCriteria();
+
+		criteria.andEqualTo("operId", operId);
+		return operLoguserDao.selectOneByExample(example);
+	}
 
 }

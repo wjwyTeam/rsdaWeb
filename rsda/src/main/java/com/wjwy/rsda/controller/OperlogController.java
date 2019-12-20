@@ -1,10 +1,10 @@
 /*
- * @Descripttion: 
+ * @Descripttion:
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 18:13:24
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-18 16:26:29
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-20 16:26:13
  */
 package com.wjwy.rsda.controller;
 
@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 
 
 /*
- * @Descripttion: 
+ * @Descripttion:
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 18:13:24
@@ -41,29 +41,43 @@ import io.swagger.annotations.ApiOperation;
 public class OperlogController {
   @Autowired
   private  OperLogService operlogService;
+
+  private String prefix = "webview/system/log/";
 	public Logger logger = LoggerFactory.getLogger(DepartmentController.class);
   /**
    * 日志展示列数据
    * @return
    */
+  @ApiOperation(value = "日志列表页", notes = "参数：operlog JSON 对象")
   @GetMapping(value = "/operlogList")
-  public ModelAndView operlog(OperLog operlog, ModelAndView model) {
-    model.setViewName("webview/system/log/operlogList");
+  public ModelAndView operlogList(ModelAndView model) {
+    model.setViewName(prefix + "operlogList");
     return model;
   }
-
+ /**
+   * 日志展示表单数据
+   * @return
+   */
+  @ApiOperation(value = "日志表单页", notes = "参数：operlog JSON 对象")
+  @GetMapping(value = "/operlogForm")
+  public ModelAndView operlogForm(String operId,ModelAndView model) {
+    OperLog operLogOne =  operlogService.getId(Long.parseLong(operId));
+    model.addObject("operLog",operLogOne);
+    model.setViewName(prefix + "operlogForm");
+    return model;
+  }
   /**
-   * 
+   *
    * @param pageNum
    * @param pageSize
    * @return
    */
   @PostMapping("/logPageInfoList")
-	@ApiOperation(value = "根据ID获取日志分页列表", notes = "参数：pageNum-当前页,pageSize-每页条数")
+	@ApiOperation(value = "日志分页列表", notes = "参数：pageNum-当前页,pageSize-每页条数")
 	public ResponseWrapper logPageInfoList(String operName,Integer page, Integer limit) {
 		try {
 				PageInfo<OperLog> pageInfos = operlogService.getPageList(operName,page, limit);
-				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos, null, Integer.parseInt(String.valueOf(pageInfos.getTotal())));
+				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null, Integer.parseInt(String.valueOf(pageInfos.getTotal())));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -71,5 +85,5 @@ public class OperlogController {
 				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
- 
+
 }

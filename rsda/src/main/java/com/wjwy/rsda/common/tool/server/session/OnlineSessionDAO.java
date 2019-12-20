@@ -5,8 +5,9 @@ import java.util.Date;
 
 import com.wjwy.rsda.common.tool.factory.AsyncFactory;
 import com.wjwy.rsda.common.tool.factory.AsyncManager;
-import com.wjwy.rsda.common.tool.server.OnlineSession;
+
 import com.wjwy.rsda.common.tool.server.service.ShiroService;
+import com.wjwy.rsda.common.tool.server.system.OnlineSession;
 import com.wjwy.rsda.enums.EnumEntitys;
 
 import org.apache.shiro.session.Session;
@@ -18,8 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 针对自定义的ShiroSession的db操作
- * 
- * @author ruoyi
  */
 public class OnlineSessionDAO extends EnterpriseCacheSessionDAO
 {

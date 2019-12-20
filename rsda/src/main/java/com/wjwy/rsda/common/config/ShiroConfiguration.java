@@ -121,6 +121,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/layuiadmin/**", "anon");
         filterChainDefinitionMap.put("/druid/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
+        filterChainDefinitionMap.put("/log /**", "anon");
         filterChainDefinitionMap.put("/image/**", "anon");
         filterChainDefinitionMap.put("/webviews/**", "anon");
         

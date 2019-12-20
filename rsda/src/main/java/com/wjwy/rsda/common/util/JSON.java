@@ -1,4 +1,4 @@
-package com.wjwy.rsda.common.tool;
+package com.wjwy.rsda.common.util;
 
 import java.io.File;
 import java.io.IOException;

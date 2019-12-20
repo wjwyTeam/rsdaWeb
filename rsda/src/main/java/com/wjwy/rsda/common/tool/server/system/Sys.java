@@ -6,7 +6,7 @@
  * @LastEditors: ZHANGQI
  * @LastEditTime: 2019-12-19 08:47:56
  */
-package com.wjwy.rsda.common.tool.server;
+package com.wjwy.rsda.common.tool.server.system;
 
 /**
  * 系统相关信息

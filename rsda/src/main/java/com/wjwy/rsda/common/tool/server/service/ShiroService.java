@@ -10,8 +10,8 @@ package com.wjwy.rsda.common.tool.server.service;
 
 import java.io.Serializable;
 
-import com.wjwy.rsda.common.tool.server.Online;
-import com.wjwy.rsda.common.tool.server.OnlineSession;
+import com.wjwy.rsda.common.tool.server.system.Online;
+import com.wjwy.rsda.common.tool.server.system.OnlineSession;
 import com.wjwy.rsda.common.util.StringUtils;
 
 import org.apache.shiro.session.Session;

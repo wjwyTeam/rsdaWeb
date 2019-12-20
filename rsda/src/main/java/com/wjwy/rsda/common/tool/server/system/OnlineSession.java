@@ -6,7 +6,7 @@
  * @LastEditors  : ZHANGQI
  * @LastEditTime : 2019-12-19 14:52:15
  */
-package com.wjwy.rsda.common.tool.server;
+package com.wjwy.rsda.common.tool.server.system;
 
 import com.wjwy.rsda.enums.EnumEntitys;
 

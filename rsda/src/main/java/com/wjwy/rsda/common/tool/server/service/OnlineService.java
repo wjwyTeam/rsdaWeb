@@ -11,7 +11,7 @@ package com.wjwy.rsda.common.tool.server.service;
 import java.util.Date;
 import java.util.List;
 
-import com.wjwy.rsda.common.tool.server.Online;
+import com.wjwy.rsda.common.tool.server.system.Online;
 
 import org.springframework.stereotype.Service;
 
