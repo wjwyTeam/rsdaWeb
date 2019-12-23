@@ -105,6 +105,21 @@ public class FunctionService {
 
 	public Set<String> listPerms(String userId) {
 		return null;
-	}
+    }
+    
+    /**
+     * 通过ID查询数据
+     * @param functionId
+     * @return
+     */
+	public Function selectFunctionById(String functionId) {
+        Example example = new Example(Function.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("functionId", functionId);
+		return functionMapper.selectOneByExample(example);
+    }
+    
+
+    
 
 }

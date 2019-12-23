@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-23 15:26:57
+ * @LastEditTime : 2019-12-23 16:30:59
  */
 package com.wjwy.rsda.controller;
 
@@ -131,9 +131,21 @@ public class DictDataController extends BaseController {
   @ApiOperation(value = "新增保存字典类型", notes = "dictData - 对象")
   @PostMapping("/dictDataInsert")
   @ResponseBody
-  public AjaxResult addSave(@Validated DictData dictData) {
+  public ResponseWrapper addSave(@RequestBody DictData dictData) {
     dictData.setCreateBy(ShiroUtils.getLoginName());
-    return toAjax(dictDataService.insertDictData(dictData));
+
+    try {
+			AjaxResult resultTotal = toAjax(dictDataService.insertDictData(dictData));
+			if (resultTotal.isEmpty()) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
 
 

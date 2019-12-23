@@ -10,14 +10,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import tk.mybatis.mapper.util.StringUtil;
 
 /*
  * @Descripttion: 
@@ -34,6 +37,35 @@ public class FunctionController {
     @Autowired
     private FunctionService functionService;
     public Logger logger = LoggerFactory.getLogger(FunctionController.class);
+    private String prefix = "/webview/system/function";
+
+
+
+  /**
+   * 
+   * @return String
+   */
+  @GetMapping("/functionList")
+  @ApiOperation(value = "字典数据列表页")
+  public ModelAndView functionData(ModelAndView model) {
+    model.setViewName(prefix+"/functionList");
+    return model;
+  }
+
+    /**
+   * 修改字典类型
+   */
+  @ApiOperation(value = "修改字典类型", notes = "dictCode - 字典编号")
+  @GetMapping("/functionEdit")
+  public ModelAndView functionedit(String functionId, ModelAndView model) {
+    if (StringUtil.isNotEmpty(functionId)) {
+      model.addObject("functionOne", functionService.selectFunctionById(functionId));
+    }
+    model.setViewName(prefix + "/functionForm");
+    return model;
+  }
+
+
 
     /**
      * 列表查询

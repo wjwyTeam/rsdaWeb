@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-23 15:34:51
+ * @LastEditTime : 2019-12-23 16:31:57
  -->
 	<!DOCTYPE html>
 	<html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -99,12 +99,7 @@
 																	sort: true,
 																	width: 114
 															},
-															{
-																	field: "dictValue",
-																	title: "字典键值",
-																	sort: true,
-																	width: 114
-															},
+			
 															{
 																	field: "dictSort",
 																	title: "字典排序",
@@ -318,6 +313,7 @@
                    //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                 var field = data.field; //获取提交的字段
+						
 																if (field.status == "true")
 																					field.status = true;
 																			else
