@@ -82,7 +82,7 @@
               display: inline-flex;
               align-items: center; ">
         <div>
-          <button class="layui-btn" data-type="add">添加</button>
+          <button class="layui-btn" data-type="add" style="">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
         </div>
         <div class="userTableSearch layui-form">
@@ -150,15 +150,14 @@
         , totalRow: true
         , url: '/role/roleFindList' //数据接口
         , cols: [[ //表头
-          { checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
-          , { type: 'numbers', title: '角色编号',width: 100 }
-          , { field: 'name', title: '角色名称', sort: true, width: 150 }
-          , { field: 'enName', title: '角色字符', sort: true, width: 150 }
-          , { field: 'id', title: '主键', sort: true, width: 165 }
-          , { field: 'roleStatus', title: '角色状态', sort: true, width: 150,align: 'center', 
+          { checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test',width: 150  }
+          , { type: 'numbers', title: '角色编号',width: 190 }
+          , { field: 'name', title: '角色名称', sort: true,align: 'center', width: 150 }
+          , { field: 'enName', title: '角色字符', sort: true,align: 'center', width: 150 }
+          , { field: 'roleStatus', title: '角色状态', sort: true, width: 250,align: 'center', 
               templet: function(d){
                     var state = "";
-                    if (d.status == "1") {
+                    if (d.roleStatus == "1") {
                         state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat' checked='checked' name='status'  lay-skin='switch' lay-text='开启|关闭' >";
                     }
                     else {
@@ -168,9 +167,8 @@
               }
               
             }
-          , { field: 'roleKey', title: '角色权限', sort: true, width: 150 }
           , {
-            field: 'createTime', title: '创建时间', width: 350, sort: true, templet: function (time) {
+            field: 'createTime',align: 'center', title: '创建时间', width: 350, sort: true, templet: function (time) {
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
             }
           }
@@ -229,11 +227,24 @@
             content: '/role/roleUpdateInfo?id=' + data.id, 
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'userFormSubmit'
+                , submitID = 'roleFormSubmit'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                console.log(123);
+                console.log(iframeWindow)
+                console.log(submitID)
+                console.log(submit)
+
+
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                console.log(dataLog)
                 var field = dataLog.field;
+                if(field.roleStatus == "true"){
+                  field.roleStatus = true;
+                }else{
+                  field.roleStatus = false;
+                }
                 //获取提交的字段
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({

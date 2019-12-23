@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-06 15:02:00
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-19 09:05:43
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-23 18:15:09
  */
 package com.wjwy.rsda.entity;
 
@@ -70,7 +70,7 @@ public class Role implements Serializable{
     /** 角色状态 0=正常,1=停用 */
     @ApiModelProperty("角色状态 0=正常,1=停用")
     @Column(name = "role_status")
-    private String roleStatus;
+    private Boolean roleStatus;
 
 
 
