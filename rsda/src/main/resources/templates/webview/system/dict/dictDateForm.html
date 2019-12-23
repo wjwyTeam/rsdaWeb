@@ -1,0 +1,95 @@
+<!--
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2019-12-20 15:26:13
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-23 15:33:34
+ -->
+ <!DOCTYPE html>
+ <html lang="zh" xmlns:th="http://www.thymeleaf.org">
+   <head>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+   </head>
+   <body>
+    <div class="layui-form" lay-filter="dictForm" id="dictForm" style="padding: 20px 0 0 0;">
+     <div class="layui-form-item  layui-hide">
+       <label class="layui-form-label">dictCode</label>
+       <div class="layui-input-inline">
+         <input type="text" name="dictCode" placeholder="请输入dictCode" autocomplete="off" class="layui-input" />
+       </div>
+     </div>
+     
+       <div class="layui-form-item">
+           <label class="layui-form-label"><i style="color:red">* </i>字典名称</label>
+           <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+             <input type="text" id="dictLabel" name="dictLabel"  lay-verify="required" autocomplete="off"
+               class="layui-input" />
+           </div>
+       </div>
+   
+     
+       <div class="layui-form-item">
+           <label class="layui-form-label"><i style="color:red">* </i>字典类型</label>
+           <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+             <input type="text" name="dictType"  lay-verify="required" autocomplete="off" placeholder="请输入业务类型"
+               class="layui-input" />
+           </div>
+       </div>
+   
+  
+     
+      <div class="layui-form-item" lay-filter="status">
+       <label class="layui-form-label"><i style="color:red">* </i>状态</label>
+       <div class="layui-inline" >
+         <input type="checkbox" name="status" id="status" lay-skin="switch" value="true" lay-text="YES|NO"     lay-filter="isStatus"
+          >
+       </div>
+     </div>
+  
+     
+       <div class="layui-form-item">
+           <label class="layui-form-label"><i style="color:red">* </i>备注</label>
+           <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+             <input type="text" name="remark" id="remark"   autocomplete="off" placeholder=""
+               class="layui-input" />
+           </div>
+       </div>
+    
+     <div class="layui-form-item layui-hide">
+      <div class="layui-input-block">
+        <input type="button" lay-submit lay-filter="dictFormSubmit" id="dictFormSubmit" value="确认">
+      </div>
+    </div>
+   
+   </div>
+   <script src="../../../layuiadmin/layui/layui.js"></script>
+   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+ 
+   <script th:inline="javascript">
+    var dictOne = [[${ dictData }]];
+    layui.config({
+       base: '../../../layuiadmin/' //静态资源所在路径
+     }).extend({
+       index: 'lib/index' //主入口模块
+     }).use(['index', 'form', 'upload'], function () {
+      var $ = layui.$
+        , form = layui.form
+        , upload = layui.upload;
+ 
+        layer.ready(function () {
+         form.val('dictForm', dictOne);
+         $("#status").attr("checked", dictOne.status);
+ 
+      });
+
+            //监听指定开关
+       form.on('switch(isStatus)', function (data) {
+        $("#status").val(this.checked);
+      });
+    });
+ 
+   </script>
+ 
+   </body>
+ </html>

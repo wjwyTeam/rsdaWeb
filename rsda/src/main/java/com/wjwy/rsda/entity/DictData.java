@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:06:40
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 18:11:12
+ * @LastEditTime : 2019-12-23 10:13:11
  */
 package com.wjwy.rsda.entity;
 
@@ -70,7 +70,7 @@ public class DictData extends BaseEntity{
     private String isDefault;
 
     /** 状态（0正常 1停用） */
-    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
-    private String status;
+    @Excel(name = "状态", readConverterExp = "false  =  停用,  true = 正常")
+    private Boolean status;
 
 }

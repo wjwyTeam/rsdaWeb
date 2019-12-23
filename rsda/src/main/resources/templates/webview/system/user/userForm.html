@@ -203,18 +203,14 @@
       });
 
       form.verify({
-        passfirst: [/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/, '密码必须6到12位字母和数字的组合'],
+        passfirst: [ /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/ , '密码必须6到12位字母和数字的组合'],
         confirmPass: function (value) {
           var firstPass = $("#firstPassword").val();
-          if (value != firstPass) {
+          if (value.trim() != firstPass) {
             return "两次输入的密码不一致"
           }
         }
       });
-
-
-
-
     })
 
 

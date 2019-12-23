@@ -4,13 +4,14 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-20 08:43:08
+ * @LastEditTime : 2019-12-23 15:26:57
  */
 package com.wjwy.rsda.controller;
 
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.util.StringUtil;
 import com.wjwy.rsda.common.util.BaseController;
 import com.wjwy.rsda.common.util.ExcelUtil;
 import com.wjwy.rsda.common.util.Log;
@@ -32,8 +33,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,7 +49,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "字典数据配置", tags = "字典数据配置")
 public class DictDataController extends BaseController {
 
-  private String prefix = "system/dict";
+  private String prefix = "/webview/system/dict";
   public Logger logger = LoggerFactory.getLogger(DictDataController.class);
   @Autowired
   private DictDateService dictDataService;
@@ -57,10 +60,24 @@ public class DictDataController extends BaseController {
    */
   @GetMapping("/dataList")
   @ApiOperation(value = "字典数据列表页")
-  public String dictData() {
-    return prefix + "/dataList";
+  public ModelAndView dictData(ModelAndView model) {
+    model.setViewName(prefix+"/dictDateList");
+    return model;
   }
 
+    /**
+   * 修改字典类型
+   */
+  @ApiOperation(value = "修改字典类型", notes = "dictCode - 字典编号")
+  @GetMapping("/dictDataEdit")
+  public ModelAndView edit(String dictCode, ModelAndView model) {
+    if (StringUtil.isNotEmpty(dictCode)) {
+      model.addObject("dictData", dictDataService.selectDictDataById(Long.valueOf(dictCode)));
+    }
+    model.setViewName(prefix + "/dictDateForm");
+    return model;
+  }
+  
   /**
    * 分页列表
    * 
@@ -72,7 +89,7 @@ public class DictDataController extends BaseController {
   @ResponseBody
   @PostMapping("/datePageList")
   @ApiOperation(value = "字典数据分页列表数据展示", notes = "dictData - 对象，page，limit ")
-  public ResponseWrapper datePageList(DictData dictData, Integer page, Integer limit) {
+  public ResponseWrapper datePageList(@Validated  DictData dictData, Integer page, Integer limit) {
     try {
       PageInfo<DictData> pageInfos = dictDataService.findList(dictData, page, limit);
       return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
@@ -104,7 +121,7 @@ public class DictDataController extends BaseController {
   @GetMapping("/dictDataForm/{dictType}")
   public String add(@PathVariable("dictType") String dictType, ModelMap map) {
     map.put("dictType", dictType);
-    return prefix + "/dataListForm";
+    return prefix + "/dictDataForm";
   }
 
   /**
@@ -119,15 +136,7 @@ public class DictDataController extends BaseController {
     return toAjax(dictDataService.insertDictData(dictData));
   }
 
-  /**
-   * 修改字典类型
-   */
-  @ApiOperation(value = "修改字典类型", notes = "dictCode - 字典编号")
-  @GetMapping("/dictDataEdit/{dictCode}")
-  public String edit(@PathVariable("dictCode") Long dictCode, ModelMap map) {
-    map.put("dictData", dictDataService.selectDictDataById(dictCode));
-    return prefix + "/dataListForm";
-  }
+
 
   /**
    * 修改保存字典类型
@@ -136,17 +145,47 @@ public class DictDataController extends BaseController {
   @PostMapping("/dictDataEdit")
   @ResponseBody
   @ApiOperation(value = "修改保存字典类型", notes = "dictData - 对象")
-  public AjaxResult editSave(@Validated DictData dictData) {
+  public ResponseWrapper editSave(@RequestBody DictData dictData) {
+    
     dictData.setUpdateBy(ShiroUtils.getLoginName());
-    return toAjax(dictDataService.updateDictData(dictData));
-  }
 
+    try {
+			int resultTotal =  dictDataService.updateDictData(dictData);
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
+
+
+  /**
+   * 
+   * @param ids
+   * @return
+   */
   @Log(title = "字典数据", businessType = EnumEntitys.DELETE)
   @PostMapping("/dictDataRemove")
   @ApiOperation(value = "移除字典数据", notes = "ids - 数组-ids")
   @ResponseBody
-  public AjaxResult remove(String ids){
-      return toAjax(dictDataService.deleteDictDataByIds(Convert.toStrArray(ids)));
+  public ResponseWrapper remove(String ids) {
+    try {
+			int resultTotal =  dictDataService.deleteDictDataByIds(Convert.toStrArray(ids));
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
 }
 

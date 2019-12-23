@@ -3,46 +3,371 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-18 17:11:01
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-23 15:34:51
  -->
- <!DOCTYPE html>
- <html>
- 
- <head>
-	 <meta charset="utf-8">
-	 <title>日志浏览</title>
-	 <meta name="renderer" content="webkit">
-	 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	 <meta name="viewport"
-		 content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	 <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
-	 <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
-	 <link rel="stylesheet" href="/css/zTreeStyle.css" media="all">
-	 <link rel="stylesheet" href="/css/metroStyle.css" type="text/css">
-</head>
-<body>
-   	<div class="container">
-			<table id="logTable" lay-filter="logTable" class="layui-hide"> </table>
-		</div>
-	<script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
+	<!DOCTYPE html>
+	<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+			<head>
+					<th:block th:include="include :: header('服务器监控')" />
+					<style>
+							.dictTableSearch {
+									width: 100%;
+									text-align: right;
+									position: relative;
+									top: 6px;
+							}
 
-	<script type="text/javascript" th:inline="none">
-		layui.config({
-			base: '/layuiadmin/' //静态资源所在路径
-		}).extend({
-			index: 'lib/index' //主入口模块
-		}).use(['table', 'form', 'util'], function () {
-			var $ = layui.$
-				, form = layui.form
-				, table = layui.table
-				, util = layui.util;
 
+					</style>
+			</head>
 	
+			<body>
+					<div class="col-xs-12">
+							<div class="dictTableSearch layui-form">
+								<div style="float: left;">
+									<button class="layui-btn" data-type="add">添加</button>
+									<button class="layui-btn" data-type="batchdel">批量删除</button>
+							</div>
 		
-		});
+									<input
+									type="text"
+									name="dictType"
+									id="dictType"
+									placeholder="请输入字典名称"
+									autocomplete="off"
+									class="layui-input"
+									style="display: inline-block;width: auto;"
+							/>
 
-	</script>
-</body>
+								<input
+								type="text"
+								name="dictLabel"
+								id="dictLabel"
+								placeholder="请输入字典标签"
+								autocomplete="off"
+								class="layui-input"
+								style="display: inline-block;width: auto;"
+						/>
+	
+								<button class="layui-btn" lay-submit lay-filter="dict-front-search">
+										搜索
+								</button>
+				
 
-</html>
+
+						
+							</div>
+							<table id="dictTable" lay-filter="dictTable" class="layui-hide"></table>
+							<script type="text/html" id="table-toolbar" th:inline="none">
+								<a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+								<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
+							</script>
+					</div>
+	
+					<script type="text/javascript" th:inline="none">
+							layui.use(["table", "form", "util", "laydate"], function() {
+									var $ = layui.$,
+											form = layui.form,
+											table = layui.table,
+											laydate = layui.laydate,
+											util = layui.util;
+	
+									//第一个实例
+									table.render({
+											elem: "#dictTable",
+											even: true,
+											height: "full-60",
+											title: "用户数据表",
+											width: "100%",
+											method: "post",
+											id: "dictTable",
+											totalRow: true,
+											url: "/dict/datePageList", //数据接口
+											cols: [
+													[
+													{
+                checkbox: true,
+                align: "center",
+                LAY_CHECKED: false,
+                filter: "test"
+              },
+              { type: "numbers", title: "编码" },
+															{
+																	field: "dictLabel",
+																	title: "字典标签",
+																	sort: true,
+																	width: 114
+															},
+															{
+																	field: "dictValue",
+																	title: "字典键值",
+																	sort: true,
+																	width: 114
+															},
+															{
+																	field: "dictSort",
+																	title: "字典排序",
+																	sort: true,
+																	width: 103
+															},
+															{
+																	field: "status",
+																	title: "状态",
+																	sort: true,
+																	width: 100
+															},
+															{
+																	field: "remark",
+																	title: "备注",
+																	sort: true,
+																	width: 150
+															},
+													
+															{
+																	field: "createTime",
+																	title: "操作时间",
+																	width: 160,
+																	sort: true,
+																	templet: function(time) {
+																			return (
+																					"<div>" +
+																					layui.util.toDateString(
+																							Date(time.createTime, "yyyy-MM-dd HH:mm:ss")
+																					) +
+																					"</div>"
+																			);
+																	}
+															},
+															{
+																	fixed: "right",
+																	title: "操作",
+																	width: 810,
+																	align: "center",
+																	toolbar: "#table-toolbar"
+															}
+													]
+											],
+											page: false,
+											response: {
+													statusName: "code", //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+													statusCode: 200, //成功的状态码，默认：0
+													msgName: "msg", //状态信息的字段名称，默认：msg
+													countName: "count", //数据总数的字段名称，默认：count
+													dataName: "data" //数据列表的字段名称，默认：data
+											},
+											page: {
+													//支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+													layout: ["limit", "count", "prev", "page", "next", "skip"], //自定义分页布局
+													//,curr: 5 //设定初始在第 5 页
+													groups: 5, //只显示 1 个连续页码
+													first: false, //不显示首页
+													last: false, //不显示尾页
+													limit: 20
+											}
+									});
+	
+									//日期时间选择器
+									laydate.render({
+											elem: "#startTime",
+											type: "datetime"
+									});
+	
+									laydate.render({
+											elem: "#endTime",
+											type: "datetime"
+									});
+	
+	
+									//监听搜索
+									form.on("submit(dict-front-search)", function (data) {
+											var field = data.field;
+	
+											//执行重载
+											table.reload("dictTable", {
+													where: field
+											});
+									});
+										//监听工具条删除
+										table.on("tool(dictTable)", function (obj) {
+														var data = obj.data;
+														if (obj.event === 'delete') {
+																layer.confirm('真的删除行么', function (index) {
+																			layer.close(index);
+																			$.post("/dict/dictDataRemove", { ids: data.dictCode }, function (resultJSONObject) {
+																					if (resultJSONObject.success) {
+																							obj.del();
+																							tableLoad(table);
+																					} 
+																					layer.msg(resultJSONObject.msg);
+																			}, "json");
+																	});
+											} else if (obj.event === "edit") {
+														layer.open({
+              type: 2,
+              title: "字典数据编辑",
+              maxmin: true,
+              area: ["500px", "350px"],
+              btn: ["确定", "取消"],
+              fixed: true,
+              shadeClose: false,
+              shade: 0.2,
+              moveType: 1, //拖拽模式，0或者1
+              content: "/dict/dictDataEdit?dictCode=" + data.dictCode,
+              yes: function (index, layero) {
+                var iframeWindow = window["layui-layer-iframe" + index],
+                  submitID = "dictFormSubmit",
+                  submit = layero
+                    .find("iframe")
+                    .contents()
+                    .find("#" + submitID);
+                //监听提交
+                iframeWindow.layui.form.on(
+                  "submit(" + submitID + ")",
+                  function (dataLog) {
+                    var field = dataLog.field;
+												
+																				if (field.status == "true")
+																					field.status = true;
+																			else
+																					field.status = false;
+                    //获取提交的字段
+                    //提交 Ajax 成功后，静态更新表格中的数据
+                    $.ajax({
+                      type: "post",
+                      url: "/dict/dictDataEdit",
+                      data: JSON.stringify(field),
+                      dataType: "json",
+                      contentType: "application/json;charset-UTF-8",
+                      success: function (resultJSONObject) {
+                        if (resultJSONObject.success) {
+                          tableLoad(table);
+                        }
+                        layer.msg(resultJSONObject.msg);
+                      }
+                    });
+                    layer.close(index); //关闭弹层
+                  }
+                );
+                submit.trigger("click");
+              }
+            });
+												}
+										});
+   				 //监听搜索查询条件
+								form.on('submit(dict-front-search)', function (data) {
+        var field = data.field;
+
+        //执行重载
+        table.reload('dictTable', {
+          where: field
+        });
+      });
+
+    //批量删除事件
+				var active = {
+        batchdel: function () {
+          //两种方式
+          var checkStatus = table.checkStatus('dictTable')
+            , checkData = checkStatus.data; //得到选中的数据
+          if (checkData.length === 0) {
+            return layer.msg('请选择数据');
+          }
+          //捉到所有被选中的，发异步进行删除
+          var ids = "";
+          if (checkData.length > 0) {
+            for (var i = 0; i < checkData.length; i++) {
+              ids += checkData[i].dictCode + ",";
+            }
+          }
+          layer.confirm('确定删除吗？', function (index) {
+            //执行 Ajax 后重载
+            $.ajax({
+              type: "post",
+              url: "/dict/dictDataRemove",
+              data: { "ids": ids },
+              success: function (data) {
+                if (data.success) {
+                  tableLoad(table);
+                }      
+                 layer.msg(data.msg);
+                
+              }
+            });
+          });
+
+        }
+        , add: function () {
+          layer.open({
+            type: 2
+            , title: "字典基础数据新增"
+            , content: '/dict/dictDataEdit'
+            , maxmin: true
+            , moveType: 1 //拖拽模式，0或者1
+            , area: ['500px', '350px']
+            , skin: 'layer_bg' //layer_bg是自定义的css样式
+            , shade: 0.2
+            , fixed: true
+            , shadeClose: true//开启遮罩关
+            , btn: ['确定', '取消']
+            , yes: function (index, layero) {
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'dictFormSubmit'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+                
+                   //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                var field = data.field; //获取提交的字段
+																if (field.status == "true")
+																					field.status = true;
+																			else
+																					field.status = false;
+                //提交 Ajax 成功后，静态更新表格中的数据
+                $.ajax({
+                  type: "post",
+                  url: "/dict/dictDataInsert",
+                  data: JSON.stringify(field),
+                  dataType: "json",
+                  contentType: "application/json;charset-UTF-8",
+                  success: function (resultJSONObject) {
+                    if (resultJSONObject.success) {
+                      tableLoad(table);
+                    }      
+                    layer.msg(resultJSONObject.msg);
+                  }, complete: function () {
+                    layer.close(index); //关闭弹层
+                  }
+                });
+              });
+
+              submit.trigger('click');
+            }
+          });
+        },
+
+      };
+
+
+						$('.layui-btn').on('click', function () {
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+      });
+
+							});
+
+							function tableLoad(table) {
+      		table.reload(
+        "dictTable",
+        {
+          where: {
+										 	dictLabel: $("#dictLabel").val(),
+            dictType: $("#dictType").val()
+          }
+        },
+        "data"
+      );
+    }
+					</script>
+			</body>
+	</html>
+	
