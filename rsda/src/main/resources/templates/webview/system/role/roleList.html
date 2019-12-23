@@ -74,19 +74,6 @@
 
 <body>
   <div class="container">
-    <!-- <div class="leftTree">
-      <div style="width: 100%;
-                                  height: 40px;
-                                  text-align: center;
-                                  border-bottom: solid 1px #efefef;
-                              "><span style="
-                                  line-height: 40px;
-                                  font-size: 18px;
-                    
-                              ">单位机构树</span>
-      </div>
-      <ul id="deptTree" class="ztree"></ul>
-    </div> -->
 
     <div class="rightGrid">
       <div style="width: 100%;
@@ -117,9 +104,9 @@
       </div>
       <table id="userList" lay-filter="userList" class="layui-hide"> </table>
 
-       <script type="text/html" id="role-status">
-		  <input type="checkbox"  name = "status"  value = {{d.roleStatus}}  lay-skin="switch" lay-text="启用|未启用" mid={{d.id}} lay-filter="roleStatus" {{ d.roleStatus == '01' ? 'checked' : '' }}>
-       </script> 
+       <!-- <script type="text/html" id="role-status">
+		     <input type="checkbox"  name = "status"  value = {{d.roleStatus}}  lay-skin="switch" lay-text="启用|未启用" mid={{d.id}} lay-filter="roleStatus" {{ d.roleStatus == '01' ? 'checked' : '' }}>
+       </script>  -->
       
 
       <script type="text/html" id="table-toolbar" th:inline="none">
@@ -134,77 +121,10 @@
 
   <input type="hidden" id="deptId">
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
-  <!-- <script src="/js/jquery.ztree.core.js" type="text/javascript" th:inline="none"></script> -->
   <script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
   <script type="text/javascript" th:inline="none">
 
 
-    //Ztree
-    // function zTreeOnClick(event, treeId, treeNode) {
-    //   if (treeNode.id != '' || treeNode.id != 'undefined') {
-    //     window.tableObj.reload('userList', {
-    //       where: {
-    //         deptId: treeNode.id
-    //       },
-    //     }, 'data');
-    //     $("#deptId").val(treeNode.id);
-    //   }
-    // }
-    // var newCount = 1;
-    // function addHoverDom(treeId, treeNode) {
-    //   var sObj = $("#" + treeNode.tId + "_span");
-    //   if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
-    //   var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-    //     + "' title='add node' onfocus='this.blur();'></span>";
-    //   sObj.after(addStr);
-    //   var btn = $("#addBtn_" + treeNode.tId);
-    //   if (btn) btn.bind("click", function () {
-    //     var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-    //     zTree.addNodes(treeNode, { id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++) });
-    //     return false;
-    //   });
-    // };
-    // function removeHoverDom(treeId, treeNode) {
-    //   $("#addBtn_" + treeNode.tId).unbind().remove();
-    // };
-
-
-
-    // $(document).ready(function () {
-    //   var setting = {
-    //     async: {
-    //       enable: true,
-    //       url: "/dept/unitTree",
-    //       autoParam: ["id=id"],
-    //       contentType: "application/json"
-    //     },
-    //     data: {
-    //       key: {
-    //         name: "name",//节点显示的值
-    //         isParent: "isParent"
-    //       }
-    //     },
-    //     simpleData: {
-    //       enable: true,//如果为true，可以直接把从数据库中得到的List集合自动转换为Array格式。而不必转换为json传递
-    //       idKey: "id",//节点的id
-    //       rootPId: 0,
-    //       pIdKey: "parentId"//节点的父节点id
-    //     },
-    //     edit: {
-    //       enable: true
-    //     },
-    //     view: {
-    //       addHoverDom: addHoverDom,
-    //       removeHoverDom: removeHoverDom,
-    //       selectedMulti: false
-    //     },
-    //     callback: {
-    //       onClick: zTreeOnClick
-    //     }
-
-    //   };
-    //   window.zTreeObj = $.fn.zTree.init($("#deptTree"), setting);
-    // });
 
 
 
@@ -235,7 +155,19 @@
           , { field: 'name', title: '角色名称', sort: true, width: 150 }
           , { field: 'enName', title: '角色字符', sort: true, width: 150 }
           , { field: 'id', title: '主键', sort: true, width: 165 }
-          , { field: 'roleStatus', title: '角色状态', sort: true, width: 150,align: 'center', templet: '#role-status'}
+          , { field: 'roleStatus', title: '角色状态', sort: true, width: 150,align: 'center', 
+              templet: function(d){
+                    var state = "";
+                    if (d.status == "1") {
+                        state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat' checked='checked' name='status'  lay-skin='switch' lay-text='开启|关闭' >";
+                    }
+                    else {
+                        state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat'  name='status'  lay-skin='switch' lay-text='开启|关闭' >";
+                    }
+                    return state;
+              }
+              
+            }
           , { field: 'roleKey', title: '角色权限', sort: true, width: 150 }
           , {
             field: 'createTime', title: '创建时间', width: 350, sort: true, templet: function (time) {
@@ -339,34 +271,64 @@
         });
       });
       
-      form.on('switch(roleStatus)', function(obj){
-          console.log(obj);
-                // 通过属性获取绑定的id值
-                var id = $(this).attr('mid');
-                console.log(id);
-                // 判断开关的状态
-				var status=obj.elem.checked?"01":"00";
-                // 构造请求参数对象
-				var data=new Object();
-				data.status=status;
-				data.id=id;
-                //ajax请求方法
-				//  $.ajax({
-				// 		url :"/role/updateRole",
-				// 		type : "post",
-				// 		dataType : "json",
-				// 		data : JSON.stringify(data),
-				// 		async : false,
-				// 		contentType : "application/json;charset=UTF-8",
-				// 		success : function(data) {
-				// 			if(data.code=="100"){
-				// 				 layer.msg("修改成功", {icon: 6});
-				// 			}else{
-				// 				 layer.msg("修改失败", {icon: 6});
-				// 			}
-				// 		}
-  				// 	}); 
-     });
+      form.on('switch(stat)', function(data){
+            var contexts;
+            var sta;
+            var x = data.elem.checked;//判断开关状态
+            if (x==true) {
+                contexts = "打开";
+                sta=1;
+            } else {
+                contexts = "关闭";
+                sta=0;
+            }
+            var obj = {
+                            //上下架的参数
+                            "id": data.value,
+                            "roleStatus":sta
+                        }
+            console.log(data.value)
+         //自定义弹窗
+         layer.open({
+                content: "你确定要"+contexts+"?"
+                , btn: ['确定', '取消']
+                , yes: function (index, layero) {
+                    //按钮确定【按钮一】的回调
+                    data.elem.checked = x;
+                    //对商品进行上架或下架处理
+                    $.ajax({
+                        type: "post",
+                        url: "/role/updateRole",
+                        data: JSON.stringify(obj),
+                       
+                        dataType: "json",
+                        contentType: "application/json;charset-UTF-8",
+                        success: function (data) {
+                          layer.msg(data.msg,
+                              // 提示的样式
+                              {icon: 1, time: 2000,});
+                          // 数据重载
+                          active.reload();
+                       }
+                      
+                    });
+                    form.render();
+                    layer.close(index);
+                }
+                , btn2: function (index, layero) {
+                    //按钮【按钮二】的回调
+                    data.elem.checked = !x;
+                    form.render();
+                    layer.close(index);
+                }
+                , cancel: function () {
+                    //右上角关闭回调
+                    data.elem.checked = !x;
+                    form.render();
+                }
+            });
+            return false;
+        });
 
 
 

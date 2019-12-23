@@ -20,17 +20,17 @@
         <input type="text" name="id" placeholder="请输入ID" autocomplete="off" class="layui-input">
       </div>
     </div>
-    <!-- <div class="layui-col-xs6">
+    <div class="layui-col-xs6">
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>姓名</label>
+          <label class="layui-form-label"><i style="color:red">* </i>角色名称</label>
           <div class="layui-input-inline">
-                <input type="text" id="userRealName" name="userRealName" lay-verify="required" autocomplete="off"  class="layui-input"
+                <input type="text" id="userRealName" name="name" lay-verify="required" autocomplete="off"  class="layui-input"
                    >
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <!-- <div class="layui-col-xs6">
       <div class="layui-form-item">
         <div class="layui-inline">
@@ -48,7 +48,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>角色字符</label>
           <div class="layui-input-inline">
-            <input type="password" name="enName"  lay-verify="passfirst" required autocomplete="off" placeholder="请输入密码"
+            <input type="text" name="enName"  lay-verify="passfirst" required autocomplete="off" placeholder="请输入角色字符"
               class="layui-input">
           </div>
         </div>
@@ -59,8 +59,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>角色状态</label>
           <div class="layui-input-inline">
-            <input type="text" name="roleStatus" id="WorkUnitDuties"  lay-verify="required" autocomplete="off" placeholder=""
-              class="layui-input">
+            <input type="checkbox" name="roleStatus" lay-skin="switch" lay-filter="switchTest" lay-text="开启|关闭">
           </div>
         </div>
       </div>
