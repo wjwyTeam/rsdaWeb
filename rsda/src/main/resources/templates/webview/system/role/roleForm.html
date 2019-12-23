@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>layuiAdmin 网站用户 iframe 框</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+</head>
+
+<body>
+
+  <div class="layui-form" lay-filter="roleKey" id="roleKey"  style="padding: 20px 0 0 0;">
+    <div class="layui-form-item  layui-hide">
+      <label class="layui-form-label">ID</label>
+      <div class="layui-input-inline">
+        <input type="text" name="id" placeholder="请输入ID" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <!-- <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>姓名</label>
+          <div class="layui-input-inline">
+                <input type="text" id="userRealName" name="userRealName" lay-verify="required" autocomplete="off"  class="layui-input"
+                   >
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <!-- <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>用户名</label>
+          <div class="layui-input-inline">
+            <input type="text" name="userName" lay-verify="required" autocomplete="off" placeholder="请输入用户名"
+              class="layui-input">
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="layui-col-xs6">
+      <div class="layui-form-item" lay-filter="enName">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>角色字符</label>
+          <div class="layui-input-inline">
+            <input type="password" name="enName"  lay-verify="passfirst" required autocomplete="off" placeholder="请输入密码"
+              class="layui-input">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="layui-form-item" lay-filter="roleStatus">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>角色状态</label>
+          <div class="layui-input-inline">
+            <input type="text" name="roleStatus" id="WorkUnitDuties"  lay-verify="required" autocomplete="off" placeholder=""
+              class="layui-input">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-col-xs6">
+      <div class="layui-form-item" lay-filter="roleKey">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>角色权限</label>
+          <div class="layui-input-inline">
+            <input type="password" name="roleKey"  required lay-verify="confirmPass" autocomplete="off"
+              placeholder="再次输入密码" class="layui-input">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>绑定IP</label>
+          <div class="layui-input-inline">
+            <input type="text" name="userIp"  id="UserIP" autocomplete="off" placeholder=""
+              class="layui-input">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i style="color:red">* </i>所在单位</label>
+          <div class="layui-input-inline">
+            <input type="text" name="workDept" id="DeptName" onclick="openWin()" readonly="readonly"
+              lay-verify="required" autocomplete="off" placeholder="选择机构" class="layui-input">
+            <input type="hidden" name="deptId" id="DeptID" lay-verify="required">
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="layui-form-item layui-hide">
+      <div class="layui-input-block">
+        <input type="button" lay-submit lay-filter="userFormSubmit" id="userFormSubmit" value="确认"
+          class="layui-btn">
+      </div>
+    </div>
+  </div>
+
+  <script src="../../../layuiadmin/layui/layui.js"></script>
+  <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+  <script  th:inline="javascript">
+    var userOne = [[${ roleOne }]];
+    layui.config({
+      base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'upload'], function () { 
+      var $ = layui.$
+        , form = layui.form
+        , upload = layui.upload;
+        form.val('roleForm', roleOne);
+      //普通图片上传
+      var uploadInst = upload.render({
+        elem: '#userUploadImg'
+        , url: '/upload/'
+        , before: function (obj) {
+          //预读本地文件示例，不支持ie8
+          obj.preview(function (index, file, result) {
+            $('#demoUser').attr('src', result); //图片链接（base64）
+
+            
+          });
+        }
+        , done: function (res) {
+          //如果上传失败
+          if (res.code > 0) {
+            return layer.msg('上传失败');
+          }
+          //上传成功
+        }
+        , error: function () {
+          //演示失败状态，并实现重传
+          var demoText = $('#demoText');
+          demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+          demoText.find('.demo-reload').on('click', function () {
+            uploadInst.upload();
+          });
+        }
+      });
+
+      upload.render({
+        elem: '#userUploadImg'
+        , url: layui.setter.base + 'json/upload/demo.js'
+        , accept: 'images'
+        , method: 'get'
+        , acceptMime: 'image/*'
+        , done: function (res) {
+          $(this.item).prev("div").children("input").val(res.data.src)
+        }
+      });
+       
+    //   form.verify({
+    //      passfirst:[ /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/, '密码必须6到12位字母和数字的组合'],
+    //      confirmPass : function (value){
+    //           var firstPass = $("#firstPassword").val();
+    //           if(value != firstPass){
+    //             return "两次输入的密码不一致"
+    //           }
+    //      }
+    //  });
+    
+
+
+
+    })
+    
+    
+
+   
+     
+    function PersWin() {
+      layer.ready(function () {
+        layer.open({
+          title: '   ',
+          type: 2,
+          content: "/Person/Select",
+          area: ['750px', '520px'],
+          zIndex: layer.zIndex //重点1
+        });
+      });
+    }
+
+    
+
+
+    function openWin() {
+      layui.use('layer', function () {
+        var layer = layui.layer;
+        layer.ready(function () {
+          layer.open({
+            type: 2,
+            closeBtn: 0,
+            title: "选择单位", //不显示标题
+            scrollbar: false, // 父页面 滚动条 禁止
+            content: "/dept/departmentInfo?hideshowType=false",
+            area: ['300px', '350px'],
+            btn: ['确定', '取消'],
+            anim: 2,
+            resize: false,
+            shadeClose: false,
+            skin: 'layer-ext-moon', //加上边框
+            id: 'LAY_layuipro', //设定一个id，防止重复弹出
+            shade: 0.2,
+            yes: function (index, layero) {
+              $("#DeptID").val(layer.getChildFrame('body', 0).find("#deptId").val());
+              $("#DeptName").val(layer.getChildFrame('body', 0).find("#deptName").val());
+              layer.close(index);
+            }
+          });
+
+        });
+      });
+    }
+  </script>
+
+</body>
+
+</html>

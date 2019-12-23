@@ -334,9 +334,9 @@
           var os = se.substring(se.indexOf('"') + 1, se.lastIndexOf('"'))
           var nse = se.replace(os, parseInt(os) - 1);
           var res = "";
-          // if(data.)
-
-
+          if(data.dorder == "1"){
+            layer.msg('禁止上移', {icon: 5})
+          }
           $(nse + " td:not(.layui-table-col-special)").each(function (k,v) {
             console.log(v)
               if ($(this).attr("data-field") == "id") {
@@ -358,14 +358,15 @@
               }
           });     
         }else if(obj.event == "down"){
+         
           // 向下移动
           var arridsDown = [];
           arridsDown.push(obj.data.id)
           var seDown = obj.tr.selector;
           var osDown = seDown.substring(seDown.indexOf('"') + 1, seDown.lastIndexOf('"'))
           var nseDown = seDown.replace(osDown, parseInt(osDown) + 1);
-          console.log(nseDown);
-          console.log(parseInt(osDown)) 
+          console.log(nseDown+'下一条数据');
+          console.log(parseInt(osDown)+'当前数据') 
           var resDown = "";
           $(nseDown + " td:not(.layui-table-col-special)").each(function (k,v) {
               if ($(this).attr("data-field") == "id") {

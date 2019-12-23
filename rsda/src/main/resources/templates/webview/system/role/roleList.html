@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>layuiAdmin 用户</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+  <link rel="stylesheet" href="/css/zTreeStyle.css" media="all">
+  <link rel="stylesheet" href="/css/metroStyle.css" type="text/css">
+  <style>
+    .ztree li a {
+      height: 25px;
+      border: 1px solid red;
+    }
+
+    .ztree * {
+      font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+    }
+
+    .layui-table-cell {
+      height: 30px;
+      line-height: 30px;
+      padding: 0 15px;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .layui-table,
+    .layui-table-view {
+      margin: unset;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      display: inline-flex;
+    }
+
+    /* .leftTree {
+      width: 320px;
+      height: 100%;
+      border-right: solid 1px #efefef;
+      ;
+    } */
+
+    /* .ztree {
+      height: calc(100% - 51px);
+      overflow: auto;
+    } */
+
+    .rightGrid {
+      width: 100%;
+      height: 100%;
+    }
+
+    .userTableSearch {
+      width: calc(100% - 180px);
+      text-align: right;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- <div class="leftTree">
+      <div style="width: 100%;
+                                  height: 40px;
+                                  text-align: center;
+                                  border-bottom: solid 1px #efefef;
+                              "><span style="
+                                  line-height: 40px;
+                                  font-size: 18px;
+                    
+                              ">单位机构树</span>
+      </div>
+      <ul id="deptTree" class="ztree"></ul>
+    </div> -->
+
+    <div class="rightGrid">
+      <div style="width: 100%;
+              height: 40px;
+              text-align: center;
+              display: inline-flex;
+              align-items: center; ">
+        <div>
+          <button class="layui-btn" data-type="add">添加</button>
+          <button class="layui-btn" data-type="batchdel">批量删除</button>
+        </div>
+        <div class="userTableSearch layui-form">
+          <input type="text" name="userName" id="userName" placeholder="请输入用户名" autocomplete="off" class="layui-input"
+            style="display: inline-block;width: auto;">
+
+          <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
+            <select name="userType">
+              <option value="" selected="true">请选择</option>
+              <option value="0">固定账号</option>
+              <option value="1">临时账号</option>
+              <option value="2">游客</option>
+            </select>
+          </div>
+
+          <button class="layui-btn" lay-submit lay-filter="user-front-search"> 搜索</button>
+
+        </div>
+      </div>
+      <table id="userList" lay-filter="userList" class="layui-hide"> </table>
+
+       <script type="text/html" id="role-status">
+		  <input type="checkbox"  name = "status"  value = {{d.roleStatus}}  lay-skin="switch" lay-text="启用|未启用" mid={{d.id}} lay-filter="roleStatus" {{ d.roleStatus == '01' ? 'checked' : '' }}>
+       </script> 
+      
+
+      <script type="text/html" id="table-toolbar" th:inline="none">
+
+                  <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a> 
+                  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-auz"></i>授权</a> 
+      </script>
+    </div>
+  </div>
+
+
+  <input type="hidden" id="deptId">
+  <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+  <!-- <script src="/js/jquery.ztree.core.js" type="text/javascript" th:inline="none"></script> -->
+  <script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
+  <script type="text/javascript" th:inline="none">
+
+
+    //Ztree
+    // function zTreeOnClick(event, treeId, treeNode) {
+    //   if (treeNode.id != '' || treeNode.id != 'undefined') {
+    //     window.tableObj.reload('userList', {
+    //       where: {
+    //         deptId: treeNode.id
+    //       },
+    //     }, 'data');
+    //     $("#deptId").val(treeNode.id);
+    //   }
+    // }
+    // var newCount = 1;
+    // function addHoverDom(treeId, treeNode) {
+    //   var sObj = $("#" + treeNode.tId + "_span");
+    //   if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+    //   var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+    //     + "' title='add node' onfocus='this.blur();'></span>";
+    //   sObj.after(addStr);
+    //   var btn = $("#addBtn_" + treeNode.tId);
+    //   if (btn) btn.bind("click", function () {
+    //     var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+    //     zTree.addNodes(treeNode, { id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++) });
+    //     return false;
+    //   });
+    // };
+    // function removeHoverDom(treeId, treeNode) {
+    //   $("#addBtn_" + treeNode.tId).unbind().remove();
+    // };
+
+
+
+    // $(document).ready(function () {
+    //   var setting = {
+    //     async: {
+    //       enable: true,
+    //       url: "/dept/unitTree",
+    //       autoParam: ["id=id"],
+    //       contentType: "application/json"
+    //     },
+    //     data: {
+    //       key: {
+    //         name: "name",//节点显示的值
+    //         isParent: "isParent"
+    //       }
+    //     },
+    //     simpleData: {
+    //       enable: true,//如果为true，可以直接把从数据库中得到的List集合自动转换为Array格式。而不必转换为json传递
+    //       idKey: "id",//节点的id
+    //       rootPId: 0,
+    //       pIdKey: "parentId"//节点的父节点id
+    //     },
+    //     edit: {
+    //       enable: true
+    //     },
+    //     view: {
+    //       addHoverDom: addHoverDom,
+    //       removeHoverDom: removeHoverDom,
+    //       selectedMulti: false
+    //     },
+    //     callback: {
+    //       onClick: zTreeOnClick
+    //     }
+
+    //   };
+    //   window.zTreeObj = $.fn.zTree.init($("#deptTree"), setting);
+    // });
+
+
+
+    layui.config({
+      base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['table', 'form', 'util'], function () {
+      var $ = layui.$
+        , form = layui.form
+        , table = layui.table
+        , util = layui.util;
+      window.tableObj = layui.table;
+
+      //第一个实例
+      table.render({
+          elem: '#userList'
+        , even: true
+        , height: "full-40"
+        , title: '用户数据表'
+        , width: '1000px'
+        , id: 'userList'
+        , totalRow: true
+        , url: '/role/roleFindList' //数据接口
+        , cols: [[ //表头
+          { checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
+          , { type: 'numbers', title: '角色编号',width: 100 }
+          , { field: 'name', title: '角色名称', sort: true, width: 150 }
+          , { field: 'enName', title: '角色字符', sort: true, width: 150 }
+          , { field: 'id', title: '主键', sort: true, width: 165 }
+          , { field: 'roleStatus', title: '角色状态', sort: true, width: 150,align: 'center', templet: '#role-status'}
+          , { field: 'roleKey', title: '角色权限', sort: true, width: 150 }
+          , {
+            field: 'createTime', title: '创建时间', width: 350, sort: true, templet: function (time) {
+              return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
+            }
+          }
+          , { fixed: 'right', title: '操作', width: 450, align: 'center', toolbar: '#table-toolbar' }
+        ]]
+        , page: false
+        , response: {
+          statusName: 'code' //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+          , statusCode: 200 //成功的状态码，默认：0
+          , msgName: 'msg' //状态信息的字段名称，默认：msg
+          , countName: 'count' //数据总数的字段名称，默认：count
+          , dataName: 'data' //数据列表的字段名称，默认：data
+        }
+        , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+          layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+          //,curr: 5 //设定初始在第 5 页
+          , groups: 5 //只显示 1 个连续页码
+          , first: false //不显示首页
+          , last: false //不显示尾页
+          , limit: 20
+        }
+      });
+
+
+
+      //监听工具条删除
+      table.on('tool(userList)', function (obj) {
+        var data = obj.data;
+
+        if (obj.event === 'detail') {
+          layer.msg('ID：' + data.id + ' 的查看操作');
+        } else if (obj.event === 'del') {
+          layer.confirm('真的删除行么', function (index) {
+
+            layer.close(index);
+            $.post("/user/deleteUser", { userId: data.userId }, function (resultJSONObject) {
+              console.log(resultJSONObject)
+              if (resultJSONObject.success) {
+                tableLoad(table);
+              }
+              layer.msg(resultJSONObject.msg);
+            }, "json");
+          });
+        } else if (obj.event === 'edit') {
+          //open 方法合作共用json串
+          layer.open({
+            type: 2,
+            title: '编辑用户',
+            maxmin: true, 
+            area: ['700px', '550px'], 
+            btn: ['确定', '取消'] , 
+            fixed: true, 
+            shadeClose: false, 
+            shade: 0.2, 
+            moveType: 1 ,  //拖拽模式，0或者1 
+            content: '/role/roleUpdateInfo?id=' + data.id, 
+            yes: function (index, layero) {
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'userFormSubmit'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                var field = dataLog.field;
+                //获取提交的字段
+                //提交 Ajax 成功后，静态更新表格中的数据
+                $.ajax({
+                  type: "post",
+                  url: "/role/updateRole",
+                  data: JSON.stringify(field),
+                  dataType: "json",
+                  contentType: "application/json;charset-UTF-8",
+                  success: function (resultJSONObject) {
+                    if (resultJSONObject.success) {
+                      tableLoad(table);
+                    }
+                    layer.msg(resultJSONObject.msg);
+                  }
+                });
+                layer.close(index); //关闭弹层
+              });
+              submit.trigger('click');
+            }
+          });
+        }
+      });
+
+     
+
+
+
+      //监听搜索
+      form.on('submit(user-front-search)', function (data) {
+        var field = data.field;
+
+        //执行重载
+        table.reload('userList', {
+          where: field
+        });
+      });
+      
+      form.on('switch(roleStatus)', function(obj){
+          console.log(obj);
+                // 通过属性获取绑定的id值
+                var id = $(this).attr('mid');
+                console.log(id);
+                // 判断开关的状态
+				var status=obj.elem.checked?"01":"00";
+                // 构造请求参数对象
+				var data=new Object();
+				data.status=status;
+				data.id=id;
+                //ajax请求方法
+				//  $.ajax({
+				// 		url :"/role/updateRole",
+				// 		type : "post",
+				// 		dataType : "json",
+				// 		data : JSON.stringify(data),
+				// 		async : false,
+				// 		contentType : "application/json;charset=UTF-8",
+				// 		success : function(data) {
+				// 			if(data.code=="100"){
+				// 				 layer.msg("修改成功", {icon: 6});
+				// 			}else{
+				// 				 layer.msg("修改失败", {icon: 6});
+				// 			}
+				// 		}
+  				// 	}); 
+     });
+
+
+
+
+
+      //事件
+      var active = {
+        batchdel: function () {
+          //两种方式
+          var checkStatus = table.checkStatus('userList')
+            , checkData = checkStatus.data; //得到选中的数据
+
+          if (checkData.length === 0) {
+            return layer.msg('请选择数据');
+          }
+
+          //捉到所有被选中的，发异步进行删除
+          var ids = "";
+          if (checkData.length > 0) {
+            for (var i = 0; i < checkData.length; i++) {
+              ids += checkData[i].userId + ",";
+            }
+          }
+          layer.confirm('确定删除吗？', function (index) {
+            //执行 Ajax 后重载
+            $.ajax({
+              type: "post",
+              url: "/user/deleteUserAlls",
+              data: { "ids": ids },
+              success: function (data) {
+                if (data.success) {
+                  tableLoad(table);
+                }
+                layer.msg(data.msg);
+              }
+            });
+
+          });
+
+        }
+        , add: function () {
+          layer.open({
+            type: 2
+            , title: '添加用户'
+            , content: '/role/roleUpdateInfo'
+            , maxmin: true
+            , area: ['700px', '550px']
+            , fixed: true
+            , shadeClose: false//开启遮罩关
+            , shade: 0.2
+            , skin: 'layer-ext-moon' //加上边框
+            , moveType: 1 //拖拽模式，0或者1 
+            , btn: ['确定', '取消']
+            , yes: function (index, layero) {
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'userFormSubmit'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                var field = data.field; //获取提交的字段
+                field.deptId = $("#deptId").val();
+
+                $.ajax({
+                  type: "post",
+                  url: "/role/roleInsert",
+                  data: JSON.stringify(field),
+                  dataType: "json",
+                  contentType: "application/json;charset-UTF-8",
+                  success: function (resultJSONObject) {
+                    if (resultJSONObject.success) {
+                      tableLoad(table);
+                    }
+                    layer.msg(resultJSONObject.msg);
+                  }, complete: function () {
+                    layer.close(index); //关闭弹层
+                  }
+                });
+              });
+
+              submit.trigger('click');
+            }
+          });
+        }
+       
+      };
+      
+      $('.layui-btn').on('click', function () {
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+      });
+    });
+    
+
+    function tableLoad(table) {
+      table.reload('userList', {
+        where: {
+          deptId: $("#deptId").val(),
+          userName: $("#userName").val(),
+        },
+      }, 'data');
+    }
+
+    
+
+
+
+
+
+  </script>
+</body>
+
+</html>
