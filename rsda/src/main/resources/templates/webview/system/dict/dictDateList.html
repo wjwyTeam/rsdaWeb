@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
- * @LastEditors  : zgr
- * @LastEditTime : 2019-12-24 16:19:49
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-24 17:45:35
  -->
 	<!DOCTYPE html>
 	<html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -30,10 +30,10 @@
 									<button class="layui-btn" data-type="batchdel">批量删除</button>
 							</div>
 		
-									<input
-									type="text"
+									<input 
+									type="hidden"
 									name="dictType"
-									id="dictType"
+									id="dictType"   th:value=" ${dictType}"
 									placeholder="请输入字典名称"
 									autocomplete="off"
 									class="layui-input"
@@ -66,6 +66,9 @@
 					</div>
 	
 					<script type="text/javascript" th:inline="none">
+						
+
+
 							layui.use(["table", "form", "util", "laydate"], function() {
 									var $ = layui.$,
 											form = layui.form,
@@ -83,7 +86,7 @@
 											id: "dictTable",
 											totalRow: true,
 											cellMinWidth:80,
-											url: "/dict/datePageList", //数据接口
+											url: "/dict/datePageList?dictType="+ $("#dictType").val(), //数据接口
 											cols: [
 													[
 													{

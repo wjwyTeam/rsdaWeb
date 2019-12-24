@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-23 16:30:59
+ * @LastEditTime : 2019-12-24 17:31:40
  */
 package com.wjwy.rsda.controller;
 
@@ -29,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +59,11 @@ public class DictDataController extends BaseController {
    */
   @GetMapping("/dataList")
   @ApiOperation(value = "字典数据列表页")
-  public ModelAndView dictData(ModelAndView model) {
+  public ModelAndView dictData(ModelAndView model,String dictType) {
+    if(StringUtil.isNotEmpty(dictType)){
+      model.addObject("dictType", dictType);
+    }
+
     model.setViewName(prefix+"/dictDateList");
     return model;
   }
@@ -89,7 +92,7 @@ public class DictDataController extends BaseController {
   @ResponseBody
   @PostMapping("/datePageList")
   @ApiOperation(value = "字典数据分页列表数据展示", notes = "dictData - 对象，page，limit ")
-  public ResponseWrapper datePageList(@Validated  DictData dictData, Integer page, Integer limit) {
+  public ResponseWrapper datePageList(DictData dictData, Integer page, Integer limit) {
     try {
       PageInfo<DictData> pageInfos = dictDataService.findList(dictData, page, limit);
       return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
