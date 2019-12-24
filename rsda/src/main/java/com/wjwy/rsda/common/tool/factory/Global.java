@@ -4,9 +4,9 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 15:50:08
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 15:51:15
+ * @LastEditTime : 2019-12-24 09:18:35
  */
-package com.wjwy.rsda.common;
+package com.wjwy.rsda.common.tool.factory;
 
 import org.springframework.stereotype.Component;
 

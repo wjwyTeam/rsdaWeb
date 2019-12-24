@@ -4,16 +4,16 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 09:43:55
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 12:06:59
+ * @LastEditTime : 2019-12-24 10:05:04
  */
 package com.wjwy.rsda.mapper;
 
 import java.util.List;
-import com.wjwy.rsda.common.TkMapper;
+
 import com.wjwy.rsda.entity.Department;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-public interface DepartmentMapper extends TkMapper<Department> {
+public interface DepartmentMapper extends com.wjwy.rsda.common.TkMapper<Department> {
 
     /**
      * 通过ID查找当前组织下的所有单位

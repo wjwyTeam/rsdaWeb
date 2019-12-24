@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 18:54:56
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-24 09:08:48
  */
 package com.wjwy.rsda.services;
 
@@ -148,7 +148,7 @@ public class UserService {
 	 */
 	public int insert(User user) {
 
-		user.setPassWord(MD5Util.md5ToHex("123456"));
+		user.setPassWord(MD5Util.md5ToHex(user.getPassWord()));
 		user.setUserId(UUID.randomUUID().toString().toLowerCase());
 		return userDao.insertSelective(user);
 	}

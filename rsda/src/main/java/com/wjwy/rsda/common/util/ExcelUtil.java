@@ -38,7 +38,7 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 
-import com.wjwy.rsda.common.Global;
+import com.wjwy.rsda.common.tool.factory.Global;
 import com.wjwy.rsda.common.util.Excel.ColumnType;
 import com.wjwy.rsda.common.util.Excel.Type;
 import com.wjwy.rsda.enums.AjaxResult;

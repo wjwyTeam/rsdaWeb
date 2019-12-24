@@ -4,13 +4,12 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 11:22:13
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 12:07:50
+ * @LastEditTime : 2019-12-24 10:04:16
  */
 package com.wjwy.rsda.mapper;
 
-import com.wjwy.rsda.common.TkMapper;
 import com.wjwy.rsda.entity.User;
 
-public interface UserMapper extends TkMapper<User> {
+public interface UserMapper extends com.wjwy.rsda.common.TkMapper<User> {
 
 }

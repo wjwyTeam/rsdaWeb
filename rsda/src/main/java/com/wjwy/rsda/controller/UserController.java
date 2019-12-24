@@ -1,4 +1,5 @@
 package com.wjwy.rsda.controller;
+
 import java.util.List;
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.ResponseWrapper;
@@ -75,8 +76,8 @@ public class UserController {
 	 * @date 2019年11月28日
 	 */
 	@GetMapping(value = "/updateInfo")
-	public ModelAndView updateInfo(User user,ModelAndView model) {
-		if(StringUtils.isNotEmpty(user.getUserId())){
+	public ModelAndView updateInfo(User user, ModelAndView model) {
+		if (StringUtils.isNotEmpty(user.getUserId())) {
 			user = userService.getPersonInfo(user.getUserId());
 		}
 		model.addObject("userOne", user);
@@ -106,7 +107,8 @@ public class UserController {
 			if (isPage != null && isPage.equals(EnumEntitys.YES.getValue())) {
 				PageInfo<User> pageInfos = userService.getPageList(userId, userName, deptId, workDept, delFlag,
 						Integer.parseInt(pageNum.trim()), Integer.parseInt(pageSize.trim()));
-				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos, null, Integer.parseInt(String.valueOf(pageInfos.getTotal())));
+				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos, null,
+						Integer.parseInt(String.valueOf(pageInfos.getTotal())));
 			} else {
 				List<User> userList = userService.getList(userId, userName, deptId, workDept, delFlag);
 				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", userList, null, userList.size());

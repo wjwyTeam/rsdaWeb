@@ -4,11 +4,12 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 15:00:33
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 15:01:30
+ * @LastEditTime : 2019-12-24 09:22:52
  */
 package com.wjwy.rsda.common.util;
 
-import com.wjwy.rsda.common.Global;
+import com.wjwy.rsda.common.tool.factory.Global;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -10,7 +10,7 @@ import com.wjwy.rsda.entity.DictData;
  * @Author: ZHANGQI
  * @Date: 2019-12-20 08:36:50
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-23 14:54:31
+ * @LastEditTime : 2019-12-24 10:05:16
  */
 public interface DictDateMapper extends TkMapper<DictData>{
 

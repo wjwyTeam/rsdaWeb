@@ -9,7 +9,7 @@ import com.wjwy.rsda.entity.Group;
  * @Author: ZHANGQI
  * @Date: 2019-12-10 08:14:16
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 12:08:18
+ * @LastEditTime : 2019-12-24 10:05:39
  */
 public interface GroupMapper extends TkMapper<Group>{
     

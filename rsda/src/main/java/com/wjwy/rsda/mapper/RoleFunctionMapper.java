@@ -1,6 +1,4 @@
 package com.wjwy.rsda.mapper;
-
-import com.wjwy.rsda.common.TkMapper;
 import com.wjwy.rsda.entity.RoleFunction;
 
 
@@ -10,10 +8,10 @@ import com.wjwy.rsda.entity.RoleFunction;
  * @Author: ZHANGQI
  * @Date: 2019-12-10 08:12:35
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 12:08:08
+ * @LastEditTime : 2019-12-24 10:04:38
  */
 
-public interface RoleFunctionMapper extends TkMapper<RoleFunction>{
+public interface RoleFunctionMapper extends com.wjwy.rsda.common.TkMapper<RoleFunction> {
 
 
     

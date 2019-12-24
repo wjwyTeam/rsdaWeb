@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-23 16:31:57
+ * @LastEditTime : 2019-12-24 16:01:22
  -->
 	<!DOCTYPE html>
 	<html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -32,8 +32,8 @@
 		
 									<input
 									type="text"
-									name="dictType"
-									id="dictType"
+									name="dictLabel"
+									id="dictLabel"
 									placeholder="请输入字典名称"
 									autocomplete="off"
 									class="layui-input"
@@ -42,29 +42,31 @@
 
 								<input
 								type="text"
-								name="dictLabel"
-								id="dictLabel"
-								placeholder="请输入字典标签"
+								name="dictType"
+								id="dictType"
+								placeholder="请输入字典类型"
 								autocomplete="off"
 								class="layui-input"
 								style="display: inline-block;width: auto;"
 						/>
 	
-								<button class="layui-btn" lay-submit lay-filter="dict-front-search">
-										搜索
-								</button>
+       <button class="layui-btn" lay-submit lay-filter="dict-front-search">
+         搜索
+       </button>
 				
 
 
 						
 							</div>
 							<table id="dictTable" lay-filter="dictTable" class="layui-hide"></table>
+
 							<script type="text/html" id="table-toolbar" th:inline="none">
-								<a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="list"><i class="layui-icon layui-icon-list"></i>列表</a>
 								<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
 							</script>
 					</div>
-	
+
 					<script type="text/javascript" th:inline="none">
 							layui.use(["table", "form", "util", "laydate"], function() {
 									var $ = layui.$,
@@ -77,9 +79,9 @@
 									table.render({
 											elem: "#dictTable",
 											even: true,
-											height: "full-60",
+											height: "full-65",
 											title: "用户数据表",
-											width: "100%",
+										 cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
 											method: "post",
 											id: "dictTable",
 											totalRow: true,
@@ -87,6 +89,7 @@
 											cols: [
 													[
 													{
+													  	fixed: "left",
                 checkbox: true,
                 align: "center",
                 LAY_CHECKED: false,
@@ -94,35 +97,34 @@
               },
               { type: "numbers", title: "编码" },
 															{
-																	field: "dictLabel",
-																	title: "字典标签",
-																	sort: true,
-																	width: 114
+																	field: "dictType",
+																	title: "字典类型",
+																	sort: true
+							
 															},
-			
 															{
-																	field: "dictSort",
-																	title: "字典排序",
-																	sort: true,
-																	width: 103
+																	field: "dictLabel",
+																	title: "字典名称",
+																	sort: true
+								
 															},
 															{
 																	field: "status",
 																	title: "状态",
-																	sort: true,
-																	width: 100
+																	sort: true
+									
 															},
 															{
 																	field: "remark",
 																	title: "备注",
-																	sort: true,
-																	width: 150
+																	sort: true
+											
 															},
 													
 															{
 																	field: "createTime",
 																	title: "操作时间",
-																	width: 160,
+																
 																	sort: true,
 																	templet: function(time) {
 																			return (
@@ -137,7 +139,6 @@
 															{
 																	fixed: "right",
 																	title: "操作",
-																	width: 810,
 																	align: "center",
 																	toolbar: "#table-toolbar"
 															}
@@ -162,16 +163,7 @@
 											}
 									});
 	
-									//日期时间选择器
-									laydate.render({
-											elem: "#startTime",
-											type: "datetime"
-									});
 	
-									laydate.render({
-											elem: "#endTime",
-											type: "datetime"
-									});
 	
 	
 									//监听搜索

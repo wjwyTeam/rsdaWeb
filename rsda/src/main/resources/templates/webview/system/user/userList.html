@@ -229,7 +229,7 @@
           even: true,
           height: "full-40",
           title: "用户数据表",
-          width: "1000px",
+          cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
           method: "post",
           id: "userList",
           totalRow: true,
@@ -243,26 +243,24 @@
                 LAY_CHECKED: false,
                 filter: "test"
               },
-              { type: "numbers", title: "序号" },
-              { field: "userName", title: "用户名", sort: true, width: 150 },
+  
+              { field: "userName", title: "用户名", sort: true },
               {
                 field: "userRealName",
                 title: "姓名",
-                sort: true,
-                width: 150
+                sort: true
+       
               },
-              { field: "roles.name", title: "角色", sort: true, width: 165 },
-              { field: "duty", title: "职务", sort: true, width: 150 },
+              { field: "roles.name", title: "角色", sort: true },
+              { field: "duty", title: "职务", sort: true },
               {
                 field: "userType",
                 title: "账号类型",
-                sort: true,
-                width: 150
+                sort: true
               },
               {
                 field: "createTime",
                 title: "创建时间",
-                width: 250,
                 sort: true,
                 templet: function (time) {
                   return (
@@ -277,9 +275,9 @@
               {
                 fixed: "right",
                 title: "操作",
-                width: 250,
                 align: "center",
                 toolbar: "#table-toolbar"
+                ,width:250
               }
             ]
           ],

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-20 16:19:54
+ * @LastEditTime : 2019-12-24 15:51:18
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -87,9 +87,8 @@
           elem: "#logTable",
           even: true,
           height: "full-60",
-
           title: "用户数据表",
-          width: "100%",
+          cellMinWidth: 80,
           method: "post",
           id: "logTable",
           totalRow: true,
@@ -105,50 +104,45 @@
               {
                 field: "operId",
                 title: "日志编号",
-                sort: true,
-                width: 112
+                sort: true
+          
               },
               {
                 field: "title",
                 title: "系统模块",
-                sort: true,
-                width: 150
+                sort: true
+            
               },
               {
                 field: "businessType",
                 title: "操作类型",
-                sort: true,
-                width: 150
+                sort: true
+            
               },
               {
                 field: "operName",
                 title: "操作人员",
-                sort: true,
-                width: 150
+                sort: true
               },
               {
                 field: "deptName",
                 title: "部门名称",
-                sort: true,
-                width: 150
+                sort: true
               },
               {
                 field: "operIp",
                 title: "主机",
-                sort: true,
-                width: 150
+                sort: true
               },
               {
                 field: "operLocation",
                 title: "操作地点",
-                sort: true,
-                width: 150
+                sort: true
               },
               {
                 field: "status",
                 title: "操作状态",
-                sort: true,
-                width: 150
+                sort: true
               },
               {
                 field: "operTime",

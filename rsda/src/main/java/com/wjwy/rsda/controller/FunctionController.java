@@ -46,7 +46,7 @@ public class FunctionController {
    * @return String
    */
   @GetMapping("/functionList")
-  @ApiOperation(value = "字典数据列表页")
+  @ApiOperation(value = "功能列表页")
   public ModelAndView functionData(ModelAndView model) {
     model.setViewName(prefix+"/functionList");
     return model;
@@ -55,7 +55,7 @@ public class FunctionController {
     /**
    * 修改字典类型
    */
-  @ApiOperation(value = "修改字典类型", notes = "dictCode - 字典编号")
+  @ApiOperation(value = "修改功能表单", notes = "functionId - 字典编号")
   @GetMapping("/functionEdit")
   public ModelAndView functionedit(String functionId, ModelAndView model) {
     if (StringUtil.isNotEmpty(functionId)) {
