@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-20 15:26:13
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-23 16:27:11
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-24 11:46:54
  -->
  <!DOCTYPE html>
  <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -42,7 +42,7 @@
       <div class="layui-form-item" lay-filter="status">
        <label class="layui-form-label"><i style="color:red">* </i>状态</label>
        <div class="layui-inline" >
-         <input type="checkbox" name="status" id="status" lay-skin="switch" value="true" lay-text="YES|NO"     lay-filter="isStatus"
+         <input type="checkbox" name="status" id="status" lay-skin="switch" value="true" lay-text="正常|作废"     lay-filter="isStatus"
           >
        </div>
      </div>
@@ -68,16 +68,18 @@
  
    <script th:inline="javascript">
     var dictOne = [[${ dictData }]];
-    layui.use(['form'], function () {
-        var $ = layui.$
-        , form = layui.form ;
+    layui.config({
+       base: '../../../layuiadmin/' //静态资源所在路径
+     }).extend({
+       index: 'lib/index' //主入口模块
+     }).use(['index', 'form', 'upload'], function () {
+      var $ = layui.$
+        , form = layui.form
+        , upload = layui.upload;
  
         layer.ready(function () {
          form.val('dictForm', dictOne);
-         if (dictOne != null) {
-          $("#status").attr("checked", dictOne.status);
-         }
-        
+         $("#status").attr("checked", dictOne.status);
  
       });
 

@@ -82,7 +82,7 @@
               display: inline-flex;
               align-items: center; ">
         <div>
-          <button class="layui-btn" data-type="add" style="">添加</button>
+          <button class="layui-btn" data-type="add">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
         </div>
         <div class="userTableSearch layui-form">
@@ -110,9 +110,13 @@
       
 
       <script type="text/html" id="table-toolbar" th:inline="none">
-
                   <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a> 
+                  {{# if(d.isCandel==true){ }}
+                      <a class="layui-btn layui-btn-disabled layui-btn-sm"  id="delect"><i class="layui-icon layui-icon-delete"></i>删除</a> 
+                  {{# } }}
+                  {{# if(d.isCandel==false){ }}
+                     <a class="layui-btn layui-btn-danger layui-btn-sm"    lay-event="del" id="delect"><i class="layui-icon layui-icon-delete"></i>删除</a>  
+                  {{# } }}
                   <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-auz"></i>授权</a> 
       </script>
     </div>
@@ -145,16 +149,16 @@
         , even: true
         , height: "full-40"
         , title: '用户数据表'
-        , width: '1000px'
         , id: 'userList'
+        , cellMinWidth: 80
         , totalRow: true
         , url: '/role/roleFindList' //数据接口
         , cols: [[ //表头
-          { checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test',width: 150  }
-          , { type: 'numbers', title: '角色编号',width: 190 }
-          , { field: 'name', title: '角色名称', sort: true,align: 'center', width: 150 }
-          , { field: 'enName', title: '角色字符', sort: true,align: 'center', width: 150 }
-          , { field: 'roleStatus', title: '角色状态', sort: true, width: 250,align: 'center', 
+          { checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test'}
+          , { type: 'numbers', title: '角色编号',align: 'center',width:100 }
+          , { field: 'name', title: '角色名称', sort: true,align: 'center' }
+          , { field: 'enName', title: '角色字符', sort: true,align: 'center' }
+          , { field: 'roleStatus', title: '角色状态', sort: true, align: 'center', 
               templet: function(d){
                     var state = "";
                     if (d.roleStatus == "1") {
@@ -168,11 +172,11 @@
               
             }
           , {
-            field: 'createTime',align: 'center', title: '创建时间', width: 350, sort: true, templet: function (time) {
+            field: 'createTime',align: 'center', title: '创建时间', sort: true, templet: function (time) {
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
             }
           }
-          , { fixed: 'right', title: '操作', width: 450, align: 'center', toolbar: '#table-toolbar' }
+          , { fixed: 'right', title: '操作', width: 400, align: 'center', toolbar: '#table-toolbar'}
         ]]
         , page: false
         , response: {
@@ -197,14 +201,13 @@
       //监听工具条删除
       table.on('tool(userList)', function (obj) {
         var data = obj.data;
-
         if (obj.event === 'detail') {
           layer.msg('ID：' + data.id + ' 的查看操作');
         } else if (obj.event === 'del') {
           layer.confirm('真的删除行么', function (index) {
 
             layer.close(index);
-            $.post("/user/deleteUser", { userId: data.userId }, function (resultJSONObject) {
+            $.post("/role/deleteRole", { id: data.id }, function (resultJSONObject) {
               console.log(resultJSONObject)
               if (resultJSONObject.success) {
                 tableLoad(table);
@@ -395,7 +398,7 @@
             , btn: ['确定', '取消']
             , yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'userFormSubmit'
+                , submitID = 'roleFormSubmit'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
 
               //监听提交
@@ -419,7 +422,6 @@
                   }
                 });
               });
-
               submit.trigger('click');
             }
           });

@@ -214,12 +214,12 @@
         , url: '/dept/findUnitList' //数据接口
         , cols: [[ //表头
            { fixed: 'left', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
-          , { fixed: 'left', type: 'numbers', width: 80, title: '序号' }
-          , { fixed: 'left', field: 'name', title: '机构名称', width: 220 }
+          , { fixed: 'left', type: 'numbers', title: '序号',width:70 }
+          , { fixed: 'left', field: 'name', title: '机构名称' }
           , { field: 'id', title: 'id',hide:true}
-          , { field: 'shortName', title: '简称', width: 160 }
-          , { field: 'unitTypeName', title: '机构类别', width: 120 }
-          , { field: 'pipeTypeName', title: '管档类别', width: 120 }
+          , { field: 'shortName', title: '简称'}
+          , { field: 'unitTypeName', title: '机构类别'}
+          , { field: 'pipeTypeName', title: '管档类别'}
           , {
             field: 'createTime', title: '创建时间', templet: function (time) {
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
