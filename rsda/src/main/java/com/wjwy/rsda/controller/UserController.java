@@ -6,8 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.ResponseWrapper;
+import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.services.RoleService;
 import com.wjwy.rsda.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,6 +43,10 @@ public class UserController {
 	 */
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private RoleService roleService;
+
 	public Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	private HttpServletRequest request;
@@ -63,6 +69,20 @@ public class UserController {
 		return model;
 	}
 
+/**
+	* 跳转用户授权界面
+	* @param user
+	* @param model
+	* @return
+ */
+	@GetMapping(value = "/userRole")
+	@ApiOperation(value = "跳转用户授权界面")
+	public ModelAndView userRole(ModelAndView model) {
+		List<Role> roleList = roleService.getRoleList();
+		model.addObject("roleList", roleList);
+		model.setViewName("webview/system/user/userRole");
+		return model;
+	}
 	/**
 	 * 
 	 * @Title: hello1 @Description: TODO方法描述:(个人信息) @param @return 设定文件 @return

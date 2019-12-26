@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 10:06:31
+ * @LastEditTime : 2019-12-26 16:16:15
  */
 package com.wjwy.rsda.services;
 
@@ -213,5 +213,12 @@ public class RoleService {
         }
         return roleNew;
     }
+
+	public List<Role> getRoleList() {
+        Example example = new Example(Role.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("delFlag", false);
+		return roleMapper.selectByExample(example);
+	}
 
 }

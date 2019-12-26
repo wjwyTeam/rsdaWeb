@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-24 17:54:25
+ * @LastEditTime : 2019-12-26 15:47:18
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -46,10 +46,10 @@
     <table id="dictTable" lay-filter="dictTable" class="layui-hide"></table>
 
     <script type="text/html" id="table-toolbar" th:inline="none">
-  
+        <a class="layui-btn layui-btn-nomal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
         <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="list"><i class="layui-icon layui-icon-list"></i>列表</a>
-								<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
-							</script>
+		   	<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
+  	</script>
   </div>
 
   <script type="text/javascript" th:inline="none">
@@ -185,7 +185,7 @@
             shadeClose: false,
             shade: 0.2,
             moveType: 1, //拖拽模式，0或者1
-            content: "/dictType/dictDataEdit?dictId=" + data.dictId,
+            content: "/dictType/dictTypeEdit?dictId=" + data.dictId,
             yes: function (index, layero) {
               var iframeWindow = window["layui-layer-iframe" + index],
                 submitID = "dictFormSubmit",
@@ -224,18 +224,18 @@
             }
           });
         } else if (obj.event === "list") {
-    
+
           layer.open({
             type: 2,
             title: "字典数据",
             maxmin: true,
-            area: ["90%", "600px"],
+            area: ["90%", "650px"],
             btn: ["取消"],
             fixed: true,
             shadeClose: false,
-            shade: 0.2,
+            shade: 0.9,
             moveType: 1, //拖拽模式，0或者1
-            content: "/dict/dataList?dictType="+data.dictType
+            content: "/dict/dataList?dictType=" + data.dictType
           });
 
 

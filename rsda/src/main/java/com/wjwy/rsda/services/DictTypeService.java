@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-20 10:28:39
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-24 15:15:00
+ * @LastEditTime : 2019-12-26 14:25:11
  */
 package com.wjwy.rsda.services;
 
@@ -31,9 +31,16 @@ public class DictTypeService {
 	public int insertDictType(DictType dict) {
 		return 0;
 	}
-
-	public DictType selectDictTypeById(String dictType) {
-		return null;
+/**
+	* 
+	* @param dictType
+	* @return
+ */
+	public DictType selectDictTypeById(String dictId) {
+		Example example = new Example(DictType.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("dictId", dictId);
+		return dictTypeMapper.selectOneByExample(example);
 	}
 
 	public int updateDictType(DictType dict) {

@@ -4,11 +4,13 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-24 17:31:40
+ * @LastEditTime : 2019-12-26 15:35:04
  */
 package com.wjwy.rsda.controller;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
@@ -52,7 +54,8 @@ public class DictDataController extends BaseController {
   public Logger logger = LoggerFactory.getLogger(DictDataController.class);
   @Autowired
   private DictDateService dictDataService;
-
+	@Autowired
+	private HttpServletRequest request;
   /**
    * 
    * @return String
@@ -76,6 +79,9 @@ public class DictDataController extends BaseController {
   public ModelAndView edit(String dictCode, ModelAndView model) {
     if (StringUtil.isNotEmpty(dictCode)) {
       model.addObject("dictData", dictDataService.selectDictDataById(Long.valueOf(dictCode)));
+    }
+    if(StringUtil.isNotEmpty(request.getParameter("dictType"))){
+      model.addObject("dictType", request.getParameter("dictType"));
     }
     model.setViewName(prefix + "/dictDateForm");
     return model;

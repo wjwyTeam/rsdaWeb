@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-24 17:45:35
+ * @LastEditTime : 2019-12-26 16:02:12
  -->
 	<!DOCTYPE html>
 	<html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -32,7 +32,7 @@
 		
 									<input 
 									type="hidden"
-									name="dictType"
+						
 									id="dictType"   th:value=" ${dictType}"
 									placeholder="请输入字典名称"
 									autocomplete="off"
@@ -221,7 +221,7 @@
               type: 2,
               title: "字典数据编辑",
               maxmin: true,
-              area: ["500px", "350px"],
+              area: ["500px", "100%"],
               btn: ["确定", "取消"],
               fixed: true,
               shadeClose: false,
@@ -240,7 +240,6 @@
                   "submit(" + submitID + ")",
                   function (dataLog) {
                     var field = dataLog.field;
-												
 																				if (field.status == "true")
 																					field.status = true;
 																			else

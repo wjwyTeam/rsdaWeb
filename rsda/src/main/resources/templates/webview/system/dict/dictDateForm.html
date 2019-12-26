@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-20 15:26:13
- * @LastEditors  : zgr
- * @LastEditTime : 2019-12-24 11:46:54
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-26 15:28:32
  -->
  <!DOCTYPE html>
  <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -21,22 +21,37 @@
      </div>
      
        <div class="layui-form-item">
-           <label class="layui-form-label"><i style="color:red">* </i>字典名称</label>
+           <label class="layui-form-label"><i style="color:red">* </i>字典标签</label>
            <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
              <input type="text" id="dictLabel" name="dictLabel"  lay-verify="required" autocomplete="off"
                class="layui-input" />
            </div>
        </div>
+
+       <div class="layui-form-item">
+        <label class="layui-form-label"><i style="color:red">* </i>字典键值</label>
+        <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+          <input type="text" id="dictValue" name="dictValue"  lay-verify="required" autocomplete="off"
+            class="layui-input" />
+        </div>
+        </div>
    
      
        <div class="layui-form-item">
            <label class="layui-form-label"><i style="color:red">* </i>字典类型</label>
            <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
-             <input type="text" name="dictType"  lay-verify="required" autocomplete="off" placeholder="请输入业务类型"
+             <input type="text" name="dictType"  lay-verify="required" autocomplete="off" placeholder="请输入字典类型"
                class="layui-input" />
            </div>
        </div>
-   
+
+       <div class="layui-form-item">
+        <label class="layui-form-label"><i style="color:red">* </i>字典排序</label>
+        <div class="layui-input-inline"  style=" width:calc(100% - 125px)">
+          <input type="text" name="dictSort"  lay-verify="required" autocomplete="off" placeholder="请输入字典排序"
+            class="layui-input" />
+        </div>
+    </div>
   
      
       <div class="layui-form-item" lay-filter="status">
