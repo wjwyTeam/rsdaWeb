@@ -40,26 +40,12 @@
       width: 100%;
       height: 100%;
     }
-
     .container {
       width: 100%;
       height: 100%;
       background-color: #ffffff;
       display: inline-flex;
     }
-
-    /* .leftTree {
-      width: 320px;
-      height: 100%;
-      border-right: solid 1px #efefef;
-      ;
-    } */
-
-    /* .ztree {
-      height: calc(100% - 51px);
-      overflow: auto;
-    } */
-
     .rightGrid {
       width: 100%;
       height: 100%;
@@ -68,6 +54,9 @@
     .userTableSearch {
       width: calc(100% - 180px);
       text-align: right;
+    }
+    .layui-btn-normal {
+        background-color: #009688 ;
     }
   </style>
 </head>
@@ -110,14 +99,16 @@
       
 
       <script type="text/html" id="table-toolbar" th:inline="none">
-                  <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                  <a class="layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                   {{# if(d.isCandel==true){ }}
                       <a class="layui-btn layui-btn-disabled layui-btn-sm"  id="delect"><i class="layui-icon layui-icon-delete"></i>删除</a> 
                   {{# } }}
                   {{# if(d.isCandel==false){ }}
                      <a class="layui-btn layui-btn-danger layui-btn-sm"    lay-event="del" id="delect"><i class="layui-icon layui-icon-delete"></i>删除</a>  
                   {{# } }}
-                  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-auz"></i>授权</a> 
+                  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="impower"><i class="layui-icon layui-icon-auz"></i>授权</a> 
+                  <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="assignRoles"><i class="layui-icon layui-icon-user"></i>分配用户</a>
+
       </script>
     </div>
   </div>
@@ -268,6 +259,117 @@
               submit.trigger('click');
             }
           });
+        }else if(obj.event === "impower"){
+
+          // 授权用户对话框
+          layer.open({
+            type: 2,
+            title: '用户授权',
+            maxmin: true, 
+            area: ['700px', '550px'], 
+            btn: ['确定', '取消'] , 
+            fixed: true, 
+            shadeClose: false, 
+            shade: 0.2, 
+            moveType: 1 ,  //拖拽模式，0或者1 
+            content: '/role/roleUpdateInfo?id=' + data.id+"&type=false", 
+            yes: function (index, layero) {
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'roleFormSubmit'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                console.log(123);
+                console.log(iframeWindow)
+                console.log(submitID)
+                console.log(submit)
+
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                console.log(dataLog)
+                var field = dataLog.field;
+                if(field.roleStatus == "true"){
+                  field.roleStatus = true;
+                }else{
+                  field.roleStatus = false;
+                }
+                //获取提交的字段
+                //提交 Ajax 成功后，静态更新表格中的数据
+                $.ajax({
+                  type: "post",
+                  url: "/role/updateRole",
+                  data: JSON.stringify(field),
+                  dataType: "json",
+                  contentType: "application/json;charset-UTF-8",
+                  success: function (resultJSONObject) {
+                    if (resultJSONObject.success) {
+                      tableLoad(table);
+                    }
+                    layer.msg(resultJSONObject.msg);
+                  }
+                });
+                layer.close(index); //关闭弹层
+              });
+              submit.trigger('click');
+            }
+          });
+
+
+
+        }else if(obj.event === "assignRoles"){
+          // 分配用户对话框
+          layer.open({
+            type: 2,
+            title: '角色分配',
+            maxmin: true, 
+            area: ['927px', '554px'], 
+            // btn: ['确定', '取消'] , 
+            fixed: true, 
+            shadeClose: false, 
+            shade: 0.2, 
+            moveType: 1 ,  //拖拽模式，0或者1 
+            content: '/user/userInfo?roleId=' + data.id+"&type=false", 
+            // yes: function (index, layero) {
+            //   var iframeWindow = window['layui-layer-iframe' + index]
+            //     , submitID = 'roleFormSubmit'
+            //     , submit = layero.find('iframe').contents().find('#' + submitID);
+            //     console.log(123);
+            //     console.log(iframeWindow)
+            //     console.log(submitID)
+            //     console.log(submit)
+
+            //   //监听提交
+            //   iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+            //     console.log(dataLog)
+            //     var field = dataLog.field;
+            //     if(field.roleStatus == "true"){
+            //       field.roleStatus = true;
+            //     }else{
+            //       field.roleStatus = false;
+            //     }
+            //     //获取提交的字段
+            //     //提交 Ajax 成功后，静态更新表格中的数据
+            //     $.ajax({
+            //       type: "post",
+            //       url: "/role/updateRole",
+            //       data: JSON.stringify(field),
+            //       dataType: "json",
+            //       contentType: "application/json;charset-UTF-8",
+            //       success: function (resultJSONObject) {
+            //         if (resultJSONObject.success) {
+            //           tableLoad(table);
+            //         }
+            //         layer.msg(resultJSONObject.msg);
+            //       }
+            //     });
+            //     layer.close(index); //关闭弹层
+            //   });
+            //   submit.trigger('click');
+            // }
+         
+         
+          });
+
+
         }
       });
 

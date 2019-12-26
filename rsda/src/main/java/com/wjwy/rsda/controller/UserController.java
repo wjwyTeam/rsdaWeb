@@ -1,6 +1,9 @@
 package com.wjwy.rsda.controller;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.User;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import tk.mybatis.mapper.util.StringUtil;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -38,7 +42,8 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	public Logger logger = LoggerFactory.getLogger(UserController.class);
-
+	@Autowired
+	private HttpServletRequest request;
 	/**
 	 * @Description: 网站用户界面
 	 * @param
@@ -50,6 +55,10 @@ public class UserController {
 
 	@GetMapping(value = "/userInfo")
 	public ModelAndView userInfo(User user, ModelAndView model) {
+		model.addObject("type",true);
+        if (StringUtil.isNotEmpty(request.getParameter("type"))) {
+            model.addObject("type",request.getParameter("type"));
+        } 
 		model.setViewName("webview/system/user/userList");
 		return model;
 	}

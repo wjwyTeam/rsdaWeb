@@ -1,6 +1,9 @@
 package com.wjwy.rsda.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.util.StringUtil;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.services.RoleService;
@@ -41,7 +44,8 @@ public class RoleController {
     private RoleService roleService;
 
     public Logger logger = LoggerFactory.getLogger(RoleController.class);
-
+	@Autowired
+	private HttpServletRequest request;
 	/**
 	 * 角色展示列表页
 	 * 
@@ -66,7 +70,12 @@ public class RoleController {
 	public ModelAndView roleUpdateInfo(Role role, ModelAndView model) {
 		if(StringUtils.isNotEmpty(role.getId())){
 			role = roleService.getId(role.getId());
-		}
+        }
+        model.addObject("type",true);
+        if (StringUtil.isNotEmpty(request.getParameter("type"))) {
+            model.addObject("type",request.getParameter("type"));
+        } 
+  
 		model.addObject("roleOne", role);
 		model.setViewName("webview/system/role/roleForm");
 		return model;

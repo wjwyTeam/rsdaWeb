@@ -16,10 +16,9 @@
      }
   </style>
 </head>
-
 <body>
 
-  <div class="layui-form" lay-filter="roleKey" id="roleKey" style="padding: 20px 0 0 0;">
+  <div class="layui-form" lay-filter="roleKey" id="roleKey" style="padding: 20px 0 0 0;"  th:if="${type}">
     <div class="layui-form-item  layui-hide">
       <label class="layui-form-label">ID</label>
       <div class="layui-input-inline">
@@ -87,6 +86,11 @@
   </div>
   </div>
 
+
+
+
+
+  
   <script src="../../../layuiadmin/layui/layui.js"></script>
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
   <script src="/js/jquery.ztree.core.js" type="text/javascript" th:inline="none"></script>
@@ -173,6 +177,7 @@
 
       layer.ready(function () {
         form.val('roleKey', roleOne);
+        console.log(roleOne);
         $("#roleStatus").attr("checked", roleOne.roleStatus);
 
       });
@@ -237,100 +242,13 @@
         $("#roleStatus").val(this.checked);
       });
 
-      // //普通图片上传
-      // var uploadInst = upload.render({
-      //   elem: '#userUploadImg'
-      //   , url: '/upload/'
-      //   , before: function (obj) {
-      //     //预读本地文件示例，不支持ie8
-      //     obj.preview(function (index, file, result) {
-      //       $('#demoUser').attr('src', result); //图片链接（base64）
-      //     });
-      //   }
-      //   , done: function (res) {
-      //     //如果上传失败
-      //     if (res.code > 0) {
-      //       return layer.msg('上传失败');
-      //     }
-      //     //上传成功
-      //   }
-      //   , error: function () {
-      //     //演示失败状态，并实现重传
-      //     var demoText = $('#demoText');
-      //     demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-      //     demoText.find('.demo-reload').on('click', function () {
-      //       uploadInst.upload();
-      //     });
-      //   }
-      // });
-
-      upload.render({
-        elem: '#userUploadImg'
-        , url: layui.setter.base + 'json/upload/demo.js'
-        , accept: 'images'
-        , method: 'get'
-        , acceptMime: 'image/*'
-        , done: function (res) {
-          $(this.item).prev("div").children("input").val(res.data.src)
-        }
-      });
-
-      //   form.verify({
-      //      passfirst:[ /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/, '密码必须6到12位字母和数字的组合'],
-      //      confirmPass : function (value){
-      //           var firstPass = $("#firstPassword").val();
-      //           if(value != firstPass){
-      //             return "两次输入的密码不一致"
-      //           }
-      //      }
-      //  });
-
     })
 
 
 
 
 
-    // function PersWin() {
-    //   layer.ready(function () {
-    //     layer.open({
-    //       title: '   ',
-    //       type: 2,
-    //       content: "/Person/Select",
-    //       area: ['750px', '520px'],
-    //       zIndex: layer.zIndex //重点1
-    //     });
-    //   });
-    // }
-
-
-    // function openWin() {
-    //   layui.use('layer', function () {
-    //     var layer = layui.layer;
-    //     layer.ready(function () {
-    //       layer.open({
-    //         type: 2,
-    //         closeBtn: 0,
-    //         title: "选择单位", //不显示标题
-    //         scrollbar: false, // 父页面 滚动条 禁止
-    //         content: "/dept/departmentInfo?hideshowType=false",
-    //         area: ['300px', '350px'],
-    //         btn: ['确定', '取消'],
-    //         anim: 2,
-    //         resize: false,
-    //         shadeClose: false,
-    //         skin: 'layer-ext-moon', //加上边框
-    //         id: 'LAY_layuipro', //设定一个id，防止重复弹出
-    //         shade: 0.2,
-    //         yes: function (index, layero) {
-    //           $("#DeptID").val(layer.getChildFrame('body', 0).find("#deptId").val());
-    //           $("#DeptName").val(layer.getChildFrame('body', 0).find("#deptName").val());
-    //           layer.close(index);
-    //         }
-    //       });
-    //     });
-    //   });
-    // }
+  
 
   </script>
 
