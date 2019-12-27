@@ -223,11 +223,14 @@
       .extend({
         index: "lib/index" //主入口模块
       })
-      .use(["table", "form", "util"], function () {
+      .use(["table", "form", "util", 'transfer','layer'], function () {
         var $ = layui.$,
           form = layui.form,
           table = layui.table,
-          util = layui.util;
+          transfer = layui.transfer
+          ,layer = layui.layer
+          ,util = layui.util;
+        
         window.tableObj = layui.table;
 
         //第一个实例
@@ -393,6 +396,68 @@
               // );
             });
 
+          }else if(obj.event === "authorization"){
+            // 授权
+            layer.open({
+              type: 2,
+              title: "授权用户",
+              maxmin: true,
+              area: ["700px", "550px"],
+              btn: ["确定", "取消"],
+              fixed: true,
+              shadeClose: false,
+              shade: 0.2,
+              moveType: 1, //拖拽模式，0或者1
+              content: "/user/userRole?userId=" + data.userId,
+              yes: function (index, layero) {
+                var iframeWindow = window["layui-layer-iframe" + index],
+                  submitID = "userRoleSubmit",
+                  submit = layero
+                    .find("iframe")
+                    .contents()
+                    .find("#" + submitID);
+
+                //监听提交
+                // util.event('lay-demoTransferActive', {
+                //   getData: function(othis){
+                //     console.log(othis);
+                //     var getData = transfer.getData('key123'); //获取右侧数据
+                //     console.log(getData);
+                //     layer.alert(JSON.stringify(getData)); 
+                //   }
+                // });
+                iframeWindow.layui.form.on(
+                  "submit(" + submitID + ")",
+                  function (dataLog) {
+                    var field = dataLog.field;
+                    console.log(field.bootString);
+                    var obj = JSON.parse(field.bootString);
+                    var arr = []
+                    $.each(obj,function(k,v){
+                       arr.push(v.id);
+                    })
+                    console.log(arr);
+                    console.log(data.userId);
+                    //获取提交的字段
+                    //提交 Ajax 成功后，静态更新表格中的数据
+                    $.ajax({
+                      type: "get",
+                      url: "/user/userSelRole?userId="+data.userId+"&ids="+arr,
+                      dataType: "json",
+                      contentType: "application/json;charset-UTF-8",
+                      success: function (resultJSONObject) {
+                        if (resultJSONObject.success) {
+                          tableLoad(table);
+                        }
+                        layer.msg(resultJSONObject.msg);
+                      }
+                    });
+                    layer.close(index); //关闭弹层
+                  }
+                );
+                submit.trigger("click");
+              }
+            });
           }
         });
 

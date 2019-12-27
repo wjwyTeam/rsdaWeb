@@ -19,7 +19,7 @@
     }
 
     .ztree * {
-      font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+      font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
     }
 
     .layui-table-cell {
@@ -40,12 +40,14 @@
       width: 100%;
       height: 100%;
     }
+
     .container {
       width: 100%;
       height: 100%;
       background-color: #ffffff;
       display: inline-flex;
     }
+
     .rightGrid {
       width: 100%;
       height: 100%;
@@ -55,8 +57,9 @@
       width: calc(100% - 180px);
       text-align: right;
     }
+
     .layui-btn-normal {
-        background-color: #009688 ;
+      background-color: #009688;
     }
   </style>
 </head>
@@ -93,10 +96,10 @@
       </div>
       <table id="userList" lay-filter="userList" class="layui-hide"> </table>
 
-       <!-- <script type="text/html" id="role-status">
+      <!-- <script type="text/html" id="role-status">
 		     <input type="checkbox"  name = "status"  value = {{d.roleStatus}}  lay-skin="switch" lay-text="启用|未启用" mid={{d.id}} lay-filter="roleStatus" {{ d.roleStatus == '01' ? 'checked' : '' }}>
        </script>  -->
-      
+
 
       <script type="text/html" id="table-toolbar" th:inline="none">
                   <a class="layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
@@ -136,7 +139,7 @@
 
       //第一个实例
       table.render({
-          elem: '#userList'
+        elem: '#userList'
         , even: true
         , height: "full-40"
         , title: '用户数据表'
@@ -145,29 +148,30 @@
         , totalRow: true
         , url: '/role/roleFindList' //数据接口
         , cols: [[ //表头
-          { checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test'}
-          , { type: 'numbers', title: '角色编号',align: 'center',width:100 }
-          , { field: 'name', title: '角色名称', sort: true,align: 'center' }
-          , { field: 'enName', title: '角色字符', sort: true,align: 'center' }
-          , { field: 'roleStatus', title: '角色状态', sort: true, align: 'center', 
-              templet: function(d){
-                    var state = "";
-                    if (d.roleStatus == "1") {
-                        state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat' checked='checked' name='status'  lay-skin='switch' lay-text='开启|关闭' >";
-                    }
-                    else {
-                        state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat'  name='status'  lay-skin='switch' lay-text='开启|关闭' >";
-                    }
-                    return state;
-              }
-              
-            }
+          { checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
+          , { type: 'numbers', title: '角色编号', align: 'center', width: 100 }
+          , { field: 'name', title: '角色名称', sort: true, align: 'center' }
+          , { field: 'enName', title: '角色字符', sort: true, align: 'center' }
           , {
-            field: 'createTime',align: 'center', title: '创建时间', sort: true, templet: function (time) {
+            field: 'roleStatus', title: '角色状态', sort: true, align: 'center',
+            templet: function (d) {
+              var state = "";
+              if (d.roleStatus == "true") {
+                state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat' checked='checked' name='status'  lay-skin='switch' lay-text='开启|关闭' >";
+              }
+              else {
+                state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat'  name='status'  lay-skin='switch' lay-text='开启|关闭' >";
+              }
+              return state;
+            }
+
+          }
+          , {
+            field: 'createTime', align: 'center', title: '创建时间', sort: true, templet: function (time) {
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
             }
           }
-          , { fixed: 'right', title: '操作', width: 400, align: 'center', toolbar: '#table-toolbar'}
+          , { fixed: 'right', title: '操作', width: 400, align: 'center', toolbar: '#table-toolbar' }
         ]]
         , page: false
         , response: {
@@ -211,32 +215,26 @@
           layer.open({
             type: 2,
             title: '编辑用户',
-            maxmin: true, 
-            area: ['700px', '550px'], 
-            btn: ['确定', '取消'] , 
-            fixed: true, 
-            shadeClose: false, 
-            shade: 0.2, 
-            moveType: 1 ,  //拖拽模式，0或者1 
-            content: '/role/roleUpdateInfo?id=' + data.id, 
+            maxmin: true,
+            area: ['700px', '550px'],
+            btn: ['确定', '取消'],
+            fixed: true,
+            shadeClose: false,
+            shade: 0.2,
+            moveType: 1,  //拖拽模式，0或者1 
+            content: '/role/roleUpdateInfo?id=' + data.id,
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'roleFormSubmit'
+                , submitID = 'roleSubmitTwo'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
-
-                console.log(123);
-                console.log(iframeWindow)
-                console.log(submitID)
-                console.log(submit)
-
-
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 console.log(dataLog)
                 var field = dataLog.field;
-                if(field.roleStatus == "true"){
+                console.log(field);
+                if (field.roleStatus == "true") {
                   field.roleStatus = true;
-                }else{
+                } else {
                   field.roleStatus = false;
                 }
                 //获取提交的字段
@@ -259,37 +257,37 @@
               submit.trigger('click');
             }
           });
-        }else if(obj.event === "impower"){
+        } else if (obj.event === "impower") {
 
           // 授权用户对话框
           layer.open({
             type: 2,
             title: '用户授权',
-            maxmin: true, 
-            area: ['700px', '550px'], 
-            btn: ['确定', '取消'] , 
-            fixed: true, 
-            shadeClose: false, 
-            shade: 0.2, 
-            moveType: 1 ,  //拖拽模式，0或者1 
-            content: '/role/roleUpdateInfo?id=' + data.id+"&type=false", 
+            maxmin: true,
+            area: ['700px', '550px'],
+            btn: ['确定', '取消'],
+            fixed: true,
+            shadeClose: false,
+            shade: 0.2,
+            moveType: 1,  //拖拽模式，0或者1 
+            content: '/role/roleUpdateInfo?id=' + data.id + "&type=false",
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'roleFormSubmit'
+                , submitID = 'roleSubmitTwo'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
 
-                console.log(123);
-                console.log(iframeWindow)
-                console.log(submitID)
-                console.log(submit)
+              console.log(123);
+              console.log(iframeWindow)
+              console.log(submitID)
+              console.log(submit)
 
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 console.log(dataLog)
                 var field = dataLog.field;
-                if(field.roleStatus == "true"){
+                if (field.roleStatus == "true") {
                   field.roleStatus = true;
-                }else{
+                } else {
                   field.roleStatus = false;
                 }
                 //获取提交的字段
@@ -315,22 +313,22 @@
 
 
 
-        }else if(obj.event === "assignRoles"){
+        } else if (obj.event === "assignRoles") {
           // 分配用户对话框
           layer.open({
             type: 2,
             title: '角色分配',
-            maxmin: true, 
-            area: ['927px', '554px'], 
+            maxmin: true,
+            area: ['927px', '554px'],
             // btn: ['确定', '取消'] , 
-            fixed: true, 
-            shadeClose: false, 
-            shade: 0.2, 
-            moveType: 1 ,  //拖拽模式，0或者1 
-            content: '/user/userInfo?roleId=' + data.id+"&type=false", 
+            fixed: true,
+            shadeClose: false,
+            shade: 0.2,
+            moveType: 1,  //拖拽模式，0或者1 
+            content: '/user/userInfo?roleId=' + data.id + "&type=false",
             // yes: function (index, layero) {
             //   var iframeWindow = window['layui-layer-iframe' + index]
-            //     , submitID = 'roleFormSubmit'
+            //     , submitID = 'roleSubmitTwo'
             //     , submit = layero.find('iframe').contents().find('#' + submitID);
             //     console.log(123);
             //     console.log(iframeWindow)
@@ -365,15 +363,15 @@
             //   });
             //   submit.trigger('click');
             // }
-         
-         
+
+
           });
 
 
         }
       });
 
-     
+
 
 
 
@@ -386,65 +384,65 @@
           where: field
         });
       });
-      
-      form.on('switch(stat)', function(data){
-            var contexts;
-            var sta;
-            var x = data.elem.checked;//判断开关状态
-            if (x==true) {
-                contexts = "打开";
-                sta=1;
-            } else {
-                contexts = "关闭";
-                sta=0;
-            }
-            var obj = {
-                            //上下架的参数
-                            "id": data.value,
-                            "roleStatus":sta
-                        }
-            console.log(data.value)
-         //自定义弹窗
-         layer.open({
-                content: "你确定要"+contexts+"?"
-                , btn: ['确定', '取消']
-                , yes: function (index, layero) {
-                    //按钮确定【按钮一】的回调
-                    data.elem.checked = x;
-                    //对商品进行上架或下架处理
-                    $.ajax({
-                        type: "post",
-                        url: "/role/updateRole",
-                        data: JSON.stringify(obj),
-                       
-                        dataType: "json",
-                        contentType: "application/json;charset-UTF-8",
-                        success: function (data) {
-                          layer.msg(data.msg,
-                              // 提示的样式
-                              {icon: 1, time: 2000,});
-                          // 数据重载
-                          active.reload();
-                       }
-                      
-                    });
-                    form.render();
-                    layer.close(index);
-                }
-                , btn2: function (index, layero) {
-                    //按钮【按钮二】的回调
-                    data.elem.checked = !x;
-                    form.render();
-                    layer.close(index);
-                }
-                , cancel: function () {
-                    //右上角关闭回调
-                    data.elem.checked = !x;
-                    form.render();
-                }
+
+      form.on('switch(stat)', function (data) {
+        var contexts;
+        var sta;
+        var x = data.elem.checked;//判断开关状态
+        if (x == true) {
+          contexts = "打开";
+          sta = 1;
+        } else {
+          contexts = "关闭";
+          sta = 0;
+        }
+        var obj = {
+          //上下架的参数
+          "id": data.value,
+          "roleStatus": sta
+        }
+        console.log(data.value)
+        //自定义弹窗
+        layer.open({
+          content: "你确定要" + contexts + "?"
+          , btn: ['确定', '取消']
+          , yes: function (index, layero) {
+            //按钮确定【按钮一】的回调
+            data.elem.checked = x;
+            //对商品进行上架或下架处理
+            $.ajax({
+              type: "post",
+              url: "/role/updateRole",
+              data: JSON.stringify(obj),
+
+              dataType: "json",
+              contentType: "application/json;charset-UTF-8",
+              success: function (data) {
+                layer.msg(data.msg,
+                  // 提示的样式
+                  { icon: 1, time: 2000, });
+                // 数据重载
+                tableLoad(table);
+              }
+
             });
-            return false;
+            form.render();
+            layer.close(index);
+          }
+          , btn2: function (index, layero) {
+            //按钮【按钮二】的回调
+            data.elem.checked = !x;
+            form.render();
+            layer.close(index);
+          }
+          , cancel: function () {
+            //右上角关闭回调
+            data.elem.checked = !x;
+            form.render();
+          }
         });
+        return false;
+      });
 
 
 
@@ -500,7 +498,7 @@
             , btn: ['确定', '取消']
             , yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'roleFormSubmit'
+                , submitID = 'roleSubmitTwo'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
 
               //监听提交
@@ -528,15 +526,15 @@
             }
           });
         }
-       
+
       };
-      
+
       $('.layui-btn').on('click', function () {
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
       });
     });
-    
+
 
     function tableLoad(table) {
       table.reload('userList', {
@@ -547,7 +545,7 @@
       }, 'data');
     }
 
-    
+
 
 
 

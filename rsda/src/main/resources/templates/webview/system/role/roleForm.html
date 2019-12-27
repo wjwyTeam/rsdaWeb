@@ -11,14 +11,15 @@
   <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
   <link rel="stylesheet" href="/css/zTreeStyle.css" media="all" />
   <style>
-     .ztree li{
-          margin-top: 5px;
-     }
+    .ztree li {
+      margin-top: 5px;
+    }
   </style>
 </head>
+
 <body>
 
-  <div class="layui-form" lay-filter="roleKey" id="roleKey" style="padding: 20px 0 0 0;"  th:if="${type}">
+  <div class="layui-form" lay-filter="roleKey" id="roleKey" style="padding: 20px 0 0 0;" th:if="${type}">
     <div class="layui-form-item  layui-hide">
       <label class="layui-form-label">ID</label>
       <div class="layui-input-inline">
@@ -38,10 +39,8 @@
       <div class="layui-form-item" lay-filter="enName">
         <label class="layui-form-label"><i style="color:red">* </i>角色字符</label>
         <div class="layui-input-block" style="margin-right: 110px;">
-
           <input type="text" name="enName" lay-verify="passfirst" required autocomplete="off" placeholder="请输入角色字符"
             class="layui-input">
-
         </div>
       </div>
     </div>
@@ -55,6 +54,17 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="layui-col-xs12">
+        <div class="layui-form-item" lay-filter="isCandel">
+          <div class="layui-inline">
+            <label class="layui-form-label"><i style="color:red">* </i>是否可删除</label>
+            <div class="layui-input-inline">
+              <input type='checkbox' name='isCandel' id="isCandel" lay-skin='switch' value="true" lay-text='是|否'
+                lay-filter="isCandel">
+            </div>
+          </div>
+        </div>
     </div>
 
     <div class="layui-col-xs12">
@@ -78,19 +88,18 @@
       </div>
     </div>
 
-  </div>
-  <div class="layui-form-item layui-hide">
-    <div class="layui-input-block">
-      <input type="button" lay-submit lay-filter="roleFormSubmit" id="roleFormSubmit" value="确认" class="layui-btn">
+    <div class="layui-form-item layui-hide">
+      <div class="layui-input-block">
+        <input type="button" lay-submit lay-filter="roleSubmitTwo" id="roleSubmitTwo" value="确认" class="layui-btn">
+      </div>
     </div>
   </div>
-  </div>
 
 
 
 
 
-  
+
   <script src="../../../layuiadmin/layui/layui.js"></script>
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
   <script src="/js/jquery.ztree.core.js" type="text/javascript" th:inline="none"></script>
@@ -179,62 +188,13 @@
         form.val('roleKey', roleOne);
         console.log(roleOne);
         $("#roleStatus").attr("checked", roleOne.roleStatus);
-
       });
-
-      //Ztree
-      function zTreeOnClick(event, treeId, treeNode) {
-        if (treeNode.id != "" || treeNode.id != "undefined") {
-          window.tableObj.reload(
-            "userList",
-            {
-              where: {
-                deptId: treeNode.id
-              }
-            },
-            "data"
-          );
-          $("#deptId").val(treeNode.id);
-        }
-      }
-      var newCount = 1;
-      function addHoverDom(treeId, treeNode) {
-        var sObj = $("#" + treeNode.tId + "_span");
-        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
-          return;
-        var addStr =
-          "<span class='button add' id='addBtn_" +
-          treeNode.tId +
-          "' title='add node' onfocus='this.blur();'></span>";
-        sObj.after(addStr);
-        var btn = $("#addBtn_" + treeNode.tId);
-        if (btn)
-          btn.bind("click", function () {
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            zTree.addNodes(treeNode, {
-              id: 100 + newCount,
-              pId: treeNode.id,
-              name: "new node" + newCount++
-            });
-            return false;
-          });
-      }
-      function removeHoverDom(treeId, treeNode) {
-        $("#addBtn_" + treeNode.tId)
-          .unbind()
-          .remove();
-      }
-
-
-
-
-
       form.on('select(brickType)', function (data) {
-           var  val = data.value;
-          if (val.trim() == '01')
-            $(".dataShowHide").show();
-          else
-            $(".dataShowHide").hide();
+        var val = data.value;
+        if (val.trim() == '01')
+          $(".dataShowHide").show();
+        else
+          $(".dataShowHide").hide();
       });
 
 
@@ -248,7 +208,7 @@
 
 
 
-  
+
 
   </script>
 

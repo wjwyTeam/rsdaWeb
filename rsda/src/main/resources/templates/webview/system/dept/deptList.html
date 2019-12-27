@@ -295,6 +295,7 @@
               var pipeTypeName = layero.find('iframe').contents().find('#pipeType option:selected').text();
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                console.log(dataLog.field);
                 var field = dataLog.field;
                 field.unitTypeName = unitTypeName;
                 field.pipeTypeName = pipeTypeName;
