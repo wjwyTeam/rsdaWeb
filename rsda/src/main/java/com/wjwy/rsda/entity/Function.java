@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-12-03 15:08:01
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 09:00:14
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-27 17:18:15
  */
 package com.wjwy.rsda.entity;
 
@@ -79,4 +79,22 @@ public class Function implements Serializable{
     @ApiModelProperty("是否可删除")
     @Column(name = "is_candel")
     private Boolean isCandel;
+
+    /** 打开方式：menuItem页签 menuBlank新窗口 */
+    @ApiModelProperty("打开方式：menuItem页签 menuBlank新窗口")
+    @Column(name = "target")
+    private String target;
+
+    @ApiModelProperty("类型:0目录,1菜单,2按钮")
+    @Column(name = "function_type")
+    /** 类型:0目录,1菜单,2按钮 */
+    private String functionType;
+    @ApiModelProperty("菜单状态:0显示,1隐藏")
+    @Column(name = "visible")
+    /** 菜单状态:0显示,1隐藏 */
+    private Boolean visible;
+    @ApiModelProperty("权限字符串 ")
+    @Column(name = "perms")
+    /** 权限字符串 */
+    private String perms;
 }

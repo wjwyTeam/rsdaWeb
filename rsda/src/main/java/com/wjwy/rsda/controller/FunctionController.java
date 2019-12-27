@@ -1,7 +1,6 @@
 package com.wjwy.rsda.controller;
 
-import java.util.List;
-
+import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.services.FunctionService;
@@ -76,10 +75,10 @@ public class FunctionController {
      */
     @ApiOperation(value = "功能列表", notes = "参数:id-主键, name-功能名称")
     @PostMapping("/functionFindList")
-    public ResponseWrapper functionFindList(String functionId, String functionName) {
+    public ResponseWrapper functionFindList(String functionId, String functionName,Integer page, Integer limit) {
         try {
-            List<Function> roleList = functionService.findList(functionId, functionName);
-            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList,null,roleList.size());
+            PageInfo<Function> pageInfos = functionService.findList(functionId, functionName,page,limit);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(),null,Integer.parseInt(String.valueOf(pageInfos.getTotal())));
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

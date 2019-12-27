@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.mapper.FunctionMapper;
 
@@ -90,7 +93,8 @@ public class FunctionService {
      * @param name
      * @return List<Function>
      */
-    public List<Function> findList(String functionId, String functionName) {
+    public PageInfo<Function> findList(String functionId, String functionName,Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
         Example example = new Example(Function.class);
         Criteria criteria = example.createCriteria();
         if (!StringUtil.isEmpty(functionId)) {
@@ -100,7 +104,10 @@ public class FunctionService {
             criteria.andEqualTo("functionName", functionName);
         }
 
-        return functionMapper.selectByExample(example);
+
+        List<Function> functions = functionMapper.selectByExample(example);
+        PageInfo<Function> PageInfoDO = new PageInfo<Function>(functions);
+		return PageInfoDO;
     }
 
 	public Set<String> listPerms(String userId) {

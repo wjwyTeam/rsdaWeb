@@ -180,7 +180,7 @@ public class RoleController {
             role.setId(id);
             int resultTotal = roleService.delete(role);
             if (resultTotal == 0) {
-                return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前角色]", null, null, null);
+                return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[超级管理员角色]", null, null, null);
             } else if (resultTotal == HttpStatus.GONE.value()) {
                 return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "数据中不存在当前角色", null, null, null);
             }
