@@ -60,7 +60,7 @@
           <div class="layui-inline">
             <label class="layui-form-label"><i style="color:red">* </i>是否可删除</label>
             <div class="layui-input-inline">
-              <input type='checkbox' name='isCandel' id="isCandel" lay-skin='switch' value="true" lay-text='是|否'
+              <input type='checkbox' name='isCandel' id="isCandel" lay-skin='switch'  lay-text='是|否'
                 lay-filter="isCandel">
             </div>
           </div>
@@ -188,7 +188,9 @@
         form.val('roleKey', roleOne);
         console.log(roleOne);
         $("#roleStatus").attr("checked", roleOne.roleStatus);
+        $("#isCandel").attr("checked", roleOne.isCandel);
       });
+
       form.on('select(brickType)', function (data) {
         var val = data.value;
         if (val.trim() == '01')
@@ -201,6 +203,11 @@
       form.on('switch(isRole)', function (data) {
         $("#roleStatus").val(this.checked);
       });
+
+      form.on('switch(isCandel)', function (data) {
+        $("#isCandel").val(this.checked);
+      });
+
 
     })
 

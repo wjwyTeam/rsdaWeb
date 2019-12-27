@@ -156,8 +156,8 @@
           , {
             field: 'roleStatus', title: '角色状态', sort: true, align: 'center',
             templet: function (d) {
-              var state = "";
-              if (d.roleStatus == "true") {
+              var state = ""
+              if (d.roleStatus == true) {
                 state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat' checked='checked' name='status'  lay-skin='switch' lay-text='开启|关闭' >";
               }
               else {
@@ -233,10 +233,15 @@
                 console.log(dataLog)
                 var field = dataLog.field;
                 console.log(field);
-                if (field.roleStatus == "true") {
+                if (field.roleStatus == true) {
                   field.roleStatus = true;
                 } else {
                   field.roleStatus = false;
+                }
+                if (field.isCandel == true) {
+                  field.roleStatus = true;
+                } else {
+                  field.isCandel = false;
                 }
                 //获取提交的字段
                 //提交 Ajax 成功后，静态更新表格中的数据
@@ -506,7 +511,6 @@
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                 var field = data.field; //获取提交的字段
                 field.deptId = $("#deptId").val();
-
                 $.ajax({
                   type: "post",
                   url: "/role/roleInsert",
