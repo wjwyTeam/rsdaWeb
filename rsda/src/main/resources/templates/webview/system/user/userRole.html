@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-26 16:18:40
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-27 14:42:20
+ * @LastEditTime : 2019-12-27 16:00:59
  -->
 <!DOCTYPE html>
 <html>
@@ -45,7 +45,7 @@
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
   <script th:inline="javascript">
      var roleList = [[${ roleList }]];
-     console.log(roleList.length);
+     console.log(roleList);
      var data = [];
      $.each(roleList,function(k,v){
        var obj = {

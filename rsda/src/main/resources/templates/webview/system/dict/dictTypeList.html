@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-27 09:10:41
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-27 16:20:00
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -59,7 +59,6 @@
         table = layui.table,
         laydate = layui.laydate,
         util = layui.util;
-
       //第一个实例
       table.render({
         elem: "#dictTable",
@@ -72,8 +71,7 @@
         totalRow: true,
         url: "/dictType/dateTypeList", //数据接口
         cols: [
-          [
-            {
+          [{
               fixed: "left",
               checkbox: true,
               align: "center",
@@ -276,13 +274,13 @@
               success: function (data) {
                 if (data.success) {
                   tableLoad(table);
+                  console.log(data+"强制刷新");
                 }
                 layer.msg(data.msg);
 
               }
             });
           });
-
         }
         , add: function () {
           layer.open({
@@ -327,7 +325,6 @@
                   }
                 });
               });
-
               submit.trigger('click');
             }
           });
