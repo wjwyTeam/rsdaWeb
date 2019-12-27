@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.github.pagehelper.PageInfo;
+import com.wjwy.rsda.common.util.MD5Util;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.User;
@@ -78,8 +79,13 @@ public class UserController {
 	@GetMapping(value = "/userRole")
 	@ApiOperation(value = "跳转用户授权界面")
 	public ModelAndView userRole(ModelAndView model) {
-		List<Role> roleList = roleService.getRoleList();
-		model.addObject("roleList", roleList);
+
+
+			  model.addObject("roleList", roleService.getRoleList());
+
+					List<Role> roleList = roleService.getUserRoleList(request.getParameter("userId"));
+					model.addObject("roleUserList", roleList);
+
 		model.setViewName("webview/system/user/userRole");
 		return model;
 	}
@@ -108,6 +114,7 @@ public class UserController {
 	public ModelAndView updateInfo(User user, ModelAndView model) {
 		if (StringUtils.isNotEmpty(user.getUserId())) {
 			user = userService.getPersonInfo(user.getUserId());
+			user.setPassWord(MD5Util.convertMD5(MD5Util.convertMD5(user.getPassWord())));
 		}
 		model.addObject("userOne", user);
 		model.setViewName("webview/system/user/userForm");

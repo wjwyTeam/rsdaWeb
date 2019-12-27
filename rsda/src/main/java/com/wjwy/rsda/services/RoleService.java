@@ -4,10 +4,11 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-27 14:36:57
+ * @LastEditTime : 2019-12-27 16:19:37
  */
 package com.wjwy.rsda.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -17,8 +18,10 @@ import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.RoleFunction;
+import com.wjwy.rsda.entity.UserRole;
 import com.wjwy.rsda.mapper.RoleFunctionMapper;
 import com.wjwy.rsda.mapper.RoleMapper;
+import com.wjwy.rsda.mapper.UserRoleMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +49,8 @@ public class RoleService {
 
     @Autowired
     private RoleFunctionMapper roleFunctionMapper;
-
+    @Autowired
+    private UserRoleMapper userRoleMapper;
     public Logger logger = LoggerFactory.getLogger(RoleService.class);
 
     /**
@@ -220,6 +224,25 @@ public class RoleService {
         Criteria criteria = example.createCriteria();
         criteria.andEqualTo("delFlag", false);
 		return roleMapper.selectByExample(example);
+	}
+
+    /**
+     * 查询数据
+     * @param parameter
+     * @return
+     */
+	public List<Role> getUserRoleList(String userId) {
+        List<Role> roles = new ArrayList<Role>();
+        Example example = new Example(UserRole.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId", userId);
+        List<UserRole> userRole = userRoleMapper.selectByExample(example);
+        for (UserRole userRoleList : userRole) {
+            Role role = new Role();
+            role = roleMapper.selectByPrimaryKey(userRoleList.getRoleId());
+            roles.add(role);
+        }
+		return roles;
 	}
 
 }

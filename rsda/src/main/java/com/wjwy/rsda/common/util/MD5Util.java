@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-05 14:39:26
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-09 16:18:23
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-27 14:56:19
  */
 package com.wjwy.rsda.common.util;
 
@@ -61,4 +61,17 @@ public class MD5Util {
         return hexString.toString();
     }
 
+
+        /**
+     * 加密解密算法 执行一次加密，两次解密
+     */
+    public static String convertMD5(String inStr){
+ 
+        char[] a = inStr.toCharArray();
+        for (int i = 0; i < a.length; i++){
+            a[i] = (char) (a[i] ^ 't');
+        }
+        String s = new String(a);
+        return s;
+    }
 }
