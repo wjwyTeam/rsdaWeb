@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-20 10:28:39
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-27 09:24:49
+ * @LastEditTime : 2019-12-27 10:37:28
  */
 package com.wjwy.rsda.services;
 
@@ -81,7 +81,11 @@ public class DictTypeService {
 	}
 
 
-
+/**
+	* 
+	* @param dictType
+	* @return
+ */
 	public int checkDictTypeUnique(DictType dictType) {
 		Example example = new Example(DictType.class);
 		Criteria criteria = example.createCriteria();

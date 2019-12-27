@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-26 16:16:15
+ * @LastEditTime : 2019-12-27 14:36:57
  */
 package com.wjwy.rsda.services;
 
@@ -68,6 +68,7 @@ public class RoleService {
         if (!StringUtil.isEmpty(name)) {
             criteria.andEqualTo("name", name);
         }
+        criteria.andEqualTo("delFlag", false);
         List<Role> roles = roleMapper.selectByExample(example);
 
         if (roles == null) {
