@@ -261,7 +261,18 @@
                 sort: true
        
               },
-              { field: "roles.name", title: "角色", sort: true },
+              { field: "roles", title: "角色", sort: true, templet:function (data){
+                var rst= [];
+                  if (data.roles != "NaN") {
+                    console.log(data.roles);
+                    $.each(data.roles,function(k,v){
+                      rst.push(v.name);
+                      console.log(v.name);
+                    })
+                  }
+                  return rst;
+                 
+              }},
               { field: "duty", title: "职务", sort: true },
               {
                 field: "userType",
