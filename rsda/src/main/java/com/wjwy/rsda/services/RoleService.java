@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-27 16:19:37
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-27 16:42:01
  */
 package com.wjwy.rsda.services;
 
@@ -90,6 +90,7 @@ public class RoleService {
      */
     public int insertRole(Role role) {
         // 调用功能更新接口
+        role.setDelFlag(false);
         role.setId(UUID.randomUUID().toString().toLowerCase());
         role.setCreateTime(new Date());
         return roleMapper.insert(role);
@@ -239,7 +240,11 @@ public class RoleService {
         List<UserRole> userRole = userRoleMapper.selectByExample(example);
         for (UserRole userRoleList : userRole) {
             Role role = new Role();
-            role = roleMapper.selectByPrimaryKey(userRoleList.getRoleId());
+            Example exampleR = new Example(Role.class);
+            Criteria criteriaR = exampleR.createCriteria();
+            criteriaR.andEqualTo("delFlag", false);
+            criteriaR.andEqualTo("id", userRoleList.getRoleId());
+            role = roleMapper.selectOneByExample(exampleR);
             roles.add(role);
         }
 		return roles;

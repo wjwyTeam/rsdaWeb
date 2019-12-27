@@ -80,11 +80,9 @@ public class UserController {
 	@ApiOperation(value = "跳转用户授权界面")
 	public ModelAndView userRole(ModelAndView model) {
 
-
-			  model.addObject("roleList", roleService.getRoleList());
-
-					List<Role> roleList = roleService.getUserRoleList(request.getParameter("userId"));
-					model.addObject("roleUserList", roleList);
+		model.addObject("roleList", roleService.getRoleList());
+		List<Role> roleList = roleService.getUserRoleList(request.getParameter("userId"));
+		model.addObject("roleUserList", roleList);
 
 		model.setViewName("webview/system/user/userRole");
 		return model;

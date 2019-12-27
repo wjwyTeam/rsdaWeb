@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-26 16:18:40
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-27 16:00:59
+ * @LastEditTime : 2019-12-27 16:30:44
  -->
 <!DOCTYPE html>
 <html>
@@ -44,6 +44,8 @@
   <script src="../../../layuiadmin/layui/layui.js"></script>
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
   <script th:inline="javascript">
+     var roleUserList = [[${ roleUserList }]];
+      console.log(roleUserList);
      var roleList = [[${ roleList }]];
      console.log(roleList);
      var data = [];
