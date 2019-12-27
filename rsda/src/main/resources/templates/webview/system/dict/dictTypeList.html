@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-26 15:47:18
+ * @LastEditTime : 2019-12-27 09:10:41
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -29,7 +29,7 @@
         <button class="layui-btn" data-type="batchdel">批量删除</button>
       </div>
 
-      <input type="text" name="dictLabel" id="dictLabel" placeholder="请输入字典名称" autocomplete="off" class="layui-input"
+      <input type="text" name="dictName" id="dictName" placeholder="请输入字典名称" autocomplete="off" class="layui-input"
         style="display: inline-block;width: auto;" />
 
       <input type="text" name="dictType" id="dictType" placeholder="请输入字典类型" autocomplete="off" class="layui-input"
@@ -166,7 +166,7 @@
         if (obj.event === 'delete') {
           layer.confirm('真的删除行么', function (index) {
             layer.close(index);
-            $.post("/dict/dictDataRemove", { ids: data.dictCode }, function (resultJSONObject) {
+            $.post("/dictType/dictTypeRemove", { ids: data.dictId }, function (resultJSONObject) {
               if (resultJSONObject.success) {
                 obj.del();
                 tableLoad(table);
@@ -188,7 +188,7 @@
             content: "/dictType/dictTypeEdit?dictId=" + data.dictId,
             yes: function (index, layero) {
               var iframeWindow = window["layui-layer-iframe" + index],
-                submitID = "dictFormSubmit",
+                submitID = "dictTypeFormSubmit",
                 submit = layero
                   .find("iframe")
                   .contents()
@@ -206,7 +206,7 @@
                   //提交 Ajax 成功后，静态更新表格中的数据
                   $.ajax({
                     type: "post",
-                    url: "/dict/dictDataEdit",
+                    url: "/dictType/dictTypeEdit?dictId="+data.dictId,
                     data: JSON.stringify(field),
                     dataType: "json",
                     contentType: "application/json;charset-UTF-8",
@@ -264,14 +264,14 @@
           var ids = "";
           if (checkData.length > 0) {
             for (var i = 0; i < checkData.length; i++) {
-              ids += checkData[i].dictCode + ",";
+              ids += checkData[i].dictId + ",";
             }
           }
           layer.confirm('确定删除吗？', function (index) {
             //执行 Ajax 后重载
             $.ajax({
               type: "post",
-              url: "/dict/dictDataRemove",
+              url: "/dictType/dictTypeRemove",
               data: { "ids": ids },
               success: function (data) {
                 if (data.success) {
@@ -288,7 +288,7 @@
           layer.open({
             type: 2
             , title: "字典基础数据新增"
-            , content: '/dict/dictDataEdit'
+            , content: '/dictType/dictTypeEdit'
             , maxmin: true
             , moveType: 1 //拖拽模式，0或者1
             , area: ['500px', '350px']
@@ -299,7 +299,7 @@
             , btn: ['确定', '取消']
             , yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'dictFormSubmit'
+                , submitID = 'dictTypeFormSubmit'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
 
               //监听提交
@@ -313,7 +313,7 @@
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
                   type: "post",
-                  url: "/dict/dictDataInsert",
+                  url: "/dictType/dictTypeInsert",
                   data: JSON.stringify(field),
                   dataType: "json",
                   contentType: "application/json;charset-UTF-8",
@@ -348,7 +348,7 @@
         "dictTable",
         {
           where: {
-            dictLabel: $("#dictLabel").val(),
+            dictName: $("#dictName").val(),
             dictType: $("#dictType").val()
           }
         },

@@ -4,20 +4,17 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:30
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-26 14:29:09
+ * @LastEditTime : 2019-12-27 09:03:15
  */
 package com.wjwy.rsda.controller;
-
-import java.util.List;
-
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.BaseController;
-import com.wjwy.rsda.common.util.ExcelUtil;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.common.util.ShiroUtils;
 import com.wjwy.rsda.entity.DictType;
 import com.wjwy.rsda.enums.AjaxResult;
+import com.wjwy.rsda.enums.Convert;
 import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.enums.ResponseMessageConstant;
 import com.wjwy.rsda.services.DictTypeService;
@@ -30,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -101,31 +99,32 @@ public class DictTypeController extends BaseController {
   }
 
 
-
-
-
-  @Log(title = "字典类型", businessType = EnumEntitys.EXPORT)
-  @PostMapping("/export")
-  @ResponseBody
-  public AjaxResult export(DictType dictType) {
-
-    List<DictType> list = dictTypeService.selectDictTypeList(dictType);
-    ExcelUtil<DictType> util = new ExcelUtil<DictType>(DictType.class);
-    return util.exportExcel(list, "字典类型");
-  }
-
   /**
    * 新增保存字典类型
    */
-  @Log(title = "字典类型", businessType = EnumEntitys.INSERT)
-  @PostMapping("/add")
+  @Log(title = "字典数据", businessType = EnumEntitys.INSERT)
+  @ApiOperation(value = "新增保存字典类型", notes = "DictType - 对象")
+  @PostMapping("/dictTypeInsert")
   @ResponseBody
-  public AjaxResult addSave(@Validated DictType dict) {
-    if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))) {
-      return error("新增字典'" + dict.getDictName() + "'失败，字典类型已存在");
-    }
-    dict.setCreateBy(ShiroUtils.getLoginName());
-    return toAjax(dictTypeService.insertDictType(dict));
+  public ResponseWrapper addSave(@RequestBody DictType dictType) {
+    dictType.setCreateBy(ShiroUtils.getLoginName());
+
+    try {
+	
+      if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE.equals(String.valueOf(dictTypeService.checkDictTypeUnique(dictType)))) {
+        return ResponseWrapper.success(HttpStatus.OK.value(), "新增字典'" + dictType.getDictName() + "'失败，字典类型已存在", null, null, null);
+      }
+      AjaxResult resultTotal = toAjax(dictTypeService.insertDictType(dictType));
+			if (resultTotal.isEmpty()) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
+      }
+			return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
 
   /**
@@ -135,33 +134,64 @@ public class DictTypeController extends BaseController {
   @PostMapping("/edit")
   @ResponseBody
   public AjaxResult editSave(@Validated DictType dict) {
-    if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))) {
+    if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE.equals(String.valueOf(dictTypeService.checkDictTypeUnique(dict)))) {
       return error("修改字典'" + dict.getDictName() + "'失败，字典类型已存在");
     }
     dict.setUpdateBy(ShiroUtils.getLoginName());
     return toAjax(dictTypeService.updateDictType(dict));
   }
 
-  @Log(title = "字典类型", businessType = EnumEntitys.DELETE)
-  @PostMapping("/remove")
+
+
+    /**
+   * 修改保存字典类型
+   */
+  @Log(title = "字典数据", businessType = EnumEntitys.UPDATE)
+  @PostMapping("/dictTypeEdit")
   @ResponseBody
-  public AjaxResult remove(String ids) {
+  @ApiOperation(value = "修改保存字典类型", notes = "dictData - 对象")
+  public ResponseWrapper edit(@RequestBody DictType dict) {
+    
+    dict.setUpdateBy(ShiroUtils.getLoginName());
+
     try {
-      return toAjax(dictTypeService.deleteDictTypeByIds(ids));
-    } catch (Exception e) {
-      return error(e.getMessage());
-    }
+      if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE.equals(String.valueOf(dictTypeService.checkDictTypeUnique(dict)))) {
+        return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "修改字典'" + dict.getDictName() + "'失败，字典类型已存在", null, null, null);
+      }
+			int resultTotal =  dictTypeService.updateDictType(dict);
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
+      }
+   
+			return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
+
+
+  @Log(title = "字典数据", businessType = EnumEntitys.DELETE)
+  @PostMapping("/dictTypeRemove")
+  @ApiOperation(value = "移除字典数据", notes = "ids - 数组-ids")
+  @ResponseBody
+  public ResponseWrapper remove(String ids) {
+    try {
+			int resultTotal =  dictTypeService.deleteDictTypeByIds(Convert.toStrArray(ids));
+			if (resultTotal == 0) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
 
-  /**
-   * 查询字典详细
-   */
-  @GetMapping("/detail/{dictId}")
-  public String detail(@PathVariable("dictId") String dictId, ModelMap mmap) {
-    mmap.put("dict", dictTypeService.selectDictTypeById(dictId));
-    mmap.put("dictList", dictTypeService.selectDictTypeAll());
-    return "system/dict/data/data";
-  }
 
   /**
    * 校验字典类型
@@ -169,7 +199,7 @@ public class DictTypeController extends BaseController {
   @PostMapping("/checkDictTypeUnique")
   @ResponseBody
   public String checkDictTypeUnique(DictType dictType) {
-    return dictTypeService.checkDictTypeUnique(dictType);
+    return String.valueOf(dictTypeService.checkDictTypeUnique(dictType));
   }
 
   /**

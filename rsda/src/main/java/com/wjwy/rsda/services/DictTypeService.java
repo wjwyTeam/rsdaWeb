@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-20 10:28:39
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-26 14:25:11
+ * @LastEditTime : 2019-12-27 09:24:49
  */
 package com.wjwy.rsda.services;
 
@@ -12,7 +12,9 @@ import java.util.List;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.wjwy.rsda.entity.DictData;
 import com.wjwy.rsda.entity.DictType;
+import com.wjwy.rsda.mapper.DictDateMapper;
 import com.wjwy.rsda.mapper.DictTypeMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +29,15 @@ public class DictTypeService {
 
 	@Autowired
 	private DictTypeMapper dictTypeMapper;
-
+	@Autowired
+	private DictDateMapper dictDataMapper;
+/**
+	* 
+	* @param dict
+	* @return
+ */
 	public int insertDictType(DictType dict) {
-		return 0;
+		return dictTypeMapper.insertSelective(dict);
 	}
 /**
 	* 
@@ -42,25 +50,43 @@ public class DictTypeService {
 		criteria.andEqualTo("dictId", dictId);
 		return dictTypeMapper.selectOneByExample(example);
 	}
-
+	
+/**
+	* 
+	* @param dict
+	* @return
+ */
 	public int updateDictType(DictType dict) {
-		return 0;
+		Example example = new Example(DictType.class);
+		Criteria criteria = example.createCriteria();
+
+		criteria.andEqualTo("dictId", dict.getDictId());
+		return dictTypeMapper.updateByExampleSelective(dict,example);
 	}
 
-	public int deleteDictTypeByIds(String ids) {
-		return 0;
+	public int deleteDictTypeByIds(String[] ids) {
+		int resN = 0;
+		for (String id : ids) {
+			Example example = new Example(DictType.class);
+			Criteria criteria = example.createCriteria();
+					criteria.andEqualTo("dictId", id);
+					DictType dictType = 	dictTypeMapper.selectOneByExample(example);
+					resN = dictTypeMapper.deleteByExample(example);
+					Example exampleData = new Example(DictData.class);
+					Criteria criteriaData = exampleData.createCriteria();
+					criteriaData.andEqualTo("dictType", dictType.getDictType());
+					dictDataMapper.deleteByExample(exampleData);
+		}
+		return resN;
 	}
 
-	public Object selectDictTypeAll() {
-		return null;
-	}
 
-	public String checkDictTypeUnique(DictType dictType) {
-		return null;
-	}
 
-	public List<DictType> selectDictTypeList(DictType dictType) {
-		return null;
+	public int checkDictTypeUnique(DictType dictType) {
+		Example example = new Example(DictType.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("dictType", dictType.getDictType());
+		return dictTypeMapper.selectByExample(example).size();
 	}
 
 	/**

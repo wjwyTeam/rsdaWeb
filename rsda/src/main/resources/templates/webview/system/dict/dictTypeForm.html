@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-20 15:26:13
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-26 14:22:26
+ * @LastEditTime : 2019-12-26 16:53:25
  -->
  <!DOCTYPE html>
  <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -58,7 +58,7 @@
     
      <div class="layui-form-item layui-hide">
       <div class="layui-input-block">
-        <input type="button" lay-submit lay-filter="dictFormSubmit" id="dictFormSubmit" value="确认">
+        <input type="button" lay-submit lay-filter="dictTypeFormSubmit" id="dictTypeFormSubmit" value="确认">
       </div>
     </div>
    
@@ -68,6 +68,7 @@
  
    <script th:inline="javascript">
     var dictOne = [[${ dictType }]];
+    console.log(dictOne)
     layui.config({
        base: '../../../layuiadmin/' //静态资源所在路径
      }).extend({
@@ -79,8 +80,9 @@
  
         layer.ready(function () {
          form.val('dictForm', dictOne);
-         $("#status").attr("checked", dictOne.status);
- 
+         if (dictOne != null) {
+          $("#status").attr("checked", dictOne.status);
+         }
       });
 
             //监听指定开关
