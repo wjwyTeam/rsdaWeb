@@ -125,6 +125,14 @@ public class FunctionService {
         criteria.andEqualTo("functionId", functionId);
 		return functionMapper.selectOneByExample(example);
     }
+
+    /**
+     * 
+     * @return
+     */
+	public List<Function> getList() {
+		return functionMapper.selectAll();
+	}
     
 
     

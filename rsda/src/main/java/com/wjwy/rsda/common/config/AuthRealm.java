@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-01 18:43:19
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 11:14:24
+ * @LastEditTime : 2019-12-28 08:15:35
  */
 package com.wjwy.rsda.common.config;
 
@@ -104,7 +104,7 @@ public class AuthRealm extends AuthorizingRealm {
 
         if (userDO.getUserName().equals("myadmin")) {
             FunctionService functionService = ApplicationContextRegister.getBean(FunctionService.class);
-            List<Function> listFunction = functionService.findList("", "");
+            List<Function> listFunction = functionService.getList();
             Set<String> permsSet = new HashSet<>();
             for (Function sysFunction : listFunction) {
                 if (!StringUtil.isEmpty(sysFunction.getUrl())) {
@@ -114,7 +114,7 @@ public class AuthRealm extends AuthorizingRealm {
             authorizationInfo.addStringPermissions(permsSet);
         } else {
             FunctionService functionService = ApplicationContextRegister.getBean(FunctionService.class);
-            List<Function> listFunction = functionService.findList("", "");
+            List<Function> listFunction = functionService.getList();
             Set<String> permsSet = new HashSet<>();
             for (Function sysFunction : listFunction) {
                 if (!StringUtil.isEmpty(sysFunction.getUrl())) {
