@@ -51,6 +51,8 @@ public class UserController {
 	public Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	private HttpServletRequest request;
+	private String prefix = "webview/system/user/";
+
 	/**
 	 * @Description: 网站用户界面
 	 * @param
@@ -62,20 +64,22 @@ public class UserController {
 
 	@GetMapping(value = "/userInfo")
 	public ModelAndView userInfo(User user, ModelAndView model) {
-		model.addObject("type",true);
-        if (StringUtil.isNotEmpty(request.getParameter("type"))) {
-            model.addObject("type",request.getParameter("type"));
-        } 
-		model.setViewName("webview/system/user/userList");
+		model.addObject("type", true);
+		if (StringUtil.isNotEmpty(request.getParameter("type"))) {
+			model.addObject("type", request.getParameter("type"));
+			model.addObject("roleId", request.getParameter("roleId"));
+		}
+		model.setViewName(prefix + "userList");
 		return model;
 	}
 
-/**
-	* 跳转用户授权界面
-	* @param user
-	* @param model
-	* @return
- */
+	/**
+	 * 跳转用户授权界面
+	 * 
+	 * @param user
+	 * @param model
+	 * @return
+	 */
 	@GetMapping(value = "/userRole")
 	@ApiOperation(value = "跳转用户授权界面")
 	public ModelAndView userRole(ModelAndView model) {
@@ -84,9 +88,10 @@ public class UserController {
 		List<Role> roleList = roleService.getUserRoleList(request.getParameter("userId"));
 		model.addObject("roleUserList", roleList);
 
-		model.setViewName("webview/system/user/userRole");
+		model.setViewName(prefix + "userRole");
 		return model;
 	}
+
 	/**
 	 * 
 	 * @Title: hello1 @Description: TODO方法描述:(个人信息) @param @return 设定文件 @return
@@ -96,7 +101,7 @@ public class UserController {
 	public ModelAndView PersonInfo(String userId, ModelAndView model) {
 		User user = userService.getPersonInfo(userId);
 		model.addObject("user", user);
-		model.setViewName("webview/system/user/userInfo");
+		model.setViewName(prefix + "userInfo");
 		return model;
 	}
 
@@ -115,7 +120,7 @@ public class UserController {
 			user.setPassWord(MD5Util.convertMD5(MD5Util.convertMD5(user.getPassWord())));
 		}
 		model.addObject("userOne", user);
-		model.setViewName("webview/system/user/userForm");
+		model.setViewName(prefix + "userForm");
 		return model;
 	}
 
@@ -136,15 +141,15 @@ public class UserController {
 	@PostMapping("/userPageInfoList")
 	@ApiOperation(value = "根据ID获取用户分页列表", notes = "参数：userId-用户ID,userName-用户名,deptId-部门ID,workDept-部门工号,delFlag-删除标志,isPage-是否开启分页,pageNum-当前页,pageSize-每页条数")
 	public ResponseWrapper userPageInfoList(String userId, String userName, String deptId, String workDept,
-			Boolean delFlag, Boolean isPage, String pageNum, String pageSize) {
+			Boolean delFlag, Boolean isPage, String pageNum, String pageSize,String roleId) {
 		try {
 			if (isPage != null && isPage.equals(EnumEntitys.YES.getValue())) {
 				PageInfo<User> pageInfos = userService.getPageList(userId, userName, deptId, workDept, delFlag,
-						Integer.parseInt(pageNum.trim()), Integer.parseInt(pageSize.trim()));
+						Integer.parseInt(pageNum.trim()), Integer.parseInt(pageSize.trim()),roleId);
 				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos, null,
 						Integer.parseInt(String.valueOf(pageInfos.getTotal())));
 			} else {
-				List<User> userList = userService.getList(userId, userName, deptId, workDept, delFlag);
+				List<User> userList = userService.getList(userId, userName, deptId, workDept, delFlag,roleId);
 				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", userList, null, userList.size());
 			}
 		} catch (Exception e) {
@@ -253,7 +258,7 @@ public class UserController {
 	 * @param ids
 	 * @return ResponseWrapper
 	 */
-	@ApiOperation(value = "根据用户选择角色", notes = "参数：userId-用户主键,ids-角色数组")
+	@ApiOperation(value = "根据用户选择角色(授权)", notes = "参数：userId-用户主键,ids-角色数组")
 	@GetMapping("/userSelRole")
 	public ResponseWrapper userSelRole(String userId, String ids[]) {
 
@@ -271,4 +276,28 @@ public class UserController {
 				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
+	
+ /**
+		* 
+		* @param userId
+		* @param ids
+		* @return
+	 */
+	@ApiOperation(value = "取消授权", notes = "参数：userId-用户主键,roleId-角色")
+	@GetMapping("/userDelRole")
+	public ResponseWrapper userDelRole(String userId, String roleId) {
+
+		try {
+			boolean flag = userService.userDelRole(userId, roleId);
+			if (!flag) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
 }

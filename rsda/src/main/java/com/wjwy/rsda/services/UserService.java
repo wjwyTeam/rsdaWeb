@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-24 09:08:48
+ * @LastEditTime : 2019-12-28 09:42:19
  */
 package com.wjwy.rsda.services;
 
@@ -59,10 +59,10 @@ public class UserService {
 	 * @return
 	 */
 	public PageInfo<User> getPageList(String userId, String userName, String deptId, String workDept, Boolean delFlag,
-			Integer pageNum, Integer pageSize) {
+			Integer pageNum, Integer pageSize,String roleId) {
 
 		PageHelper.startPage(pageNum, pageSize);
-		List<User> users = getList(userId, userName, deptId, workDept, delFlag);
+		List<User> users = getList(userId, userName, deptId, workDept, delFlag,roleId);
 		if (users == null) {
 			return null;
 		}
@@ -163,7 +163,7 @@ public class UserService {
 	 * @param delFlag
 	 * @return
 	 */
-	public List<User> getList(String userId, String userName, String deptId, String workDept, Boolean delFlag) {
+	public List<User> getList(String userId, String userName, String deptId, String workDept, Boolean delFlag,String roleId) {
 
 		Example example = new Example(User.class);
 
@@ -209,6 +209,11 @@ public class UserService {
 					criteriaRole.andEqualTo("id", userRole.getRoleId());
 					role = roleDao.selectOneByExample(exampleRole);
 					roleNewList.add(role);
+					if(StringUtils.isNotEmpty(roleId)&&roleId.equals(userRole.getRoleId())){
+						//已分配
+						user.setISRole(true);
+					}
+
 				}
 				user.setRoles(roleNewList);
 			}
@@ -240,9 +245,29 @@ public class UserService {
 			criteria.andEqualTo("roleId", roleId);
 			userRole.setRId(UUID.randomUUID().toString().toLowerCase());
 			userRole.setRoleId(roleId);
-			logger.info(roleId, userRoleDao.insertSelective(userRole));
+			logger.info("=========================================》", userRoleDao.insertSelective(userRole));
 		}
 
+		return true;
+	}
+
+	/**
+		* 取消授权
+		* @param userId
+		* @param roleId
+		* @return
+	 */
+	public boolean userDelRole(String userId, String roleId) {
+
+		if (StringUtils.isEmpty(userId)&&StringUtils.isEmpty(roleId)) {
+			return false;
+		}
+		Example example = new Example(UserRole.class);
+		Criteria criteria = example.createCriteria();
+		// 将当前用户所选角色全部清除，新增
+		criteria.andEqualTo("userId", userId);
+		criteria.andEqualTo("roleId", roleId);
+		logger.info("=========================================》",userRoleDao.deleteByExample(example));
 		return true;
 	}
 

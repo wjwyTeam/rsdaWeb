@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-11-30 22:58:25
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-13 09:17:46
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-28 09:11:20
  */
 package com.wjwy.rsda.entity;
 
@@ -14,6 +14,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import com.alibaba.fastjson.annotation.JSONField;
 
 import io.swagger.annotations.ApiModel;
@@ -109,7 +111,13 @@ public class User implements Serializable{
 	@Column(name = "index_url")
 	private String indexUrl;
 
+	
+	@Transient
 	@ApiModelProperty(name = "角色列表")
 	private List<Role> roles;
+
+	@Transient
+	@ApiModelProperty(name = "是否分配")
+	private Boolean iSRole;
 
 }

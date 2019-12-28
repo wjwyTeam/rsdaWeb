@@ -120,6 +120,7 @@
         </div>
       </div>
       <table id="userList" lay-filter="userList" class="layui-hide"></table>
+      <input id="roleId" hidden th:value="${roleId}">
       <div>
       <script type="text/html" id="table-toolbar" th:inline="none" >
           <div th:if="${type}">
@@ -243,7 +244,7 @@
           method: "post",
           id: "userList",
           totalRow: true,
-          url: "/user/userPageInfoList", //数据接口
+          url: "/user/userPageInfoList?roleId="+$("#roleId").val(), //数据接口
           cols: [
             [
               //表头
