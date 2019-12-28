@@ -128,7 +128,15 @@
                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
                <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="authorization"><i class="layui-icon layui-icon-auz"></i>授权</a>
           </div>
-          <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="cancelAuthorization"><i class="layui-icon layui-icon-auz"></i>取消授权</a>
+
+
+          {{# if(d.isrole==true){ }}
+             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="cancelAuthorization"><i class="layui-icon layui-icon-auz"></i>取消授权</a>
+          {{# } }}
+          {{# if(d.isrole==null){ }}
+             <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="authorizationRole"><i class="layui-icon layui-icon-auz"></i>授权</a>
+          {{# } }}
+
         </script>
       </div>
     </div>
@@ -391,21 +399,22 @@
               }
             });
           }else if(obj.event === "cancelAuthorization"){
-            // 取消授权
+            // 取消固定角色授权
             layer.confirm("确定要取消对该用户的授权吗？", function (index) {
               layer.close(index);
-              // $.post(
-              //   "/user/deleteUser",
-              //   { userId: data.userId },
-              //   function (resultJSONObject) {
-              //     console.log(resultJSONObject);
-              //     if (resultJSONObject.success) {
-              //       tableLoad(table);
-              //     }
-              //     layer.msg(resultJSONObject.msg, {icon: 1, time: 2000,});
-              //   },
-              //   "json"
-              // );
+              console.log(data.userId);   //用户id
+              console.log($("#roleId").val());
+              $.get(
+                "/user/userDelRole?roleId="+$("#roleId").val()+"&userId="+data.userId,
+                function (resultJSONObject) {
+                  console.log(resultJSONObject);
+                  if (resultJSONObject.success) {
+                    tableLoad(table);
+                  }
+                  layer.msg(resultJSONObject.msg, {icon: 1, time: 2000,});
+                },
+                "json"
+              );
             });
 
           }else if(obj.event === "authorization"){
@@ -469,6 +478,25 @@
                 );
                 submit.trigger("click");
               }
+            });
+          }else if(obj.event == "authorizationRole"){
+            // 角色授权
+            layer.confirm("确定对该用户的授权吗？", function (index) {
+              layer.close(index);
+              console.log(data.userId);   //用户id
+              var arrRole = [$("#roleId").val()]
+              console.log(arrRole);  
+              $.get(
+                "/user/userSelRole?ids="+arrRole+"&userId="+data.userId,
+                function (resultJSONObject) {
+                  console.log(resultJSONObject);
+                  if (resultJSONObject.success) {
+                    tableLoad(table);
+                  }
+                  layer.msg(resultJSONObject.msg, {icon: 1, time: 2000,});
+                },
+                "json"
+              );
             });
           }
         });

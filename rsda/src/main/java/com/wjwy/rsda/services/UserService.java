@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-28 09:42:19
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-28 10:42:50
  */
 package com.wjwy.rsda.services;
 
@@ -268,6 +268,24 @@ public class UserService {
 		criteria.andEqualTo("userId", userId);
 		criteria.andEqualTo("roleId", roleId);
 		logger.info("=========================================》",userRoleDao.deleteByExample(example));
+		return true;
+	}
+
+	/**
+	 * 授权
+	 * @param userId
+	 * @param roleId
+	 * @return
+	 */
+	public boolean userInRole(String userId, String roleId) {
+		if (StringUtils.isEmpty(userId)&&StringUtils.isEmpty(roleId)) {
+			return false;
+		}
+		UserRole userRole = new UserRole();
+		userRole.setRId(UUID.randomUUID().toString().toLowerCase());
+		userRole.setRoleId(roleId);
+		userRole.setUserId(userId);
+		logger.info("=========================================》",userRoleDao.insertSelective(userRole));
 		return true;
 	}
 
