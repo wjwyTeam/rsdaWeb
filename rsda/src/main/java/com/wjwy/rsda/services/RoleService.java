@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-27 16:42:01
+ * @LastEditTime : 2019-12-30 15:31:00
  */
 package com.wjwy.rsda.services;
 
@@ -243,7 +243,6 @@ public class RoleService {
             Role role = new Role();
             Example exampleR = new Example(Role.class);
             Criteria criteriaR = exampleR.createCriteria();
-            criteriaR.andEqualTo("roleStatus", true);
             criteriaR.andEqualTo("delFlag", false);
             criteriaR.andEqualTo("id", userRoleList.getRoleId());
             role = roleMapper.selectOneByExample(exampleR);
