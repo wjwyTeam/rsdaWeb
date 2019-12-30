@@ -207,6 +207,7 @@ public class UserService {
 					Example exampleRole = new Example(Role.class);
 					Criteria criteriaRole = exampleRole.createCriteria();
 					criteriaRole.andEqualTo("id", userRole.getRoleId());
+					criteriaRole.andEqualTo("roleStatus", true);
 					role = roleDao.selectOneByExample(exampleRole);
 					roleNewList.add(role);
 					if(StringUtils.isNotEmpty(roleId)&&roleId.equals(userRole.getRoleId())){

@@ -245,6 +245,7 @@ public class RoleService {
             Criteria criteriaR = exampleR.createCriteria();
             criteriaR.andEqualTo("delFlag", false);
             criteriaR.andEqualTo("id", userRoleList.getRoleId());
+            criteriaR.andEqualTo("roleStatus", true);
             role = roleMapper.selectOneByExample(exampleR);
             roles.add(role);
         }

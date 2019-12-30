@@ -272,7 +272,9 @@
                 var rst= [];
                   if (data.roles != "NaN" && data.roles != null) {
                     $.each(data.roles,function(k,v){
-                      rst.push(v.name);
+                      if(v!=null){
+                        rst.push(v.name);
+                      }
                     })
                   }
                   return rst;
