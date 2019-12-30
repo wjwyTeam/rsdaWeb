@@ -59,9 +59,12 @@
     var checkedValue = []
     $.each(data,function(k,v){
       $.each(roleUserList,function(k2,v2){
-        if(v2.id == v.id){
+        if(v2!=null && v!= null){
+          if(v2.id == v.id){
            checkedValue.push(v.value);
         }
+        }
+       
       })
     })
 
