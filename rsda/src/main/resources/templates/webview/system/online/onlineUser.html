@@ -1,0 +1,223 @@
+<!--
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2019-12-17 19:08:33
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-24 15:51:18
+ -->
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+ <th:block th:include="include :: header('服务器监控')" />
+ <style>
+  .userTableSearch {
+   width: 100%;
+   text-align: left;
+   position: relative;
+   top: 6px;
+  }
+ </style>
+</head>
+
+<body>
+ <div class="col-xs-12 ">
+  <div class="userTableSearch layui-form">
+
+   <input type="text" name="userName" id="userName" placeholder="请输入用户名" autocomplete="off" class="layui-input"
+    style="display: inline-block;width: auto;" />
+
+   <button class="layui-btn" lay-submit lay-filter="online-front-search">
+    搜索
+   </button>
+  </div>
+  <table id="onlineTable" lay-filter="onlineTable" class="layui-hide"></table>
+  <script type="text/html" id="table-toolbar" th:inline="none">
+         <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="findOne"><i class="layui-icon layui-icon-search"></i>查看</a>
+       </script>
+ </div>
+
+ <script type="text/javascript" th:inline="none">
+  layui.use(["table", "form", "util", "laydate"], function () {
+   var $ = layui.$,
+    form = layui.form,
+    table = layui.table,
+    laydate = layui.laydate,
+    util = layui.util;
+
+   //第一个实例
+   table.render({
+    elem: "#onlineTable",
+    even: true,
+    height: "full-60",
+    title: "在线用户",
+    cellMinWidth: 80,
+    method: "post",
+    id: "onlineTable",
+    totalRow: true,
+    url: "/online/listTwo", //数据接口
+    cols: [
+     [
+      //表头
+      {
+       fixed: "left",
+       type: "numbers",
+       title: "序号"
+      },
+      {
+       field: "sessionId",
+       title: "会话编号",
+       sort: true
+
+      },
+      {
+       field: "loginName",
+       title: "登录名称",
+       sort: true
+
+      },
+      {
+       field: "deptName",
+       title: "部门名称",
+       sort: true
+
+      },
+      {
+       field: "ipaddr",
+       title: "主机",
+       sort: true
+      },
+      {
+       field: "loginLocation",
+       title: "登录地点",
+       sort: true
+      },
+      {
+       field: "browser",
+       title: "浏览器",
+       sort: true
+      },
+      {
+       field: "os",
+       title: "操作系统",
+       sort: true
+      },
+      {
+       field: "status",
+       title: "会话状态",
+       sort: true,
+       templet: function(value, row, index) {
+		                if (value == 'ONLINE') {
+		                    return '<span class="badge badge-primary">在线</span>';
+		                } else if (value == 'OFFONLINE') {
+		                    return '<span class="badge badge-danger">离线</span>';
+		                }
+		            }
+      },
+      {
+       field: "startTimestamp",
+       title: "登录时间",
+       width: 250,
+       sort: true,
+       templet: function (time) {
+        return (
+         "<div>" +
+         layui.util.toDateString(
+          Date(time.startTimestamp, "yyyy-MM-dd HH:mm:ss")
+         ) +
+         "</div>"
+        );
+       }
+      },
+      {
+       field: "lastAccessTime",
+       title: "最后访问时间",
+       width: 250,
+       sort: true,
+       templet: function (time) {
+        return (
+         "<div>" +
+         layui.util.toDateString(
+          Date(time.lastAccessTime, "yyyy-MM-dd HH:mm:ss")
+         ) +
+         "</div>"
+        );
+       }
+      },
+      {
+       fixed: "right",
+       title: "操作",
+       width: 200,
+       align: "center",
+       toolbar: "#table-toolbar"
+      }
+     ]
+    ],
+    page: false,
+    response: {
+     statusName: "code", //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+     statusCode: 200, //成功的状态码，默认：0
+     msgName: "msg", //状态信息的字段名称，默认：msg
+     countName: "count", //数据总数的字段名称，默认：count
+     dataName: "data" //数据列表的字段名称，默认：data
+    },
+    page: {
+     //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+     layout: ["limit", "count", "prev", "page", "next", "skip"], //自定义分页布局
+     //,curr: 5 //设定初始在第 5 页
+     groups: 5, //只显示 1 个连续页码
+     first: false, //不显示首页
+     last: false, //不显示尾页
+     limit: 20
+    }
+   });
+
+   //日期时间选择器
+   laydate.render({
+    elem: "#startTime",
+    type: "datetime"
+   });
+
+   laydate.render({
+    elem: "#endTime",
+    type: "datetime"
+   });
+
+
+   //监听搜索
+   form.on("submit(online-front-search)", function (data) {
+    var field = data.field;
+
+    //执行重载
+    table.reload("onlineTable", {
+     where: field
+    });
+   });
+   //监听工具条删除
+   table.on("tool(onlineTable)", function (obj) {
+    var data = obj.data;
+    if (obj.event === "findOne") {
+     layer.open({
+      type: 2,
+      title: "日志浏览",
+      maxmin: true,
+      area: ["700px", "550px"],
+      btn: ["取消"],
+      fixed: true,
+      shadeClose: false,
+      shade: 0.2,
+      moveType: 1, //拖拽模式，0或者1
+      content: "/log/operlogForm?operId=" + data.operId,
+      yes: function (index, layero) {
+       layer.close(index); //关闭弹层
+       submit.trigger("click");
+      }
+     });
+    }
+   });
+  });
+ </script>
+</body>
+
+</html>

@@ -3,13 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:30
-<<<<<<< HEAD
  * @LastEditors  : ZHANGQI
  * @LastEditTime : 2019-12-30 08:55:28
-=======
- * @LastEditors  : zgr
- * @LastEditTime : 2019-12-30 08:30:14
->>>>>>> 6dcc733bf5fee99003e39d2e966f91365a56de17
  */
 package com.wjwy.rsda.controller;
 import com.github.pagehelper.PageInfo;

@@ -56,7 +56,7 @@ public class OnlineSession extends SimpleSession
     private String os;
 
     /** 在线状态 */
-    private EnumEntitys status = (EnumEntitys) EnumEntitys.ONLINE.getDesc();
+    private EnumEntitys status = EnumEntitys.ONLINE;
 
     /** 属性是否改变 优化session数据同步 */
     private transient boolean attributeChanged = false;

@@ -14,18 +14,18 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 
 /**
  * 针对自定义的ShiroSession的db操作
  */
+@Service("onlineSessionDAO")
 public class OnlineSessionDAO extends EnterpriseCacheSessionDAO
 {
     /**
      * 同步session到数据库的周期 单位为毫秒（默认1分钟）
      */
-    @Value("${shiro.session.dbSyncPeriod}")
     private int dbSyncPeriod;
 
     /**
