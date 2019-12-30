@@ -204,7 +204,6 @@
 
             layer.close(index);
             $.post("/role/deleteRole", { id: data.id }, function (resultJSONObject) {
-              console.log(resultJSONObject)
               if (resultJSONObject.success) {
                 tableLoad(table);
               }
@@ -230,9 +229,7 @@
                 , submit = layero.find('iframe').contents().find('#' + submitID);
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
-                console.log(dataLog)
                 var field = dataLog.field;
-                console.log(field);
                 if (field.roleStatus == "true") {
                   field.roleStatus = true;
                 } else {
@@ -397,7 +394,6 @@
           "id": data.value,
           "roleStatus": sta
         }
-        console.log(data.value)
         //自定义弹窗
         layer.open({
           content: "你确定要" + contexts + "?"

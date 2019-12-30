@@ -258,7 +258,7 @@ public class UserController {
 	 * @param ids
 	 * @return ResponseWrapper
 	 */
-	@ApiOperation(value = "根据用户选择角色(授权)", notes = "参数：userId-用户主键,ids-角色数组")
+	@ApiOperation(value = "根据用户选择角色", notes = "参数：userId-用户主键,ids-角色数组")
 	@GetMapping("/userSelRole")
 	public ResponseWrapper userSelRole(String userId, String ids[]) {
 
@@ -290,9 +290,34 @@ public class UserController {
 		try {
 			boolean flag = userService.userDelRole(userId, roleId);
 			if (!flag) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "取消授权失败", null, null, null);
 			}
-			return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "取消授权成功", null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
+
+
+	/**
+		* 
+		* @param userId
+		* @param ids
+		* @return
+	 */
+	@ApiOperation(value = "授权", notes = "参数：userId-用户主键,roleId-角色")
+	@GetMapping("/userInRole")
+	public ResponseWrapper userInRole(String userId, String roleId) {
+
+		try {
+			boolean flag = userService.userInRole(userId, roleId);
+			if (!flag) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "授权失败", null, null, null);
+			}
+			return ResponseWrapper.success(HttpStatus.OK.value(), "授权成功", null, null, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
