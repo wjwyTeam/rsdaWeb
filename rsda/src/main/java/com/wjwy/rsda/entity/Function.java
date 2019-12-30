@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 15:08:01
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-27 17:18:15
+ * @LastEditTime : 2019-12-30 08:48:37
  */
 package com.wjwy.rsda.entity;
 
@@ -13,6 +13,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -37,10 +38,13 @@ public class Function implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-
     @ApiModelProperty("主键id")
-    @Column(name = "function_id")
-    private String functionId;
+    @Column(name = "id")
+    private String id;
+
+    @ApiModelProperty("groupid")
+    @Column(name = "pid")
+    private String pid;
     // 名称
     @ApiModelProperty("名称")
     @Column(name = "function_name")
@@ -49,10 +53,7 @@ public class Function implements Serializable{
     @ApiModelProperty("图标")
     @Column(name = "icon")
     private String icon;
-    // 所属组
-    @ApiModelProperty("所属组")
-    @Column(name = "group_id")
-    private String groupId;
+ 
     // 请求地址
     @ApiModelProperty("请求地址")
     @Column(name = "url")
@@ -63,8 +64,8 @@ public class Function implements Serializable{
     private String remark;
     // 排序字段
     @ApiModelProperty("排序字段")
-    @Column(name = "f_order")
-    private Integer fOrder;
+    @Column(name = "forder")
+    private Integer forder;
     // 建立时间
 
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -97,4 +98,8 @@ public class Function implements Serializable{
     @Column(name = "perms")
     /** 权限字符串 */
     private String perms;
+
+    @Transient
+    private Boolean haveChild;
+
 }

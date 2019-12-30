@@ -31,7 +31,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ApiModel("字典类型=>实体")
 @Table(name = "sys_dict_type")
-public class DictType  extends BaseEntity{
+public class DictType  extends BaseEntity {
 
     /**
      *

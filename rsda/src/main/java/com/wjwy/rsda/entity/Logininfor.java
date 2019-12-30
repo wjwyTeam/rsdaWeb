@@ -8,6 +8,7 @@
  */
 package com.wjwy.rsda.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Table;
@@ -32,7 +33,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @ApiModel("登录用户=>实体")
 @Table(name = "sys_logininfor")
-public class Logininfor{
+public class Logininfor implements Serializable{
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     /** ID */
     @Excel(name = "序号", cellType = ColumnType.NUMERIC)

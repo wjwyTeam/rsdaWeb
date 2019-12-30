@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-09 17:47:32
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 09:00:06
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-30 08:48:25
  */
 package com.wjwy.rsda.entity;
 

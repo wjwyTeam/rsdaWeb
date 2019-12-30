@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.entity.Function;
+import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.mapper.FunctionMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class FunctionService {
      * @return int
      */
     public int insertFunction(Function function) {
-        function.setFunctionId(UUID.randomUUID().toString().toLowerCase());
+        function.setId(UUID.randomUUID().toString().toLowerCase());
         function.setCreateTime(new Date());
         return functionMapper.insert(function);
     }
@@ -59,7 +60,7 @@ public class FunctionService {
         Example example = new Example(Function.class);
         Criteria criteria = example.createCriteria();
 
-        criteria.andEqualTo("functionId", function.getFunctionId());
+        criteria.andEqualTo("functionId", function.getId());
 
         List<Function> functionNew = functionMapper.selectByExample(example);
 
@@ -82,7 +83,7 @@ public class FunctionService {
     public int updateFunction(Function function) {
         Example example = new Example(Function.class);
         Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("functionId", function.getFunctionId());
+        criteria.andEqualTo("functionId", function.getId());
         return functionMapper.updateByExampleSelective(function, example);
     }
 
@@ -132,6 +133,16 @@ public class FunctionService {
      */
 	public List<Function> getList() {
 		return functionMapper.selectAll();
+	}
+
+
+
+	public List<Function> list(String groupId) {
+		 if(StringUtil.isEmpty(groupId)|| groupId.equalsIgnoreCase("{}")){
+            groupId=String.valueOf(EnumEntitys.GJD.getValue());
+        }
+        List<Function> functionlists = functionMapper.selectTreeList(groupId);
+        return functionlists;
 	}
     
 

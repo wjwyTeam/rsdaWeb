@@ -1,5 +1,8 @@
 package com.wjwy.rsda.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Function;
@@ -51,6 +54,7 @@ public class FunctionController {
     return model;
   }
 
+
     /**
    * 修改字典类型
    */
@@ -64,7 +68,26 @@ public class FunctionController {
     return model;
   }
 
-
+	/**
+	 * 加载部门管理左边的部门树的json
+	 * 
+	 * @param parentId
+	 * @return ResponseWrapper
+	 */
+	@ApiOperation(value = "菜单树展示 ")
+	@GetMapping(value = "/functionTree")
+	public ResponseWrapper loadDepartmentLeftTreeJson(String groupId) {
+		List<Function> functionList = new ArrayList<Function>();
+        
+        try {
+            functionList = functionService.list(groupId);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", functionList,null,null);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+	}
 
     /**
      * 列表查询
@@ -163,7 +186,7 @@ public class FunctionController {
 
         try {
             Function function = new Function();
-            function.setFunctionId(id);
+            function.setId(id);
             int resultTotal = functionService.delete(function);
             if (resultTotal == 0) {
                 return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前功能]", null, null,null);
@@ -178,4 +201,13 @@ public class FunctionController {
         return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
+
+
+    @RequestMapping(value="/treedata")
+	@ResponseBody
+	public ResponseWrapper treedata() {
+		// Sort sort = Sort.by("forder");
+		// List<Function> list = functionService.findAll(sort);
+        return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", null, null,null);
+	}
 }

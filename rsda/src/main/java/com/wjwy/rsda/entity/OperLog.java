@@ -3,15 +3,18 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 18:19:36
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 19:18:24
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-30 08:37:36
  */
 package com.wjwy.rsda.entity;
+
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Table;
 import com.wjwy.rsda.common.util.Excel;
@@ -26,7 +29,12 @@ import com.wjwy.rsda.common.util.Excel.ColumnType;
 @NoArgsConstructor
 @ApiModel("日志=>实体")
 @Table(name = "sys_oper_log")
-public class OperLog {
+public class OperLog implements Serializable{
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     /** 日志主键 */
     @Excel(name = "操作序号", cellType = ColumnType.NUMERIC)

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:30
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-27 09:03:15
+ * @LastEditTime : 2019-12-30 08:55:28
  */
 package com.wjwy.rsda.controller;
 import com.github.pagehelper.PageInfo;
@@ -56,7 +56,7 @@ public class DictTypeController extends BaseController {
    * @return
    */
   @GetMapping("/dictTypeListPage")
-  @ApiOperation(value = "字典数据类型列表页")
+  @ApiOperation(value = "跳转字典数据类型列表页")
   public ModelAndView dictType(ModelAndView model) {
     model.setViewName(prefix + "/dictTypeList");
     return model;
@@ -65,7 +65,7 @@ public class DictTypeController extends BaseController {
   /**
    * 修改字典类型
    */
-  @ApiOperation(value = "修改字典类型", notes = "dictId - 字典编号")
+  @ApiOperation(value = "跳转表单", notes = "dictId - 字典编号")
   @GetMapping("/dictTypeEdit")
   public ModelAndView edit(String dictId, ModelAndView model) {
     if (StringUtil.isNotEmpty(dictId)) {
