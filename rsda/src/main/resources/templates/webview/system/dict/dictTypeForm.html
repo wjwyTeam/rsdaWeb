@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-20 15:26:13
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-26 16:53:25
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-30 09:09:45
  -->
  <!DOCTYPE html>
  <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -42,8 +42,10 @@
       <div class="layui-form-item" lay-filter="status">
        <label class="layui-form-label"><i style="color:red">* </i>状态</label>
        <div class="layui-inline" >
+         
          <input type="checkbox" name="status" id="status" lay-skin="switch" value="true" lay-text="正常|作废"     lay-filter="isStatus"
           >
+
        </div>
      </div>
   
@@ -67,8 +69,7 @@
    <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
  
    <script th:inline="javascript">
-    var dictOne = [[${ dictType }]];
-    console.log(dictOne)
+    var dictType = [[${ dictType }]];
     layui.config({
        base: '../../../layuiadmin/' //静态资源所在路径
      }).extend({
@@ -79,9 +80,9 @@
         , upload = layui.upload;
  
         layer.ready(function () {
-         form.val('dictForm', dictOne);
-         if (dictOne != null) {
-          $("#status").attr("checked", dictOne.status);
+         form.val('dictForm', dictType);
+         if (dictType != null) {
+          $("#status").attr("checked", dictType.status);
          }
       });
 

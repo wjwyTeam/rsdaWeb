@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:30
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-27 09:03:15
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-30 08:30:14
  */
 package com.wjwy.rsda.controller;
 import com.github.pagehelper.PageInfo;
@@ -155,9 +155,7 @@ public class DictTypeController extends BaseController {
     dict.setUpdateBy(ShiroUtils.getLoginName());
 
     try {
-      if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE.equals(String.valueOf(dictTypeService.checkDictTypeUnique(dict)))) {
-        return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "修改字典'" + dict.getDictName() + "'失败，字典类型已存在", null, null, null);
-      }
+
 			int resultTotal =  dictTypeService.updateDictType(dict);
 			if (resultTotal == 0) {
 				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
@@ -166,7 +164,7 @@ public class DictTypeController extends BaseController {
 			return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			logger.error(e.getMessage()); 
 		}
 		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");

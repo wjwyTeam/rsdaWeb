@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-27 16:20:00
+ * @LastEditTime : 2019-12-30 09:21:13
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -17,6 +17,9 @@
       text-align: right;
       position: relative;
       top: 6px;
+    }
+    .layui-btn-normal {
+      background-color: #009688;
     }
   </style>
 </head>
@@ -44,10 +47,9 @@
 
     </div>
     <table id="dictTable" lay-filter="dictTable" class="layui-hide"></table>
-
     <script type="text/html" id="table-toolbar" th:inline="none">
-        <a class="layui-btn layui-btn-nomal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="list"><i class="layui-icon layui-icon-list"></i>列表</a>
+        <a class="layui-btn layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="list"><i class="layui-icon layui-icon-list"></i>列表</a>
 		   	<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
   	</script>
   </div>
@@ -94,8 +96,17 @@
             {
               field: "status",
               title: "状态",
-              sort: true
-
+              sort: true,
+              templet: function(d){
+											var state = "";
+											if (d.status == true) {
+												state = "<input type='checkbox' value='" + d.dictId + "' id='status' lay-filter='statTwo' checked='checked' name='status'  lay-skin='switch' lay-text='正常|作废' >";
+											}
+											else {
+												state = "<input type='checkbox' value='" + d.dictId + "' id='status' lay-filter='statTwo'  name='status'  lay-skin='switch' lay-text='正常|作废' >";
+											}
+											return state;
+									}
             },
             {
               field: "remark",
@@ -200,6 +211,8 @@
                     field.status = true;
                   else
                     field.status = false;
+
+
                   //获取提交的字段
                   //提交 Ajax 成功后，静态更新表格中的数据
                   $.ajax({
@@ -274,7 +287,6 @@
               success: function (data) {
                 if (data.success) {
                   tableLoad(table);
-                  console.log(data+"强制刷新");
                 }
                 layer.msg(data.msg);
 
@@ -331,6 +343,61 @@
         },
 
       };
+      form.on('switch(statTwo)', function(data){
+        var contexts;
+        var sta;
+        var x = data.elem.checked;//判断开关状态
+        if (x=="true") {
+            contexts = "正常";
+        } else {
+            contexts = "作废";
+        }
+        var obj = {
+                        //上下架的参数
+                        "dictId": data.value,
+                        "status":x
+                  }
+        //自定义弹窗
+        layer.open({
+            content: "你确定要"+contexts+"?"
+            , btn: ['确定', '取消']
+            , yes: function (index, layero) {
+                //按钮确定【按钮一】的回调
+                data.elem.checked = x;
+                //对商品进行上架或下架处理
+                $.ajax({
+                    type: "post",
+                    url: "/dictType/dictTypeEdit",
+                    data: JSON.stringify(obj),
+                    dataType: "json",
+                    contentType: "application/json;charset-UTF-8",
+                    success: function (data) {
+                      layer.msg(data.msg,
+                          // 提示的样式
+                          {icon: 1, time: 2000,});
+                      // 数据重载
+                      tableLoad(table);
+                  }
+                  
+                });
+                form.render();
+                layer.close(index);
+            }
+            , btn2: function (index, layero) {
+                //按钮【按钮二】的回调
+                data.elem.checked = !x;
+                form.render();
+                layer.close(index);
+            }
+            , cancel: function () {
+                //右上角关闭回调
+                data.elem.checked = !x;
+                form.render();
+            }
+        });
+        return false;
+        }); 
+
 
 
       $('.layui-btn').on('click', function () {
