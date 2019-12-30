@@ -123,7 +123,7 @@ public class FunctionService {
 	public Function selectFunctionById(String functionId) {
         Example example = new Example(Function.class);
         Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("functionId", functionId);
+        criteria.andEqualTo("id", functionId);
 		return functionMapper.selectOneByExample(example);
     }
 
