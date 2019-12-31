@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-03 16:08:57
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-18 11:33:22
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-31 10:38:31
  */
 package com.wjwy.rsda.services;
 
@@ -67,8 +67,8 @@ public class DepartmentService {
             department.setParentId(String.valueOf(EnumEntitys.GJD.getValue()));
         } 
         department.setCreateTime(new Date());
-        department.setDorder(Integer.parseInt(this.getMaxCodeById(departmentMapper.getMaxCodeById("1"),"1",1)));
-      
+        department.setDorder(Integer.parseInt(this.getMaxCodeById(departmentMapper.getMaxCodeById(""),"",departmentMapper.selectMax())));
+
         return departmentMapper.insertSelective(department);
     }
 
@@ -237,6 +237,10 @@ public class DepartmentService {
         Department departUp =  departmentMapper.selectByPrimaryKey(id);
        
         for (String idUps : ids) {
+            Department departall =  departmentMapper.selectByPrimaryKey(idUps);
+            if (idUps.equals(departUp.getParentId()) || departall.getParentId().equals(id)) {
+                return 2;
+            }
             Example example = new Example(Department.class);
             Criteria criteria = example.createCriteria();
             criteria.andEqualTo("id", idUps);
