@@ -548,7 +548,7 @@
                   "submit(" + submitID + ")",
                   function (data) {
                     var field = data.field; //获取提交的字段
-                    field.deptId = $("#deptId").val();
+              
                     $.ajax({
                       type: "post",
                       url: "/user/insertUser",

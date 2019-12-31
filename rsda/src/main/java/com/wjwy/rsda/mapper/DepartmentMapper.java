@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 09:43:55
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-31 10:25:40
+ * @LastEditTime : 2019-12-31 10:52:45
  */
 package com.wjwy.rsda.mapper;
 
@@ -50,7 +50,7 @@ public interface DepartmentMapper extends com.wjwy.rsda.common.TkMapper<Departme
     @Select("SELECT  MAX(d_order) FROM  sys_dapartment  where d_order  LIKE CONCAT(#{pstr}, '%')")
 	String getMaxCodeById(@Param("pstr")String pstr);
 
-    @Select("SELECT  MAX(length(d_order)) FROM  sys_dapartment  ")
+    @Select("SELECT  IFNULL(MAX(length(d_order)),1) FROM  sys_dapartment  ")
 	int selectMax();
 
 }
