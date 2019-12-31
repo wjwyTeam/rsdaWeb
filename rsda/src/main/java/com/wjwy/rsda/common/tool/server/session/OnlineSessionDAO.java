@@ -7,7 +7,6 @@ import com.wjwy.rsda.common.tool.factory.AsyncFactory;
 import com.wjwy.rsda.common.tool.factory.AsyncManager;
 
 import com.wjwy.rsda.common.tool.server.service.ShiroService;
-import com.wjwy.rsda.common.tool.server.system.OnlineSession;
 import com.wjwy.rsda.enums.EnumEntitys;
 
 import org.apache.shiro.session.Session;

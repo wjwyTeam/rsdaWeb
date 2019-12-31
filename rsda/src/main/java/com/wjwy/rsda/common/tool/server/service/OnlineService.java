@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 16:00:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 16:00:41
+ * @LastEditTime : 2019-12-31 09:01:55
  */
 package com.wjwy.rsda.common.tool.server.service;
 
@@ -67,7 +67,7 @@ public class OnlineService {
      * @param online 会话信息
      */
     public void saveOnline(Online online) {
-
+        userOnlineDao.insert(online);
     }
 
     /**

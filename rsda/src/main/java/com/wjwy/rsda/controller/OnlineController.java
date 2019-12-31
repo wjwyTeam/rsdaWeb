@@ -3,16 +3,16 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-19 17:50:35
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-19 17:53:11
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2019-12-31 08:37:32
  */
 package com.wjwy.rsda.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.tool.server.service.OnlineService;
+import com.wjwy.rsda.common.tool.server.session.OnlineSession;
 import com.wjwy.rsda.common.tool.server.session.OnlineSessionDAO;
 import com.wjwy.rsda.common.tool.server.system.Online;
-import com.wjwy.rsda.common.tool.server.system.OnlineSession;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.common.util.ShiroUtils;
@@ -22,21 +22,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
  * 在线用户监控
  */
-@Controller
+@RestController
 @RequestMapping("/online")
+@Api(value = "在线用户监控", tags = "在线用户监控")
 public class OnlineController {
  public Logger logger = LoggerFactory.getLogger(OnlineController.class);
  private String prefix = "/webview/system/online";
@@ -72,8 +74,7 @@ public class OnlineController {
  public ResponseWrapper list( Online userOnline, Integer page, Integer limit) {
   try {
    PageInfo<Online> pageInfos = userOnlineService.selectUserOnlineList(userOnline, page, limit);
-   return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
-     Integer.parseInt(String.valueOf(pageInfos.getTotal())));
+   return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,Integer.parseInt(String.valueOf(pageInfos.getTotal())));
   } catch (Exception e) {
    logger.error(e.getMessage());
   }

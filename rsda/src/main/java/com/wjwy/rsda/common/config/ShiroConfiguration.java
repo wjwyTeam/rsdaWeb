@@ -20,6 +20,9 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.wjwy.rsda.common.tool.server.session.OnlineFilter;
+import com.wjwy.rsda.common.tool.server.session.OnlineSessionFilter;
+
 /**
  * Shiro 配置
  *
@@ -30,8 +33,6 @@ public class ShiroConfiguration {
 
     @Value("${server.session-timeout}")
     private int tomcatTimeout;
- 
-  
 
     @Bean
     public EhCacheManager getEhCacheManager() {
@@ -39,7 +40,6 @@ public class ShiroConfiguration {
         em.setCacheManagerConfigFile("classpath:shiro-ehcache.xml");
         return em;
     }
-
 
     @Bean(name = "lifecycleBeanPostProcessor")
     public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
@@ -96,7 +96,7 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSuccessUrl("/index");
 
         shiroFilterFactoryBean.setUnauthorizedUrl("/login");
-      
+
         loadShiroFilterChain(shiroFilterFactoryBean);
         return shiroFilterFactoryBean;
     }
@@ -113,7 +113,6 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/login", "anon");
         // anon：它对应的过滤器里面是空的,什么都没做
 
-
         // 不用注解也可以通过 API 方式加载权限规则
         // Map<String, String> permissions = new LinkedHashMap<>();
         // permissions.put("/users/find", "perms[user:find]");
@@ -124,16 +123,15 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/log /**", "anon");
         filterChainDefinitionMap.put("/image/**", "anon");
         filterChainDefinitionMap.put("/webviews/**", "anon");
-        
-         filterChainDefinitionMap.put("/**", "authc");
+
+        filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
 
-
-    @Bean(name ="securityManager")
+    @Bean(name = "securityManager")
     public SecurityManager securityManager(EhCacheManager ehCacheManager) {
         SecurityManager securityManager = new SecurityManager();
-     
+
         return securityManager;
     }
 
@@ -143,40 +141,41 @@ public class ShiroConfiguration {
     @Bean
     public DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setGlobalSessionTimeout(tomcatTimeout*1000);
-        //设置sessionDao对session查询，在查询在线用户service中用到了
+        sessionManager.setGlobalSessionTimeout(tomcatTimeout * 1000);
+        // 设置sessionDao对session查询，在查询在线用户service中用到了
         sessionManager.setSessionDAO(sessionDAO());
-        //配置session的监听
+        // 配置session的监听
         Collection<SessionListener> listeners = new ArrayList<SessionListener>();
         listeners.add(new BDSessionListener());
         sessionManager.setSessionListeners(listeners);
-        //设置在cookie中的sessionId名称
+        // 设置在cookie中的sessionId名称
         sessionManager.setSessionIdCookie(simpleCookie());
         return sessionManager;
     }
+
     @Bean
-    public SessionDAO sessionDAO(){
+    public SessionDAO sessionDAO() {
         return new MemorySessionDAO();
     }
- 
+
     @Bean
-    public SimpleCookie simpleCookie(){
- 
+    public SimpleCookie simpleCookie() {
+
         SimpleCookie simpleCookie = new SimpleCookie();
         simpleCookie.setName("jeesite.session.id");
- 
+
         return simpleCookie;
     }
- 
-	@Bean
+
+    @Bean
     AuthRealm authRealm() {
-		AuthRealm authRealm = new AuthRealm();
-		return authRealm;
-	}
- 
+        AuthRealm authRealm = new AuthRealm();
+        return authRealm;
+    }
+
     /**
-     *  开启shiro aop注解支持.
-     *  使用代理方式;所以需要开启代码支持;
+     * 开启shiro aop注解支持. 使用代理方式;所以需要开启代码支持;
+     * 
      * @param securityManager
      * @return
      */
@@ -186,6 +185,25 @@ public class ShiroConfiguration {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
+    }
+
+    /**
+     * 自定义在线用户同步过滤器
+     */
+    @Bean
+    public OnlineFilter onlineFilter() {
+        OnlineFilter onlineFilter = new OnlineFilter();
+        onlineFilter.setLoginUrl("/login");
+        return onlineFilter;
+    }
+
+    /**
+     * 自定义在线用户同步过滤器
+     */
+    @Bean
+    public OnlineSessionFilter syncOnlineSessionFilter() {
+        OnlineSessionFilter syncOnlineSessionFilter = new OnlineSessionFilter();
+        return syncOnlineSessionFilter;
     }
 
 }

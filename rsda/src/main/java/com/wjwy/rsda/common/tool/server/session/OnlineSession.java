@@ -4,9 +4,9 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:47:31
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 14:52:15
+ * @LastEditTime : 2019-12-31 09:47:13
  */
-package com.wjwy.rsda.common.tool.server.system;
+package com.wjwy.rsda.common.tool.server.session;
 
 import com.wjwy.rsda.enums.EnumEntitys;
 
