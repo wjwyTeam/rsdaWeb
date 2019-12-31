@@ -136,9 +136,7 @@ public class  GroupController{
             int resultTotal = groupService.delete(group);
             if (resultTotal == 0) {
                 return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前功能]", null, null, null);
-            } else if (resultTotal == HttpStatus.GONE.value()) {
-                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "数据中不存在当前功能", null, null, null);
-            }
+            } 
             return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
         } catch (Exception e) {
             logger.error(e.getMessage());

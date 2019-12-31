@@ -58,11 +58,11 @@ public class FunctionController {
     /**
    * 修改字典类型
    */
-  @ApiOperation(value = "修改功能表单", notes = "functionId - 字典编号")
+  @ApiOperation(value = "修改功能表单", notes = "id - 字典编号")
   @GetMapping("/functionEdit")
-  public ModelAndView functionedit(String functionId, ModelAndView model) {
-    if (StringUtil.isNotEmpty(functionId)) {
-      model.addObject("functionOne", functionService.selectFunctionById(functionId));
+  public ModelAndView functionedit(String id, ModelAndView model) {
+    if (StringUtil.isNotEmpty(id)) {
+      model.addObject("functionOne", functionService.selectFunctionById(id));
     }
     model.setViewName(prefix + "/functionForm");
     return model;
@@ -98,9 +98,9 @@ public class FunctionController {
      */
     @ApiOperation(value = "功能列表", notes = "参数:id-主键, name-功能名称")
     @PostMapping("/functionFindList")
-    public ResponseWrapper functionFindList(String functionId, String functionName,Integer page, Integer limit) {
+    public ResponseWrapper functionFindList(String id, String functionName,Integer page, Integer limit) {
         try {
-            PageInfo<Function> pageInfos = functionService.findList(functionId, functionName,page,limit);
+            PageInfo<Function> pageInfos = functionService.findList(id, functionName,page,limit);
             return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(),null,Integer.parseInt(String.valueOf(pageInfos.getTotal())));
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -190,9 +190,7 @@ public class FunctionController {
             int resultTotal = functionService.delete(function);
             if (resultTotal == 0) {
                 return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前功能]", null, null,null);
-            } else if (resultTotal == HttpStatus.GONE.value()) {
-                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "数据中不存在当前功能", null, null,null);
-            }
+            } 
             return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null,null);
         } catch (Exception e) {
             logger.error(e.getMessage());

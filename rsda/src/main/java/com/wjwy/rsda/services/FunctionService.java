@@ -60,14 +60,14 @@ public class FunctionService {
         Example example = new Example(Function.class);
         Criteria criteria = example.createCriteria();
 
-        criteria.andEqualTo("functionId", function.getId());
+        criteria.andEqualTo("id", function.getId());
 
         List<Function> functionNew = functionMapper.selectByExample(example);
 
         criteria.andEqualTo("isCandel", false);
-        function.setDelFlag(true);
 
-        int count = functionMapper.updateByExampleSelective(function, example);
+
+        int count = functionMapper.deleteByExample(example);
         if (functionNew.size() == 0) {
             count = HttpStatus.GONE.value();
         }
@@ -83,7 +83,7 @@ public class FunctionService {
     public int updateFunction(Function function) {
         Example example = new Example(Function.class);
         Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("functionId", function.getId());
+        criteria.andEqualTo("id", function.getId());
         return functionMapper.updateByExampleSelective(function, example);
     }
 
@@ -94,12 +94,12 @@ public class FunctionService {
      * @param name
      * @return List<Function>
      */
-    public PageInfo<Function> findList(String functionId, String functionName,Integer page, Integer limit) {
+    public PageInfo<Function> findList(String id, String functionName,Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         Example example = new Example(Function.class);
         Criteria criteria = example.createCriteria();
-        if (!StringUtil.isEmpty(functionId)) {
-            criteria.andEqualTo("functionId", functionId);
+        if (!StringUtil.isEmpty(id)) {
+            criteria.andEqualTo("id", id);
         }
         if (!StringUtil.isEmpty(functionName)) {
             criteria.andEqualTo("functionName", functionName);
@@ -117,13 +117,13 @@ public class FunctionService {
     
     /**
      * 通过ID查询数据
-     * @param functionId
+     * @param id
      * @return
      */
-	public Function selectFunctionById(String functionId) {
+	public Function selectFunctionById(String id) {
         Example example = new Example(Function.class);
         Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("id", functionId);
+        criteria.andEqualTo("id", id);
 		return functionMapper.selectOneByExample(example);
     }
 
