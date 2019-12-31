@@ -30,10 +30,9 @@
       box-sizing: border-box;
     }
 
-    .layui-table,
-    .layui-table-view {
-      margin: unset;
-    }
+    .layui-table, .layui-table-view {
+        margin: unset;
+    } 
 
     html,
     body {
@@ -141,6 +140,7 @@
   </div>
 
   <input type="hidden" id="deptId" />
+
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
   <script src="/js/jquery.ztree.core.js" type="text/javascript" th:inline="none"></script>
   <script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
@@ -573,6 +573,7 @@
             });
           }
         };
+        $(".layui-table-total").empty();  
 
         $(".layui-btn").on("click", function () {
           var type = $(this).data("type");

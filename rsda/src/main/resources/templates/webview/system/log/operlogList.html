@@ -3,28 +3,28 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-24 15:51:18
+ * @LastEditors  : zgr
+ * @LastEditTime : 2019-12-31 10:42:09
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
   <head>
     <th:block th:include="include :: header('服务器监控')" />
     <style>
-      .userTableSearch {
-        width: 100%;
-        text-align: left;
-        position: relative;
-        top: 6px;
-      }
+        body{
+          height: 100%;
+          width: 100%;
+        }
+        .layui-table,
+        .layui-table-view {
+          margin: unset;
+        }
     </style>
   </head>
 
   <body>
-    <div class="col-xs-12 ">
+    <div>
       <div class="userTableSearch layui-form">
-       
-
         <input
           type="text"
           class="layui-input"
@@ -147,7 +147,6 @@
               {
                 field: "operTime",
                 title: "操作时间",
-                width: 250,
                 sort: true,
                 templet: function(time) {
                   return (
@@ -186,7 +185,9 @@
             limit: 20
           }
         });
-
+         
+       $(".layui-table-total").empty();  
+   
         //日期时间选择器
         laydate.render({
           elem: "#startTime",

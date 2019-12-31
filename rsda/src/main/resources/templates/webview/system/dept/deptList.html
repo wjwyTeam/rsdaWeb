@@ -378,7 +378,7 @@
                   $.ajax({
                       type: "post",
                       url: "/dept/moveUpOrDown",
-                      data: JSON.stringify(objDown),
+                      data: JSON.stringify(objDown),  
                       contentType: "application/json;charset-UTF-8",
                       success: function (resultJSconsole) {
                         layer.msg(resultJSconsole.msg);

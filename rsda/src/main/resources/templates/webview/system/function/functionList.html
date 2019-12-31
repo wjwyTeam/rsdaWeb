@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-30 19:08:00
+ * @LastEditTime : 2019-12-31 10:52:32
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -13,16 +13,31 @@
   <th:block th:include="include :: header('服务器监控')" />
   <style>
     .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
-    position: relative;
-    min-height: 1px;
-    padding-right: 0px;
-    padding-left: 10px;
+        position: relative;
+        min-height: 1px;
+        padding-right: 0px;
+        padding-left: 10px;
    }
     .functionTableSearch {
       width: 100%;
       text-align: right;
       position: relative;
       top: 6px;
+    }
+    .layui-btn-normal {
+      background-color: #8a8eee;
+    }
+    #type-button{
+      padding: 3px 10px;
+      color: #ffffff;
+      background-color: #1c84c6;
+      border-radius: 5px;
+    }
+    #visible-button{
+      padding: 3px 10px;
+      color: #ffffff;
+      background-color: #1ab394;
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -32,7 +47,8 @@
     <table class="layui-hide" id = "functionTable" lay-filter="functionTable"></table> 
     <!-- 表格操作列 -->
     <script type="text/html" id="demoTreeTableBar1">
-      <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+      <a class="layui-btn layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+      <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>新增</a>
       <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
     </script>
 
@@ -78,8 +94,17 @@
                 , { field: 'functionName', title: '菜单名称'}
                 // , { field: 'forder', title: '排序', align: 'center' }
                 , { field: 'url', title: '请求地址', align: 'center' }
-                , { field: 'functionType', title: '类型', align: 'center' }
-                , { field: 'visible', title: '可见', align: 'center' }
+                , { field: 'functionType', title: '类型', align: 'center',templet:function(d){
+                      return  '<span id="type-button">'+d.functionType+'</span>'
+                  }}
+                , { field: 'visible', title: '可见', align: 'center' ,templet:function(d){
+                     var visible = "";
+                     if(visible == true){
+                       return  '<span id="visible-button">显示</span>'
+                     }else{
+                       return  '<span id="visible-button">不显示</span>'
+                     }
+                 }}
                 , { field: 'perms', title: '权限标识', align: 'center' }
                 , {
                     field: 'createTime', title: '创建时间',align: 'center', templet: function (d) {
@@ -87,7 +112,7 @@
                     },
                 },
                 // {templet: '#demoTreeTableState1', title: '状态',align: 'center'},
-                {align: 'center', toolbar: '#demoTreeTableBar1', title: '操作', width: 200}
+                {align: 'center', toolbar: '#demoTreeTableBar1', title: '操作', width: 280}
         
             ],
             reqData: function (data, callback) {
@@ -114,7 +139,7 @@
           if(obj.event === "del"){
             layer.confirm('确认要删除吗？', function (index) {
             layer.close(index);
-            $.post("function/deleteFunction", {functionId: data.id }, function (resultJSONObject) {
+            $.post("/group/deleteGroup", {id: data.id }, function (resultJSONObject) {
               if (resultJSONObject.success) { 
                 // tableLoad(table);
               }
@@ -179,13 +204,8 @@
       });
 
       function treeTableLoad(table) {
-        treeTable.reload('functionTable', {
-          where: {
-            deptId: $("#deptId").val(),
-            userName: $("#userName").val(),
-         },
-        }, 'data');
-    }
+        treeTable.reload({elem : '#functionTable'});
+      }
 
     
         

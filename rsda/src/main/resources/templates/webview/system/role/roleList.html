@@ -46,7 +46,6 @@
       height: 100%;
       background-color: #ffffff;
       display: inline-flex;
-      margin: 0 10px;
     }
 
     .rightGrid {
@@ -74,7 +73,7 @@
               text-align: center;
               display: inline-flex;
               align-items: center; ">
-        <div>
+        <div style="padding-left:10px;">
           <button class="layui-btn" data-type="add">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
         </div>
@@ -143,7 +142,7 @@
         , table = layui.table
         , util = layui.util;
       window.tableObj = layui.table;
-
+  
       //第一个实例
       table.render({
         elem: '#userList'
@@ -178,7 +177,7 @@
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
             }
           }
-          , { fixed: 'right', title: '操作', width: 400, align: 'center', toolbar: '#table-toolbar' }
+          , { fixed: 'right', title: '操作', width: 368, align: 'center', toolbar: '#table-toolbar' }
         ]]
         , page: false
         , response: {
@@ -197,7 +196,8 @@
           , limit: 20
         }
       });
-
+ 
+      $(".layui-table-total").empty();  
 
 
       //监听工具条删除
