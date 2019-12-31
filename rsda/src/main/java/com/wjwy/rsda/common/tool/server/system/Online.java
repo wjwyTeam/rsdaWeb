@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:35:18
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 14:43:05
+ * @LastEditTime : 2019-12-31 08:15:59
  */
 package com.wjwy.rsda.common.tool.server.system;
 
@@ -62,5 +62,5 @@ public class Online {
     private Long expireTime;
 
     /** 在线状态 */
-    private EnumEntitys status = (EnumEntitys) EnumEntitys.ONLINE.getDesc();
+    private EnumEntitys status = (EnumEntitys) EnumEntitys.ONLINE;
 }

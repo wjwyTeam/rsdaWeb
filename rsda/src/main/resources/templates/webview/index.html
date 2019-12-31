@@ -275,9 +275,7 @@
                 <cite>系统管理</cite>
               </a>
               <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">系统设置</a>
-                </dd>
+
                 <dd class="layui-nav-itemed">
                     <a th:attr="lay-href=@{/function/functionList}" >菜单管理</a>
                 </dd>
@@ -293,19 +291,10 @@
                 <dd class="layui-nav-itemed">
                   <a th:attr="lay-href=@{/log/operlogList}">日志浏览</a>
                 </dd>
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">新闻公告</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">档案授权</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/monitor/swagger}" >系统接口</a>
-                </dd>
               </dl>
             </li>
 
-            <li data-name="set" class="layui-nav-item">
+            <!-- <li data-name="set" class="layui-nav-item">
               <a href="javascript:;" lay-tips="系统监控" lay-direction="2">
                 <i class="layui-icon layui-icon-video"></i>
                 <cite>系统监控</cite>
@@ -319,10 +308,14 @@
                 <dd class="layui-nav-itemed">
                   <a th:attr="lay-href=@{/monitor/data}">数据监控</a>
                 </dd>
+
+                <dd class="layui-nav-itemed">
+                  <a th:attr="lay-href=@{/online/onlineList}">在线监控</a>
+                </dd>
                
                
               </dl>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>

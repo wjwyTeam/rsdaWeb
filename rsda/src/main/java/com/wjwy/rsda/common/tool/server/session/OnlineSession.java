@@ -4,9 +4,9 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:47:31
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 14:52:15
+ * @LastEditTime : 2019-12-31 09:47:13
  */
-package com.wjwy.rsda.common.tool.server.system;
+package com.wjwy.rsda.common.tool.server.session;
 
 import com.wjwy.rsda.enums.EnumEntitys;
 
@@ -56,7 +56,7 @@ public class OnlineSession extends SimpleSession
     private String os;
 
     /** 在线状态 */
-    private EnumEntitys status = (EnumEntitys) EnumEntitys.ONLINE.getDesc();
+    private EnumEntitys status = EnumEntitys.ONLINE;
 
     /** 属性是否改变 优化session数据同步 */
     private transient boolean attributeChanged = false;

@@ -4,14 +4,14 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 15:59:15
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 16:04:00
+ * @LastEditTime : 2019-12-31 08:19:21
  */
 package com.wjwy.rsda.common.tool.server.service;
 
 import java.io.Serializable;
 
+import com.wjwy.rsda.common.tool.server.session.OnlineSession;
 import com.wjwy.rsda.common.tool.server.system.Online;
-import com.wjwy.rsda.common.tool.server.system.OnlineSession;
 import com.wjwy.rsda.common.util.StringUtils;
 
 import org.apache.shiro.session.Session;

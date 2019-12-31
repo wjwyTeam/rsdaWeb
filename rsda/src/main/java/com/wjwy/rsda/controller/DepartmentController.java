@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-24 08:16:15
+ * @LastEditTime : 2019-12-31 10:44:00
  */
 package com.wjwy.rsda.controller;
 
@@ -250,6 +250,9 @@ public class DepartmentController {
 			}
 			if (resultTotal == 0) {
 				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), msg+"失败", null, null, null);
+			}
+			if (resultTotal == 2) {
+				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "父级禁止"+msg, null, null, null);
 			}
 			return ResponseWrapper.success(HttpStatus.OK.value(), msg+"成功", null, null, null);
 		} catch (Exception e) {

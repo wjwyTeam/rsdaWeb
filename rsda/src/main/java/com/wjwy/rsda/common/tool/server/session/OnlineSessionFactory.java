@@ -4,13 +4,12 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:51:23
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 16:05:32
+ * @LastEditTime : 2019-12-31 08:18:49
  */
 package com.wjwy.rsda.common.tool.server.session;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.wjwy.rsda.common.tool.server.system.OnlineSession;
 import com.wjwy.rsda.common.util.IpUtils;
 import com.wjwy.rsda.common.util.ServletUtils;
 
