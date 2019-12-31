@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.github.pagehelper.PageInfo;
+import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.MD5Util;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Role;
@@ -166,6 +167,7 @@ public class UserController {
 	 * @return ResponseWrapper
 	 */
 	@ResponseBody
+	@Log(title = "根据ID批量删除用户", businessType = EnumEntitys.DELETE)
 	@ApiOperation(value = "根据ID批量删除用户", notes = "参数:ids")
 	@PostMapping("/deleteUserAlls")
 	public ResponseWrapper deleteUserAlls(String[] ids) {
@@ -185,6 +187,7 @@ public class UserController {
 	 * @return ResponseWrapper
 	 */
 	@ApiOperation(value = "根据ID删除用户", notes = "参数:userId")
+	@Log(title = "根据ID删除用户", businessType = EnumEntitys.DELETE)
 	@PostMapping("/deleteUser")
 	public ResponseWrapper deleteUser(String userId) {
 		try {
@@ -212,6 +215,7 @@ public class UserController {
 	 * @return ResponseWrapper
 	 */
 	@ApiOperation(value = "新增用户", notes = "新增用户")
+	@Log(title = "新增用户", businessType = EnumEntitys.INSERT)
 	@PostMapping("/insertUser")
 	public ResponseWrapper insertUser(@RequestBody User user) {
 		try {
@@ -236,6 +240,7 @@ public class UserController {
 	 */
 	@ApiOperation(value = "更新", notes = "更新")
 	@PostMapping("/updateUser")
+	@Log(title = "更新", businessType = EnumEntitys.UPDATE)
 	public ResponseWrapper toUpdateUser(@RequestBody User User) {
 		try {
 			int resultTotal = userService.update(User);
@@ -259,6 +264,7 @@ public class UserController {
 	 * @return ResponseWrapper
 	 */
 	@ApiOperation(value = "根据用户选择角色", notes = "参数：userId-用户主键,ids-角色数组")
+	@Log(title = "根据用户选择角色", businessType = EnumEntitys.INSERT)
 	@GetMapping("/userSelRole")
 	public ResponseWrapper userSelRole(String userId, String ids[]) {
 
@@ -284,6 +290,7 @@ public class UserController {
 		* @return
 	 */
 	@ApiOperation(value = "取消授权", notes = "参数：userId-用户主键,roleId-角色")
+	@Log(title = "取消授权", businessType = EnumEntitys.UPDATE)
 	@GetMapping("/userDelRole")
 	public ResponseWrapper userDelRole(String userId, String roleId) {
 
@@ -309,6 +316,7 @@ public class UserController {
 		* @return
 	 */
 	@ApiOperation(value = "授权", notes = "参数：userId-用户主键,roleId-角色")
+	@Log(title = "授权", businessType = EnumEntitys.INSERT)
 	@GetMapping("/userInRole")
 	public ResponseWrapper userInRole(String userId, String roleId) {
 

@@ -33,7 +33,6 @@ public class LogAspect {
     // 配置织入点
     @Pointcut("@annotation(com.wjwy.rsda.common.util.Log)")
     public void logPointCut() {
-        System.err.println("22");
     }
 
     /**
