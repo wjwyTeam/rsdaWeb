@@ -215,9 +215,9 @@
         , id: 'deptList'
         , url: '/dept/findUnitList' //数据接口
         , cols: [[ //表头
-           { fixed: 'left', checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
-          , { fixed: 'left', type: 'numbers', title: '序号',width:70 }
-          , { fixed: 'left', field: 'name', title: '机构名称' }
+            {  checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
+          , {  type: 'numbers', title: '序号',width:70 }
+          , {  field: 'name', title: '机构名称' }
           , { field: 'id', title: 'id',hide:true}
           , { field: 'shortName', title: '简称'}
           , { field: 'unitTypeName', title: '机构类别'}
@@ -252,6 +252,8 @@
         var recodeLimit = $(".layui-laypage-limits").find("option:selected").val();     
         var recodePage = $(".layui-laypage-skip .layui-input").val();
         var totalNum = $(".layui-laypage-count").text().replace(/[^0-9]/ig,"");
+        var data_tr = $(this);
+        var tr = $(data_tr).parent().parent().parent();
         //列表删除方法
         if (obj.event === 'del') {
           layer.confirm('真的删除行么', function (index) {
@@ -327,16 +329,25 @@
             }
           });
         }else if(obj.event == "up"){
+         
+         console.log(tr);
+         var up_tr = $(tr).prev();
+         console.log(up_tr);
+         
+         if($(tr).prev().html() == null){
+            layer.msg('已是第一个元素', {icon: 5})
+         }else{
+            $(tr).insertBefore($(tr).prev())
+         }
           // 上移事件
           var arrids = [];
           arrids.push(obj.data.id)
+          // 当前行
           var se = obj.tr.selector;
           var os = se.substring(se.indexOf('"') + 1, se.lastIndexOf('"'))
           var nse = se.replace(os, parseInt(os) - 1);
           var res = "";
-          if(recodePage*recodeLimit-(recodeLimit-1) == data.dorder){
-            layer.msg('已是第一个元素', {icon: 5})
-          }
+        
           $(nse + " td:not(.layui-table-col-special)").each(function (k,v) {
               if ($(this).attr("data-field") == "id") {
                   var obj = {
@@ -351,12 +362,18 @@
                       contentType: "application/json;charset-UTF-8",
                       success: function (resultJSconsole) {
                         layer.msg(resultJSconsole.msg);
-                        tableLoad(table);
                       } 
                   });
               }
           });     
         }else if(obj.event == "down"){
+
+          if($(tr).next().html() == null){
+            layer.msg('已是当页最后一个元素', {icon: 5})
+          }else{
+            $(tr).insertAfter($(tr).next())
+          }
+           
           // 向下移动
           var arridsDown = [];
           arridsDown.push(obj.data.id)
@@ -382,7 +399,7 @@
                       contentType: "application/json;charset-UTF-8",
                       success: function (resultJSconsole) {
                         layer.msg(resultJSconsole.msg);
-                        tableLoad(table);
+                       
                       } 
                   });
               }

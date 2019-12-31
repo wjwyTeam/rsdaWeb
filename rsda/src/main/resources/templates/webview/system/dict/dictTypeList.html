@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-31 10:02:51
+ * @LastEditTime : 2019-12-31 14:25:42
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -65,12 +65,11 @@
       table.render({
         elem: "#dictTable",
         even: true,
-        height: "full-65",
+        height: "full-60",
         title: "用户数据表",
         cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
         method: "post",
         id: "dictTable",
-        totalRow: true,
         url: "/dictType/dateTypeList", //数据接口
         cols: [
           [{

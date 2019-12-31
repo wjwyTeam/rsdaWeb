@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-31 10:42:09
+ * @LastEditTime : 2019-12-31 14:22:41
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -86,12 +86,11 @@
         table.render({
           elem: "#logTable",
           even: true,
-          height: "full-60",
+          height: "full-40",
           title: "用户数据表",
           cellMinWidth: 80,
           method: "post",
           id: "logTable",
-          totalRow: true,
           url: "/log/logPageInfoList", //数据接口
           cols: [
             [

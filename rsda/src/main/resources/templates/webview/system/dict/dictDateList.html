@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-28 11:00:17
+ * @LastEditTime : 2019-12-31 14:24:00
  -->
 	<!DOCTYPE html>
 	<html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -80,11 +80,10 @@
 									table.render({
 											elem: "#dictTable",
 											even: true,
-											height: "full-60",
+											height: "full-40",
 											title: "用户数据表",
 											method: "post",
 											id: "dictTable",
-											totalRow: true,
 											cellMinWidth:80,
 											url: "/dict/datePageList?dictType="+ $("#dictType").val(), //数据接口
 											cols: [
