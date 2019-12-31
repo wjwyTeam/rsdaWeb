@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-31 14:22:41
+ * @LastEditTime : 2019-12-31 15:15:41
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -18,6 +18,9 @@
         .layui-table,
         .layui-table-view {
           margin: unset;
+        }
+        .userTableSearch{
+          padding:5px;
         }
     </style>
   </head>
@@ -86,7 +89,7 @@
         table.render({
           elem: "#logTable",
           even: true,
-          height: "full-40",
+          height: "full-50",
           title: "用户数据表",
           cellMinWidth: 80,
           method: "post",
@@ -98,55 +101,65 @@
               {
                 fixed: "left",
                 type: "numbers",
-                title: "序号"
+                title: "序号",
+                align:"center"
               },
               {
                 field: "operId",
                 title: "日志编号",
-                sort: true
+                sort: true,
+                align:"center"
           
               },
               {
                 field: "title",
                 title: "系统模块",
-                sort: true
+                sort: true,
+                align:"center"
             
               },
               {
                 field: "businessType",
                 title: "操作类型",
-                sort: true
+                sort: true,
+                align:"center"
             
               },
               {
                 field: "operName",
                 title: "操作人员",
-                sort: true
+                sort: true,
+                align:"center"
               },
               {
                 field: "deptName",
                 title: "部门名称",
-                sort: true
-              },
+                sort: true,
+                align:"center"
+              },  
               {
                 field: "operIp",
                 title: "主机",
-                sort: true
+                sort: true,
+                align:"center"
               },
               {
                 field: "operLocation",
                 title: "操作地点",
-                sort: true
+                sort: true,
+                align:"center"
               },
               {
                 field: "status",
                 title: "操作状态",
-                sort: true
+                sort: true,
+                align:"center"
               },
               {
                 field: "operTime",
                 title: "操作时间",
                 sort: true,
+                align:"center",
                 templet: function(time) {
                   return (
                     "<div>" +
@@ -159,7 +172,7 @@
               },
               {
                 fixed: "right",
-                title: "操作",
+                align:"center",
                 width: 200,
                 align: "center",
                 toolbar: "#table-toolbar"

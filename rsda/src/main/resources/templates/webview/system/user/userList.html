@@ -30,9 +30,10 @@
       box-sizing: border-box;
     }
 
-    .layui-table, .layui-table-view {
-        margin: unset;
-    } 
+    .layui-table,
+    .layui-table-view {
+      margin: unset;
+    }
 
     html,
     body {
@@ -89,14 +90,15 @@
     </div>
 
     <div class="rightGrid">
-      <div style="width: 100%;
+      <div style="width: 99%;
               height: 40px;
+              padding: 5px;
               text-align: center;
               display: inline-flex;
               align-items: center; "
               th:if="${type}"
               >
-        <div style="margin-left:10px;">
+        <div>
           <button class="layui-btn" data-type="add">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
         </div>
@@ -244,7 +246,7 @@
         table.render({
           elem: "#userList",
           even: true,
-          height: "full-40",
+          height: "full-60",
           title: "用户数据表",
           cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
           method: "post",
@@ -547,7 +549,7 @@
                   "submit(" + submitID + ")",
                   function (data) {
                     var field = data.field; //获取提交的字段
-              
+                    field.deptId = $("#deptId").val();
                     $.ajax({
                       type: "post",
                       url: "/user/insertUser",

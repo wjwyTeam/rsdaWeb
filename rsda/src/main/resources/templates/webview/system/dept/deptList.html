@@ -248,6 +248,8 @@
       });
       //监听工具条删除
       table.on('tool(deptList)', function (obj) {
+        var tbData = table.cache.deptList; //是一个Array 
+        
         var data = obj.data;
         var recodeLimit = $(".layui-laypage-limits").find("option:selected").val();     
         var recodePage = $(".layui-laypage-skip .layui-input").val();
@@ -329,81 +331,77 @@
             }
           });
         }else if(obj.event == "up"){
-         
-         console.log(tr);
-         var up_tr = $(tr).prev();
-         console.log(up_tr);
-         
-         if($(tr).prev().html() == null){
-            layer.msg('已是第一个元素', {icon: 5})
-         }else{
-            $(tr).insertBefore($(tr).prev())
-         }
           // 上移事件
-          var arrids = [];
-          arrids.push(obj.data.id)
-          // 当前行
-          var se = obj.tr.selector;
-          var os = se.substring(se.indexOf('"') + 1, se.lastIndexOf('"'))
-          var nse = se.replace(os, parseInt(os) - 1);
-          var res = "";
-        
-          $(nse + " td:not(.layui-table-col-special)").each(function (k,v) {
-              if ($(this).attr("data-field") == "id") {
-                  var obj = {
-                    id:$(this).children(":first").html(),
-                    ids:arrids,   //选中的id    
-                    option:true
-                  }
-                  $.ajax({
-                      type: "post",
-                      url: "/dept/moveUpOrDown", 
-                      data: JSON.stringify(obj),
-                      contentType: "application/json;charset-UTF-8",
-                      success: function (resultJSconsole) {
-                        layer.msg(resultJSconsole.msg);
-                      } 
-                  });
-              }
-          });     
-        }else if(obj.event == "down"){
-
-          if($(tr).next().html() == null){
-            layer.msg('已是当页最后一个元素', {icon: 5})
+          if($(tr).prev().html() == null){
+            layer.msg('已是最顶部', {icon: 5})
           }else{
-            $(tr).insertAfter($(tr).next())
-          }
-           
-          // 向下移动
-          var arridsDown = [];
-          arridsDown.push(obj.data.id)
-          var seDown = obj.tr.selector;
-          var osDown = seDown.substring(seDown.indexOf('"') + 1, seDown.lastIndexOf('"'));
-          var nseDown = seDown.replace(osDown, parseInt(osDown) + 1);
-          var currentNum = nseDown.substring(nseDown.indexOf('"') + 1, nseDown.lastIndexOf('"'));
-          if(recodePage*recodeLimit >= data.dorder){
-            layer.msg('已是当页最后一个元素', {icon: 5})
-          }
-          var resDown = "";
-          $(nseDown + " td:not(.layui-table-col-special)").each(function (k,v) {
-              if ($(this).attr("data-field") == "id") {
-                  var objDown = {
-                    id:$(this).children(":first").html(),
-                    ids:arridsDown,   //选中的id    
-                    option:false
+             // 当前行
+            var tem1 = tbData[tr.index()];
+            // 上一行
+            var tem2 = tbData[tr.prev().index()];
+            console.log(tem2);
+            var obj = {
+              id:tem2.id,
+              ids:[tem1.id],   //选中的id    
+              option:true
+            }
+            $.ajax({
+                type: "post",
+                url: "/dept/moveUpOrDown", 
+                data: JSON.stringify(obj),
+                contentType: "application/json;charset-UTF-8",
+                success: function (resultJSconsole) {
+                  // 禁止移动
+                  console.log(resultJSconsole.data)
+                  if(resultJSconsole.data == true){
+                    layer.msg(resultJSconsole.msg, {icon: 5})
+                  }else{
+                      // 将本身插入到目标tr之前
+                      $(tr).insertBefore($(tr).prev());
+                      // 上移之后，数据交换
+                      tbData[tr.index()] = tem1;
+                      tbData[tr.next().index()] = tem2;
+                      layer.msg(resultJSconsole.msg, {icon: 1})
                   }
-                  $.ajax({
-                      type: "post",
-                      url: "/dept/moveUpOrDown",
-                      data: JSON.stringify(objDown),  
-                      contentType: "application/json;charset-UTF-8",
-                      success: function (resultJSconsole) {
-                        layer.msg(resultJSconsole.msg);
-                       
-                      } 
-                  });
-              }
-          });     
+                  
+                } 
+            });
+          }
+        }else if(obj.event == "down"){
+          if($(tr).next().html() == null){
+            layer.msg('已是最底部', {icon: 5})
+          }else{
+            // 当前行
+            var tem3 = tbData[tr.index()];
+            console.log(tem3);
+            // 下一行
+            var tem4 = tbData[tr.next().index()];
+            console.log(tem4);
+            // 向下移动
+            var objDown = {
+              id:tem4.id,
+              ids:[tem3.id],   //选中的id    
+              option:false
+            }
+            $.ajax({
+                type: "post",
+                url: "/dept/moveUpOrDown",
+                data: JSON.stringify(objDown),  
+                contentType: "application/json;charset-UTF-8",
+                success: function (resultJSconsole) {
+                  if(resultJSconsole.data == true){
+                    layer.msg(resultJSconsole.msg, {icon: 5})
+                  }else{
+                      // 将本身插入到目标tr的后面
+                      $(tr).insertAfter($(tr).next());
+                      // 交换数据
+                      tbData[tr.index()] = tem3;
+                      tbData[tr.prev().index()] = tem4;
+                      layer.msg(resultJSconsole.msg, {icon: 1})
+                  }
+                } 
+            });
+          }
         }
       });
       //批量删除事件
