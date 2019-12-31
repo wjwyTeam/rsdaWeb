@@ -68,12 +68,12 @@
   <div class="container">
 
     <div class="rightGrid">
-      <div style="width: 100%;
-              height: 40px;
+      <div style="width: 99%;
+               padding: 5px;
               text-align: center;
               display: inline-flex;
-              align-items: center; ">
-        <div style="padding-left:10px;">
+              align-items: center;">
+        <div>
           <button class="layui-btn" data-type="add">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
         </div>
@@ -95,10 +95,6 @@
         </div>
       </div>
       <table id="userList" lay-filter="userList" class="layui-hide"> </table>
-
-      <!-- <script type="text/html" id="role-status">
-		     <input type="checkbox"  name = "status"  value = {{d.roleStatus}}  lay-skin="switch" lay-text="启用|未启用" mid={{d.id}} lay-filter="roleStatus" {{ d.roleStatus == '01' ? 'checked' : '' }}>
-       </script>  -->
 
 
       <script type="text/html" id="table-toolbar" th:inline="none">
@@ -147,7 +143,7 @@
       table.render({
         elem: '#userList'
         , even: true
-        , height: "full-40"
+        , height: "full-60"
         , title: '用户数据表'
         , id: 'userList'
         , cellMinWidth: 80

@@ -329,16 +329,7 @@
             }
           });
         }else if(obj.event == "up"){
-         
-         console.log(tr);
-         var up_tr = $(tr).prev();
-         console.log(up_tr);
-         
-         if($(tr).prev().html() == null){
-            layer.msg('已是第一个元素', {icon: 5})
-         }else{
-            $(tr).insertBefore($(tr).prev())
-         }
+        
           // 上移事件
           var arrids = [];
           arrids.push(obj.data.id)
@@ -362,18 +353,21 @@
                       contentType: "application/json;charset-UTF-8",
                       success: function (resultJSconsole) {
                         layer.msg(resultJSconsole.msg);
+                        if($(tr).prev().html() == null){
+                            layer.msg('已是第一个元素', {icon: 5})
+                        }else{
+                            $(tr).insertBefore($(tr).prev())
+                        }
                       } 
                   });
               }
           });     
         }else if(obj.event == "down"){
-
           if($(tr).next().html() == null){
             layer.msg('已是当页最后一个元素', {icon: 5})
           }else{
             $(tr).insertAfter($(tr).next())
           }
-           
           // 向下移动
           var arridsDown = [];
           arridsDown.push(obj.data.id)
