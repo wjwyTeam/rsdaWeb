@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-03 16:08:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-31 10:38:31
+ * @LastEditTime : 2019-12-31 10:51:08
  */
 package com.wjwy.rsda.services;
 
@@ -67,6 +67,7 @@ public class DepartmentService {
             department.setParentId(String.valueOf(EnumEntitys.GJD.getValue()));
         } 
         department.setCreateTime(new Date());
+        
         department.setDorder(Integer.parseInt(this.getMaxCodeById(departmentMapper.getMaxCodeById(""),"",departmentMapper.selectMax())));
 
         return departmentMapper.insertSelective(department);
