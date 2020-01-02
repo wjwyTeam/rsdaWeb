@@ -67,8 +67,8 @@ public class DictTypeController extends BaseController {
    * 修改字典类型
    */
   @ApiOperation(value = "跳转表单", notes = "dictId - 字典编号")
-  @GetMapping("/dictTypeEdit")
-  public ModelAndView edit(String dictId, ModelAndView model) {
+  @GetMapping("/dictTypeFormPage")
+  public ModelAndView dictTypeFormPage(String dictId, ModelAndView model) {
     if (StringUtil.isNotEmpty(dictId)) {
       model.addObject("dictType", dictTypeService.selectDictTypeById(dictId));
     }

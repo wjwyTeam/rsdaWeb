@@ -226,7 +226,7 @@
               shadeClose: false,
               shade: 0.2,
               moveType: 1, //拖拽模式，0或者1
-              content: "/dict/dictDataEdit?dictCode=" + data.dictCode,
+              content: "/dict/dictDataFormPage?dictCode=" + data.dictCode,
               yes: function (index, layero) {
                 var iframeWindow = window["layui-layer-iframe" + index],
                   submitID = "dictFormSubmit",
@@ -313,7 +313,7 @@
           layer.open({
             type: 2
             , title: "字典基础数据新增"
-            , content: '/dict/dictDataEdit?dictType='+$("#dictType").val()
+            , content: '/dict/dictDataFormPage?dictType='+$("#dictType").val()
             , maxmin: true
             , moveType: 1 //拖拽模式，0或者1
             , area: ['500px', '100%']

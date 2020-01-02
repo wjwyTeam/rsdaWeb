@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/group")
 @RestController
 @Api(value = "功能组", tags = "功能组菜单维护")
-public class  GroupController{
+public class GroupController {
     @Autowired
     private com.wjwy.rsda.services.GroupService groupService;
     public Logger logger = LoggerFactory.getLogger(GroupController.class);
@@ -47,7 +47,7 @@ public class  GroupController{
     public ResponseWrapper groupFindList(String groupId, String groupName) {
         try {
             List<Group> roleList = groupService.findList(groupId, groupName);
-            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList, null,roleList.size());
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList, null, roleList.size());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -136,7 +136,7 @@ public class  GroupController{
             int resultTotal = groupService.delete(group);
             if (resultTotal == 0) {
                 return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前功能]", null, null, null);
-            } 
+            }
             return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
         } catch (Exception e) {
             logger.error(e.getMessage());

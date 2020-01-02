@@ -197,7 +197,7 @@
             shadeClose: false,
             shade: 0.2,
             moveType: 1, //拖拽模式，0或者1
-            content: "/dictType/dictDataFormPage?dictId=" + data.dictId,
+            content: "/dictType/dictTypeFormPage?dictId=" + data.dictId,
             yes: function (index, layero) {
               var iframeWindow = window["layui-layer-iframe" + index],
                 submitID = "dictTypeFormSubmit",
@@ -301,7 +301,7 @@
           layer.open({
             type: 2
             , title: "字典基础数据新增"
-            , content: '/dictType/dictDataFormPage'
+            , content: '/dictType/dictTypeFormPage'
             , maxmin: true
             , moveType: 1 //拖拽模式，0或者1
             , area: ['500px', '350px']
