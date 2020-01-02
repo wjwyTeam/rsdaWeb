@@ -268,13 +268,13 @@
             type: 2,
             title: '用户授权',
             maxmin: true,
-            area: ['700px', '550px'],
+            area: ['927px', '654px'],
             btn: ['确定', '取消'],
             fixed: true,
             shadeClose: false,
             shade: 0.2,
             moveType: 1,  //拖拽模式，0或者1 
-            content: '/role/roleUpdateInfo?id=' + data.id + "&type=false",
+            content: '/function/functionList?id=' + data.id + "&type=false",
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
                 , submitID = 'roleSubmitTwo'

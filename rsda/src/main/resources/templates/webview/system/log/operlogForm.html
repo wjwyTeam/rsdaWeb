@@ -19,73 +19,85 @@
         <input type="text" name="operId" placeholder="请输入ID" autocomplete="off" class="layui-input" />
       </div>
     </div>
-    <div class="layui-col-xs6">
+    <!-- <div class="layui-col-xs6">
       <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>操作模块</label>
-          <div class="layui-input-inline">
-            <input type="text" id="title" name="title" disabled lay-verify="required" autocomplete="off"
-              class="layui-input" />
-          </div>
+          <div class="form-control-static" th:text="${title}">123</div>
         </div>
       </div>
-    </div>
-    <div class="layui-col-xs6">
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>业务类型</label>
-          <div class="layui-input-inline">
-            <input type="text" name="businessType" disabled lay-verify="required" autocomplete="off" placeholder="请输入业务类型"
-              class="layui-input" />
-          </div>
-        </div>
-      </div>
-    </div>
- 
-    <div class="layui-col-xs6">
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>请求方法</label>
-          <div class="layui-input-inline">
-            <input type="text" name="method" id="method" disabled lay-verify="passfirst" required autocomplete="off"
-              placeholder="请输入密码" class="layui-input" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="layui-col-xs6">
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>请求方式</label>
-          <div class="layui-input-inline">
-            <input type="text" name="requestMethod" id="requestMethod" disabled lay-verify="required" autocomplete="off" placeholder=""
-              class="layui-input" />
-          </div>
-        </div>
-      </div>
-    </div>
+    </div> -->
 
-    <div class="layui-col-xs6">
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>操作人员</label>
-          <div class="layui-input-inline">
-            <input type="text" name="operName" required lay-verify="confirmPass" disabled
-              autocomplete="off" placeholder="操作人员" class="layui-input" />
+    <!-- <div class="layui-col-xs12">
+        <label class="col-sm-2 control-label">系统模块</label>
+        <div class="form-control-static" th:text="${operLog.title}">
+        </div>
+    </div> -->
+
+    <div class="layui-col-xs12">
+        <div class="layui-form-item">
+          <div class="layui-block">
+            <label class="layui-form-label"><i style="color:red">* </i>系统模块</label>
+            <div class="layui-input-block" th:text="${operLog.title}" style="display: flex;justify-content: left;align-items: center;">
           </div>
         </div>
-      </div>
     </div>
-    <div class="layui-col-xs6">
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>部门名称</label>
-          <div class="layui-input-inline">
-            <input type="text" name="deptName" id="deptName" autocomplete="off" placeholder="" class="layui-input" />
+    <div class="layui-col-xs12">
+        <div class="layui-form-item">
+          <div class="layui-block">
+            <label class="layui-form-label"><i style="color:red">* </i>业务类型</label>
+            <div class="layui-input-block" th:text="${operLog.businessType}" style="display: flex;justify-content: left;align-items: center;">
           </div>
         </div>
-      </div>
-     </div>
+    </div>
+    <div class="layui-col-xs12">
+        <div class="layui-form-item">
+          <div class="layui-block">
+            <label class="layui-form-label"><i style="color:red">* </i>请求方法</label>
+            <div class="layui-input-block" th:text="${operLog.method}" style="display: flex;justify-content: left;align-items: center;">
+          </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12">
+        <div class="layui-form-item">
+          <div class="layui-block">
+            <label class="layui-form-label"><i style="color:red">* </i>请求方式</label>
+            <div class="layui-input-block" th:text="${operLog.requestMethod}" style="display: flex;justify-content: left;align-items: center;">
+          </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12">
+        <div class="layui-form-item">
+          <div class="layui-block">
+            <label class="layui-form-label"><i style="color:red">* </i>操作人员</label>
+            <div class="layui-input-block" th:text="${operLog.operName}" style="display: flex;justify-content: left;align-items: center;">
+          </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12">
+        <div class="layui-form-item">
+          <div class="layui-block">
+            <label class="layui-form-label"><i style="color:red">* </i>部门名称</label>
+            <div class="layui-input-block" th:text="${operLog.deptName}" style="display: flex;justify-content: left;align-items: center;">
+          </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12">
+        <div class="layui-form-item">
+          <div class="layui-block">
+            <label class="layui-form-label"><i style="color:red">* </i>主机</label>
+            <div class="layui-input-block" th:text="${operLog.operIp}" style="display: flex;justify-content: left;align-items: center;">
+          </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12">
+        <div class="layui-form-item">
+          <div class="layui-block">
+            <label class="layui-form-label"><i style="color:red">* </i>操作地点</label>
+            <div class="layui-input-block" th:text="${operLog.operLocation}" style="display: flex;justify-content: left;align-items: center;">
+          </div>
+        </div>
+    </div>
   </div>
   <script src="../../../layuiadmin/layui/layui.js"></script>
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
