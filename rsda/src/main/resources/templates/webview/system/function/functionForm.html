@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-12 08:17:42
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-30 19:08:22
+ * @LastEditTime : 2020-01-02 10:14:40
  -->
  <!DOCTYPE html>
  <html>
@@ -21,7 +21,7 @@
  
  <body>
  
-   <div class="layui-form" lay-filter="deptform" id="deptform" style="padding: 20px 0 0 0;">
+   <div class="layui-form" lay-filter="functionform" id="functionform" style="padding: 20px 0 0 0;">
      <div class="layui-form-item  layui-hide">
        <div class="layui-input-inline" style=" width:calc(100% - 125px)">
          <input type="text" name="id" autocomplete="off" class="layui-input">
@@ -34,39 +34,68 @@
            class="layui-input">
        </div>
      </div>
-     <div class="layui-form-item">
+     <div class="layui-form-item" lay-filter="url">
        <label class="layui-form-label"><i style="color:red">* </i>请求地址</label>
        <div class="layui-input-inline" style=" width:calc(100% - 125px)">
          <input type="text" name="url" lay-verify="required" placeholder="请输入简称" autocomplete="off"
            class="layui-input">
        </div>
      </div>
-    
-     <div class="layui-form-item" lay-filter="isPipe">
+     
+     <div class="layui-form-item" lay-filter="functionType">
+      <label class="layui-form-label"><i style="color:red">* </i>类型</label>
+      <div class="layui-input-inline" style=" width:calc(100% - 125px)">
+        <input type="radio" name="functionType" value="M" title="目录" checked>
+        <input type="radio" name="functionType" value="C" title="菜单" >
+        <input type="radio" name="functionType" value="F" title="按钮" >
+      </div>
+    </div>
+
+     <div class="layui-form-item" lay-filter="visible">
        <label class="layui-form-label"><i style="color:red">* </i>可见</label>
        <div class="layui-inline">
          <input type="checkbox" name="visible" id="isPipe" lay-skin="switch" value="true" lay-text="YES|NO"
            lay-filter="isPipeval">
        </div>
      </div>
-     <!-- <div class="layui-form-item" lay-filter="isPipe">
-        <label class="layui-form-label"><i style="color:red">* </i>状态</label>
-        <div class="layui-inline">
-            <input type="checkbox" name="isPipe" id="isPipe" lay-skin="switch" value="true" lay-text="YES|NO"
-            lay-filter="isPipeval">
-        </div>
-     </div> -->
-     <div class="layui-form-item" lay-filter="unitType">
+    
+     <div class="layui-form-item" lay-filter="perms">
         <label class="layui-form-label"><i style="color:red">* </i>权限标识</label>
         <div class="layui-input-inline" style=" width:calc(100% - 125px)">
-            <input type="text" name="shortName" lay-verify="required" placeholder="请输入简称" autocomplete="off"
+            <input type="text" name="perms" lay-verify="required" placeholder="请输入权限标识" autocomplete="off"
             class="layui-input">
         </div>
-    </div>
+    </div>  
+
+    <!-- <div class="form-group">
+      <label class="col-sm-3 control-label">图标：</label>
+      <div class="col-sm-8">
+        <input id="icon" name="icon" class="form-control" type="text" placeholder="选择图标" th:field="*{icon}">
+          <div class="ms-parent" style="width: 100%;">
+              <div class="icon-drop animated flipInX" style="display: none;max-height:200px;overflow-y:auto">
+                  <div data-th-include="system/menu/icon"></div>
+              </div>
+          </div>
+      </div>
+    </div> -->
  
-     <div class="layui-form-item layui-hide">
+    <div class="layui-form-item" lay-filter="icon">
+      <label class="layui-form-label"><i style="color:red">* </i>图标</label>
+      <div class="layui-input-inline" style=" width:calc(100% - 125px)">
+        <input id="icon" name="icon" class="form-control" type="text" placeholder="选择图标" th:field="*{icon}">
+        <div class="ms-parent" style="width: 100%;">
+            <div class="icon-drop animated flipInX" style="display: none;max-height:200px;overflow-y:auto">
+                <div data-th-include="system/function/icon"></div>
+            </div>
+        </div>
+      </div>
+    </div>  
+
+
+
+     <div class="layui-form-item layui-hide">  
        <div class="layui-input-block">
-         <input type="button" lay-submit lay-filter="deptconfirm" id="deptconfirm" value="确认">
+         <input type="button" lay-submit lay-filter="functionConfirm" id="functionConfirm" value="确认">
        </div>
      </div>
    </div>
@@ -75,7 +104,7 @@
    <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
    <script th:inline="javascript">
     
-     var deptOne = [[${ functionOne }]];
+     var functionOne = [[${ functionOne }]];
      layui.config({
        base: '../../../layuiadmin/' //静态资源所在路径
      }).extend({
@@ -84,25 +113,10 @@
        var $ = layui.$
          , form = layui.form;
        layer.ready(function () {
- 
-         form.val('deptform', deptOne);
-      
+         form.val('functionform', functionOne);
+         
        });
-       //监听指定开关
-    //    form.on('switch(isPipeval)', function (data) {
-    //      $("#isPipe").val(this.checked);
-    //      if (this.checked) {
-    //        $("select[name=pipeType]").attr("lay-verify", "required");
-    //        $(".pipeType").show();
-    //      } else {
-    //        $("select[name=pipeType]").attr("lay-verify", "");
-    //        $(".pipeType").hide();
-    //      }
- 
-    //    });
      })
- 
- 
    </script>
    <script>
  

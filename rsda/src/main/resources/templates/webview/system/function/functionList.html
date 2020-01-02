@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-31 17:43:11
+ * @LastEditTime : 2020-01-02 11:07:43
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -80,79 +80,87 @@
         , treeTable = layui.treeTable;
 
            // 渲染表格
-           var insTb = treeTable.render({
-            elem: '#functionTable',
-            tree: {
-                iconIndex: 2,
-                arrowType: 'arrow2'
-            },
-            cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
-            id: "functionTable",
-            cols: [
-                { type:"checkbox", align: 'center', LAY_CHECKED: false, filter: 'test' }
-                , { type: 'numbers', title: '编号', align: 'center',width:70}
-                , { field: 'functionName', title: '菜单名称'}
-                // , { field: 'forder', title: '排序', align: 'center' }
-                , { field: 'url', title: '请求地址', align: 'center' }
-                , { field: 'functionType', title: '类型', align: 'center',templet:function(d){
-                      return  '<span id="type-button">'+d.functionType+'</span>'
-                  }}
-                , { field: 'visible', title: '可见', align: 'center' ,templet:function(d){
-                     var visible = "";
-                     if(visible == true){
-                       return  '<span id="visible-button">显示</span>'
-                     }else{
-                       return  '<span id="visible-button">不显示</span>'
-                     }
-                 }}
-                , { field: 'perms', title: '权限标识', align: 'center' }
-                , {
-                    field: 'createTime', title: '创建时间',align: 'center', templet: function (d) {
-                        return util.toDateString(d.createTime);
-                    },
-                },
-                // {templet: '#demoTreeTableState1', title: '状态',align: 'center'},
-                {align: 'center', toolbar: '#demoTreeTableBar1', title: '操作', width: 280}
+           var renderTreeTable = function(){
+                treeTable.render({
+                      elem: '#functionTable',
+                      treeDefaultClose: true,
+                      tree: {
+                          iconIndex: 2,
+                          arrowType: 'arrow2',
+                      },
+                      cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
+                      id: "functionTable",
+                      cols: [
+                          { type:"checkbox", align: 'center', LAY_CHECKED: false, filter: 'test' }
+                          , { type: 'numbers', title: '编号', align: 'center',width:70}
+                          , { field: 'functionName', title: '菜单名称'}
+                          // , { field: 'forder', title: '排序', align: 'center' }
+                          , { field: 'url', title: '请求地址', align: 'center' }
+                          , { field: 'functionType', title: '类型', align: 'center',templet:function(d){
+                                return  '<span id="type-button">'+d.functionType+'</span>'
+                            }}
+                          , { field: 'visible', title: '可见', align: 'center' ,templet:function(d){
+                              var visible = "";
+                              if(d.visible == true){
+                                return  '<span id="visible-button">显示</span>'
+                              }else{
+                                return  '<span id="visible-button">不显示</span>'
+                              }
+                          }}
+                          , { field: 'perms', title: '权限标识', align: 'center' }
+                          , {
+                              field: 'createTime', title: '创建时间',align: 'center', templet: function (d) {
+                                  return util.toDateString(d.createTime);
+                              },
+                          },
+                          // {templet: '#demoTreeTableState1', title: '状态',align: 'center'},
+                          {align: 'center', toolbar: '#demoTreeTableBar1', title: '操作', width: 280}
+                  
+                      ],
+                      reqData: function (data, callback) {
+                          setTimeout(function () {  // 故意延迟一下
+                              // // var url = '/webviews/list.json';
+                              var url = "/function/functionTree?groupId=";
+                              url += (data ? (data.id) : '');
+                              $.get(url, function (res) {
+                                  callback(res.data);
+                              });
+                          }, 800);
+                      },
+                      style: 'margin-top:0;'
+                  });
+                  
+           }
+    
         
-            ],
-            reqData: function (data, callback) {
-                setTimeout(function () {  // 故意延迟一下
-                    // // var url = '/webviews/list.json';
-                    var url = "/function/functionTree?groupId=";
-                    url += (data ? (data.id) : '');
-                    $.get(url, function (res) {
-                        callback(res.data);
-                    });
-                }, 800);
-            },
-            style: 'margin-top:0;'
-        });
+      
         setTimeout(function () {
             $('body').children('.page-loading').hide();
             $('body').removeClass('page-no-scroll');
         }, 100);
 
+        renderTreeTable();
+        // treeTable.expandAll('#functionTable');
+
         
        treeTable.on('tool(functionTable)', function (obj) {
           var data = obj.data;
-          console.log(data)
           if(obj.event === "del"){
             layer.confirm('确认要删除吗？', function (index) {
             layer.close(index);
             $.post("/function/deleteFunction", {id: data.id }, function (resultJSONObject) {
               if (resultJSONObject.success) { 
-                treeTableLoad();
+                renderTreeTable();
               }
               layer.msg(resultJSONObject.msg);
             }, "json");
             });
             
           }else if(obj.event === "edit"){
-            console.log(data.id);
              //open 方法合作共用json串
           layer.open({
             type: 2,
-            title: '编辑用户',
+            title: '编辑菜单',
             maxmin: true,
             area: ['700px', '550px'],
             btn: ['确定', '取消'],
@@ -160,35 +168,31 @@
             shadeClose: false,
             shade: 0.2,
             moveType: 1,  //拖拽模式，0或者1 
-            content: '/function/functionEdit?functionId=' + data.id,
+            content: '/function/functionEdit?id=' + data.id,
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'roleSubmitTwo'
+                , submitID = 'functionConfirm'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
+
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 var field = dataLog.field;
-                if (field.roleStatus == "true") {
-                  field.roleStatus = true;
+                if (field.visible == "true") {
+                  field.visible = true;
                 } else {
-                  field.roleStatus = false;
-                }
-                if (field.isCandel == "true") {
-                  field.roleStatus = true;
-                } else {
-                  field.isCandel = false;
+                  field.visible = false;
                 }
                 //获取提交的字段
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
                   type: "post",
-                  url: "/role/updateRole",
+                  url: "/function/updateFunction",
                   data: JSON.stringify(field),
                   dataType: "json",
                   contentType: "application/json;charset-UTF-8",
                   success: function (resultJSONObject) {
                     if (resultJSONObject.success) {
-                      tableLoad(table);
+                      renderTreeTable();
                     }
                     layer.msg(resultJSONObject.msg);
                   }
@@ -198,14 +202,60 @@
               submit.trigger('click');
             }
           });
-          }
+          }else if(obj.event == "add"){
+            // 新增菜单
+            layer.open({
+            type: 2,
+            title: '新增菜单',
+            maxmin: true,
+            area: ['700px', '550px'],
+            btn: ['确定', '取消'],
+            fixed: true,
+            shadeClose: false,
+            shade: 0.2,
+            moveType: 1,  //拖拽模式，0或者1 
+            content: '/function/functionEdit',
+            yes: function (index, layero) {
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'functionConfirm'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                var field = dataLog.field;
+                field.pid=data.id;
+                field.isCandel=false;
+                field.delFlag=false; 
+                if (field.visible == "true") {
+                  field.visible = true;
+                } else {
+                  field.visible = false;
+                }
+                //获取提交的字段
+                //提交 Ajax 成功后，静态更新表格中的数据
+                $.ajax({
+                  type: "post",
+                  url: "/function/functionInsert",
+                  data: JSON.stringify(field),
+                  dataType: "json",
+                  contentType: "application/json;charset-UTF-8",
+                  success: function (resultJSONObject) {
+                    if (resultJSONObject.success) {
+                      renderTreeTable();
+                    }
+                    layer.msg(resultJSONObject.msg);
+                  }
+                });
+                layer.close(index); //关闭弹层
+              });
+              submit.trigger('click');
+            }
+          });
+         }
        })
-
       });
+     
 
-      function treeTableLoad(table) {
-        treeTable.reload({elem : '#functionTable'});
-      }
 
     
         
