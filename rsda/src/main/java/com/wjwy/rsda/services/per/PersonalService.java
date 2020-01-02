@@ -10,6 +10,7 @@ import com.wjwy.rsda.mapper.per.PersonalMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
@@ -24,6 +25,7 @@ import tk.mybatis.mapper.util.StringUtil;
  * @LastEditTime : 2020-01-02 10:19:02
  */
 @Service("personalService")
+@Transactional
 public class PersonalService {
  @Autowired
  private PersonalMapper personalMapper;

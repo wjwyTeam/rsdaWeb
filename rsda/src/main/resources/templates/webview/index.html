@@ -107,7 +107,7 @@
 
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
             lay-filter="layadmin-system-side-menu">
-            <!-- <li data-name="template" class="layui-nav-item">
+             <li data-name="template" class="layui-nav-item">
               <a href="javascript:;" lay-tips="页面" lay-direction="2">
                 <i class="layui-icon layui-icon-template"></i>
                 <cite>页面</cite>
@@ -116,26 +116,8 @@
                 <dd><a lay-href="/webviews/template/tips/404.html">404页面不存在</a></dd>
                 <dd><a lay-href="/webviews/template/tips/error.html">错误提示</a></dd>
               </dl>
-            </li> -->
+            </li> 
 
-            <!-- <li data-name="user" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="用户" lay-direction="2">
-                <i class="layui-icon layui-icon-user"></i>
-                <cite>用户</cite>
-              </a>
-              <dl class="layui-nav-child">
-                <dd>
-                     <a th:attr="lay-href=@{/user/userInfo}">网站用户</a>
-                </dd>
-                <dd>
-                  <a lay-href="/webviews/user/administrators/list.html">后台管理员</a>
-                </dd>
-                <dd>
-                  <a lay-href="/webviews/user/administrators/role.html">角色管理</a>
-                  <a th:attr="lay-href=@{'/roleInfo}">角色管理</a>
-                </dd>
-              </dl>
-            </li> -->
             <li data-name="set" class="layui-nav-item">
               <a href="javascript:;" lay-tips="管理首页" lay-direction="2">
                 <i class="layui-icon layui-icon-set"></i>
@@ -180,7 +162,7 @@
               </a>
               <dl class="layui-nav-child">
                 <dd class="layui-nav-itemed">
-                  <a href="javascript:;">案卷管理</a>
+                  <a th:attr="lay-href=@{/dossier/dossierListPage}">案卷管理</a>
                 </dd>
               </dl>
             </li>
