@@ -7,6 +7,7 @@
  * @LastEditTime : 2019-12-30 08:55:28
  */
 package com.wjwy.rsda.controller;
+
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.BaseController;
 import com.wjwy.rsda.common.util.Log;
@@ -75,8 +76,7 @@ public class DictTypeController extends BaseController {
     return model;
   }
 
-
-/**
+  /**
    * 分页列表
    * 
    * @param DictType
@@ -87,10 +87,11 @@ public class DictTypeController extends BaseController {
   @ResponseBody
   @PostMapping("/dateTypeList")
   @ApiOperation(value = "字典类型数据分页列表数据展示", notes = "DictType - 对象，page，limit ")
-  public ResponseWrapper datePageList(@Validated  DictType dictType, Integer page, Integer limit) {
+  public ResponseWrapper datePageList(@Validated DictType dictType, Integer page, Integer limit) {
     try {
       PageInfo<DictType> pageInfos = dictTypeService.findList(dictType, page, limit);
-      return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,Integer.parseInt(String.valueOf(pageInfos.getTotal())));
+      return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
+          Integer.parseInt(String.valueOf(pageInfos.getTotal())));
     } catch (Exception e) {
       logger.error(e.getMessage());
     }
@@ -98,98 +99,81 @@ public class DictTypeController extends BaseController {
         HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
 
-
   /**
    * 新增保存字典类型
    */
+  @ResponseBody
+  @PostMapping("/dictTypeInsert")
   @Log(title = "字典数据", businessType = EnumEntitys.INSERT)
   @ApiOperation(value = "新增保存字典类型", notes = "DictType - 对象")
-  @PostMapping("/dictTypeInsert")
-  @ResponseBody
   public ResponseWrapper addSave(@RequestBody DictType dictType) {
     dictType.setCreateBy(ShiroUtils.getLoginName());
 
     try {
-	
-      if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE.equals(String.valueOf(dictTypeService.checkDictTypeUnique(dictType)))) {
-        return ResponseWrapper.success(HttpStatus.OK.value(), "新增字典'" + dictType.getDictName() + "'失败，字典类型已存在", null, null, null);
+
+      if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE
+          .equals(String.valueOf(dictTypeService.checkDictTypeUnique(dictType)))) {
+        return ResponseWrapper.success(HttpStatus.OK.value(), "新增字典'" + dictType.getDictName() + "'失败，字典类型已存在", null,
+            null, null);
       }
       AjaxResult resultTotal = toAjax(dictTypeService.insertDictType(dictType));
-			if (resultTotal.isEmpty()) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
+      if (resultTotal.isEmpty()) {
+        return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
       }
-			return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+      return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
 
   /**
    * 修改保存字典类型
    */
-  @Log(title = "字典类型", businessType = EnumEntitys.UPDATE)
-  @PostMapping("/edit")
   @ResponseBody
-  public AjaxResult editSave(@Validated DictType dict) {
-    if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE.equals(String.valueOf(dictTypeService.checkDictTypeUnique(dict)))) {
-      return error("修改字典'" + dict.getDictName() + "'失败，字典类型已存在");
-    }
-    dict.setUpdateBy(ShiroUtils.getLoginName());
-    return toAjax(dictTypeService.updateDictType(dict));
-  }
-
-
-
-    /**
-   * 修改保存字典类型
-   */
-  @Log(title = "字典数据", businessType = EnumEntitys.UPDATE)
   @PostMapping("/dictTypeEdit")
-  @ResponseBody
+  @Log(title = "字典数据", businessType = EnumEntitys.UPDATE)
   @ApiOperation(value = "修改保存字典类型", notes = "dictData - 对象")
   public ResponseWrapper edit(@RequestBody DictType dict) {
-    
+
     dict.setUpdateBy(ShiroUtils.getLoginName());
 
     try {
 
-			int resultTotal =  dictTypeService.updateDictType(dict);
-			if (resultTotal == 0) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
+      int resultTotal = dictTypeService.updateDictType(dict);
+      if (resultTotal == 0) {
+        return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
       }
-   
-			return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage()); 
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
-	}
 
-
-  @Log(title = "字典数据", businessType = EnumEntitys.DELETE)
-  @PostMapping("/dictTypeRemove")
-  @ApiOperation(value = "移除字典数据", notes = "ids - 数组-ids")
-  @ResponseBody
-  public ResponseWrapper remove(String ids) {
-    try {
-			int resultTotal =  dictTypeService.deleteDictTypeByIds(Convert.toStrArray(ids));
-			if (resultTotal == 0) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
-			}
-			return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+      return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
 
+  @ResponseBody
+  @PostMapping("/dictTypeRemove")
+  @ApiOperation(value = "移除字典数据", notes = "ids - 数组-ids")
+  @Log(title = "字典数据", businessType = EnumEntitys.DELETE)
+  public ResponseWrapper remove(String ids) {
+    try {
+      int resultTotal = dictTypeService.deleteDictTypeByIds(Convert.toStrArray(ids));
+      if (resultTotal == 0) {
+        return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
+      }
+      return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+  }
 
   /**
    * 校验字典类型

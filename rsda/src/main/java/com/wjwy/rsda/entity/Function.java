@@ -24,19 +24,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-
 @ToString
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("用户=>实体")
+@ApiModel("菜单=>实体")
 @Table(name = "sys_function")
-public class Function implements Serializable{
+public class Function implements Serializable {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("主键id")
     @Column(name = "id")
@@ -53,7 +52,7 @@ public class Function implements Serializable{
     @ApiModelProperty("图标")
     @Column(name = "icon")
     private String icon;
- 
+
     // 请求地址
     @ApiModelProperty("请求地址")
     @Column(name = "url")

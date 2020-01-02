@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
+import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Function;
+import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.FunctionService;
 
 import org.slf4j.Logger;
@@ -34,60 +36,57 @@ import tk.mybatis.mapper.util.StringUtil;
  */
 @RequestMapping("/function")
 @RestController
-@Api(value = "功能信息", tags = "子功能菜单维护")
+@Api(value = "菜单管理数据信息维护", tags = "菜单管理数据信息维护")
 public class FunctionController {
     @Autowired
     private FunctionService functionService;
     public Logger logger = LoggerFactory.getLogger(FunctionController.class);
     private String prefix = "/webview/system/function";
 
-
-
-  /**
-   * 
-   * @return String
-   */
-  @GetMapping("/functionList")
-  @ApiOperation(value = "功能列表页")
-  public ModelAndView functionData(ModelAndView model) {
-    model.setViewName(prefix+"/functionList");
-    return model;
-  }
-
+    /**
+     * 
+     * @return String
+     */
+    @GetMapping("/functionList")
+    @ApiOperation(value = "菜单管理列表主页")
+    public ModelAndView functionData(ModelAndView model) {
+        model.setViewName(prefix + "/functionList");
+        return model;
+    }
 
     /**
-   * 修改字典类型
-   */
-  @ApiOperation(value = "修改功能表单", notes = "id - 字典编号")
-  @GetMapping("/functionEdit")
-  public ModelAndView functionedit(String id, ModelAndView model) {
-    if (StringUtil.isNotEmpty(id)) {
-      model.addObject("functionOne", functionService.selectFunctionById(id));
+     * 修改字典类型
+     */
+    @ApiOperation(value = "菜单管理表单主页", notes = "id - 编号")
+    @GetMapping("/functionEdit")
+    public ModelAndView functionedit(String id, ModelAndView model) {
+        if (StringUtil.isNotEmpty(id)) {
+            model.addObject("functionOne", functionService.selectFunctionById(id));
+        }
+        model.setViewName(prefix + "/functionForm");
+        return model;
     }
-    model.setViewName(prefix + "/functionForm");
-    return model;
-  }
 
-	/**
-	 * 加载部门管理左边的部门树的json
-	 * 
-	 * @param parentId
-	 * @return ResponseWrapper
-	 */
-	@ApiOperation(value = "菜单树展示 ")
-	@GetMapping(value = "/functionTree")
-	public ResponseWrapper loadDepartmentLeftTreeJson(String groupId) {
-		List<Function> functionList = new ArrayList<Function>();
-        
+    /**
+     * 加载部门管理左边的部门树的json
+     * 
+     * @param parentId
+     * @return ResponseWrapper
+     */
+    @ApiOperation(value = "菜单树展示 ", notes = "groupId - 父编号")
+    @GetMapping(value = "/functionTree")
+    public ResponseWrapper loadDepartmentLeftTreeJson(String groupId) {
+        List<Function> functionList = new ArrayList<Function>();
+
         try {
             functionList = functionService.list(groupId);
-            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", functionList,null,null);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", functionList, null, null);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
-	}
+    }
 
     /**
      * 列表查询
@@ -96,12 +95,13 @@ public class FunctionController {
      * @param name
      * @return ResponseWrapper
      */
-    @ApiOperation(value = "功能列表", notes = "参数:id-主键, name-功能名称")
     @PostMapping("/functionFindList")
-    public ResponseWrapper functionFindList(String id, String functionName,Integer page, Integer limit) {
+    @ApiOperation(value = "菜单管理列表数据查询", notes = "参数:id-主键, name-功能名称")
+    public ResponseWrapper functionFindList(String id, String functionName, Integer page, Integer limit) {
         try {
-            PageInfo<Function> pageInfos = functionService.findList(id, functionName,page,limit);
-            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(),null,Integer.parseInt(String.valueOf(pageInfos.getTotal())));
+            PageInfo<Function> pageInfos = functionService.findList(id, functionName, page, limit);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
+                    Integer.parseInt(String.valueOf(pageInfos.getTotal())));
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -116,16 +116,17 @@ public class FunctionController {
      * @param function
      * @return ResponseWrapper
      */
-    @ApiOperation(value = "功能新增", notes = "参数:Function-JSON对象")
     @PostMapping("/functionInsert")
+    @Log(title = "菜单管理表单数据新增", businessType = EnumEntitys.INSERT)
+    @ApiOperation(value = "菜单管理表单数据新增", notes = "参数:function-对象")
     public ResponseWrapper functionInsert(@RequestBody Function function) {
 
         try {
             int resultTotal = functionService.insertFunction(function);
             if (resultTotal == 0) {
-                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null,null);
+                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
             }
-            return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null,null);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -139,15 +140,16 @@ public class FunctionController {
      * @param function
      * @return ResponseWrapper
      */
-    @ApiOperation(value = "功能更新", notes = "参数:Function-JSON对象")
     @PostMapping("/updateFunction")
+    @Log(title = "菜单管理表单数据更新", businessType = EnumEntitys.UPDATE)
+    @ApiOperation(value = "菜单管理表单数据更新", notes = "参数:function-对象")
     public ResponseWrapper updateFunction(@RequestBody Function function) {
         try {
             int resultTotal = functionService.updateFunction(function);
             if (resultTotal == 0) {
-                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null,null);
+                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
             }
-            return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null,null);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -162,8 +164,9 @@ public class FunctionController {
      * @return ResponseWrapper
      */
     @ResponseBody
-    @ApiOperation(value = "根据用户ID批量删除功能", notes = "根据用户ID批量删除功能")
     @PostMapping("/deleteFunctionAlls")
+    @Log(title = "菜单管理表单数据批量移除", businessType = EnumEntitys.DELETE)
+    @ApiOperation(value = "菜单管理表单数据批量移除", notes = "根据用户ID批量删除功能")
     public ResponseWrapper deleteFunctionAlls(String[] ids) {
         ResponseWrapper rmAll = null;
         for (String id : ids) {
@@ -180,8 +183,9 @@ public class FunctionController {
      * @param id
      * @return ResponseWrapper
      */
-    @ApiOperation(value = "根据用户ID删除功能", notes = "参数:id-主键")
     @PostMapping("/deleteFunction")
+    @Log(title = "菜单管理表单数据移除", businessType = EnumEntitys.DELETE)
+    @ApiOperation(value = "菜单管理表单数据移除", notes = "参数:id-主键")
     public ResponseWrapper deleteFunction(String id) {
 
         try {
@@ -189,9 +193,9 @@ public class FunctionController {
             function.setId(id);
             int resultTotal = functionService.delete(function);
             if (resultTotal == 0) {
-                return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前功能]", null, null,null);
-            } 
-            return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null,null);
+                return ResponseWrapper.success(HttpStatus.OK.value(), "禁止删除[当前功能]", null, null, null);
+            }
+            return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -200,12 +204,4 @@ public class FunctionController {
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
 
-
-    @RequestMapping(value="/treedata")
-	@ResponseBody
-	public ResponseWrapper treedata() {
-		// Sort sort = Sort.by("forder");
-		// List<Function> list = functionService.findAll(sort);
-        return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", null, null,null);
-	}
 }

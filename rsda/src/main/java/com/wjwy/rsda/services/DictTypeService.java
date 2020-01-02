@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-20 10:28:39
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-27 10:37:28
+ * @LastEditTime : 2020-01-02 10:06:21
  */
 package com.wjwy.rsda.services;
 
@@ -19,12 +19,14 @@ import com.wjwy.rsda.mapper.DictTypeMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 import tk.mybatis.mapper.util.StringUtil;
 
 @Service("dictTypeService")
+@Transactional
 public class DictTypeService {
 
 	@Autowired

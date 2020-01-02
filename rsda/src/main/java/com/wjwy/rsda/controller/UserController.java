@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 @RequestMapping("/user")
 @RestController
-@Api(value = "用户中心", tags = "用户信息库中心")
+@Api(value = "用户管理数据信息API", tags = "用户管理数据信息API")
 
 public class UserController {
 	/**
@@ -64,6 +64,7 @@ public class UserController {
 	 */
 
 	@GetMapping(value = "/userInfo")
+	@ApiOperation(value = "用户管理列表查询主页")
 	public ModelAndView userInfo(User user, ModelAndView model) {
 		model.addObject("type", true);
 		if (StringUtil.isNotEmpty(request.getParameter("type"))) {
@@ -82,7 +83,7 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping(value = "/userRole")
-	@ApiOperation(value = "跳转用户授权界面")
+	@ApiOperation(value = "用户管理列表授权主页")
 	public ModelAndView userRole(ModelAndView model) {
 
 		model.addObject("roleList", roleService.getRoleList());
@@ -99,6 +100,7 @@ public class UserController {
 	 *         String 返回类型 @throws
 	 */
 	@GetMapping("/personInfo")
+	@ApiOperation(value = "用户个人信息主页")
 	public ModelAndView PersonInfo(String userId, ModelAndView model) {
 		User user = userService.getPersonInfo(userId);
 		model.addObject("user", user);
@@ -115,6 +117,7 @@ public class UserController {
 	 * @date 2019年11月28日
 	 */
 	@GetMapping(value = "/updateInfo")
+	@ApiOperation(value = "用户管理数据表单信息主页")
 	public ModelAndView updateInfo(User user, ModelAndView model) {
 		if (StringUtils.isNotEmpty(user.getUserId())) {
 			user = userService.getPersonInfo(user.getUserId());
@@ -140,17 +143,17 @@ public class UserController {
 	 */
 
 	@PostMapping("/userPageInfoList")
-	@ApiOperation(value = "根据ID获取用户分页列表", notes = "参数：userId-用户ID,userName-用户名,deptId-部门ID,workDept-部门工号,delFlag-删除标志,isPage-是否开启分页,pageNum-当前页,pageSize-每页条数")
+	@ApiOperation(value = "用户管理数据列表信息查询", notes = "参数：userId-用户ID,userName-用户名,deptId-部门ID,workDept-部门工号,delFlag-删除标志,isPage-是否开启分页,pageNum-当前页,pageSize-每页条数")
 	public ResponseWrapper userPageInfoList(String userId, String userName, String deptId, String workDept,
-			Boolean delFlag, Boolean isPage, String pageNum, String pageSize,String roleId) {
+			Boolean delFlag, Boolean isPage, String pageNum, String pageSize, String roleId) {
 		try {
 			if (isPage != null && isPage.equals(EnumEntitys.YES.getValue())) {
 				PageInfo<User> pageInfos = userService.getPageList(userId, userName, deptId, workDept, delFlag,
-						Integer.parseInt(pageNum.trim()), Integer.parseInt(pageSize.trim()),roleId);
+						Integer.parseInt(pageNum.trim()), Integer.parseInt(pageSize.trim()), roleId);
 				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos, null,
 						Integer.parseInt(String.valueOf(pageInfos.getTotal())));
 			} else {
-				List<User> userList = userService.getList(userId, userName, deptId, workDept, delFlag,roleId);
+				List<User> userList = userService.getList(userId, userName, deptId, workDept, delFlag, roleId);
 				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", userList, null, userList.size());
 			}
 		} catch (Exception e) {
@@ -167,9 +170,9 @@ public class UserController {
 	 * @return ResponseWrapper
 	 */
 	@ResponseBody
-	@Log(title = "根据ID批量删除用户", businessType = EnumEntitys.DELETE)
-	@ApiOperation(value = "根据ID批量删除用户", notes = "参数:ids")
 	@PostMapping("/deleteUserAlls")
+	@Log(title = "用户管理数据列表数据批量移除", businessType = EnumEntitys.DELETE)
+	@ApiOperation(value = "用户管理数据列表数据批量移除", notes = "参数:ids")
 	public ResponseWrapper deleteUserAlls(String[] ids) {
 		ResponseWrapper rmAll = null;
 		for (String userId : ids) {
@@ -186,9 +189,9 @@ public class UserController {
 	 * @param userId
 	 * @return ResponseWrapper
 	 */
-	@ApiOperation(value = "根据ID删除用户", notes = "参数:userId")
-	@Log(title = "根据ID删除用户", businessType = EnumEntitys.DELETE)
 	@PostMapping("/deleteUser")
+	@ApiOperation(value = "用户管理数据列表数据移除", notes = "参数:userId")
+	@Log(title = "用户管理数据列表数据移除", businessType = EnumEntitys.DELETE)
 	public ResponseWrapper deleteUser(String userId) {
 		try {
 			User user = new User();
@@ -214,9 +217,9 @@ public class UserController {
 	 * @param User
 	 * @return ResponseWrapper
 	 */
-	@ApiOperation(value = "新增用户", notes = "新增用户")
-	@Log(title = "新增用户", businessType = EnumEntitys.INSERT)
 	@PostMapping("/insertUser")
+	@ApiOperation(value = "用户管理数据列表数据新增", notes = "参数：user")
+	@Log(title = "用户管理数据列表数据新增", businessType = EnumEntitys.INSERT)
 	public ResponseWrapper insertUser(@RequestBody User user) {
 		try {
 			int resultTotal = userService.insert(user);
@@ -238,12 +241,12 @@ public class UserController {
 	 * @param User
 	 * @return ResponseWrapper
 	 */
-	@ApiOperation(value = "更新", notes = "更新")
+	@ApiOperation(value = "用户管理数据列表数据更新", notes = "user")
 	@PostMapping("/updateUser")
-	@Log(title = "更新", businessType = EnumEntitys.UPDATE)
-	public ResponseWrapper toUpdateUser(@RequestBody User User) {
+	@Log(title = "用户管理数据列表数据更新", businessType = EnumEntitys.UPDATE)
+	public ResponseWrapper toUpdateUser(@RequestBody User user) {
 		try {
-			int resultTotal = userService.update(User);
+			int resultTotal = userService.update(user);
 			if (resultTotal == 0) {
 				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
 			}
@@ -263,8 +266,8 @@ public class UserController {
 	 * @param ids
 	 * @return ResponseWrapper
 	 */
-	@ApiOperation(value = "根据用户选择角色", notes = "参数：userId-用户主键,ids-角色数组")
-	@Log(title = "根据用户选择角色", businessType = EnumEntitys.INSERT)
+	@ApiOperation(value = "用户管理数据列表用户选择角色", notes = "参数：userId-用户主键,ids-角色数组")
+	@Log(title = "用户管理数据列表用户选择角色", businessType = EnumEntitys.INSERT)
 	@GetMapping("/userSelRole")
 	public ResponseWrapper userSelRole(String userId, String ids[]) {
 
@@ -282,15 +285,14 @@ public class UserController {
 				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
-	
- /**
-		* 
-		* @param userId
-		* @param ids
-		* @return
+	/**
+	 * 
+	 * @param userId
+	 * @param ids
+	 * @return
 	 */
-	@ApiOperation(value = "取消授权", notes = "参数：userId-用户主键,roleId-角色")
-	@Log(title = "取消授权", businessType = EnumEntitys.UPDATE)
+	@ApiOperation(value = "用户管理数据列表取消授权", notes = "参数：userId-用户主键,roleId-角色")
+	@Log(title = "用户管理数据列表取消授权", businessType = EnumEntitys.UPDATE)
 	@GetMapping("/userDelRole")
 	public ResponseWrapper userDelRole(String userId, String roleId) {
 
@@ -308,15 +310,14 @@ public class UserController {
 				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 	}
 
-
 	/**
-		* 
-		* @param userId
-		* @param ids
-		* @return
+	 * 
+	 * @param userId
+	 * @param ids
+	 * @return
 	 */
-	@ApiOperation(value = "授权", notes = "参数：userId-用户主键,roleId-角色")
-	@Log(title = "授权", businessType = EnumEntitys.INSERT)
+	@ApiOperation(value = "用户管理数据列表授权", notes = "参数：userId-用户主键,roleId-角色")
+	@Log(title = "用户管理数据列表授权", businessType = EnumEntitys.INSERT)
 	@GetMapping("/userInRole")
 	public ResponseWrapper userInRole(String userId, String roleId) {
 

@@ -40,107 +40,106 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/online")
 @Api(value = "在线用户监控", tags = "在线用户监控")
 public class OnlineController {
- public Logger logger = LoggerFactory.getLogger(OnlineController.class);
- private String prefix = "/webview/system/online";
+  public Logger logger = LoggerFactory.getLogger(OnlineController.class);
+  private String prefix = "/webview/system/online";
 
- @Autowired
- private OnlineService userOnlineService;
- @Autowired
- private OnlineSessionDAO onlineSessionDAO;
+  @Autowired
+  private OnlineService userOnlineService;
+  @Autowired
+  private OnlineSessionDAO onlineSessionDAO;
 
-
-
- /**
-  * 在线用户界面
-  * 
-  * @param model
-  * @return
-  */
- @GetMapping("/onlineList")
- @ApiOperation(value = "在线用户界面")
- public ModelAndView dictData(ModelAndView model) {
-  model.setViewName(prefix + "/onlineUser");
-  return model;
- }
-
- /**
-  * 列表数据查询
-  * 
-  * @param userOnline
-  * @return
-  */
- @PostMapping("/listTwo")
- @ApiOperation(value = "列表数据查询", notes = "userOnline-object")
- public ResponseWrapper list( Online userOnline, Integer page, Integer limit) {
-  try {
-   PageInfo<Online> pageInfos = userOnlineService.selectUserOnlineList(userOnline, page, limit);
-   return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,Integer.parseInt(String.valueOf(pageInfos.getTotal())));
-  } catch (Exception e) {
-   logger.error(e.getMessage());
+  /**
+   * 在线用户界面
+   * 
+   * @param model
+   * @return
+   */
+  @GetMapping("/onlineList")
+  @ApiOperation(value = "在线用户界面")
+  public ModelAndView dictData(ModelAndView model) {
+    model.setViewName(prefix + "/onlineUser");
+    return model;
   }
-  return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-    HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
- }
 
- @Log(title = "在线用户", businessType = EnumEntitys.FORCE)
- @ApiOperation(value = "在线用户正常退出", notes = "ids")
- @PostMapping("/batchForceLogout")
- @ResponseBody
- public ResponseWrapper batchForceLogout(@RequestParam("ids[]") String[] ids) {
-
-  try {
-   for (String sessionId : ids) {
-    Online online = userOnlineService.selectOnlineById(sessionId);
-    if (online == null) {
-     return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "用户已下线", null);
+  /**
+   * 列表数据查询
+   * 
+   * @param userOnline
+   * @return
+   */
+  @PostMapping("/listTwo")
+  @ApiOperation(value = "列表数据查询", notes = "userOnline-object")
+  public ResponseWrapper list(Online userOnline, Integer page, Integer limit) {
+    try {
+      PageInfo<Online> pageInfos = userOnlineService.selectUserOnlineList(userOnline, page, limit);
+      return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
+          Integer.parseInt(String.valueOf(pageInfos.getTotal())));
+    } catch (Exception e) {
+      logger.error(e.getMessage());
     }
-    OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
-    if (onlineSession == null) {
-     return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "用户已下线", null);
-    }
-    if (sessionId.equals(ShiroUtils.getSessionId())) {
-     return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "当前登陆用户无法强退", null);
-    }
-    onlineSession.setStatus(EnumEntitys.OFFLINE);
-    onlineSessionDAO.update(onlineSession);
-    online.setStatus(EnumEntitys.OFFLINE);
-    userOnlineService.saveOnline(online);
-    return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", null, null, null);
-   }
-  } catch (Exception e) {
-   logger.error(e.getMessage());
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
-  return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-    HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 
- }
+  @Log(title = "在线用户", businessType = EnumEntitys.FORCE)
+  @ApiOperation(value = "在线用户正常退出", notes = "ids")
+  @PostMapping("/batchForceLogout")
+  @ResponseBody
+  public ResponseWrapper batchForceLogout(@RequestParam("ids[]") String[] ids) {
 
- @Log(title = "在线用户强制退出", businessType = EnumEntitys.FORCE)
- @PostMapping("/forceLogout")
- @ResponseBody
- public ResponseWrapper forceLogout(String sessionId) {
-  try {
+    try {
+      for (String sessionId : ids) {
+        Online online = userOnlineService.selectOnlineById(sessionId);
+        if (online == null) {
+          return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "用户已下线", null);
+        }
+        OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
+        if (onlineSession == null) {
+          return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "用户已下线", null);
+        }
+        if (sessionId.equals(ShiroUtils.getSessionId())) {
+          return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "当前登陆用户无法强退", null);
+        }
+        onlineSession.setStatus(EnumEntitys.OFFLINE);
+        onlineSessionDAO.update(onlineSession);
+        online.setStatus(EnumEntitys.OFFLINE);
+        userOnlineService.saveOnline(online);
+        return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", null, null, null);
+      }
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
 
-   Online online = userOnlineService.selectOnlineById(sessionId);
-   if (sessionId.equals(ShiroUtils.getSessionId())) {
-    return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "当前登陆用户无法强退", null);
-   }
-   if (online == null) {
-    return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "用户已下线", null);
-   }
-   OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
-   if (onlineSession == null) {
-    return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "用户已下线", null);
-   }
-   onlineSession.setStatus(EnumEntitys.OFFLINE);
-   onlineSessionDAO.update(onlineSession);
-   online.setStatus(EnumEntitys.OFFLINE);
-   userOnlineService.saveOnline(online);
-  } catch (Exception e) {
-   logger.error(e.getMessage());
   }
-  return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-    HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
- }
+
+  @Log(title = "在线用户强制退出", businessType = EnumEntitys.FORCE)
+  @PostMapping("/forceLogout")
+  @ResponseBody
+  public ResponseWrapper forceLogout(String sessionId) {
+    try {
+
+      Online online = userOnlineService.selectOnlineById(sessionId);
+      if (sessionId.equals(ShiroUtils.getSessionId())) {
+        return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "当前登陆用户无法强退", null);
+      }
+      if (online == null) {
+        return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "用户已下线", null);
+      }
+      OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
+      if (onlineSession == null) {
+        return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "用户已下线", null);
+      }
+      onlineSession.setStatus(EnumEntitys.OFFLINE);
+      onlineSessionDAO.update(onlineSession);
+      online.setStatus(EnumEntitys.OFFLINE);
+      userOnlineService.saveOnline(online);
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+  }
 
 }

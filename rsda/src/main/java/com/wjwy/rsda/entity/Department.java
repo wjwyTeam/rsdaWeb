@@ -34,13 +34,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @ApiModel("单位=>实体")
 @Table(name = "sys_dapartment")
-public class Department implements Serializable{
+public class Department implements Serializable {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,7 +74,7 @@ public class Department implements Serializable{
   @Column(name = "unit_type")
   private Integer unitType;
 
-    /**
+  /**
    * 单位类别
    */
   @ApiModelProperty("单位类别名称")
@@ -102,28 +101,27 @@ public class Department implements Serializable{
   @Column(name = "is_candel")
   private Boolean isCandel;
 
-
- /**
+  /**
    * 管档类别
    */
   @ApiModelProperty("管档类别")
   @Column(name = "pipe_type")
   private Integer pipeType;
 
-   /**
+  /**
    * 管档类别名称
    */
   @ApiModelProperty("管档类别名称")
   @Column(name = "pipe_type_name")
   private String pipeTypeName;
-  
-   /**
+
+  /**
    * 简称
    */
   @ApiModelProperty("简称")
   @Column(name = "short_name")
   private String shortName;
-  
+
   /**
    * 创建时间
    */
@@ -141,5 +139,4 @@ public class Department implements Serializable{
   @Transient
   private Boolean option;
 
-  
 }

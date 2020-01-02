@@ -22,10 +22,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-
 /**
  * 系统访问记录表 sys_logininfor
-
+ * 
  */
 @Data
 @ToString
@@ -33,7 +32,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ApiModel("登录用户=>实体")
 @Table(name = "sys_logininfor")
-public class Logininfor implements Serializable{
+public class Logininfor implements Serializable {
 
     /**
      *

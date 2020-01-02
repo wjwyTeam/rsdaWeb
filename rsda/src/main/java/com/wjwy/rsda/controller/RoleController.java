@@ -4,8 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Role;
+import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.RoleService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -44,42 +46,47 @@ public class RoleController {
     private RoleService roleService;
 
     public Logger logger = LoggerFactory.getLogger(RoleController.class);
-	@Autowired
-	private HttpServletRequest request;
-	/**
-	 * 角色展示列表页
-	 * 
-	 * @param department
-	 * @param model
-	 * @return
-	 */
-	@GetMapping(value = "/roleInfo")
-	public ModelAndView roleInfo(Role role, ModelAndView model) {
-		model.setViewName("webview/system/role/roleList");
-		return model;
-	}
+    @Autowired
+    private HttpServletRequest request;
 
-	/**
-	 * 机构单位展示添加页
-	 * @param department
-	 * @param request
-	 * @param model
-	 * @return
-	 */
-	@GetMapping(value = "/roleUpdateInfo")
-	public ModelAndView roleUpdateInfo(Role role, ModelAndView model) {
-		if(StringUtils.isNotEmpty(role.getId())){
-			role = roleService.getId(role.getId());
+    /**
+     * 角色展示列表页
+     * 
+     * @param department
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/roleInfo")
+    @ApiOperation(value = "角色管理列表主页", notes = "参数:role")
+    public ModelAndView roleInfo(Role role, ModelAndView model) {
+        model.setViewName("webview/system/role/roleList");
+        return model;
+    }
+
+    /**
+     * 机构单位展示添加页
+     * 
+     * @param department
+     * @param request
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/roleUpdateInfo")
+    @ApiOperation(value = "角色管理表单主页", notes = "参数:role")
+    public ModelAndView roleUpdateInfo(Role role, ModelAndView model) {
+        if (StringUtils.isNotEmpty(role.getId())) {
+            role = roleService.getId(role.getId());
         }
-        model.addObject("type",true);
+        model.addObject("type", true);
         if (StringUtil.isNotEmpty(request.getParameter("type"))) {
-            model.addObject("type",request.getParameter("type"));
-        } 
-  
-		model.addObject("roleOne", role);
-		model.setViewName("webview/system/role/roleForm");
-		return model;
-	}
+            model.addObject("type", request.getParameter("type"));
+        }
+
+        model.addObject("roleOne", role);
+        model.setViewName("webview/system/role/roleForm");
+        return model;
+    }
+
     /**
      * 列表查询
      * 
@@ -87,12 +94,13 @@ public class RoleController {
      * @param name
      * @return ResponseWrapper
      */
-    @ApiOperation(value = "角色列表", notes = "参数:id-主键, name-角色名称")
     @GetMapping("/roleFindList")
-    public ResponseWrapper roleFindList(String id, String name,Integer page,Integer limit) {
+    @ApiOperation(value = "角色管理列表数据分页查询", notes = "参数:id-主键, name-角色名称")
+    public ResponseWrapper roleFindList(String id, String name, Integer page, Integer limit) {
         try {
-            PageInfo<Role> roleList = roleService.findList(id, name,page,limit);
-            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList.getList(), null, Integer.parseInt(String.valueOf(roleList.getTotal())));
+            PageInfo<Role> roleList = roleService.findList(id, name, page, limit);
+            return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList.getList(), null,
+                    Integer.parseInt(String.valueOf(roleList.getTotal())));
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -107,8 +115,9 @@ public class RoleController {
      * @param role
      * @return ResponseWrapper
      */
-    @ApiOperation(value = "角色新增", notes = "参数:Role-JSON对象")
     @PostMapping("/roleInsert")
+    @Log(title = "角色管理数据新增", businessType = EnumEntitys.INSERT)
+    @ApiOperation(value = "角色管理数据新增", notes = "参数:Role-对象")
     public ResponseWrapper insertRole(@RequestBody Role role) {
 
         try {
@@ -130,8 +139,9 @@ public class RoleController {
      * @param role
      * @return ResponseWrapper
      */
-    @ApiOperation(value = "角色更新", notes = "参数:Role-JSON对象")
     @PostMapping("/updateRole")
+    @Log(title = "角色管理数据更新", businessType = EnumEntitys.UPDATE)
+    @ApiOperation(value = "角色管理数据更新", notes = "参数:Role-对象")
     public ResponseWrapper updateRole(@RequestBody Role role) {
         try {
             int resultTotal = roleService.updateRole(role);
@@ -153,7 +163,8 @@ public class RoleController {
      * @return ResponseWrapper
      */
     @ResponseBody
-    @ApiOperation(value = "根据用户ID批量删除角色", notes = "根据用户ID批量删除角色")
+    @Log(title = "角色管理数据批量移除", businessType = EnumEntitys.DELETE)
+    @ApiOperation(value = "角色管理数据批量移除", notes = "参数：ids")
     @PostMapping("/deleteRoleAlls")
     public ResponseWrapper deleteRoleAlls(String[] ids) {
         ResponseWrapper rmAll = null;
@@ -171,8 +182,9 @@ public class RoleController {
      * @param id
      * @return ResponseWrapper
      */
-    @ApiOperation(value = "根据用户ID删除角色", notes = "参数:id-主键")
     @PostMapping("/deleteRole")
+    @Log(title = "角色管理数据移除", businessType = EnumEntitys.DELETE)
+    @ApiOperation(value = "角色管理数据移除", notes = "参数:id-主键")
     public ResponseWrapper deleteRole(String id) {
 
         try {
@@ -193,51 +205,48 @@ public class RoleController {
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
 
-
     /**
-	 * 根据角色选择功能
-	 * 
-	 * @param id
-	 * @param ids
-	 * @return ResponseWrapper
-	 */
-	@ApiOperation(value = "根据角色选择功能", notes = "参数：id-角色主键,ids-功能数组")
-	@GetMapping("/roleSelFunction")
-	public ResponseWrapper roleSelFunction(String id, String ids[]) {
+     * 根据角色选择功能
+     * 
+     * @param id
+     * @param ids
+     * @return ResponseWrapper
+     */
+    @GetMapping("/roleSelFunction")
+    @Log(title = "根据角色选择菜单", businessType = EnumEntitys.INSERT)
+    @ApiOperation(value = "根据角色选择菜单", notes = "参数：id-角色主键,ids-功能数组")
+    public ResponseWrapper roleSelFunction(String id, String ids[]) {
 
-		try {
-			boolean flag = roleService.roleSelFunction(id, ids);
-			if (!flag) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
-			}
-			return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+        try {
+            boolean flag = roleService.roleSelFunction(id, ids);
+            if (!flag) {
+                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
+            }
+            return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+        return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
-    
 
     @ApiOperation(value = "根据角色查询功能", notes = "参数：id-角色主键")
-	@GetMapping("/getFunction")
-	public ResponseWrapper getFunction(String id) {
+    @GetMapping("/getFunction")
+    public ResponseWrapper getFunction(String id) {
 
-		try {
-			boolean flag = roleService.getFunction(id);
-			if (!flag) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "查询失败", null, null, null);
-			}
-			return ResponseWrapper.success(HttpStatus.OK.value(), "查询成功", null, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+        try {
+            boolean flag = roleService.getFunction(id);
+            if (!flag) {
+                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "查询失败", null, null, null);
+            }
+            return ResponseWrapper.success(HttpStatus.OK.value(), "查询成功", null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+        return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
-
-
 
 }

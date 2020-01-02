@@ -17,12 +17,14 @@ import com.wjwy.rsda.mapper.DictDateMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 import tk.mybatis.mapper.util.StringUtil;
 
 @Service("dictDateService")
+@Transactional
 public class DictDateService {
 	
 		

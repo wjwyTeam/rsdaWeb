@@ -47,46 +47,57 @@ import io.swagger.annotations.ApiOperation;
  */
 @Controller
 @RequestMapping("/dict")
-@Api(value = "字典数据配置", tags = "字典数据配置")
+@Api(value = "字典管理数据信息", tags = "字典管理数据信息API")
 public class DictDataController extends BaseController {
 
   private String prefix = "/webview/system/dict";
   public Logger logger = LoggerFactory.getLogger(DictDataController.class);
   @Autowired
   private DictDateService dictDataService;
-	@Autowired
-	private HttpServletRequest request;
+  @Autowired
+  private HttpServletRequest request;
+
   /**
    * 
    * @return String
    */
   @GetMapping("/dataList")
-  @ApiOperation(value = "字典数据列表页")
-  public ModelAndView dictData(ModelAndView model,String dictType) {
-    if(StringUtil.isNotEmpty(dictType)){
+  @ApiOperation(value = "字典管理数据信息列表主页")
+  public ModelAndView dictData(ModelAndView model, String dictType) {
+    if (StringUtil.isNotEmpty(dictType)) {
       model.addObject("dictType", dictType);
     }
-
-    model.setViewName(prefix+"/dictDateList");
+    model.setViewName(prefix + "/dictDateList");
     return model;
   }
 
-    /**
-   * 修改字典类型
+  /**
+   * 字典管理数据信息表单主页
    */
-  @ApiOperation(value = "修改字典类型", notes = "dictCode - 字典编号")
-  @GetMapping("/dictDataEdit")
-  public ModelAndView edit(String dictCode, ModelAndView model) {
+  @ApiOperation(value = "字典管理数据信息表单主页", notes = "dictCode - 字典编号")
+  @GetMapping("/dictDataFormPage")
+  public ModelAndView dictDataFormPage(String dictCode, ModelAndView model) {
     if (StringUtil.isNotEmpty(dictCode)) {
       model.addObject("dictData", dictDataService.selectDictDataById(Long.valueOf(dictCode)));
     }
-    if(StringUtil.isNotEmpty(request.getParameter("dictType"))){
+    if (StringUtil.isNotEmpty(request.getParameter("dictType"))) {
       model.addObject("dictType", request.getParameter("dictType"));
     }
     model.setViewName(prefix + "/dictDateForm");
     return model;
   }
-  
+
+    /**
+   * 字典数据新增字典类型
+   */
+  @ApiOperation(value = "字典数据新增字典类型", notes = "dictType - 字典类型")
+  @GetMapping("/dictDataForm/{dictType}")
+  public String add(@PathVariable("dictType") String dictType, ModelMap map) {
+    map.put("dictType", dictType);
+    return prefix + "/dictDataForm";
+  }
+
+
   /**
    * 分页列表
    * 
@@ -123,90 +134,78 @@ public class DictDataController extends BaseController {
     return util.exportExcel(list, "字典数据");
   }
 
-  /**
-   * 新增字典类型
-   */
-  @ApiOperation(value = "字典数据新增字典类型", notes = "dictType - 字典类型")
-  @GetMapping("/dictDataForm/{dictType}")
-  public String add(@PathVariable("dictType") String dictType, ModelMap map) {
-    map.put("dictType", dictType);
-    return prefix + "/dictDataForm";
-  }
+
 
   /**
    * 新增保存字典类型
+   @ResponseBody
    */
   @Log(title = "字典数据", businessType = EnumEntitys.INSERT)
-  @ApiOperation(value = "新增保存字典类型", notes = "dictData - 对象")
   @PostMapping("/dictDataInsert")
-  @ResponseBody
+  @ApiOperation(value = "新增保存字典类型", notes = "dictData - 对象")
   public ResponseWrapper addSave(@RequestBody DictData dictData) {
     dictData.setCreateBy(ShiroUtils.getLoginName());
 
     try {
-			AjaxResult resultTotal = toAjax(dictDataService.insertDictData(dictData));
-			if (resultTotal.isEmpty()) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
-			}
-			return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+      AjaxResult resultTotal = toAjax(dictDataService.insertDictData(dictData));
+      if (resultTotal.isEmpty()) {
+        return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
+      }
+      return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
-
-
 
   /**
    * 修改保存字典类型
+   @ResponseBody
    */
-  @Log(title = "字典数据", businessType = EnumEntitys.UPDATE)
   @PostMapping("/dictDataEdit")
-  @ResponseBody
+  @Log(title = "字典数据", businessType = EnumEntitys.UPDATE)
   @ApiOperation(value = "修改保存字典类型", notes = "dictData - 对象")
   public ResponseWrapper editSave(@RequestBody DictData dictData) {
-    
+
     dictData.setUpdateBy(ShiroUtils.getLoginName());
 
     try {
-			int resultTotal =  dictDataService.updateDictData(dictData);
-			if (resultTotal == 0) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
-			}
-			return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
-	}
-
+      int resultTotal = dictDataService.updateDictData(dictData);
+      if (resultTotal == 0) {
+        return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
+      }
+      return ResponseWrapper.success(HttpStatus.OK.value(), "更新成功", null, null, null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+  }
 
   /**
    * 
    * @param ids
    * @return
    */
+  @ResponseBody
   @Log(title = "字典数据", businessType = EnumEntitys.DELETE)
   @PostMapping("/dictDataRemove")
   @ApiOperation(value = "移除字典数据", notes = "ids - 数组-ids")
-  @ResponseBody
   public ResponseWrapper remove(String ids) {
     try {
-			int resultTotal =  dictDataService.deleteDictDataByIds(Convert.toStrArray(ids));
-			if (resultTotal == 0) {
-				return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
-			}
-			return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+      int resultTotal = dictDataService.deleteDictDataByIds(Convert.toStrArray(ids));
+      if (resultTotal == 0) {
+        return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
+      }
+      return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
 }
-
