@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Font Awesome Ico list</title>
     <link href="/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
-    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-1.4.4.min.js"></script>
     <style type="text/css">
         .ico-list .fa{
             margin: 5px;
@@ -922,7 +922,15 @@
      <i class="fa fa-window-restore" aria-hidden="true"></i>
 
      <i class="fa fa-wrench" aria-hidden="true"></i>
-
 </div>
+<script>
+        var isI = $(".ico-list i");
+        for(var i = 0 ;i<isI.length;i++){
+            isI[i].onclick = function(){
+                var checkedIcon = $(this).attr("class")
+                parent.GetChildValue(checkedIcon);
+            }
+        }
+</script>
 </body>
 </html>

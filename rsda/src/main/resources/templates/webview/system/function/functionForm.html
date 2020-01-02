@@ -7,7 +7,7 @@
  * @LastEditTime : 2020-01-02 10:14:40
  -->
  <!DOCTYPE html>
- <html>
+ <html lang="zh" xmlns:th="http://www.thymeleaf.org">
  
  <head>
    <meta charset="utf-8">
@@ -76,16 +76,16 @@
                   <div data-th-include="system/menu/icon"></div>
               </div>
           </div>
-      </div>
+      </div>"
     </div> -->
  
     <div class="layui-form-item" lay-filter="icon">
       <label class="layui-form-label"><i style="color:red">* </i>图标</label>
       <div class="layui-input-inline" style=" width:calc(100% - 125px)">
-        <input id="icon" name="icon" class="form-control" type="text" placeholder="选择图标" th:field="*{icon}">
-        <div class="ms-parent" style="width: 100%;">
-            <div class="icon-drop animated flipInX" style="display: none;max-height:200px;overflow-y:auto">
-                <div data-th-include="system/function/icon"></div>
+        <input type="text" id="icon" name="icon" lay-verify="required" placeholder="请选择图标" autocomplete="off" class="layui-input">
+        <div  style="width: 100%;">
+            <div class="icon-drop animated flipInX" id="icon-drop" style="display: none;max-height:200px;overflow-y:auto">
+                <iframe src="/function/icon" frameborder="0" class="layadmin-iframe" name="myIframeIcon" style="width: 100%;"></iframe>
             </div>
         </div>
       </div>
@@ -114,16 +114,23 @@
          , form = layui.form;
        layer.ready(function () {
          form.val('functionform', functionOne);
-         
        });
      })
+    
+     $(function() {
+          $("input[name='icon']").click("on",function() {
+              $("#icon-drop").show();
+           });
+           
+     });
+
    </script>
    <script>
- 
-     function unitTypeChange(val) {
-       $("#unitType").find("option:selected").text();
-     }
- 
+       function GetChildValue(obj){
+          $("#icon").val(obj);
+          $("#icon-drop").hide();
+       } 
+
    </script>
  
  </body>

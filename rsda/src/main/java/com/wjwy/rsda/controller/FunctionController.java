@@ -54,6 +54,18 @@ public class FunctionController {
         return model;
     }
 
+    
+    /**
+     * 
+     * @return Icon
+     */
+    @GetMapping("/icon")
+    @ApiOperation(value = "菜单管理表单图标")
+    public ModelAndView functionIcon(ModelAndView model) {
+        model.setViewName( prefix + "/functionIcon");
+        return model;
+    }
+
     /**
      * 修改字典类型
      */
