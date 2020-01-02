@@ -20,7 +20,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("案卷管理=>实体")
-@Table(name = "personal_infomation")
+@Table(name = "dossier_manage")
 public class Dossier {
  @ApiModelProperty("案卷管理主键")
  @Column(name = "dossier_id")
