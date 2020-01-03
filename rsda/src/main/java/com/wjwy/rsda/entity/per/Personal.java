@@ -29,7 +29,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("个人档案=>实体")
-@Table(name = "personal_infomation")
+@Table(name = "person_info")
 public class Personal {
 
  @ApiModelProperty("档案主键")
