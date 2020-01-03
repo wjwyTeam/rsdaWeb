@@ -2,19 +2,20 @@
  * @Descripttion: 
  * @version: 
  * @Author: ZHANGQI
- * @Date: 2020-01-03 09:35:54
+ * @Date: 2020-01-03 11:24:10
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 11:27:45
+ * @LastEditTime : 2020-01-03 14:10:00
  */
-
 package com.wjwy.rsda.controller;
+
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
-import com.wjwy.rsda.entity.Borrow;
+import com.wjwy.rsda.entity.DossierInto;
 import com.wjwy.rsda.enums.Convert;
 import com.wjwy.rsda.enums.EnumEntitys;
-import com.wjwy.rsda.services.BorrowService;
+import com.wjwy.rsda.services.DossierIntoService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,67 +28,68 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tk.mybatis.mapper.util.StringUtil;
 
-@RequestMapping("/borrow")
+@RequestMapping("/dossierInto")
 @RestController
-@Api(value = "借阅管理", tags = "借阅管理API维护")
-public class BorrowController {
+@Api(value = "档案转入", tags = "档案转入API维护")
+public class DossierIntoController {
  @Autowired
- private BorrowService borrowService;
+ private DossierIntoService dossierIntoService;
 
- public Logger logger = LoggerFactory.getLogger(BorrowController.class);
+ public Logger logger = LoggerFactory.getLogger(DossierIntoController.class);
 
  // 跳转界面前缀
  private String prefix = "/webview/person";
 
  /**
-  * 跳转借阅管理列表主页
+  * 跳转档案转入管理列表主页
   * 
   * @param model
   * @return ModelAndView
   */
- @GetMapping("/borrowListPage")
- @ApiOperation(value = "跳转借阅管理列表主页")
- public ModelAndView BorrowListPage(ModelAndView model) {
-  model.setViewName(prefix + "/borrowList");
+ @GetMapping("/dossierIntoListPage")
+ @ApiOperation(value = "跳转档案转入管理列表主页")
+ public ModelAndView dossierIntoListPage(ModelAndView model) {
+  model.setViewName(prefix + "/dossierIntoList");
   return model;
  }
 
  /**
-  * 跳转借阅管理表单主页
+  * 跳转档案转入管理表单主页
   * 
-  * @param BorrowId
+  * @param DossierIntoId
   * @param model
   * @return ModelAndView
   */
- @ApiOperation(value = "跳转借阅管理表单主页", notes = "borrowId - 借阅编号")
- @GetMapping("/borrowFormPage")
- public ModelAndView BorrowFormPage(String borrowId, ModelAndView model) {
-  if (StringUtil.isNotEmpty(borrowId)) {
-   model.addObject("BorrowOne", borrowService.getById(borrowId));
+ @ApiOperation(value = "跳转档案转入管理表单主页", notes = "DossierIntoId - 档案转入编号")
+ @GetMapping("/dossierIntoFormPage")
+ public ModelAndView DossierIntoFormPage(String dossierIntoId, ModelAndView model) {
+  if (StringUtil.isNotEmpty(dossierIntoId)) {
+   model.addObject("DossierIntoOne", dossierIntoService.getById(dossierIntoId));
   }
-  model.setViewName(prefix + "/borrowForm");
+  model.setViewName(prefix + "/dossierIntoForm");
   return model;
  }
 
  /**
   * 列表数据查询
   * 
-  * @param Borrow
+  * @param DossierInto
   * @param page
   * @param limit
   * @return ResponseWrapper
   */
- @ApiOperation(value = "借阅管理列表数据查询", notes = "参数:Borrow-对象")
- @PostMapping("/borrowFindList")
- public ResponseWrapper BorrowFindList(@RequestBody Borrow borrow,
+ @ApiOperation(value = "档案转入管理列表数据查询", notes = "参数:DossierInto-对象")
+ @PostMapping("/dossierIntoFindList")
+ public ResponseWrapper dossierIntoFindList(@RequestBody DossierInto DossierInto,
    @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
    @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
   try {
-   PageInfo<Borrow> pageInfos = borrowService.findList(borrow, page, limit);
+   PageInfo<DossierInto> pageInfos = dossierIntoService.findList(DossierInto, page, limit);
    return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
      Integer.parseInt(String.valueOf(pageInfos.getTotal())));
   } catch (Exception e) {
@@ -98,18 +100,18 @@ public class BorrowController {
  }
 
  /**
-  * 借阅管理表单数据新增
+  * 档案转入管理表单数据新增
   * 
-  * @param Borrow
+  * @param DossierInto
   * @return ResponseWrapper
   */
- @PostMapping("/borrowInsert")
- @Log(title = "借阅管理表单数据新增", businessType = EnumEntitys.INSERT)
- @ApiOperation(value = "借阅管理表单数据新增", notes = "参数:Borrow-对象")
- public ResponseWrapper BorrowInsert(@RequestBody Borrow borrow) {
+ @PostMapping("/dossierIntoInsert")
+ @Log(title = "档案转入管理表单数据新增", businessType = EnumEntitys.INSERT)
+ @ApiOperation(value = "档案转入管理表单数据新增", notes = "参数:DossierInto-对象")
+ public ResponseWrapper dossierIntoInsert(@RequestBody DossierInto dossierInto) {
 
   try {
-   int resultTotal = borrowService.borrowInsert(borrow);
+   int resultTotal = dossierIntoService.dossierIntoInsert(dossierInto);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
    }
@@ -122,17 +124,17 @@ public class BorrowController {
  }
 
  /**
-  * 借阅管理表单数据更新
+  * 档案转入管理表单数据更新
   * 
-  * @param Borrow
+  * @param DossierInto
   * @return ResponseWrapper
   */
- @PostMapping("/borrowUpdate")
- @Log(title = "借阅管理表单数据更新", businessType = EnumEntitys.UPDATE)
- @ApiOperation(value = "借阅管理表单数据更新", notes = "参数:Borrow-对象")
- public ResponseWrapper BorrowUpdate(@RequestBody Borrow borrow) {
+ @PostMapping("/dossierIntoUpdate")
+ @Log(title = "档案转入管理表单数据更新", businessType = EnumEntitys.UPDATE)
+ @ApiOperation(value = "档案转入管理表单数据更新", notes = "参数:DossierInto-对象")
+ public ResponseWrapper dossierIntoUpdate(@RequestBody DossierInto dossierInto) {
   try {
-   int resultTotal = borrowService.borrowUpdate(borrow);
+   int resultTotal = dossierIntoService.dossierIntoUpdate(dossierInto);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
    }
@@ -145,18 +147,18 @@ public class BorrowController {
  }
 
  /**
-  * 借阅管理移除数据
+  * 档案转入管理移除数据
   * 
   * @param ids
   * @return ResponseWrapper
   */
  @ResponseBody
- @PostMapping("/borrowRemove")
- @Log(title = "借阅管理移除数据", businessType = EnumEntitys.DELETE)
- @ApiOperation(value = "借阅管理移除数据", notes = "参数：数组-ids")
+ @PostMapping("/dossierIntoRemove")
+ @Log(title = "档案转入管理移除数据", businessType = EnumEntitys.DELETE)
+ @ApiOperation(value = "档案转入管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {
-   int resultTotal = borrowService.borrowRemove(Convert.toStrArray(ids));
+   int resultTotal = dossierIntoService.dossierIntoRemove(Convert.toStrArray(ids));
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
    }
