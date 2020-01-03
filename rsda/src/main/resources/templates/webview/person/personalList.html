@@ -220,16 +220,31 @@
         //   , {  type: 'numbers', title: '序号',width:70 }
           , {  field: 'personalName', title: '姓名',align:"center" }
           , { field: 'personalId', title: 'id',hide:true,align:"center" }
-          , { field: 'personalSex', title: '性别',align:"center" }
+          , { field: 'personalSex', title: '性别',align:"center",templet:function(d){
+               if(d.personalSex == 0){
+                 return "男"
+               }else{
+                 return "女"
+               }
+          } }
           , { field: 'nativePlace', title: '籍贯',align:"center" }
           , {
-             field: 'birthDate', title: '出生年月',align:"center" , templet: function (time) {
+             field: 'birthDate', title: '出生年月',align:"center" ,
+              templet: function (time) {
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd')) + "</div>";
             }
            }
-          , { field: 'politicalOutlook', title: '政治面貌',align:"center" }
+          , { field: 'politicalOutlook', title: '政治面貌',align:"center",templet:function(d){
+              if(d.politicalOutlook == 0){
+                  return "群众"
+              }else if(d.politicalOutlook == 1){
+                return "团员"
+              }else{
+                return "党员"
+              }
+          } }
           , { field: 'workDuty', title: '工作单位及职务',align:"center" }
-          , { field: 'personalNo', title: '省份证号',align:"center" }
+          , { field: 'personalNo', title: '身份证号',align:"center" }
           , { fixed: 'right', title: '操作', width: 200, align: 'center', toolbar: '#barDemo' }
         ]]
         , page: false
@@ -293,26 +308,18 @@
             content: '/person/personalFormPage?personalId=' + data.personalId,
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'deptconfirm'
+                , submitID = 'personconfirm'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
-              //机构类型名称
-              var unitTypeName = layero.find('iframe').contents().find('#unitType option:selected').text();
-              //机构类别名称
-              var pipeTypeName = layero.find('iframe').contents().find('#pipeType option:selected').text();
+                //选中的籍贯名称
+                var politicalOutlookName = layero.find('iframe').contents().find('#politicalOutlook option:selected').val();
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 var field = dataLog.field;
-                field.unitTypeName = unitTypeName;
-                field.pipeTypeName = pipeTypeName;
-
-                if (field.isPipe == "true")
-                  field.isPipe = true;
-                else
-                  field.isPipe = false;
+                field.politicalOutlook = politicalOutlookName;
                 //获取提交的字段
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
-                  url: "/dept/updateUnitTree",
+                  url: "/person/personalUpdate",
                   data: JSON.stringify(field),
                   type: "post",
                   dataType: "json",
@@ -464,13 +471,12 @@
                 , submit = layero.find('iframe').contents().find('#' + submitID);
                    //选中的籍贯名称
                   var politicalOutlookName = layero.find('iframe').contents().find('#politicalOutlook option:selected').val();
-                  console.log(politicalOutlookName);
+             
                    //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                 var field = data.field; //获取提交的字段
                 // field.parentId = $("#deptId").val();
                 field.politicalOutlook = politicalOutlookName;
-                console.log(field);
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
                   type: "post",

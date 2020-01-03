@@ -30,7 +30,7 @@ public class Dossier {
  private String dossierNo;
  @ApiModelProperty("档案箱号")
  @Column(name = "dossier_box_no")
- private String dossierBox;
+ private String dossierBoxNo;
  @ApiModelProperty("档案正副本")    
  @Column(name = "dossier_ charter" )  
  private String dossierCharter;

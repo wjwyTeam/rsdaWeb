@@ -1,0 +1,171 @@
+<!--
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2019-12-12 08:17:42
+ * @LastEditors  : zgr
+ * @LastEditTime : 2020-01-03 16:36:57
+ -->
+ <!DOCTYPE html>
+ <html>
+ 
+ <head>
+   <meta charset="utf-8">
+   <title>案卷管理</title>
+   <meta name="renderer" content="webkit">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+   <meta name="viewport"
+     content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+   <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+   <style>
+      .layui-form-label{
+          width: 120px;
+      }
+   </style>
+ </head>
+ 
+ <body>
+ 
+   <div class="layui-form" lay-filter="personForm" id="personForm" style="padding: 20px 0 0 0;">
+     <div class="layui-form-item  layui-hide">
+       <div class="layui-input-inline" style=" width:calc(100% - 225px)">
+         <input type="text" name="id" autocomplete="off" class="layui-input">
+       </div>
+     </div>
+
+     <div class="layui-form-item">
+       <label class="layui-form-label"><i style="color:red">* </i>姓名</label>
+       <div class="layui-input-inline" style=" width:calc(100% - 225px)">
+         <input type="text" name="personName" lay-verify="required" placeholder="请输入姓名" autocomplete="off"
+           class="layui-input">
+       </div>
+     </div>
+
+     <div class="layui-form-item">
+       <label class="layui-form-label"><i style="color:red">* </i>工作单位及职务</label>    
+       <div class="layui-input-inline" style=" width:calc(100% - 225px)">
+        <input type="text" name="personDuty" lay-verify="required" placeholder="请输入性别" autocomplete="off"
+          class="layui-input">
+      </div>
+     </div>
+
+     <div class="layui-form-item">
+        <label class="layui-form-label"><i style="color:red">* </i>档案号</label>
+        <div class="layui-input-inline" style=" width:calc(100% - 225px)">
+            <input type="text" name="dossierNo" lay-verify="required" placeholder="请输入工作单位及职务" autocomplete="off"
+              class="layui-input">
+          </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label"><i style="color:red">* </i>档案箱号</label>
+        <div class="layui-input-inline" style=" width:calc(100% - 225px)">
+            <input type="text" name="dossierBox" lay-verify="required" placeholder="请输入身份证号" autocomplete="off"
+              class="layui-input">
+          </div>
+      </div>
+
+      <div class="layui-form-item"> 
+        <label class="layui-form-label"><i style="color:red">* </i>档案正副本</label>
+        <div class="layui-input-inline" style=" width:calc(100% - 225px)">
+            <input type="text"  name="dossierCharter" class="layui-input"  placeholder="请输入档案在正副本">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label"><i style="color:red">* </i>来档单位</label>
+        <div class="layui-input-inline" style=" width:calc(100% - 225px)">
+            <input type="text"  name="departmentName" class="layui-input"  placeholder="请输入来档单位">
+        </div>
+      </div>
+
+      <!-- <div class="layui-form-item">
+        <label class="layui-form-label"><i style="color:red">* </i>转入时间</label>
+        <div class="layui-input-inline" style=" width:calc(100% - 225px)">
+            <input type="text"  name="transferTime" class="layui-input"  id= "transferTime"  placeholder="请输入转入时间">
+        </div>
+      </div> -->
+
+      <div class="layui-form-item pipeType" lay-filter="dossierStatus">
+        <label class="layui-form-label"><i style="color:red">* </i>档案状态</label>    
+        <div class="layui-input-inline" style=" width:calc(100% - 225px)">
+          <select name="dossierStatus" id="dossierStatus">
+            <option value="" selected="true">请选择</option>
+            <option value="0">转出</option>
+            <option value="1">转入</option>
+          </select>
+        </div>
+      </div>
+ 
+      
+     <div class="layui-form-item layui-hide">
+       <div class="layui-input-block">
+         <input type="button" lay-submit lay-filter="dossierconfirm" id="dossierconfirm" value="确认">
+       </div>
+     </div>
+
+     
+
+   </div>
+ 
+   <script src="../../../layuiadmin/layui/layui.js" th:inline="none"></script>
+   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+   <script th:inline="javascript">
+    
+     var personalOne = [[${ personalOne }]];
+     layui.config({
+       base: '../../../layuiadmin/' //静态资源所在路径
+     }).extend({
+       index: 'lib/index' //主入口模块
+     }).use(['index', 'form','laydate'], function () {
+       var $ = layui.$
+          , laydate = layui.laydate
+          , form = layui.form;
+
+         
+          
+       layer.ready(function () {
+            laydate.render({
+                elem: '#transferTime'
+            });
+        
+          form.val('personForm', personalOne);
+    //     //  if (!deptOne.isPipe) {
+    //     //    $(".pipeType").hide();
+    //     //    $("select[name=pipeType]").attr("lay-verify", "");
+    //     //    $("#isPipe").attr("checked", false);
+    //     //  } else {
+    //     //    $(".pipeType").show();
+    //     //    $("select[name=pipeType]").attr("lay-verify", "required");
+    //     //  }
+       
+       });
+       
+  
+       //监听指定开关
+    //    form.on('switch(isPipeval)', function (data) {
+    //      $("#isPipe").val(this.checked);
+    //      if (this.checked) {
+    //        $("select[name=pipeType]").attr("lay-verify", "required");
+    //        $(".pipeType").show();
+    //      } else {
+    //        $("select[name=pipeType]").attr("lay-verify", "");
+    //        $(".pipeType").hide();
+    //      }
+ 
+    //    });
+     })
+ 
+ 
+   </script>
+   <script>
+    //  获取选中的政治面貌
+    //  function unitTypeChange(val) {
+    //    $("#dossierStatus").find("option:selected").val();
+    //  }
+ 
+   </script>
+ 
+ </body>
+ 
+ </html>

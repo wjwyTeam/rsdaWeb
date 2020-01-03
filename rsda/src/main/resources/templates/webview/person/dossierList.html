@@ -226,7 +226,13 @@
           , { field: 'dossierCharter', title: '档案正副本'}
           , { field: 'departmentName', title: '来档单位'}
           , { field: 'transferTime', title: '转入时间'}
-          , { field: 'dossierStatus', title: '档案状态'}
+          , { field: 'dossierStatus', title: '档案状态',templet:function(d){
+              if(d.dossierStatus == 0){
+                return "转入"
+              }else{
+                return "转出"
+              }
+          }}
           , {
             field: 'createTime', title: '创建时间', templet: function (time) {
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
@@ -299,14 +305,14 @@
                 , submitID = 'deptconfirm'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
               //机构类型名称
-              var unitTypeName = layero.find('iframe').contents().find('#unitType option:selected').text();
-              //机构类别名称
-              var pipeTypeName = layero.find('iframe').contents().find('#pipeType option:selected').text();
+              // var unitTypeName = layero.find('iframe').contents().find('#unitType option:selected').text();
+              // //机构类别名称
+              // var pipeTypeName = layero.find('iframe').contents().find('#pipeType option:selected').text();
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 var field = dataLog.field;
-                field.unitTypeName = unitTypeName;
-                field.pipeTypeName = pipeTypeName;
+                // field.unitTypeName = unitTypeName;
+                // field.pipeTypeName = pipeTypeName;
 
                 if (field.isPipe == "true")
                   field.isPipe = true;
@@ -449,10 +455,10 @@
           layer.open({
             type: 2
             , title: $("#deptName").val() + "新增机构"
-            , content: '/dept/deptInfo'
+            , content: '/dossier/dossierFormPage'
             , maxmin: true
             , moveType: 1 //拖拽模式，0或者1
-            , area: ['500px', '450px']
+            , area: ['600px', '550px']
             , skin: 'layer_bg' //layer_bg是自定义的css样式
             , shade: 0.2
             , fixed: true
@@ -460,22 +466,21 @@
             , btn: ['确定', '取消']
             , yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'deptconfirm'
+                , submitID = 'dossierconfirm'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
-                  //机构类型名称
-                  var unitTypeName = layero.find('iframe').contents().find('#unitType option:selected').text();
-                  //机构类别名称
-                  var pipeTypeName = layero.find('iframe').contents().find('#pipeType option:selected').text();
+                  // //机构类型名称
+                  // var unitTypeName = layero.find('iframe').contents().find('#unitType option:selected').text();
+                
                    //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                 var field = data.field; //获取提交的字段
                 field.parentId = $("#deptId").val();
-                field.unitTypeName = unitTypeName;
-                field.pipeTypeName = pipeTypeName;
+                // field.unitTypeName = unitTypeName;
+                // field.pipeTypeName = pipeTypeName;
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
                   type: "post",
-                  url: "/dept/insertUnit",
+                  url: "/dossier/dossierInsert",
                   data: JSON.stringify(field),
                   dataType: "json",
                   contentType: "application/json;charset-UTF-8",
