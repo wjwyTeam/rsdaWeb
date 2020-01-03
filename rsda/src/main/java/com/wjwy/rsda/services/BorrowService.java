@@ -29,7 +29,13 @@ public class BorrowService {
   * @return
   */
  public Borrow getById(String borrowId) {
-  return borrowMapper.selectByPrimaryKey(borrowId);
+  Example example = new Example(Borrow.class);
+  Criteria criteria = example.createCriteria();
+  if (!StringUtil.isEmpty(borrowId)) {
+   criteria.andEqualTo("borrowId", borrowId);
+  }
+
+  return borrowMapper.selectOneByExample(example);
  }
 
  /**

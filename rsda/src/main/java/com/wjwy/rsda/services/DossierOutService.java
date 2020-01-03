@@ -37,7 +37,12 @@ public class DossierOutService {
   * @return
   */
  public DossierOut getById(String dossierOutId) {
-  return dossierOutMapper.selectByPrimaryKey(dossierOutId);
+  Example example = new Example(DossierOut.class);
+  Criteria criteria = example.createCriteria();
+  if (!StringUtil.isEmpty(dossierOutId)) {
+   criteria.andEqualTo("transferId", dossierOutId);
+  }
+  return dossierOutMapper.selectOneByExample(example);
  }
 
  /**

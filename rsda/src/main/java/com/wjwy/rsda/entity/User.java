@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-11-30 22:58:25
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-28 09:11:20
+ * @LastEditTime : 2020-01-03 14:56:31
  */
 package com.wjwy.rsda.entity;
 
@@ -31,7 +31,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ApiModel("用户=>实体")
 @Table(name = "sys_user")
-public class User implements Serializable{
+public class User implements Serializable {
 
 	/**
 	 *
@@ -111,7 +111,6 @@ public class User implements Serializable{
 	@Column(name = "index_url")
 	private String indexUrl;
 
-	
 	@Transient
 	@ApiModelProperty(name = "角色列表")
 	private List<Role> roles;
@@ -119,5 +118,13 @@ public class User implements Serializable{
 	@Transient
 	@ApiModelProperty(name = "是否分配")
 	private Boolean iSRole;
+
+	public boolean isAdmin() {
+		return isAdmin(this.userId);
+	}
+
+	public static boolean isAdmin(String userId) {
+		return userId != null;
+	}
 
 }

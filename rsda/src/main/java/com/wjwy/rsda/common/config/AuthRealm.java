@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-01 18:43:19
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-28 08:15:35
+ * @LastEditTime : 2020-01-03 14:52:10
  */
 package com.wjwy.rsda.common.config;
 
@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.wjwy.rsda.common.util.ShiroUtils;
 import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.services.FunctionService;
 import com.wjwy.rsda.services.UserService;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -96,11 +96,38 @@ public class AuthRealm extends AuthorizingRealm {
      * 只有需要验证权限时才会调用, 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.在配有缓存的情况下，只加载一次.
      * 如果需要动态权限,但是又不想每次去数据库校验,可以存在ehcache中.自行完善
      */
+
+     /**
+     * 授权
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-        User userDO = (User) SecurityUtils.getSubject().getPrincipal();
+        User user = ShiroUtils.getUser();
+
+        // 角色列表
+        Set<String> roles = new HashSet<String>();
+
+        // 功能列表
+        Set<String> functions = new HashSet<String>();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        // 给予Myadmin超级权限
+        // 管理员拥有所有权限
+        if (user.isAdmin()) {
+            authorizationInfo.addRole("admin");
+            authorizationInfo.addStringPermission("*:*:*");
+        } else {
+            roles = roleService.selectRoleKeys(user.getUserId());
+            functions = menuService.selectPermsByUserId(user.getUserId());
+            // 角色加入AuthorizationInfo认证对象
+            info.setRoles(roles);
+            // 权限加入AuthorizationInfo认证对象
+            info.setStringPermissions(menus);
+        }
+
+
+
+
+
+
 
         if (userDO.getUserName().equals("myadmin")) {
             FunctionService functionService = ApplicationContextRegister.getBean(FunctionService.class);

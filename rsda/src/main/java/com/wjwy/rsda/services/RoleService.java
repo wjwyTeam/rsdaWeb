@@ -3,19 +3,23 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
- * @LastEditors  : zgr
- * @LastEditTime : 2019-12-30 15:31:00
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-03 15:33:35
  */
 package com.wjwy.rsda.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import com.wjwy.rsda.common.util.StringUtils;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.RoleFunction;
 import com.wjwy.rsda.entity.UserRole;
@@ -233,7 +237,7 @@ public class RoleService {
      * @param parameter
      * @return
      */
-	public List<Role> getUserRoleList(String userId) {
+    public List<Role> getUserRoleList(String userId) {
         List<Role> roles = new ArrayList<Role>();
         Example example = new Example(UserRole.class);
         Criteria criteria = example.createCriteria();
@@ -249,7 +253,27 @@ public class RoleService {
             role = roleMapper.selectOneByExample(exampleR);
             roles.add(role);
         }
-		return roles;
-	}
+        return roles;
+    }
 
+    
+    /**
+     * 根据用户ID查询权限
+     * 
+     * @param userId 用户ID
+     * @return 权限列表
+     */
+    public Set<String> selectRoleKeys(String userId) {
+        Example example = new Example(UserRole.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId", userId);
+        List<Role> perms = roleMapper.selectByExample(userId);
+        Set<String> permsSet = new HashSet<>();
+        for (Role perm : perms) {
+            if (StringUtils.isNotNull(perm)) {
+                permsSet.addAll(Arrays.asList(perm.getRoleKey().trim().split(",")));
+            }
+        }
+        return permsSet;
+    }
 }

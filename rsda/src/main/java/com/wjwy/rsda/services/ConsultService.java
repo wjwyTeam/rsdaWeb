@@ -29,7 +29,12 @@ public class ConsultService {
   * @return
   */
  public Consult getById(String consultId) {
-  return consultMapper.selectByPrimaryKey(consultId);
+  Example example = new Example(Consult.class);
+  Criteria criteria = example.createCriteria();
+  if (!StringUtil.isEmpty(consultId)) {
+   criteria.andEqualTo("consultId", consultId);
+  }
+  return consultMapper.selectOneByExample(example);
  }
 
  /**

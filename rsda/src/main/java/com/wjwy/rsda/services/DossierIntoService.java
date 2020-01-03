@@ -37,8 +37,13 @@ public class DossierIntoService {
   * @param DossierIntoId
   * @return
   */
- public DossierInto getById(String dossierIntoId) {
-  return dossierIntoMapper.selectByPrimaryKey(dossierIntoId);
+  public DossierInto getById(String dossierIntoId) {
+    Example example = new Example(DossierInto.class);
+    Criteria criteria = example.createCriteria();
+    if (!StringUtil.isEmpty(dossierIntoId)) {
+      criteria.andEqualTo("transferId", dossierIntoId);
+    }
+  return dossierIntoMapper.selectOneByExample(example);
  }
 
  /**
