@@ -37,7 +37,12 @@ public class PersonalService {
   * @return
   */
  public Personal getById(String personalId) {
-  return personalMapper.selectByPrimaryKey(personalId);
+    Example example = new Example(Personal.class);
+    Criteria criteria = example.createCriteria();
+    if (!StringUtil.isEmpty(personalId)) {
+        criteria.andEqualTo("personalId",personalId);
+     }
+  return personalMapper.selectOneByExample(example);
  }
 
  /**

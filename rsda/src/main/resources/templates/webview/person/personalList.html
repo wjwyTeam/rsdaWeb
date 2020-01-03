@@ -103,7 +103,7 @@
           <button class="layui-btn" data-type="batchdel">批量删除</button>
         </div>
         <div class="deptTableSearch layui-form">
-          <input type="text" name="name" id="unitName" placeholder="请输入机构名称" autocomplete="off" class="layui-input"
+          <input type="text" name="name" id="unitName" placeholder="请输入人员名称" autocomplete="off" class="layui-input"
             style="display: inline-block;width: auto;">
           <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
             <select name="unitType">
@@ -120,8 +120,8 @@
       <script type="text/html" id="barDemo" th:inline="none">
           <a class="layui-btn  layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
-          <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="up"><i class="layui-icon layui-icon-up"></i>上移</a>
-          <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="down"><i class="layui-icon layui-icon-down"></i>下移</a> 
+          <!-- <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="up"><i class="layui-icon layui-icon-up"></i>上移</a>
+          <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="down"><i class="layui-icon layui-icon-down"></i>下移</a>  -->
       </script>
     </div>
   </div>
@@ -218,19 +218,19 @@
         , cols: [[ //表头
             {  checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
         //   , {  type: 'numbers', title: '序号',width:70 }
-          , {  field: 'personName', title: '姓名',align:"center" }
-          , { field: 'id', title: 'id',hide:true,align:"center" }
-          , { field: 'personDuty', title: '性别',align:"center" }
-          , { field: 'dossierNo', title: '籍贯',align:"center" }
+          , {  field: 'personalName', title: '姓名',align:"center" }
+          , { field: 'personalId', title: 'id',hide:true,align:"center" }
+          , { field: 'personalSex', title: '性别',align:"center" }
+          , { field: 'nativePlace', title: '籍贯',align:"center" }
           , {
-             field: 'createTime', title: '出生日期',align:"center" , templet: function (time) {
-              return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
+             field: 'birthDate', title: '出生年月',align:"center" , templet: function (time) {
+              return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd')) + "</div>";
             }
            }
-          , { field: 'dossierBox', title: '政治面貌',align:"center" }
-          , { field: 'dossierCharter', title: '工作单位及职务',align:"center" }
-          , { field: 'departmentName', title: '省份证号',align:"center" }
-          , { fixed: 'right', title: '操作', width: 180, align: 'center', toolbar: '#barDemo' }
+          , { field: 'politicalOutlook', title: '政治面貌',align:"center" }
+          , { field: 'workDuty', title: '工作单位及职务',align:"center" }
+          , { field: 'personalNo', title: '省份证号',align:"center" }
+          , { fixed: 'right', title: '操作', width: 200, align: 'center', toolbar: '#barDemo' }
         ]]
         , page: false
         , response: {
@@ -263,9 +263,8 @@
         if (obj.event === 'del') {
           layer.confirm('真的删除行么', function (index) {
             layer.close(index);
-            $.post("/dept/deleteUnit", { id: data.id }, function (resultJSONObject) {
+            $.post("/person/personalRemove", { ids: data.personalId }, function (resultJSONObject) {
               if (resultJSONObject.success) {
-
                 obj.del();
                 var node;
                 if ($("#deptId").val() == data.id || $("#deptId").val() == data.parentId) {
@@ -287,11 +286,11 @@
             type: 2,
             title: '更新机构',
             maxmin: true
-            , area: ['500px', '450px']
+            , area: ['630px', '570px']
             , btn: ['确定', '取消']
             , shadeClose: false,
             shade: 0.2,
-            content: '/dept/deptInfo?id=' + data.id,
+            content: '/person/personalFormPage?personalId=' + data.personalId,
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
                 , submitID = 'deptconfirm'
@@ -416,19 +415,22 @@
           if (checkData.length === 0) {
             return layer.msg('请选择数据');
           }
+          console.log(checkData)
           //捉到所有被选中的，发异步进行删除
-          var ids = "";
+          var ids = [];
           if (checkData.length > 0) {
-            for (var i = 0; i < checkData.length; i++) {
-              ids += checkData[i].id + ",";
+            console.log(123);
+            for (var i = 0; i < checkData.length; i++) { 
+              ids.push(checkData[i].personalId)
             }
           }
+          console.log(ids);
           layer.confirm('确定删除吗？', function (index) {
             //执行 Ajax 后重载
             $.ajax({
               type: "post",
-              url: "/dept/deleteUnitAll",
-              data: { "ids": ids },
+              url: "/person/personalRemove",
+              data: "ids="+ids,
               success: function (data) {
                 if (data.success) {
                   var node = zTreeObj.getNodeByParam("id", 0, null);
@@ -446,11 +448,11 @@
         , add: function () {
           layer.open({
             type: 2
-            , title: $("#deptName").val() + "新增机构"
-            , content: '/dept/deptInfo'
+            , title: $("#deptName").val() + "新增人员"
+            , content: '/person/personalFormPage'
             , maxmin: true
             , moveType: 1 //拖拽模式，0或者1
-            , area: ['500px', '450px']
+            , area: ['630px', '570px']
             , skin: 'layer_bg' //layer_bg是自定义的css样式
             , shade: 0.2
             , fixed: true
@@ -458,22 +460,21 @@
             , btn: ['确定', '取消']
             , yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'deptconfirm'
+                , submitID = 'personconfirm'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
-                  //机构类型名称
-                  var unitTypeName = layero.find('iframe').contents().find('#unitType option:selected').text();
-                  //机构类别名称
-                  var pipeTypeName = layero.find('iframe').contents().find('#pipeType option:selected').text();
+                   //选中的籍贯名称
+                  var politicalOutlookName = layero.find('iframe').contents().find('#politicalOutlook option:selected').val();
+                  console.log(politicalOutlookName);
                    //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                 var field = data.field; //获取提交的字段
-                field.parentId = $("#deptId").val();
-                field.unitTypeName = unitTypeName;
-                field.pipeTypeName = pipeTypeName;
+                // field.parentId = $("#deptId").val();
+                field.politicalOutlook = politicalOutlookName;
+                console.log(field);
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
                   type: "post",
-                  url: "/dept/insertUnit",
+                  url: "/person/personalInsert",
                   data: JSON.stringify(field),
                   dataType: "json",
                   contentType: "application/json;charset-UTF-8",
