@@ -31,7 +31,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "sys_role_function_r")
+@Table(name = "sys_role_function")
 public class RoleFunction implements Serializable{
 
 	/**
