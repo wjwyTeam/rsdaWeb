@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-06 15:02:00
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 08:59:45
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-03 09:28:35
  */
 package com.wjwy.rsda.entity;
 
@@ -32,7 +32,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "sys_user_role_r")
+@Table(name = "sys_user_role")
 public class UserRole implements Serializable{
 
 	/**
