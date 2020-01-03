@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -96,7 +97,9 @@ public class RoleController {
      */
     @GetMapping("/roleFindList")
     @ApiOperation(value = "角色管理列表数据分页查询", notes = "参数:id-主键, name-角色名称")
-    public ResponseWrapper roleFindList(String id, String name, Integer page, Integer limit) {
+    public ResponseWrapper roleFindList(String id, String name, 
+            @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
+            @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
         try {
             PageInfo<Role> roleList = roleService.findList(id, name, page, limit);
             return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", roleList.getList(), null,

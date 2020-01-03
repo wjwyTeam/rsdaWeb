@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -78,7 +79,9 @@ public class OperlogController {
    */
   @PostMapping("/logPageInfoList")
   @ApiOperation(value = "日志分页列表", notes = "参数：pageNum-当前页,pageSize-每页条数")
-  public ResponseWrapper logPageInfoList(String operName, Integer page, Integer limit) {
+  public ResponseWrapper logPageInfoList(String operName, 
+      @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
+      @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
     try {
       PageInfo<OperLog> pageInfos = operlogService.getPageList(operName, page, limit);
       return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,

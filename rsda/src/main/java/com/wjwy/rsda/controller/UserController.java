@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -145,11 +146,12 @@ public class UserController {
 	@PostMapping("/userPageInfoList")
 	@ApiOperation(value = "用户管理数据列表信息查询", notes = "参数：userId-用户ID,userName-用户名,deptId-部门ID,workDept-部门工号,delFlag-删除标志,isPage-是否开启分页,pageNum-当前页,pageSize-每页条数")
 	public ResponseWrapper userPageInfoList(String userId, String userName, String deptId, String workDept,
-			Boolean delFlag, Boolean isPage, String pageNum, String pageSize, String roleId) {
+			Boolean delFlag, Boolean isPage, @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
+			@RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit, String roleId) {
 		try {
 			if (isPage != null && isPage.equals(EnumEntitys.YES.getValue())) {
 				PageInfo<User> pageInfos = userService.getPageList(userId, userName, deptId, workDept, delFlag,
-						Integer.parseInt(pageNum.trim()), Integer.parseInt(pageSize.trim()), roleId);
+						page, limit, roleId);
 				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos, null,
 						Integer.parseInt(String.valueOf(pageInfos.getTotal())));
 			} else {

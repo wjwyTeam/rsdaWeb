@@ -69,7 +69,9 @@ public class OnlineController {
    */
   @PostMapping("/listTwo")
   @ApiOperation(value = "列表数据查询", notes = "userOnline-object")
-  public ResponseWrapper list(Online userOnline, Integer page, Integer limit) {
+  public ResponseWrapper list(Online userOnline,
+      @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
+      @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
     try {
       PageInfo<Online> pageInfos = userOnlineService.selectUserOnlineList(userOnline, page, limit);
       return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,

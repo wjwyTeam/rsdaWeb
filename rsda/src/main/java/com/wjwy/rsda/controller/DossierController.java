@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -83,7 +84,9 @@ public class DossierController{
   */
  @ApiOperation(value = "案卷管理列表数据查询", notes = "参数:dossier-对象")
  @PostMapping("/dossierFindList")
- public ResponseWrapper dossierFindList(@RequestBody Dossier dossier, Integer page, Integer limit) {
+ public ResponseWrapper dossierFindList(@RequestBody Dossier dossier, 
+      @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
+      @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
   try {
    PageInfo<Dossier> pageInfos = dossierService.findList(dossier, page, limit);
    return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,

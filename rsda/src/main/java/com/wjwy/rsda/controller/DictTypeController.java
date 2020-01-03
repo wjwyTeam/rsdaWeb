@@ -24,12 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -87,7 +87,9 @@ public class DictTypeController extends BaseController {
   @ResponseBody
   @PostMapping("/dateTypeList")
   @ApiOperation(value = "字典类型数据分页列表数据展示", notes = "DictType - 对象，page，limit ")
-  public ResponseWrapper datePageList(@Validated DictType dictType, Integer page, Integer limit) {
+  public ResponseWrapper datePageList(@RequestBody DictType dictType, 
+      @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
+      @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
     try {
       PageInfo<DictType> pageInfos = dictTypeService.findList(dictType, page, limit);
       return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,

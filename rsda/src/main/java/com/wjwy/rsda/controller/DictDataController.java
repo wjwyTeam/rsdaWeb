@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -109,7 +110,9 @@ public class DictDataController extends BaseController {
   @ResponseBody
   @PostMapping("/datePageList")
   @ApiOperation(value = "字典数据分页列表数据展示", notes = "dictData - 对象，page，limit ")
-  public ResponseWrapper datePageList(DictData dictData, Integer page, Integer limit) {
+  public ResponseWrapper datePageList(@RequestBody DictData dictData, 
+      @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
+      @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
     try {
       PageInfo<DictData> pageInfos = dictDataService.findList(dictData, page, limit);
       return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
