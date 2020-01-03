@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-31 14:24:00
+ * @LastEditTime : 2020-01-03 10:35:50
  -->
 	<!DOCTYPE html>
 	<html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -85,6 +85,7 @@
 											method: "post",
 											id: "dictTable",
 											cellMinWidth:80,
+											contentType:"application/json",
 											url: "/dict/datePageList?dictType="+ $("#dictType").val(), //数据接口
 											cols: [
 													[

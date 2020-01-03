@@ -483,7 +483,8 @@
         //监听搜索
         form.on("submit(user-front-search)", function (data) {
           var field = data.field;
-
+          field.id = ""
+          console.log(field);
           //执行重载
           table.reload("userList", {
             where: field

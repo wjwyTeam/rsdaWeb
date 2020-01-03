@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-31 15:11:31
+ * @LastEditTime : 2020-01-03 10:35:36
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -75,6 +75,7 @@
         cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
         method: "post",
         id: "dictTable",
+        contentType:"application/json",
         url: "/dictType/dateTypeList", //数据接口
         cols: [
           [{
