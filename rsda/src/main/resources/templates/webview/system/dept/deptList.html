@@ -50,8 +50,7 @@
     .leftTree {
       width: 320px;
       height: 100%;
-      border-right: solid 1px #efefef;
-      ;
+      border-right:1px solid  #efefef;
     }
 
     .ztree {
@@ -60,7 +59,8 @@
     }
 
     .rightGrid {
-      width: calc(100% - 320px);
+      /* width: calc(100% - 320px); */
+      width: 100%;
       height: 100%;
     }
 
@@ -213,6 +213,7 @@
         , title: '用户数据表'
         , method: 'post'
         , id: 'deptList'
+        ,cellMinWidth: 80
         , url: '/dept/findUnitList' //数据接口
         , cols: [[ //表头
             {  checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }

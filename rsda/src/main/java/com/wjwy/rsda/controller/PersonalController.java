@@ -1,5 +1,6 @@
 package com.wjwy.rsda.controller;
 
+
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -85,7 +87,7 @@ public class PersonalController {
   */
  @ApiOperation(value = "人员管理列表数据查询", notes = "参数:personal-对象")
  @PostMapping("/personalFindList")
- public ResponseWrapper personalFindList(@RequestBody Personal personal, Integer page, Integer limit) {
+ public ResponseWrapper personalFindList(@RequestBody Personal personal, @RequestParam(value="page",required=true,defaultValue="1") Integer page,@RequestParam(value="limit",required=true,defaultValue="10")  Integer limit) {
   try {
    PageInfo<Personal> pageInfos = personalService.findList(personal, page, limit);
    return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
