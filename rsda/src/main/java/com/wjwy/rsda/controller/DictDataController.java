@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-26 15:35:04
+ * @LastEditTime : 2020-01-03 14:19:43
  */
 package com.wjwy.rsda.controller;
 
@@ -88,7 +88,7 @@ public class DictDataController extends BaseController {
     return model;
   }
 
-    /**
+  /**
    * 字典数据新增字典类型
    */
   @ApiOperation(value = "字典数据新增字典类型", notes = "dictType - 字典类型")
@@ -97,7 +97,6 @@ public class DictDataController extends BaseController {
     map.put("dictType", dictType);
     return prefix + "/dictDataForm";
   }
-
 
   /**
    * 分页列表
@@ -110,7 +109,7 @@ public class DictDataController extends BaseController {
   @ResponseBody
   @PostMapping("/datePageList")
   @ApiOperation(value = "字典数据分页列表数据展示", notes = "dictData - 对象，page，limit ")
-  public ResponseWrapper datePageList(@RequestBody DictData dictData, 
+  public ResponseWrapper datePageList(@RequestBody DictData dictData,
       @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
       @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
     try {
@@ -137,11 +136,10 @@ public class DictDataController extends BaseController {
     return util.exportExcel(list, "字典数据");
   }
 
-
-
   /**
    * 新增保存字典类型
-   @ResponseBody
+   * 
+   * @ResponseBody
    */
   @Log(title = "字典数据", businessType = EnumEntitys.INSERT)
   @PostMapping("/dictDataInsert")
@@ -154,7 +152,7 @@ public class DictDataController extends BaseController {
       if (resultTotal.isEmpty()) {
         return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
       }
-      return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", null, null, null);
+      return ResponseWrapper.success(HttpStatus.OK.value(), "新增成功", resultTotal, null, null);
     } catch (Exception e) {
       e.printStackTrace();
       logger.error(e.getMessage());
@@ -165,7 +163,8 @@ public class DictDataController extends BaseController {
 
   /**
    * 修改保存字典类型
-   @ResponseBody
+   * 
+   * @ResponseBody
    */
   @PostMapping("/dictDataEdit")
   @Log(title = "字典数据", businessType = EnumEntitys.UPDATE)
