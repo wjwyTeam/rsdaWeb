@@ -1,7 +1,7 @@
-package com.wjwy.rsda.mapper.per;
+package com.wjwy.rsda.mapper;
 
 import com.wjwy.rsda.common.TkMapper;
-import com.wjwy.rsda.entity.per.Personal;
+import com.wjwy.rsda.entity.Personal;
 
 /*
  * @Descripttion: 

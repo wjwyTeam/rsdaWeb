@@ -1,12 +1,19 @@
-package com.wjwy.rsda.controller.per;
+/*
+ * @Author: ZHANGQI 
+ * @Date: 2020-01-02 14:59:58 
+ * @Last Modified by: ZHANGQI
+ * @Last Modified time: 2020-01-02 15:40:33
+ */
+
+package com.wjwy.rsda.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
-import com.wjwy.rsda.entity.per.Consult;
+import com.wjwy.rsda.entity.Dossier;
 import com.wjwy.rsda.enums.Convert;
 import com.wjwy.rsda.enums.EnumEntitys;
-import com.wjwy.rsda.services.per.ConsultService;
+import com.wjwy.rsda.services.DossierService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,61 +31,61 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tk.mybatis.mapper.util.StringUtil;
 
-@RequestMapping("/consult")
+@RequestMapping("/dossier")
 @RestController
-@Api(value = "查阅管理", tags = "查阅管理API维护")
-public class ConsultController {
+@Api(value = "案卷管理", tags = "案卷管理API维护")
+public class DossierController{
  @Autowired
- private ConsultService consultService;
+ private DossierService dossierService;
 
- public Logger logger = LoggerFactory.getLogger(ConsultController.class);
+ public Logger logger = LoggerFactory.getLogger(DossierController.class);
 
  // 跳转界面前缀
  private String prefix = "/webview/person";
 
  /**
-  * 跳转查阅管理列表主页
+  * 跳转案卷管理列表主页
   * 
   * @param model
   * @return ModelAndView
   */
- @GetMapping("/consultListPage")
- @ApiOperation(value = "跳转查阅管理列表主页")
- public ModelAndView ConsultListPage(ModelAndView model) {
-  model.setViewName(prefix + "/consultList");
+ @GetMapping("/dossierListPage")
+ @ApiOperation(value = "跳转案卷管理列表主页")
+ public ModelAndView dossierListPage(ModelAndView model) {
+  model.setViewName(prefix + "/dossierList");
   return model;
  }
 
  /**
-  * 跳转查阅管理表单主页
+  * 跳转案卷管理表单主页
   * 
-  * @param ConsultId
+  * @param dossierId
   * @param model
   * @return ModelAndView
   */
- @ApiOperation(value = "跳转查阅管理表单主页", notes = "ConsultId - 查阅编号")
- @GetMapping("/consultFormPage")
- public ModelAndView ConsultFormPage(String consultId, ModelAndView model) {
-  if (StringUtil.isNotEmpty(consultId)) {
-   model.addObject("consultOne", consultService.getById(consultId));
+ @ApiOperation(value = "跳转案卷管理表单主页", notes = "dossierId - 案卷编号")
+ @GetMapping("/dossierFormPage")
+ public ModelAndView dossierFormPage(String dossierId, ModelAndView model) {
+  if (StringUtil.isNotEmpty(dossierId)) {
+   model.addObject("dossierOne", dossierService.getById(dossierId));
   }
-  model.setViewName(prefix + "/consultForm");
+  model.setViewName(prefix + "/dossierForm");
   return model;
  }
 
  /**
   * 列表数据查询
   * 
-  * @param Consult
+  * @param dossier
   * @param page
   * @param limit
   * @return ResponseWrapper
   */
- @ApiOperation(value = "查阅管理列表数据查询", notes = "参数:Consult-对象")
- @PostMapping("/consultFindList")
- public ResponseWrapper ConsultFindList(@RequestBody Consult consult, Integer page, Integer limit) {
+ @ApiOperation(value = "案卷管理列表数据查询", notes = "参数:dossier-对象")
+ @PostMapping("/dossierFindList")
+ public ResponseWrapper dossierFindList(@RequestBody Dossier dossier, Integer page, Integer limit) {
   try {
-   PageInfo<Consult> pageInfos = consultService.findList(consult, page, limit);
+   PageInfo<Dossier> pageInfos = dossierService.findList(dossier, page, limit);
    return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
      Integer.parseInt(String.valueOf(pageInfos.getTotal())));
   } catch (Exception e) {
@@ -89,18 +96,18 @@ public class ConsultController {
  }
 
  /**
-  * 查阅管理表单数据新增
+  * 案卷管理表单数据新增
   * 
-  * @param Consult
+  * @param dossier
   * @return ResponseWrapper
   */
- @PostMapping("/consultInsert")
- @Log(title = "查阅管理表单数据新增", businessType = EnumEntitys.INSERT)
- @ApiOperation(value = "查阅管理表单数据新增", notes = "参数:Consult-对象")
- public ResponseWrapper ConsultInsert(@RequestBody Consult Consult) {
+ @PostMapping("/dossierInsert")
+ @Log(title = "案卷管理表单数据新增", businessType = EnumEntitys.INSERT)
+ @ApiOperation(value = "案卷管理表单数据新增", notes = "参数:dossier-对象")
+ public ResponseWrapper dossierInsert(@RequestBody Dossier dossier) {
 
   try {
-   int resultTotal = consultService.consultInsert(Consult);
+   int resultTotal = dossierService.dossierInsert(dossier);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
    }
@@ -113,17 +120,17 @@ public class ConsultController {
  }
 
  /**
-  * 查阅管理表单数据更新
+  * 案卷管理表单数据更新
   * 
-  * @param Consult
+  * @param dossier
   * @return ResponseWrapper
   */
- @PostMapping("/consultUpdate")
- @Log(title = "查阅管理表单数据更新", businessType = EnumEntitys.UPDATE)
- @ApiOperation(value = "查阅管理表单数据更新", notes = "参数:Consult-对象")
- public ResponseWrapper ConsultUpdate(@RequestBody Consult consult) {
+ @PostMapping("/dossierUpdate")
+ @Log(title = "案卷管理表单数据更新", businessType = EnumEntitys.UPDATE)
+ @ApiOperation(value = "案卷管理表单数据更新", notes = "参数:dossier-对象")
+ public ResponseWrapper dossierUpdate(@RequestBody Dossier dossier) {
   try {
-   int resultTotal = consultService.consultUpdate(consult);
+   int resultTotal = dossierService.dossierUpdate(dossier);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
    }
@@ -136,18 +143,18 @@ public class ConsultController {
  }
 
  /**
-  * 查阅管理移除数据
+  * 案卷管理移除数据
   * 
   * @param ids
   * @return ResponseWrapper
   */
  @ResponseBody
- @PostMapping("/consultRemove")
- @Log(title = "查阅管理移除数据", businessType = EnumEntitys.DELETE)
- @ApiOperation(value = "查阅管理移除数据", notes = "参数：数组-ids")
+ @PostMapping("/dossierRemove")
+ @Log(title = "案卷管理移除数据", businessType = EnumEntitys.DELETE)
+ @ApiOperation(value = "案卷管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {
-   int resultTotal = consultService.consultRemove(Convert.toStrArray(ids));
+   int resultTotal = dossierService.dossierRemove(Convert.toStrArray(ids));
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
    }

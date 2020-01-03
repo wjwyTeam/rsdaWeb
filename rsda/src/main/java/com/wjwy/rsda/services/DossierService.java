@@ -5,15 +5,15 @@
  * @Last Modified time: 2020-01-02 15:41:44
  */
 
-package com.wjwy.rsda.services.per;
+package com.wjwy.rsda.services;
 
 import java.util.List;
 import java.util.UUID;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wjwy.rsda.entity.per.Dossier;
-import com.wjwy.rsda.mapper.per.DossierMapper;
+import com.wjwy.rsda.entity.Dossier;
+import com.wjwy.rsda.mapper.DossierMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,12 @@
-package com.wjwy.rsda.services.per;
+package com.wjwy.rsda.services;
 
 import java.util.List;
 import java.util.UUID;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wjwy.rsda.entity.per.Consult;
-import com.wjwy.rsda.mapper.per.ConsultMapper;
+import com.wjwy.rsda.entity.Consult;
+import com.wjwy.rsda.mapper.ConsultMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

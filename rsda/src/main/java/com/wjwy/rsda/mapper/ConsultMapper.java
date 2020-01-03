@@ -1,7 +1,7 @@
-package com.wjwy.rsda.mapper.per;
+package com.wjwy.rsda.mapper;
 
 import com.wjwy.rsda.common.TkMapper;
-import com.wjwy.rsda.entity.per.Consult;
+import com.wjwy.rsda.entity.Consult;
 
 public interface ConsultMapper extends TkMapper<Consult> {
 

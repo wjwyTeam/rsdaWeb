@@ -6,7 +6,7 @@
  * @LastEditors  : ZHANGQI
  * @LastEditTime : 2020-01-03 09:12:45
  */
-package com.wjwy.rsda.entity.per;
+package com.wjwy.rsda.entity;
 
 import java.util.Date;
 

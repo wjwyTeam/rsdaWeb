@@ -1,12 +1,13 @@
-package com.wjwy.rsda.controller.per;
+package com.wjwy.rsda.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
-import com.wjwy.rsda.entity.per.Personal;
+import com.wjwy.rsda.entity.Consult;
 import com.wjwy.rsda.enums.Convert;
 import com.wjwy.rsda.enums.EnumEntitys;
-import com.wjwy.rsda.services.per.PersonalService;
+import com.wjwy.rsda.services.ConsultService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,74 +19,66 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tk.mybatis.mapper.util.StringUtil;
 
-/*
- * @Descripttion: 
- * @version: v0.0.1
- * @Author: ZHANGQI
- * @Date: 2020-01-02 10:01:53
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-02 10:03:37
- */
-
-@RequestMapping("/person")
+@RequestMapping("/consult")
 @RestController
-@Api(value = "人员管理", tags = "人员管理API维护")
-public class PersonalController {
+@Api(value = "查阅管理", tags = "查阅管理API维护")
+public class ConsultController {
  @Autowired
- private PersonalService personalService;
+ private ConsultService consultService;
 
- public Logger logger = LoggerFactory.getLogger(PersonalController.class);
+ public Logger logger = LoggerFactory.getLogger(ConsultController.class);
 
  // 跳转界面前缀
  private String prefix = "/webview/person";
 
  /**
-  * 跳转人员管理列表主页
+  * 跳转查阅管理列表主页
   * 
   * @param model
   * @return ModelAndView
   */
- @GetMapping("/personalListPage")
- @ApiOperation(value = "跳转人员管理列表主页")
- public ModelAndView personalListPage(ModelAndView model) {
-  model.setViewName(prefix + "/personalList");
+ @GetMapping("/consultListPage")
+ @ApiOperation(value = "跳转查阅管理列表主页")
+ public ModelAndView ConsultListPage(ModelAndView model) {
+  model.setViewName(prefix + "/consultList");
   return model;
  }
 
  /**
-  * 跳转人员管理表单主页
+  * 跳转查阅管理表单主页
   * 
-  * @param personalId
+  * @param ConsultId
   * @param model
   * @return ModelAndView
   */
- @ApiOperation(value = "跳转人员管理表单主页", notes = "personalId - 人员编号")
- @GetMapping("/personalFormPage")
- public ModelAndView personalFormPage(String personalId, ModelAndView model) {
-  if (StringUtil.isNotEmpty(personalId)) {
-   model.addObject("personalOne", personalService.getById(personalId));
+ @ApiOperation(value = "跳转查阅管理表单主页", notes = "ConsultId - 查阅编号")
+ @GetMapping("/consultFormPage")
+ public ModelAndView ConsultFormPage(String consultId, ModelAndView model) {
+  if (StringUtil.isNotEmpty(consultId)) {
+   model.addObject("consultOne", consultService.getById(consultId));
   }
-  model.setViewName(prefix + "/personalForm");
+  model.setViewName(prefix + "/consultForm");
   return model;
  }
 
  /**
   * 列表数据查询
   * 
-  * @param personal
+  * @param Consult
   * @param page
   * @param limit
   * @return ResponseWrapper
   */
- @ApiOperation(value = "人员管理列表数据查询", notes = "参数:personal-对象")
- @PostMapping("/personalFindList")
- public ResponseWrapper personalFindList(@RequestBody Personal personal, Integer page, Integer limit) {
+ @ApiOperation(value = "查阅管理列表数据查询", notes = "参数:Consult-对象")
+ @PostMapping("/consultFindList")
+ public ResponseWrapper ConsultFindList(@RequestBody Consult consult, Integer page, Integer limit) {
   try {
-   PageInfo<Personal> pageInfos = personalService.findList(personal, page, limit);
+   PageInfo<Consult> pageInfos = consultService.findList(consult, page, limit);
    return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
      Integer.parseInt(String.valueOf(pageInfos.getTotal())));
   } catch (Exception e) {
@@ -96,18 +89,18 @@ public class PersonalController {
  }
 
  /**
-  * 人员管理表单数据新增
+  * 查阅管理表单数据新增
   * 
-  * @param personal
+  * @param Consult
   * @return ResponseWrapper
   */
- @PostMapping("/personalInsert")
- @Log(title = "人员管理表单数据新增", businessType = EnumEntitys.INSERT)
- @ApiOperation(value = "人员管理表单数据新增", notes = "参数:personal-对象")
- public ResponseWrapper personalInsert(@RequestBody Personal personal) {
+ @PostMapping("/consultInsert")
+ @Log(title = "查阅管理表单数据新增", businessType = EnumEntitys.INSERT)
+ @ApiOperation(value = "查阅管理表单数据新增", notes = "参数:Consult-对象")
+ public ResponseWrapper ConsultInsert(@RequestBody Consult Consult) {
 
   try {
-   int resultTotal = personalService.personalInsert(personal);
+   int resultTotal = consultService.consultInsert(Consult);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
    }
@@ -120,17 +113,17 @@ public class PersonalController {
  }
 
  /**
-  * 人员管理表单数据更新
+  * 查阅管理表单数据更新
   * 
-  * @param personal
+  * @param Consult
   * @return ResponseWrapper
   */
- @PostMapping("/personalUpdate")
- @Log(title = "人员管理表单数据更新", businessType = EnumEntitys.UPDATE)
- @ApiOperation(value = "人员管理表单数据更新", notes = "参数:personal-对象")
- public ResponseWrapper personalUpdate(@RequestBody Personal personal) {
+ @PostMapping("/consultUpdate")
+ @Log(title = "查阅管理表单数据更新", businessType = EnumEntitys.UPDATE)
+ @ApiOperation(value = "查阅管理表单数据更新", notes = "参数:Consult-对象")
+ public ResponseWrapper ConsultUpdate(@RequestBody Consult consult) {
   try {
-   int resultTotal = personalService.personalUpdate(personal);
+   int resultTotal = consultService.consultUpdate(consult);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
    }
@@ -143,17 +136,18 @@ public class PersonalController {
  }
 
  /**
-  * 人员管理移除数据
+  * 查阅管理移除数据
+  * 
   * @param ids
   * @return ResponseWrapper
   */
  @ResponseBody
- @PostMapping("/personalRemove")
- @Log(title = "人员管理移除数据", businessType = EnumEntitys.DELETE)
- @ApiOperation(value = "人员管理移除数据", notes = "参数：数组-ids")
+ @PostMapping("/consultRemove")
+ @Log(title = "查阅管理移除数据", businessType = EnumEntitys.DELETE)
+ @ApiOperation(value = "查阅管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {
-   int resultTotal = personalService.personalRemove(Convert.toStrArray(ids));
+   int resultTotal = consultService.consultRemove(Convert.toStrArray(ids));
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
    }
@@ -165,4 +159,5 @@ public class PersonalController {
   return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
     HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
  }
+
 }

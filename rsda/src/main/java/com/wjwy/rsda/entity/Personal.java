@@ -1,4 +1,4 @@
-package com.wjwy.rsda.entity.per;
+package com.wjwy.rsda.entity;
 
 import java.util.Date;
 

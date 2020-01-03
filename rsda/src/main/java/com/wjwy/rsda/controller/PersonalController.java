@@ -1,19 +1,12 @@
-/*
- * @Author: ZHANGQI 
- * @Date: 2020-01-02 14:59:58 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2020-01-02 15:40:33
- */
-
-package com.wjwy.rsda.controller.per;
+package com.wjwy.rsda.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
-import com.wjwy.rsda.entity.per.Dossier;
+import com.wjwy.rsda.entity.Personal;
 import com.wjwy.rsda.enums.Convert;
 import com.wjwy.rsda.enums.EnumEntitys;
-import com.wjwy.rsda.services.per.DossierService;
+import com.wjwy.rsda.services.PersonalService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,61 +24,70 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tk.mybatis.mapper.util.StringUtil;
 
-@RequestMapping("/dossier")
-@RestController
-@Api(value = "案卷管理", tags = "案卷管理API维护")
-public class DossierController{
- @Autowired
- private DossierService dossierService;
+/*
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2020-01-02 10:01:53
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-02 10:03:37
+ */
 
- public Logger logger = LoggerFactory.getLogger(DossierController.class);
+@RequestMapping("/person")
+@RestController
+@Api(value = "人员管理", tags = "人员管理API维护")
+public class PersonalController {
+ @Autowired
+ private PersonalService personalService;
+
+ public Logger logger = LoggerFactory.getLogger(PersonalController.class);
 
  // 跳转界面前缀
  private String prefix = "/webview/person";
 
  /**
-  * 跳转案卷管理列表主页
+  * 跳转人员管理列表主页
   * 
   * @param model
   * @return ModelAndView
   */
- @GetMapping("/dossierListPage")
- @ApiOperation(value = "跳转案卷管理列表主页")
- public ModelAndView dossierListPage(ModelAndView model) {
-  model.setViewName(prefix + "/dossierList");
+ @GetMapping("/personalListPage")
+ @ApiOperation(value = "跳转人员管理列表主页")
+ public ModelAndView personalListPage(ModelAndView model) {
+  model.setViewName(prefix + "/personalList");
   return model;
  }
 
  /**
-  * 跳转案卷管理表单主页
+  * 跳转人员管理表单主页
   * 
-  * @param dossierId
+  * @param personalId
   * @param model
   * @return ModelAndView
   */
- @ApiOperation(value = "跳转案卷管理表单主页", notes = "dossierId - 案卷编号")
- @GetMapping("/dossierFormPage")
- public ModelAndView dossierFormPage(String dossierId, ModelAndView model) {
-  if (StringUtil.isNotEmpty(dossierId)) {
-   model.addObject("dossierOne", dossierService.getById(dossierId));
+ @ApiOperation(value = "跳转人员管理表单主页", notes = "personalId - 人员编号")
+ @GetMapping("/personalFormPage")
+ public ModelAndView personalFormPage(String personalId, ModelAndView model) {
+  if (StringUtil.isNotEmpty(personalId)) {
+   model.addObject("personalOne", personalService.getById(personalId));
   }
-  model.setViewName(prefix + "/dossierForm");
+  model.setViewName(prefix + "/personalForm");
   return model;
  }
 
  /**
   * 列表数据查询
   * 
-  * @param dossier
+  * @param personal
   * @param page
   * @param limit
   * @return ResponseWrapper
   */
- @ApiOperation(value = "案卷管理列表数据查询", notes = "参数:dossier-对象")
- @PostMapping("/dossierFindList")
- public ResponseWrapper dossierFindList(@RequestBody Dossier dossier, Integer page, Integer limit) {
+ @ApiOperation(value = "人员管理列表数据查询", notes = "参数:personal-对象")
+ @PostMapping("/personalFindList")
+ public ResponseWrapper personalFindList(@RequestBody Personal personal, Integer page, Integer limit) {
   try {
-   PageInfo<Dossier> pageInfos = dossierService.findList(dossier, page, limit);
+   PageInfo<Personal> pageInfos = personalService.findList(personal, page, limit);
    return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
      Integer.parseInt(String.valueOf(pageInfos.getTotal())));
   } catch (Exception e) {
@@ -96,18 +98,18 @@ public class DossierController{
  }
 
  /**
-  * 案卷管理表单数据新增
+  * 人员管理表单数据新增
   * 
-  * @param dossier
+  * @param personal
   * @return ResponseWrapper
   */
- @PostMapping("/dossierInsert")
- @Log(title = "案卷管理表单数据新增", businessType = EnumEntitys.INSERT)
- @ApiOperation(value = "案卷管理表单数据新增", notes = "参数:dossier-对象")
- public ResponseWrapper dossierInsert(@RequestBody Dossier dossier) {
+ @PostMapping("/personalInsert")
+ @Log(title = "人员管理表单数据新增", businessType = EnumEntitys.INSERT)
+ @ApiOperation(value = "人员管理表单数据新增", notes = "参数:personal-对象")
+ public ResponseWrapper personalInsert(@RequestBody Personal personal) {
 
   try {
-   int resultTotal = dossierService.dossierInsert(dossier);
+   int resultTotal = personalService.personalInsert(personal);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
    }
@@ -120,17 +122,17 @@ public class DossierController{
  }
 
  /**
-  * 案卷管理表单数据更新
+  * 人员管理表单数据更新
   * 
-  * @param dossier
+  * @param personal
   * @return ResponseWrapper
   */
- @PostMapping("/dossierUpdate")
- @Log(title = "案卷管理表单数据更新", businessType = EnumEntitys.UPDATE)
- @ApiOperation(value = "案卷管理表单数据更新", notes = "参数:dossier-对象")
- public ResponseWrapper dossierUpdate(@RequestBody Dossier dossier) {
+ @PostMapping("/personalUpdate")
+ @Log(title = "人员管理表单数据更新", businessType = EnumEntitys.UPDATE)
+ @ApiOperation(value = "人员管理表单数据更新", notes = "参数:personal-对象")
+ public ResponseWrapper personalUpdate(@RequestBody Personal personal) {
   try {
-   int resultTotal = dossierService.dossierUpdate(dossier);
+   int resultTotal = personalService.personalUpdate(personal);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
    }
@@ -143,18 +145,17 @@ public class DossierController{
  }
 
  /**
-  * 案卷管理移除数据
-  * 
+  * 人员管理移除数据
   * @param ids
   * @return ResponseWrapper
   */
  @ResponseBody
- @PostMapping("/dossierRemove")
- @Log(title = "案卷管理移除数据", businessType = EnumEntitys.DELETE)
- @ApiOperation(value = "案卷管理移除数据", notes = "参数：数组-ids")
+ @PostMapping("/personalRemove")
+ @Log(title = "人员管理移除数据", businessType = EnumEntitys.DELETE)
+ @ApiOperation(value = "人员管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {
-   int resultTotal = dossierService.dossierRemove(Convert.toStrArray(ids));
+   int resultTotal = personalService.personalRemove(Convert.toStrArray(ids));
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
    }
@@ -166,5 +167,4 @@ public class DossierController{
   return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
     HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
  }
-
 }
