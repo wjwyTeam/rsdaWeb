@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: v 1.0
+ * @Author: ZHANGQI
+ * @Date: 2020-01-02 18:12:32
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-03 09:12:45
+ */
 package com.wjwy.rsda.entity.per;
 
 import java.util.Date;
@@ -20,7 +28,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("查阅管理=>实体")
-@Table(name = "consult_application")
+@Table(name = "consult_apply")
 public class Consult {
  @ApiModelProperty("查阅申请ID")
  @Column(name = "consult_id")
