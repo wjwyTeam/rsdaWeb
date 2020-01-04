@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-11-30 18:24:05
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 08:49:35
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-04 10:18:06
  */
 package com.wjwy.rsda.controller;
 
@@ -14,7 +14,7 @@ import com.wjwy.rsda.entity.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -102,6 +102,7 @@ public class LoginController {
 	@PostMapping("/login")
 	public ResponseWrapper UserLogin(String loginName, String passwordMd5) {
 		try {
+			
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(loginName, passwordMd5);
 
@@ -113,8 +114,8 @@ public class LoginController {
 			HttpSession session = request.getSession(true);// 获取库内session
 			session.setAttribute("userInfo", user);
 			return ResponseWrapper.success(HttpStatus.OK.value(), "登陆中,请稍候...", user, "/index", null);
-		} catch (UnknownAccountException e) {
-			return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "此用户不存在", null, "/login", null);
+		} catch (AuthenticationException e) {
+			return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null, "/login", null);
 		}
 	}
 

@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-11-30 22:58:25
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 14:56:31
+ * @LastEditTime : 2020-01-03 17:48:19
  */
 package com.wjwy.rsda.entity;
 
@@ -107,6 +107,10 @@ public class User implements Serializable {
 	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime; // 创建时间
 
+	/** 盐加密 */
+	@ApiModelProperty("盐加密")
+	@Column(name = "salt")
+	private String salt;
 	@ApiModelProperty("指定路径")
 	@Column(name = "index_url")
 	private String indexUrl;

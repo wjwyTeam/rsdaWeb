@@ -1,12 +1,15 @@
 package com.wjwy.rsda.services;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.wjwy.rsda.common.util.StringUtils;
 import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.mapper.FunctionMapper;
@@ -145,7 +148,22 @@ public class FunctionService {
         return functionlists;
 	}
     
-
+    /**
+     * 根据用户ID查询权限
+     * 
+     * @param userId 用户ID
+     * @return 权限列表
+     */
+    public Set<String> selectPermsByUserId(String userId) {
+        List<String> perms = functionMapper.selectRolesByUserId(userId);
+        Set<String> permsSet = new HashSet<>();
+        for (String perm : perms) {
+            if (StringUtils.isNotEmpty(perm)) {
+                permsSet.addAll(Arrays.asList(perm.trim().split(",")));
+            }
+        }
+        return permsSet;
+    }
     
 
 }

@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
- * @LastEditors  : zgr
- * @LastEditTime : 2019-12-28 10:42:50
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-04 10:02:20
  */
 package com.wjwy.rsda.services;
 
@@ -14,15 +14,30 @@ import java.util.UUID;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.wjwy.rsda.common.tool.factory.AsyncFactory;
+import com.wjwy.rsda.common.tool.factory.AsyncManager;
+import com.wjwy.rsda.common.tool.server.except.CaptchaException;
+import com.wjwy.rsda.common.tool.server.except.UserBlockedException;
+import com.wjwy.rsda.common.tool.server.except.UserDeleteException;
+import com.wjwy.rsda.common.tool.server.except.UserNotExistsException;
+import com.wjwy.rsda.common.tool.server.except.UserPasswordNotMatchException;
+import com.wjwy.rsda.common.tool.server.service.PasswordService;
+import com.wjwy.rsda.common.util.DateUtils;
 import com.wjwy.rsda.common.util.MD5Util;
+import com.wjwy.rsda.common.util.MessageUtils;
+import com.wjwy.rsda.common.util.ServletUtils;
+import com.wjwy.rsda.common.util.ShiroUtils;
+import com.wjwy.rsda.common.util.StringUtils;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.entity.UserRole;
+import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.enums.ResponseMessageConstant;
+import com.wjwy.rsda.enums.ShiroConstants;
 import com.wjwy.rsda.mapper.RoleMapper;
 import com.wjwy.rsda.mapper.UserMapper;
 import com.wjwy.rsda.mapper.UserRoleMapper;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +65,9 @@ public class UserService {
 	@Autowired
 	private RoleMapper roleDao;
 
+	@Autowired
+	private PasswordService passwordService;
+
 	public Logger logger = LoggerFactory.getLogger(UserService.class);
 
 	/**
@@ -59,10 +77,10 @@ public class UserService {
 	 * @return
 	 */
 	public PageInfo<User> getPageList(String userId, String userName, String deptId, String workDept, Boolean delFlag,
-			Integer pageNum, Integer pageSize,String roleId) {
+			Integer pageNum, Integer pageSize, String roleId) {
 
 		PageHelper.startPage(pageNum, pageSize);
-		List<User> users = getList(userId, userName, deptId, workDept, delFlag,roleId);
+		List<User> users = getList(userId, userName, deptId, workDept, delFlag, roleId);
 		if (users == null) {
 			return null;
 		}
@@ -133,8 +151,9 @@ public class UserService {
 		Example example = new Example(User.class);
 		Criteria criteria = example.createCriteria();
 		criteria.andEqualTo("userId", user.getUserId());
-	
-		user.setPassWord(MD5Util.md5ToHex(user.getPassWord()));
+		User user1 = userDao.selectOneByExample(example);
+		user.setPassWord(
+				passwordService.encryptPassword(user.getUserName(), MD5Util.md5ToHex(user.getPassWord()), user1.getSalt()));
 		return userDao.updateByExampleSelective(user, example);
 	}
 
@@ -148,7 +167,9 @@ public class UserService {
 	 */
 	public int insert(User user) {
 
-		user.setPassWord(MD5Util.md5ToHex(user.getPassWord()));
+		user.setSalt(ShiroUtils.randomSalt());
+		user.setPassWord(
+				passwordService.encryptPassword(user.getUserName(), MD5Util.md5ToHex(user.getPassWord()), user.getSalt()));
 		user.setUserId(UUID.randomUUID().toString().toLowerCase());
 		return userDao.insertSelective(user);
 	}
@@ -163,7 +184,8 @@ public class UserService {
 	 * @param delFlag
 	 * @return
 	 */
-	public List<User> getList(String userId, String userName, String deptId, String workDept, Boolean delFlag,String roleId) {
+	public List<User> getList(String userId, String userName, String deptId, String workDept, Boolean delFlag,
+			String roleId) {
 
 		Example example = new Example(User.class);
 
@@ -210,15 +232,15 @@ public class UserService {
 					criteriaRole.andEqualTo("roleStatus", true);
 					role = roleDao.selectOneByExample(exampleRole);
 					roleNewList.add(role);
-					if(StringUtils.isNotEmpty(roleId)&&roleId.equals(userRole.getRoleId())){
-						//已分配
+					if (StringUtils.isNotEmpty(roleId) && roleId.equals(userRole.getRoleId())) {
+						// 已分配
 						user.setISRole(true);
 					}
 
 				}
 				user.setRoles(roleNewList);
 			}
-			
+
 			userNew.add(user);
 		}
 		return userNew;
@@ -253,14 +275,15 @@ public class UserService {
 	}
 
 	/**
-		* 取消授权
-		* @param userId
-		* @param roleId
-		* @return
+	 * 取消授权
+	 * 
+	 * @param userId
+	 * @param roleId
+	 * @return
 	 */
 	public boolean userDelRole(String userId, String roleId) {
 
-		if (StringUtils.isEmpty(userId)&&StringUtils.isEmpty(roleId)) {
+		if (StringUtils.isEmpty(userId) && StringUtils.isEmpty(roleId)) {
 			return false;
 		}
 		Example example = new Example(UserRole.class);
@@ -268,27 +291,140 @@ public class UserService {
 		// 将当前用户所选角色全部清除，新增
 		criteria.andEqualTo("userId", userId);
 		criteria.andEqualTo("roleId", roleId);
-		logger.info("=========================================》",userRoleDao.deleteByExample(example));
+		logger.info("=========================================》", userRoleDao.deleteByExample(example));
 		return true;
 	}
 
 	/**
 	 * 授权
+	 * 
 	 * @param userId
 	 * @param roleId
 	 * @return
 	 */
 	public boolean userInRole(String userId, String roleId) {
-		if (StringUtils.isEmpty(userId)&&StringUtils.isEmpty(roleId)) {
+		if (StringUtils.isEmpty(userId) && StringUtils.isEmpty(roleId)) {
 			return false;
 		}
 		UserRole userRole = new UserRole();
 		userRole.setRId(UUID.randomUUID().toString().toLowerCase());
 		userRole.setRoleId(roleId);
 		userRole.setUserId(userId);
-		logger.info("=========================================》",userRoleDao.insertSelective(userRole));
+		logger.info("=========================================》", userRoleDao.insertSelective(userRole));
 		return true;
 	}
 
-	
+	/**
+	 * selectUserByLoginName
+	 * 
+	 * @param userName
+	 * @param passWord
+	 * @return
+	 */
+	public User selectUserByLoginName(String userName) {
+		User user = new User();
+		user.setDelFlag(false);
+		user.setUserName(userName);
+		return userDao.selectOne(user);
+	}
+
+	/**
+	 * selectUserByPhoneNumber
+	 * 
+	 * @param userName
+	 * @param passWord
+	 * @return
+	 */
+	public User selectUserByPhoneNumber(String userName) {
+		User user = new User();
+		user.setDelFlag(false);
+		user.setPhone(userName);
+		return userDao.selectOne(user);
+	}
+
+	/**
+	 * 登录
+	 */
+	public User login(String userName, String passWord) {
+
+		// 验证码校验。
+		if (ServletUtils.getRequest().getAttribute(ShiroConstants.CURRENT_CAPTCHA) != null) {
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+					MessageUtils.message("user.jcaptcha.error")));
+			throw new CaptchaException();
+		}
+		// 用户名或密码为空 错误
+		if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(passWord)) {
+			AsyncManager.me().execute(
+					AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL, MessageUtils.message("not.null")));
+			throw new UserNotExistsException();
+		}
+		// 密码如果不在指定范围内 错误
+		if (passWord.length() < ResponseMessageConstant.PASSWORD_MIN_LENGTH
+				|| passWord.length() > ResponseMessageConstant.PASSWORD_MAX_LENGTH) {
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+					MessageUtils.message("user.passWord.not.match")));
+			throw new UserPasswordNotMatchException();
+		}
+
+		// 用户名不在指定范围内 错误
+		if (userName.length() < ResponseMessageConstant.USERNAME_MIN_LENGTH
+				|| userName.length() > ResponseMessageConstant.USERNAME_MAX_LENGTH) {
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+					MessageUtils.message("user.passWord.not.match")));
+			throw new UserPasswordNotMatchException();
+		}
+		// 查询用户信息
+		User user = selectUserByLoginName(userName);
+
+		if (user == null && maybeMobilePhoneNumber(userName)) {
+			user = selectUserByPhoneNumber(userName);
+		}
+
+		if (user == null) {
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+					MessageUtils.message("user.not.exists")));
+			throw new UserNotExistsException();
+		}
+
+		if (EnumEntitys.DELETED.getValue().equals(user.getDelFlag())) {
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+					MessageUtils.message("user.password.delete")));
+			throw new UserDeleteException();
+		}
+
+		if (EnumEntitys.DISABLE.getValue().equals(user.getUserType())) {
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+					MessageUtils.message("user.blocked", user.getRemark())));
+			throw new UserBlockedException();
+		}
+
+		passwordService.validate(user, passWord);
+
+		AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_SUCCESS, "登录成功"));
+		recordLoginInfo(user);
+		return user;
+	}
+
+	private boolean maybeMobilePhoneNumber(String username) {
+		if (!username.matches(ResponseMessageConstant.MOBILE_PHONE_NUMBER_PATTERN)) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 记录登录信息
+	 * 
+	 * @return
+	 */
+	public int recordLoginInfo(User user) {
+		user.setUserIp(ShiroUtils.getIp());
+		user.setCreateTime(DateUtils.getNowDate());
+		Example example = new Example(User.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("userId", user.getUserId());
+		return userDao.updateByExampleSelective(user, example);
+	}
+
 }

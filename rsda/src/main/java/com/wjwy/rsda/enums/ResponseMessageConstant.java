@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 18:03:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-31 09:22:38
+ * @LastEditTime : 2020-01-03 17:22:40
  */
 package com.wjwy.rsda.enums;
 import java.nio.charset.StandardCharsets;
@@ -288,7 +288,7 @@ public class ResponseMessageConstant {
      * 密码长度限制
      */
     public static final int PASSWORD_MIN_LENGTH = 5;
-    public static final int PASSWORD_MAX_LENGTH = 20;
+    public static final int PASSWORD_MAX_LENGTH = 36;
 
     /**
      * 手机号码格式限制

@@ -264,10 +264,8 @@ public class RoleService {
      * @return 权限列表
      */
     public Set<String> selectRoleKeys(String userId) {
-        Example example = new Example(UserRole.class);
-        Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("userId", userId);
-        List<Role> perms = roleMapper.selectByExample(userId);
+    
+        List<Role> perms = roleMapper.selectRolesByUserId(userId);
         Set<String> permsSet = new HashSet<>();
         for (Role perm : perms) {
             if (StringUtils.isNotNull(perm)) {

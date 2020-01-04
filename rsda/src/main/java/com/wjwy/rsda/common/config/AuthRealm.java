@@ -1,52 +1,60 @@
 /*
- * @Descripttion: 
- * @version: v0.0.1
- * @Author: zgr
- * @Date: 2019-12-01 18:43:19
+ * @Descripttion: 认证领域
+ * @version: 
+ * @Author: ZHANGQI
+ * @Date: 2019-12-16 09:05:48
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 14:52:10
+ * @LastEditTime : 2020-01-03 17:03:10
  */
+
 package com.wjwy.rsda.common.config;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
+import com.wjwy.rsda.common.tool.server.except.CaptchaException;
+import com.wjwy.rsda.common.tool.server.except.RoleBlockedException;
+import com.wjwy.rsda.common.tool.server.except.UserBlockedException;
+import com.wjwy.rsda.common.tool.server.except.UserNotExistsException;
+import com.wjwy.rsda.common.tool.server.except.UserPasswordNotMatchException;
+import com.wjwy.rsda.common.tool.server.except.UserPasswordRetryLimitExceedException;
 import com.wjwy.rsda.common.util.ShiroUtils;
-import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.services.FunctionService;
+import com.wjwy.rsda.services.RoleService;
 import com.wjwy.rsda.services.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-import tk.mybatis.mapper.util.StringUtil;
 
-/**
- * 认证领域
- *
- * @author Levin
- * @version 2.5.1
- * @since 2018-01-10
- */
 @Configuration
 public class AuthRealm extends AuthorizingRealm {
-
+    private static final Logger log = LoggerFactory.getLogger(AuthRealm.class);
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private FunctionService functionService;
+    
 
     /**
      * 认证回调函数,登录时调用
@@ -60,13 +68,13 @@ public class AuthRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        StringBuffer passWord = new StringBuffer();
-        for (char p : (char[]) token.getCredentials()) {
-            passWord.append(p);
-        }
-        User user = Optional
-                .ofNullable(userService.getUserByLogin(token.getPrincipal().toString(), passWord.toString()))
-                .orElseThrow(UnknownAccountException::new);
+        // StringBuffer passWord = new StringBuffer();
+        // for (char p : (char[]) token.getCredentials()) {
+        //     passWord.append(p);
+        // }
+        // User user = Optional
+        //         .ofNullable(userService.getUserByLogin(token.getPrincipal().toString(), passWord.toString()))
+        //         .orElseThrow(UnknownAccountException::new);
         // 锁定账户先空着， 暂时用不上
         // if (!user.isLocked()) {
         // throw new LockedAccountException();
@@ -77,14 +85,42 @@ public class AuthRealm extends AuthorizingRealm {
         // 交给 AuthenticatingRealm 使用 CredentialsMatcher 进行密码匹配，如果觉得人家的不好可以自定义实现
         //
         // 存入用户信息
-        List<Object> principals = new ArrayList<Object>();
-        principals.add(user.getUserName());
-        principals.add(user);
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principals, user.getPassWord(),
-                getName());
-        Session session = SecurityUtils.getSubject().getSession();
-        session.setAttribute("USER_SESSION", user);
-        return authenticationInfo;
+        // List<Object> principals = new ArrayList<Object>();
+        // principals.add(user.getUserName());
+        // principals.add(user);
+        // SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principals, user.getPassWord(),
+        //         getName());
+        // Session session = SecurityUtils.getSubject().getSession();
+        // session.setAttribute("USER_SESSION", user);
+
+        UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+        String userName = upToken.getUsername();
+        String passWord = "";
+        if (upToken.getPassword() != null) {
+            passWord = new String(upToken.getPassword());
+        }
+
+        User user = null;
+        try {
+            user = userService.login(userName, passWord);
+        } catch (CaptchaException e) {
+            throw new AuthenticationException(e.getMessage(), e);
+        } catch (UserNotExistsException e) {
+            throw new UnknownAccountException(e.getMessage(), e);
+        } catch (UserPasswordNotMatchException e) {
+            throw new IncorrectCredentialsException(e.getMessage(), e);
+        } catch (UserPasswordRetryLimitExceedException e) {
+            throw new ExcessiveAttemptsException(e.getMessage(), e);
+        } catch (UserBlockedException e) {
+            throw new LockedAccountException(e.getMessage(), e);
+        } catch (RoleBlockedException e) {
+            throw new LockedAccountException(e.getMessage(), e);
+        } catch (Exception e) {
+            log.info("对用户[" + userName + "]进行登录验证..验证未通过{}", e.getMessage());
+            throw new AuthenticationException(e.getMessage(), e);
+        }
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, passWord, getName());
+        return info;
     }
 
     /**
@@ -116,39 +152,11 @@ public class AuthRealm extends AuthorizingRealm {
             authorizationInfo.addStringPermission("*:*:*");
         } else {
             roles = roleService.selectRoleKeys(user.getUserId());
-            functions = menuService.selectPermsByUserId(user.getUserId());
+            functions = functionService.selectPermsByUserId(user.getUserId());
             // 角色加入AuthorizationInfo认证对象
-            info.setRoles(roles);
+            authorizationInfo.setRoles(roles);
             // 权限加入AuthorizationInfo认证对象
-            info.setStringPermissions(menus);
-        }
-
-
-
-
-
-
-
-        if (userDO.getUserName().equals("myadmin")) {
-            FunctionService functionService = ApplicationContextRegister.getBean(FunctionService.class);
-            List<Function> listFunction = functionService.getList();
-            Set<String> permsSet = new HashSet<>();
-            for (Function sysFunction : listFunction) {
-                if (!StringUtil.isEmpty(sysFunction.getUrl())) {
-                    permsSet.add(sysFunction.getUrl());
-                }
-            }
-            authorizationInfo.addStringPermissions(permsSet);
-        } else {
-            FunctionService functionService = ApplicationContextRegister.getBean(FunctionService.class);
-            List<Function> listFunction = functionService.getList();
-            Set<String> permsSet = new HashSet<>();
-            for (Function sysFunction : listFunction) {
-                if (!StringUtil.isEmpty(sysFunction.getUrl())) {
-                    permsSet.add(sysFunction.getUrl());
-                }
-            }
-            authorizationInfo.addStringPermissions(permsSet);
+            authorizationInfo.setStringPermissions(functions);
         }
         return authorizationInfo;
     }
