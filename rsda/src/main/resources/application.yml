@@ -1,11 +1,8 @@
-
-
-
 logging:
+    config: classpath:logback.xml
     level:
-        root: INFO
-    pattern:
-        console: '%d -%msg%n'
+        com: debug
+                   
 mapper:
     identity: MYSQL
     mappers: com.wjwy.rsda.common.TkMapper
@@ -23,8 +20,12 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
 server:
-    port: 8081
+    port: 8080
+    servlet:
+        context-path: /
     tomcat:
+        max-threads: 800
+        min-spare-threads: 30
         uri-encoding: UTF-8
 spring:
     datasource:
@@ -56,12 +57,15 @@ spring:
             testOnReturn: false
             testWhileIdle: true
             timeBetweenEvictionRunsMillis: 60000
-            url: jdbc:mysql://192.168.1.58:3306/crebas?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+            url: jdbc:mysql://192.168.1.58:3306/crebas?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
             username: root
             validationQuery: SELECT 1 FROM DUAL
             webStatFilter:
                 enabled: true
         type: com.alibaba.druid.pool.DruidDataSource
+    devtools:
+        restart:
+            enabled: true
     http:
         converters:
             preferred-json-mapper: jackson
@@ -71,6 +75,10 @@ spring:
         serialization:
             write-dates-as-timestamps: true
         time-zone: GMT+8
+    messages:
+        basename: static/i18n/messages
+    profiles:
+        active: druid
     redis:
         host: 127.0.0.1
         password: root
@@ -80,7 +88,5 @@ spring:
         store-type: none
     thymeleaf:
         cache: false
-    # 资源信息
-    messages:
-        # 国际化资源文件路径
-        basename: static/i18n/messages
+        encoding: utf-8
+        mode: HTML

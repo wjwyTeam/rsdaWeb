@@ -32,7 +32,7 @@ import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.entity.UserRole;
 import com.wjwy.rsda.enums.EnumEntitys;
-import com.wjwy.rsda.enums.ResponseMessageConstant;
+import com.wjwy.rsda.enums.MessageConstant;
 import com.wjwy.rsda.enums.ShiroConstants;
 import com.wjwy.rsda.mapper.RoleMapper;
 import com.wjwy.rsda.mapper.UserMapper;
@@ -349,28 +349,28 @@ public class UserService {
 
 		// 验证码校验。
 		if (ServletUtils.getRequest().getAttribute(ShiroConstants.CURRENT_CAPTCHA) != null) {
-			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
 					MessageUtils.message("user.jcaptcha.error")));
 			throw new CaptchaException();
 		}
 		// 用户名或密码为空 错误
 		if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(passWord)) {
 			AsyncManager.me().execute(
-					AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL, MessageUtils.message("not.null")));
+					AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL, MessageUtils.message("not.null")));
 			throw new UserNotExistsException();
 		}
 		// 密码如果不在指定范围内 错误
-		if (passWord.length() < ResponseMessageConstant.PASSWORD_MIN_LENGTH
-				|| passWord.length() > ResponseMessageConstant.PASSWORD_MAX_LENGTH) {
-			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+		if (passWord.length() < MessageConstant.PASSWORD_MIN_LENGTH
+				|| passWord.length() > MessageConstant.PASSWORD_MAX_LENGTH) {
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
 					MessageUtils.message("user.passWord.not.match")));
 			throw new UserPasswordNotMatchException();
 		}
 
 		// 用户名不在指定范围内 错误
-		if (userName.length() < ResponseMessageConstant.USERNAME_MIN_LENGTH
-				|| userName.length() > ResponseMessageConstant.USERNAME_MAX_LENGTH) {
-			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+		if (userName.length() < MessageConstant.USERNAME_MIN_LENGTH
+				|| userName.length() > MessageConstant.USERNAME_MAX_LENGTH) {
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
 					MessageUtils.message("user.passWord.not.match")));
 			throw new UserPasswordNotMatchException();
 		}
@@ -382,32 +382,32 @@ public class UserService {
 		}
 
 		if (user == null) {
-			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
 					MessageUtils.message("user.not.exists")));
 			throw new UserNotExistsException();
 		}
 
 		if (EnumEntitys.DELETED.getValue().equals(user.getDelFlag())) {
-			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
 					MessageUtils.message("user.password.delete")));
 			throw new UserDeleteException();
 		}
 
 		if (EnumEntitys.DISABLE.getValue().equals(user.getUserType())) {
-			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_FAIL,
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
 					MessageUtils.message("user.blocked", user.getRemark())));
 			throw new UserBlockedException();
 		}
 
 		passwordService.validate(user, passWord);
 
-		AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, ResponseMessageConstant.LOGIN_SUCCESS, "登录成功"));
+		AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_SUCCESS, "登录成功"));
 		recordLoginInfo(user);
 		return user;
 	}
 
 	private boolean maybeMobilePhoneNumber(String username) {
-		if (!username.matches(ResponseMessageConstant.MOBILE_PHONE_NUMBER_PATTERN)) {
+		if (!username.matches(MessageConstant.MOBILE_PHONE_NUMBER_PATTERN)) {
 			return false;
 		}
 		return true;

@@ -2,7 +2,7 @@ package com.wjwy.rsda.common.util;
 
 import java.util.Collection;
 import java.util.Map;
-import com.wjwy.rsda.enums.ResponseMessageConstant;
+import com.wjwy.rsda.enums.MessageConstant;
 
 /**
  * 字符串工具类
@@ -222,7 +222,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         if (isEmpty(params) || isEmpty(template)) {
             return template;
         }
-        return ResponseMessageConstant.format(template, params);
+        return MessageConstant.format(template, params);
     }
 
     /**

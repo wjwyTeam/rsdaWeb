@@ -6,7 +6,7 @@ import org.springframework.validation.ObjectError;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wjwy.rsda.enums.ResponseMessageConstant;
+import com.wjwy.rsda.enums.MessageConstant;
 
 /**
  * @author xmpu
@@ -68,11 +68,11 @@ public class ResponseWrapper {
     }
 
     public static ResponseWrapper success(Object data) {
-        return new ResponseWrapper(StatusEnum.SUCCESS, 200, ResponseMessageConstant.MSG_SUCCESS, data, "",null);
+        return new ResponseWrapper(StatusEnum.SUCCESS, 200, MessageConstant.MSG_SUCCESS, data, "",null);
     }
 
     public static ResponseWrapper success(Object data, String indexUrl) {
-        return new ResponseWrapper(StatusEnum.SUCCESS, 200, ResponseMessageConstant.MSG_SUCCESS, data, indexUrl,null);
+        return new ResponseWrapper(StatusEnum.SUCCESS, 200, MessageConstant.MSG_SUCCESS, data, indexUrl,null);
     }
 
     public static ResponseWrapper success(String info) {
@@ -80,7 +80,7 @@ public class ResponseWrapper {
     }
 
     public static ResponseWrapper success() {
-        return new ResponseWrapper(StatusEnum.SUCCESS, 200, ResponseMessageConstant.MSG_SUCCESS, "", "",null);
+        return new ResponseWrapper(StatusEnum.SUCCESS, 200, MessageConstant.MSG_SUCCESS, "", "",null);
     }
 
     public static ResponseWrapper error(Integer code, String info, Object data) {
@@ -92,7 +92,7 @@ public class ResponseWrapper {
     }
 
     public static ResponseWrapper error() {
-        return new ResponseWrapper(StatusEnum.ERROR, 500, ResponseMessageConstant.MSG_ERROR, "", "",null);
+        return new ResponseWrapper(StatusEnum.ERROR, 500, MessageConstant.MSG_ERROR, "", "",null);
     }
 
     public StatusEnum getStatus() {
@@ -178,7 +178,7 @@ public class ResponseWrapper {
      */
     public static ResponseWrapper choose(int num) {
         if (num > 0) {
-            return success(200, ResponseMessageConstant.MSG_SUCCESS, null, "",null);
+            return success(200, MessageConstant.MSG_SUCCESS, null, "",null);
         } else {
             return fail();
         }
@@ -190,7 +190,7 @@ public class ResponseWrapper {
      * @return
      */
     public static ResponseWrapper invalid() {
-        return new ResponseWrapper(StatusEnum.ERROR, 400, ResponseMessageConstant.MSG_INVALID_DATA, "", "",null);
+        return new ResponseWrapper(StatusEnum.ERROR, 400, MessageConstant.MSG_INVALID_DATA, "", "",null);
     }
 
     /**
@@ -199,7 +199,7 @@ public class ResponseWrapper {
      * @return
      */
     public static ResponseWrapper deny() {
-        return new ResponseWrapper(StatusEnum.ERROR, 403, ResponseMessageConstant.MSG_DENY_MODIFY, "", "",null);
+        return new ResponseWrapper(StatusEnum.ERROR, 403, MessageConstant.MSG_DENY_MODIFY, "", "",null);
     }
 
     /**
@@ -208,7 +208,7 @@ public class ResponseWrapper {
      * @return
      */
     public static ResponseWrapper duplicate() {
-        return new ResponseWrapper(StatusEnum.ERROR, 405, ResponseMessageConstant.MSG_DENY_DUPLICATE, "", "",null);
+        return new ResponseWrapper(StatusEnum.ERROR, 405, MessageConstant.MSG_DENY_DUPLICATE, "", "",null);
     }
 
     /**
@@ -217,7 +217,7 @@ public class ResponseWrapper {
      * @return
      */
     public static ResponseWrapper notFound() {
-        return new ResponseWrapper(StatusEnum.ERROR, 404, ResponseMessageConstant.MSG_NOT_FOUND, "", "",null);
+        return new ResponseWrapper(StatusEnum.ERROR, 404, MessageConstant.MSG_NOT_FOUND, "", "",null);
     }
 
     /**
@@ -226,7 +226,7 @@ public class ResponseWrapper {
      * @return
      */
     public static ResponseWrapper fail() {
-        return new ResponseWrapper(StatusEnum.ERROR, 404, ResponseMessageConstant.MSG_FAIL, "", "",null);
+        return new ResponseWrapper(StatusEnum.ERROR, 404, MessageConstant.MSG_FAIL, "", "",null);
     }
 
     public boolean isSuccess() {

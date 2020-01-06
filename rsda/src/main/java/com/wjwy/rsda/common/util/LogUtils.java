@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 处理并记录日志文件
- * 
- * @author ruoyi
  */
 public class LogUtils
 {

@@ -17,7 +17,7 @@ import com.wjwy.rsda.common.tool.server.except.UserPasswordNotMatchException;
 import com.wjwy.rsda.common.tool.server.except.UserPasswordRetryLimitExceedException;
 import com.wjwy.rsda.common.util.MessageUtils;
 import com.wjwy.rsda.entity.User;
-import com.wjwy.rsda.enums.ResponseMessageConstant;
+import com.wjwy.rsda.enums.MessageConstant;
 import com.wjwy.rsda.enums.ShiroConstants;
 
 import org.apache.shiro.cache.Cache;
@@ -55,13 +55,13 @@ public class PasswordService {
             loginRecordCache.put(loginName, retryCount);
         }
         if (retryCount.incrementAndGet() > maxRetryCount) {
-            AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, ResponseMessageConstant.LOGIN_FAIL,
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, MessageConstant.LOGIN_FAIL,
                     MessageUtils.message("user.password.retry.limit.exceed", maxRetryCount)));
             throw new UserPasswordRetryLimitExceedException(Integer.valueOf(maxRetryCount).intValue());
         }
 
         if (!matches(user, password)) {
-            AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, ResponseMessageConstant.LOGIN_FAIL,
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, MessageConstant.LOGIN_FAIL,
                     MessageUtils.message("user.password.retry.limit.count", retryCount)));
             loginRecordCache.put(loginName, retryCount);
             throw new UserPasswordNotMatchException();

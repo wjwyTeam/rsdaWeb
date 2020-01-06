@@ -2,18 +2,16 @@
  * @Descripttion: 
  * @version: v 1.0
  * @Author: ZHANGQI
- * @Date: 2020-01-02 18:12:32
+ * @String: 2020-01-02 18:12:32
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 09:12:45
+ * @LastEditTime : 2020-01-06 14:58:33
  */
 package com.wjwy.rsda.entity;
 
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 
-import com.alibaba.fastjson.annotation.JSONField;
 
 import io.swagger.annotations.ApiModel;
 
@@ -59,10 +57,10 @@ public class Consult {
  @ApiModelProperty("备注")
  @Column(name = "remarks")
  private String remarks;
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+
  @ApiModelProperty("创建时间")
  @Column(name = "create_time")
- private Date createTime;
+ private String createTime;
  @ApiModelProperty("是否删除")
  @Column(name = "del_flag")
  private Boolean delFlag;

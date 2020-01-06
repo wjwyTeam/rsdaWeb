@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-09 17:37:40
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 08:59:28
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-06 15:00:19
  */
 package com.wjwy.rsda.entity;
 
@@ -19,14 +19,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-/*
- * @Descripttion: 
- * @version: v0.0.1
- * @Author: ZHANGQI
- * @Date: 2019-12-09 17:37:40
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-09 17:41:53
- */
 @Data
 @ToString
 @AllArgsConstructor

@@ -1,11 +1,19 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: ZHANGQI
+ * @String: 2020-01-02 14:48:17
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-06 14:59:00
+ */
 package com.wjwy.rsda.entity;
 
-import java.util.Date;
+
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 
-import com.alibaba.fastjson.annotation.JSONField;
+
 
 import io.swagger.annotations.ApiModel;
 
@@ -45,18 +53,18 @@ public class Dossier {
  private String personName;
  @ApiModelProperty("转入时间")
  @Column(name = "transfer_time")
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
- private Date transferTime;
+
+ private String transferTime;
  @ApiModelProperty("档案状态")
  @Column(name = "dossier_status")
  private String dossierStatus;
  @ApiModelProperty("工作单位及职务")
  @Column(name = "person_duty")
  private String personDuty;
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+
  @ApiModelProperty("创建时间")
  @Column(name = "create_time")
- private Date createTime;
+ private String createTime;
  @ApiModelProperty("是否删除")
  @Column(name = "del_flag")
  private Boolean delFlag;

@@ -11,7 +11,7 @@ import com.wjwy.rsda.common.util.ShiroUtils;
 import com.wjwy.rsda.common.util.SpringUtils;
 import com.wjwy.rsda.entity.Logininfor;
 import com.wjwy.rsda.entity.OperLog;
-import com.wjwy.rsda.enums.ResponseMessageConstant;
+import com.wjwy.rsda.enums.MessageConstant;
 import com.wjwy.rsda.services.OperLogService;
 
 import org.slf4j.Logger;
@@ -110,10 +110,10 @@ public class AsyncFactory {
                 logininfor.setOs(os);
                 logininfor.setMsg(message);
                 // 日志状态
-                if (ResponseMessageConstant.LOGIN_SUCCESS.equals(status) || ResponseMessageConstant.LOGOUT.equals(status)) {
-                    logininfor.setStatus(ResponseMessageConstant.SUCCESS);
-                } else if (ResponseMessageConstant.LOGIN_FAIL.equals(status)) {
-                    logininfor.setStatus(ResponseMessageConstant.FAIL);
+                if (MessageConstant.LOGIN_SUCCESS.equals(status) || MessageConstant.LOGOUT.equals(status)) {
+                    logininfor.setStatus(MessageConstant.SUCCESS);
+                } else if (MessageConstant.LOGIN_FAIL.equals(status)) {
+                    logininfor.setStatus(MessageConstant.FAIL);
                 }
                 // 插入数据
                 // SpringUtils.getBean(LogininforService.class).insertLogininfor(logininfor);

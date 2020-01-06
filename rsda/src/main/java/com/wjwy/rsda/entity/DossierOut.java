@@ -1,13 +1,21 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: ZHANGQI
+ * @Date: 2020-01-03 13:55:13
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2020-01-06 15:00:02
+ */
 package com.wjwy.rsda.entity;
 
 import javax.persistence.Column;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
+
 import javax.persistence.Table;
 
-import com.alibaba.fastjson.annotation.JSONField;
+
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -49,9 +57,9 @@ public class DossierOut {
  @Column(name = "transfer_content")
  private String transferContent;
  @ApiModelProperty("转出时间")
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+
  @Column(name = "transfer_time")
- private Date transferTime;
+ private String transferTime;
  @ApiModelProperty("收件人")
  @Column(name = "consignee")
  private String consignee;
@@ -67,10 +75,10 @@ public class DossierOut {
  @ApiModelProperty("是否可删除")
  @Column(name = "is_candel")
  private Boolean isCandel;
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+
  @ApiModelProperty("创建时间")
  @Column(name = "create_time")
- private Date createTime;
+ private String createTime;
  @ApiModelProperty("删除标记")
  @Column(name = "del_flag")
  private Boolean delFlag;

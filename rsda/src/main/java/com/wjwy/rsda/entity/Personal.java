@@ -1,12 +1,6 @@
 package com.wjwy.rsda.entity;
-
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Table;
-
-import com.alibaba.fastjson.annotation.JSONField;
-
 import io.swagger.annotations.ApiModel;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -46,19 +40,17 @@ public class Personal {
  private String spellName;
  @ApiModelProperty("出生年月")
  @Column(name = "birth_date")
- @JSONField(format = "yyyy-MM")
- private Date birthDate;
+
+ private String birthDate;
  @ApiModelProperty("性别")
  @Column(name = "personal_sex")
  private String personalSex;
  @ApiModelProperty("参加工作时间")
  @Column(name = "work_time")
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
- private Date workTime;
+ private String workTime;
  @ApiModelProperty("入党时间")
  @Column(name = "party_time")
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
- private Date partyTime;
+ private String partyTime;
  @ApiModelProperty("身份证号码")
  @Column(name = "personal_no")
  private String personalNo;
@@ -73,8 +65,7 @@ public class Personal {
  private String workDuty;
  @ApiModelProperty("任职时间")
  @Column(name = "appointment_time")
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
- private Date appointmentTime;
+ private String appointmentTime;
  @ApiModelProperty("最高学历")
  @Column(name = "highest_degreel")
  private String highestDegreel;
@@ -116,8 +107,7 @@ public class Personal {
  private Boolean isCandel;
  @ApiModelProperty("创建时间")
  @Column(name = "create_time")
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
- private Date createTime;
+ private String createTime;
  @ApiModelProperty("创建人")
  @Column(name = "create_by")
  private String createBy;

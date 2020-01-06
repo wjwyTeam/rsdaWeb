@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:47:31
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-31 09:47:13
+ * @LastEditTime : 2020-01-06 07:57:07
  */
 package com.wjwy.rsda.common.tool.server.session;
 
@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 /**
  * 在线用户会话属性
  */
@@ -30,8 +29,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("在线用户=>")
-public class OnlineSession extends SimpleSession
-{
+public class OnlineSession extends SimpleSession {
     private static final long serialVersionUID = 1L;
 
     /** 用户ID */
@@ -42,9 +40,9 @@ public class OnlineSession extends SimpleSession
 
     /** 部门名称 */
     private String deptName;
-	
-	/** 用户头像 */
-	private String avatar;
+
+    /** 用户头像 */
+    private String avatar;
 
     /** 登录IP地址 */
     private String host;
@@ -62,42 +60,34 @@ public class OnlineSession extends SimpleSession
     private transient boolean attributeChanged = false;
 
     @Override
-    public String getHost()
-    {
+    public String getHost() {
         return host;
     }
 
     @Override
-    public void setHost(String host)
-    {
+    public void setHost(String host) {
         this.host = host;
     }
 
     @Override
-    public void setAttribute(Object key, Object value)
-    {
+    public void setAttribute(Object key, Object value) {
         super.setAttribute(key, value);
     }
 
     @Override
-    public Object removeAttribute(Object key)
-    {
+    public Object removeAttribute(Object key) {
         return super.removeAttribute(key);
     }
 
-
-    public void markAttributeChanged()
-    {
+    public void markAttributeChanged() {
         this.attributeChanged = true;
     }
 
-    public void resetAttributeChanged()
-    {
+    public void resetAttributeChanged() {
         this.attributeChanged = false;
     }
 
-    public boolean isAttributeChanged()
-    {
+    public boolean isAttributeChanged() {
         return attributeChanged;
     }
 

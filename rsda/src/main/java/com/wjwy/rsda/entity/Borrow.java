@@ -4,16 +4,15 @@ package com.wjwy.rsda.entity;
  * @Descripttion: 
  * @version: v 1.0
  * @Author: ZHANGQI
- * @Date: 2020-01-03 09:31:57
+ * @String: 2020-01-03 09:31:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 09:32:27
+ * @LastEditTime : 2020-01-06 14:57:58
  */
-import java.util.Date;
+
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 
-import com.alibaba.fastjson.annotation.JSONField;
 
 import io.swagger.annotations.ApiModel;
 
@@ -49,13 +48,13 @@ public class Borrow {
  @Column(name = "borrow_reason")
  private String borrowReason;
  @ApiModelProperty("借阅开始时间")
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+
  @Column(name = "borrow_start_time")
- private Date borrowStartTime;
+ private String borrowStartTime;
  @ApiModelProperty("借阅结束时间")
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+
  @Column(name = "borrow_end_time")
- private Date borrowEndTime;
+ private String borrowEndTime;
  @ApiModelProperty("备注")
  @Column(name = "remarks")
  private String remarks;
@@ -66,9 +65,9 @@ public class Borrow {
  @Column(name = "is_candel")
  private Boolean isCandel;
  @ApiModelProperty("创建时间")
- @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+
  @Column(name = "create_time")
- private Date createTime;
+ private String createTime;
  @ApiModelProperty("删除标记")
  @Column(name = "del_flag")
  private Boolean delFlag;

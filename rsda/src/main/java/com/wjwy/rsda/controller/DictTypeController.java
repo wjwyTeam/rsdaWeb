@@ -17,7 +17,7 @@ import com.wjwy.rsda.entity.DictType;
 import com.wjwy.rsda.enums.AjaxResult;
 import com.wjwy.rsda.enums.Convert;
 import com.wjwy.rsda.enums.EnumEntitys;
-import com.wjwy.rsda.enums.ResponseMessageConstant;
+import com.wjwy.rsda.enums.MessageConstant;
 import com.wjwy.rsda.services.DictTypeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +113,7 @@ public class DictTypeController extends BaseController {
 
     try {
 
-      if (ResponseMessageConstant.DICT_TYPE_NOT_UNIQUE
+      if (MessageConstant.DICT_TYPE_NOT_UNIQUE
           .equals(String.valueOf(dictTypeService.checkDictTypeUnique(dictType)))) {
         return ResponseWrapper.success(HttpStatus.OK.value(), "新增字典'" + dictType.getDictName() + "'失败，字典类型已存在", null,
             null, null);

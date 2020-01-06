@@ -16,13 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-
 /**
  * 自定义任务调度器完成
  */
 @Component
-public class SpringSessionValidationScheduler implements SessionValidationScheduler
-{
+public class SpringSessionValidationScheduler implements SessionValidationScheduler {
     private static final Logger log = LoggerFactory.getLogger(SpringSessionValidationScheduler.class);
 
     public static final long DEFAULT_SESSION_VALIDATION_INTERVAL = DefaultSessionManager.DEFAULT_SESSION_VALIDATION_INTERVAL;
@@ -49,8 +47,7 @@ public class SpringSessionValidationScheduler implements SessionValidationSchedu
     private long sessionValidationInterval;
 
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.enabled;
     }
 
@@ -60,12 +57,12 @@ public class SpringSessionValidationScheduler implements SessionValidationSchedu
      * ValidatingSessionManager#validateSessions()} method.
      *
      * <p>
-     * Unless this method is called, the default value is {@link #DEFAULT_SESSION_VALIDATION_INTERVAL}.
+     * Unless this method is called, the default value is
+     * {@link #DEFAULT_SESSION_VALIDATION_INTERVAL}.
      *
      * @param sessionValidationInterval
      */
-    public void setSessionValidationInterval(long sessionValidationInterval)
-    {
+    public void setSessionValidationInterval(long sessionValidationInterval) {
         this.sessionValidationInterval = sessionValidationInterval;
     }
 
@@ -73,26 +70,20 @@ public class SpringSessionValidationScheduler implements SessionValidationSchedu
      * Starts session validation by creating a spring PeriodicTrigger.
      */
     @Override
-    public void enableSessionValidation()
-    {
+    public void enableSessionValidation() {
 
         enabled = true;
 
-        if (log.isDebugEnabled())
-        {
+        if (log.isDebugEnabled()) {
             log.debug("Scheduling session validation job using Spring Scheduler with "
                     + "session validation interval of [" + sessionValidationInterval + "]ms...");
         }
 
-        try
-        {
-            executorService.scheduleAtFixedRate(new Runnable()
-            {
+        try {
+            executorService.scheduleAtFixedRate(new Runnable() {
                 @Override
-                public void run()
-                {
-                    if (enabled)
-                    {
+                public void run() {
+                    if (enabled) {
                         sessionManager.validateSessions();
                     }
                 }
@@ -100,31 +91,26 @@ public class SpringSessionValidationScheduler implements SessionValidationSchedu
 
             this.enabled = true;
 
-            if (log.isDebugEnabled())
-            {
+            if (log.isDebugEnabled()) {
                 log.debug("Session validation job successfully scheduled with Spring Scheduler.");
             }
 
-        }
-        catch (Exception e)
-        {
-            if (log.isErrorEnabled())
-            {
-                log.error("Error starting the Spring Scheduler session validation job.  Session validation may not occur.", e);
+        } catch (Exception e) {
+            if (log.isErrorEnabled()) {
+                log.error(
+                        "Error starting the Spring Scheduler session validation job.  Session validation may not occur.",
+                        e);
             }
         }
     }
 
     @Override
-    public void disableSessionValidation()
-    {
-        if (log.isDebugEnabled())
-        {
+    public void disableSessionValidation() {
+        if (log.isDebugEnabled()) {
             log.debug("Stopping Spring Scheduler session validation job...");
         }
 
-        if (this.enabled)
-        {
+        if (this.enabled) {
             Threads.shutdownAndAwaitTermination(executorService);
         }
         this.enabled = false;
