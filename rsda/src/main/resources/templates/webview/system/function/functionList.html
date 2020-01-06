@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-03 10:40:51
+ * @LastEditTime : 2020-01-04 10:39:25
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -191,7 +191,6 @@
               var iframeWindow = window['layui-layer-iframe' + index]
                 , submitID = 'functionConfirm'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
-
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 var field = dataLog.field;

@@ -165,10 +165,10 @@
               </a>
               <dl class="layui-nav-child">
                 <dd class="layui-nav-itemed">
-                  <a href="javascript:;">查阅申请</a>
+                    <a th:attr="lay-href=@{/consult/consultListPage}">查阅申请</a>
                 </dd>
                 <dd class="layui-nav-itemed">
-                  <a href="javascript:;">借阅申请</a>
+                  <a th:attr="lay-href=@{/borrow/borrowListPage}">借阅申请</a>
                 </dd>
               </dl>
             </li>
@@ -180,10 +180,10 @@
               </a>
               <dl class="layui-nav-child">
                 <dd class="layui-nav-itemed">
-                  <a href="javascript:;">档案转入</a>
+                  <a th:attr="lay-href=@{/dossierInto/dossierIntoListPage}">档案转入</a>
                 </dd>
                 <dd class="layui-nav-itemed">
-                  <a href="javascript:;">档案转出</a>
+                  <a th:attr="lay-href=@{/dossierOut/dossierOutListPage}">档案转出</a>
                 </dd>
               </dl>
             </li>

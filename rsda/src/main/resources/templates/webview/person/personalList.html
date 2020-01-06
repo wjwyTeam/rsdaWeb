@@ -120,11 +120,13 @@
       <script type="text/html" id="barDemo" th:inline="none">
           <a class="layui-btn  layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+          <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="select"><i class="layui-icon layui-icon-ok"></i>选择</a>
           <!-- <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="up"><i class="layui-icon layui-icon-up"></i>上移</a>
           <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="down"><i class="layui-icon layui-icon-down"></i>下移</a>  -->
       </script>
     </div>
   </div>
+  <input type="hidden" id="personInfoLine" info="" />
   <input type="hidden" id="deptId">
   <input type="hidden" id="deptName">
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
@@ -245,7 +247,7 @@
           } }
           , { field: 'workDuty', title: '工作单位及职务',align:"center" }
           , { field: 'personalNo', title: '身份证号',align:"center" }
-          , { fixed: 'right', title: '操作', width: 200, align: 'center', toolbar: '#barDemo' }
+          , { fixed: 'right', title: '操作', width: 260, align: 'center', toolbar: '#barDemo' }
         ]]
         , page: false
         , response: {
@@ -315,6 +317,7 @@
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 var field = dataLog.field;
+                field.personalId = data.personalId
                 field.politicalOutlook = politicalOutlookName;
                 //获取提交的字段
                 //提交 Ajax 成功后，静态更新表格中的数据
@@ -411,6 +414,9 @@
                 } 
             });
           }
+        }else if(obj.event == "select"){
+          //  为父级查档界面传递参数
+           parent.GetChildValue(data); 
         }
       });
       //批量删除事件
@@ -503,7 +509,6 @@
                   }
                 });
               });
-
               submit.trigger('click');
             }
           });

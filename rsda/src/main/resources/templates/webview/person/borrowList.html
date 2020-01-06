@@ -1,0 +1,606 @@
+<!--
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: ZHANGQI
+ * @Date: 2019-12-17 19:08:33
+ * @LastEditors  : zgr
+ * @LastEditTime : 2020-01-06 14:54:29
+ -->
+ <!-- 借阅申请 -->
+ <!DOCTYPE html>
+ <html lang="zh" xmlns:th="http://www.thymeleaf.org">
+ <head>
+ <th:block th:include="include :: header('服务器监控')" />
+    <style>
+        body,html{
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            /* border: 1px solid blue; */
+        }
+        .content{
+            height: calc(100% - 50px);
+            /* border: 3px solid yellow; */
+            width: 100%;
+          overflow-y: scroll;
+        }
+        .layui-icon-tabs{
+            font-size: 19px;
+            padding-left: 15px;
+        }
+        .two div{
+            float: left;
+        }
+        #selectFile{
+          margin-left: 88%;
+        }
+        .layui-upload{
+          width: 97%;
+          margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body> 
+        
+        <div class="hesder" style="width: 100%;height: 100%;height: 50px;">
+                <div style="height: 100%; width: 98%; line-height: 50px;border-bottom : 3px solid #00c0ef;margin: 0 30px;margin: 0 auto;">
+                        <span style="font-size: 24px;padding-left: 10px;">
+                            借阅申请
+                        </span>
+                        <span style="font-size: 14px;font-weight: lighter;">纸质档案借阅登记</span>
+                </div>
+        </div>
+        <div class="content">
+              <div class="two" style="width: 98%;height: 50px;line-height: 50px;margin: 0 auto;font-size: 20px; font-size: 0.1px;color: #cccccc;">
+                    <div style="width: 3%;"> ———</div>
+                    <div style="width: 8%;color: #676a6c;font-size: 20px;">
+                        借阅对象
+                        <i class="layui-icon layui-icon-tabs"></i>
+                    </div>
+                    <div  style="width: 88%;height: 100%;overflow: hidden;"> ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</div>    
+              </div>
+              <div class="layui-upload">
+                  <div class="layui-upload-list">
+                    <table class="layui-table" style="text-align: center;">
+                      <thead>
+                          <tr>
+                            <td>姓名</td>
+                            <td>工作职务</td>
+                            <td>政治面貌</td>
+                            <td>操作</td>
+                         </tr>
+                      </thead>
+                      <tbody id="personList"></tbody>
+                    </table>
+                  </div>
+                  <button type="button" class="layui-btn layui-btn-xm" style="margin-left: 95%;" typeSelect="one" data-type="selectPersonInfo">选择</button>
+              </div>
+               <!-- 查档信息 -->
+               <div class="two" style="width: 98%;height: 50px;line-height: 50px;margin: 0 auto;font-size: 20px; font-size: 0.1px;color: #cccccc;"> 
+                    <div style="width: 3%;"> ———</div>
+                    <div style="width: 6%;color: #676a6c;font-size: 20px;">
+                        借阅信息
+                    </div>
+                    <div  style="width: 91%;height: 100%;overflow: hidden;"> ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</div>    
+               </div>
+               <!--具体查档人员的信息 -->
+               <form class="layui-form layui-form-pane" action="" style="padding: 0 20px;">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">借阅人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="borrowName"   autocomplete="off" placeholder="请输入标题" class="layui-input">
+                        </div>
+                        <div class="layui-input-inline">
+                             <input type="text" name="deptDuty"   autocomplete="off" placeholder="工作单位及职务" class="layui-input">
+                        </div>
+                        <div class="layui-input-inline">
+                                <select name="politicCountenance" id="politicCountenance">
+                                    <option value="" selected="true">请选择</option>
+                                    <option value="中共党员">中共党员</option>
+                                    <option value="中共预备党员">中共预备党员</option>
+                                </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn layui-btn-xm select" style="margin-left: 25%;"  typeSelect="two"  data-type="selectPersonInfo">选择</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item layui-hide">
+                        <label class="layui-form-label">借阅人id</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" name="borrowId" placeholder="输入或选择查档理由">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">借阅理由</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" name="borrowReason" placeholder="输入或选择查档理由">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-inline">
+                        <label class="layui-form-label">借阅时间</label>
+                        <div class="layui-input-inline">
+                          <input type="text" class="layui-input" name="borrowStartTime" id="start" placeholder="yyyy-MM-dd ">
+                        </div>
+                        到
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" name="borrowEndTime"  id="end" placeholder="yyyy-MM-dd ">
+                          </div>
+                    </div>
+
+
+                    <div class="layui-form-item "  pane="">
+                      <label class="layui-form-label">备注</label>
+                      <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" name="remarks" class="layui-textarea"></textarea>
+                      </div>
+                    </div>
+                    
+                     <!-- 附件上传 -->
+                    <div class="two" style="width: 98%;height: 50px;line-height: 50px;margin: 0 auto;font-size: 20px; font-size: 0.1px;color: #cccccc;">
+                        <div style="width: 3%;"> ———</div>
+                        <div style="width: 8%;color: #676a6c;font-size: 20px;">
+                            附件上传
+                        </div>
+                        <div  style="width: 88%;height: 100%;overflow: hidden;"> ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</div>    
+                    </div>
+                      <!-- 附件表格 -->
+                     <div class="layui-upload">
+                          <div class="layui-upload-list">
+                            <table class="layui-table">
+                              <thead>
+                                <tr><td>文件名</td>
+                                <td>大小</td>
+                                <td>状态</td>
+                                <td>操作</td>
+                              </tr></thead>
+                              <tbody id="demoList"></tbody>
+                            </table>
+                          </div>
+                          <button type="button" class="layui-btn layui-btn-xm" id="selectFile">选择文件</button> 
+                          <button type="button" class="layui-btn layui-btn-xm" id="startUpload">开始上传</button>
+                      </div> 
+
+                    <div class="layui-form-item layui-inline">
+                        <button type="button" class="layui-btn layui-btn-xm" lay-submit style="margin-left: 30px;" id="borrowsubmit" lay-filter="borrowsubmit">借阅</button> 
+                    </div>
+               </form>
+
+               
+        </div>
+      
+        
+       
+ 
+<script type="text/javascript" th:inline="none">
+
+var inlineInfo = null;
+var borrowPersonId = ""
+layui.use(["table", "form", "util", "laydate","upload","laydate"], function() {
+        var $ = layui.$,
+                form = layui.form,
+                table = layui.table,
+                laydate = layui.laydate,
+                upload = layui.upload,
+                laydate = layui.laydate,
+                util = layui.util;
+        laydate.render({
+           elem: '#start'
+        });
+        laydate.render({
+           elem: '#end'
+        });
+
+
+
+
+        // 选择文件
+        var demoListView = $('#demoList')
+          ,uploadListIns = upload.render({
+            elem: '#selectFile'
+            ,url: '/upload/'
+            ,accept: 'file'
+            ,multiple: true
+            ,auto: false
+            ,bindAction: '#startUpload'
+            ,choose: function(obj){   
+              var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+              //读取本地文件
+              obj.preview(function(index, file, result){
+                var tr = $(['<tr id="upload-'+ index +'">'
+                  ,'<td>'+ file.name +'</td>'
+                  ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+                  ,'<td>等待上传</td>'
+                  ,'<td>'
+                    ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                    ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                  ,'</td>'
+                ,'</tr>'].join(''));
+                
+                //单个重传
+                tr.find('.demo-reload').on('click', function(){ 
+                  obj.upload(index, file);
+                });
+                
+                //删除
+                tr.find('.demo-delete').on('click', function(){
+                  delete files[index]; //删除对应的文件
+                  tr.remove();
+                  uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                });
+                
+                demoListView.append(tr);
+              });
+            }
+            ,done: function(res, index, upload){
+              if(res.code == 0){ //上传成功
+                var tr = demoListView.find('tr#upload-'+ index)
+                ,tds = tr.children();
+                tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                tds.eq(3).html(''); //清空操作
+                return delete this.files[index]; //删除文件队列已经上传成功的文件
+              }
+              this.error(index, upload);
+            }
+            ,error: function(index, upload){
+              var tr = demoListView.find('tr#upload-'+ index)
+              ,tds = tr.children();
+              tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+              tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+      });
+      //监听搜索
+      form.on("submit(dict-front-search)", function (data) {
+              var field = data.field;
+              
+              //执行重载
+              table.reload("inputTable", {
+                      where: field
+              });
+      });
+      //监听工具条删除
+      table.on("tool(inputTable)", function (obj) {
+              var data = obj.data;
+              if (obj.event === 'delete') {
+                      layer.confirm('真的删除行么', function (index) {
+                                  layer.close(index);
+                                  $.post("/dict/dictDataRemove", { ids: data.dictCode }, function (resultJSONObject) {
+                                          if (resultJSONObject.success) {
+                                                  obj.del();
+                                                  tableLoad(table);
+                                          } 
+                                          layer.msg(resultJSONObject.msg);
+                                  }, "json");
+                          });
+              } else if (obj.event === "edit") {
+              layer.open({
+                type: 2,
+                title: "字典数据编辑",
+                maxmin: true,
+                area: ["500px", "100%"],
+                btn: ["确定", "取消"],
+                fixed: true,
+                shadeClose: false,
+                shade: 0.2,
+                moveType: 1, //拖拽模式，0或者1
+                content: "/dict/dictDataFormPage?dictCode=" + data.dictCode,
+                yes: function (index, layero) {
+                  var iframeWindow = window["layui-layer-iframe" + index],
+                    submitID = "dictFormSubmit",
+                    submit = layero
+                      .find("iframe")
+                      .contents()
+                      .find("#" + submitID);
+                  //监听提交
+                  iframeWindow.layui.form.on(
+                    "submit(" + submitID + ")",
+                    function (dataLog) {
+                      var field = dataLog.field;
+                            if (field.status == "true")
+                                field.status = true;
+                        else
+                                field.dataType = false;
+                      //获取提交的字段
+                      //提交 Ajax 成功后，静态更新表格中的数据
+                      $.ajax({
+                        type: "post",
+                        url: "/dict/dictDataEdit",
+                        data: JSON.stringify(field),
+                        dataType: "json",
+                        contentType: "application/json;charset-UTF-8",
+                        success: function (resultJSONObject) {
+                          if (resultJSONObject.success) {
+                            tableLoad(table);
+                          }
+                          layer.msg(resultJSONObject.msg);
+                        }
+                      });
+                      layer.close(index); //关闭弹层
+                    }
+                  );
+                  submit.trigger("click");
+                }
+              });
+                                                  }
+                                          });
+      
+      
+      
+      
+      
+      //监听搜索查询条件
+      form.on('submit(dict-front-search)', function (data) {
+          var field = data.field;
+
+          //执行重载
+          table.reload('inputTable', {
+            where: field
+          });
+        });
+
+
+      
+
+      //批量删除事件
+      var active = {
+          batchdel: function () {
+            //两种方式
+            var checkStatus = table.checkStatus('inputTable')
+              , checkData = checkStatus.data; //得到选中的数据
+            if (checkData.length === 0) {
+              return layer.msg('请选择数据');
+            }
+            //捉到所有被选中的，发异步进行删除
+            var ids = "";
+            if (checkData.length > 0) {
+              for (var i = 0; i < checkData.length; i++) {
+                ids += checkData[i].dictCode + ",";
+              }
+            }
+            layer.confirm('确定删除吗？', function (index) {
+              //执行 Ajax 后重载
+              $.ajax({
+                type: "post",
+                url: "/dict/dictDataRemove",
+                data: { "ids": ids },
+                success: function (data) {
+                  if (data.success) {
+                    tableLoad(table);
+                  }      
+                    layer.msg(data.msg);
+                  
+                }
+              });
+            });
+
+          }
+          , add: function () {
+            layer.open({
+              type: 2
+              , title: "字典基础数据新增"
+              , content: '/dict/dictDataFormPage?dictType='+$("#dictType").val()
+              , maxmin: true
+              , moveType: 1 //拖拽模式，0或者1
+              , area: ['500px', '100%']
+              , skin: 'layer_bg' //layer_bg是自定义的css样式
+              , shade: 0.2
+              , fixed: true
+              , shadeClose: true//开启遮罩关
+              , btn: ['确定', '取消']
+              , yes: function (index, layero) {
+                var iframeWindow = window['layui-layer-iframe' + index]
+                  , submitID = 'dictFormSubmit'
+                  , submit = layero.find('iframe').contents().find('#' + submitID);
+                  
+                      //监听提交
+                iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                  var field = data.field; //获取提交的字段
+                  if (field.status == "true")
+                          field.status = true;
+                  else
+                          field.status = false;
+                  //提交 Ajax 成功后，静态更新表格中的数据
+                  $.ajax({
+                    type: "post",
+                    url: "/dict/dictDataInsert",
+                    data: JSON.stringify(field),
+                    dataType: "json",
+                    contentType: "application/json;charset-UTF-8",
+                    success: function (resultJSONObject) {
+                      if (resultJSONObject.success) {
+                        tableLoad(table);
+                      }      
+                      layer.msg(resultJSONObject.msg);
+                    }, complete: function () {
+                      layer.close(index); //关闭弹层
+                    }
+                  });
+                });
+
+                submit.trigger('click');
+              }
+            });
+          }
+          ,selectPersonInfo:function(){
+            selectType = $(this).attr("typeSelect")
+            //  选择查档人员的信息
+            index = layer.open({
+              type: 2
+              , title: "人员信息查询"
+              , method: 'get'
+              , content: '/person/personalListPage'
+              , maxmin: true
+              , moveType: 1 //拖拽模式，0或者1
+              , area: ['1200px', '600px']  
+              , skin: 'layer_bg'//layer_bg是自定义的css样式
+              , shade: 0.2
+              , fixed: true
+              , shadeClose: true//开启遮罩关
+              , btn: ['确定', '取消']
+              , yes: function (index, layero) {
+                  
+                var iframeWindow = window['layui-layer-iframe' + index]
+                  , submitID = 'consultSubmit'
+                  , submit = layero.find('iframe').contents().find('#' + submitID);
+                //监听提交
+                iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                  var field = data.field; //获取提交的字段
+                  //提交 Ajax 成功后，静态更新表格中的数据
+                  $.ajax({
+                    type: "post",
+                    url: "/dict/dictDataInsert",
+                    data: JSON.stringify(field),
+                    dataType: "json",
+                    contentType: "application/json;charset-UTF-8",
+                    success: function (resultJSONObject) {
+                      if (resultJSONObject.success) {
+                        tableLoad(table);
+                      }      
+                      layer.msg(resultJSONObject.msg);
+                    }, complete: function () {
+                      layer.close(index); //关闭弹层
+                    }
+                  });
+                });
+
+                submit.trigger('click');
+              }
+            });
+            
+            if(inlineInfo != null){
+              alert(111);
+            }
+
+
+          }
+        };
+        
+        form.on('submit(borrowsubmit)', function (data) {
+            data.field.file = "";
+            console.log(data.field);
+            var field = data.field
+            field.personId = borrowPersonId
+            $.ajax({
+                type: "post",
+                url: "/borrow/borrowInsert",
+                data: JSON.stringify(field),
+                dataType: "application/json",
+                contentType: "application/json;charset-UTF-8",
+                success: function (resultJSONObject) {
+                  layer.msg(resultJSONObject.msg);
+                }
+            });
+            return false;
+        });
+
+
+
+
+
+
+        form.on('switch(stat)', function(data){
+
+              var contexts;
+              var sta;
+              var x = data.elem.checked;//判断开关状态
+              if (x==true) {
+                  contexts = "打开";
+                  sta=1;
+              } else {
+                  contexts = "关闭";
+                  sta=0;
+              }
+              var obj = {
+                              //上下架的参数
+                              "dictCode": data.value,
+                              "status":x
+                          }
+              console.log(data.value)
+            //自定义弹窗
+            layer.open({
+                  content: "你确定要"+contexts+"?"
+                  , btn: ['确定', '取消']
+                  , yes: function (index, layero) {
+                      //按钮确定【按钮一】的回调
+                      data.elem.checked = x;
+                      //对商品进行上架或下架处理
+                      $.ajax({
+                          type: "post",
+                          url: "/dict/dictDataEdit",
+                          data: JSON.stringify(obj),
+                          
+                          dataType: "json",
+                          contentType: "application/json;charset-UTF-8",
+                          success: function (data) {
+                            layer.msg(data.msg,
+                                // 提示的样式
+                                {icon: 1, time: 2000,});
+                            // 数据重载
+                                                                                                          tableLoad(table);
+                          }
+                        
+                      });
+                      form.render();
+                      layer.close(index);
+                  }
+                  , btn2: function (index, layero) {
+                      //按钮【按钮二】的回调
+                      data.elem.checked = !x;
+                      form.render();
+                      layer.close(index);
+                  }
+                  , cancel: function () {
+                      //右上角关闭回调
+                      data.elem.checked = !x;
+                      form.render();
+                  }
+              });
+              return false;
+          });
+
+          $('.layui-btn').on('click', function () {
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+
+          
+      });
+      function tableLoad(table) {
+              table.reload(
+                "inputTable",
+                {
+                where: {
+                    dictLabel: $("#dictLabel").val()
+                }
+                },
+                "data"
+            );
+        }
+      function GetChildValue(obj){
+        console.log(obj);
+        if(selectType  == "one"){
+          // 借阅表
+         var tr = ""
+         tr +=      '<tr><td>'+obj.personalName+'</td>'+
+                    '<td>'+obj.workDuty+'</td>'+
+                    '<td>'+obj.politicalOutlook+'</td>'+
+                    '<td><button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button></td></tr>'
+         borrowPersonId += obj.personalId + ","
+         $("#personList").append(tr);
+        }else if(selectType  == "two"){
+          // 借阅input信息框
+          $("input[name=borrowName]").val(obj.personalName);
+          $("input[name=deptDuty]").val(obj.workDuty);
+          $("input[name=borrowId]").val(obj.personalId)
+        }
+        layer.close(index);
+      }
+
+     </script>
+   </body>
+ </html>
+ 
