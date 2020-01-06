@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RequestMapping("/group")
 @RestController
-@Api(value = "功能组", tags = "功能组菜单维护")
+@Api(value = "功能组", tags = "G2-菜单管理API维护")
 public class GroupController {
     @Autowired
     private com.wjwy.rsda.services.GroupService groupService;

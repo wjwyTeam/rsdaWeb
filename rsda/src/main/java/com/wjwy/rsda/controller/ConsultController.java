@@ -27,7 +27,7 @@ import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/consult")
 @RestController
-@Api(value = "查阅管理", tags = "查阅管理API维护")
+@Api(value = "查阅管理", tags = "B1-查阅管理API维护")
 public class ConsultController {
   @Autowired
   private ConsultService consultService;

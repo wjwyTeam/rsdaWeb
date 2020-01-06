@@ -37,7 +37,7 @@ import tk.mybatis.mapper.util.StringUtil;
  */
 @RequestMapping("/function")
 @RestController
-@Api(value = "菜单管理数据信息维护", tags = "菜单管理数据信息维护")
+@Api(value = "菜单管理数据信息维护", tags = "G1-菜单管理API维护")
 public class FunctionController {
     @Autowired
     private FunctionService functionService;
@@ -55,7 +55,6 @@ public class FunctionController {
         return model;
     }
 
-    
     /**
      * 
      * @return Icon
@@ -63,7 +62,7 @@ public class FunctionController {
     @GetMapping("/icon")
     @ApiOperation(value = "菜单管理表单图标")
     public ModelAndView functionIcon(ModelAndView model) {
-        model.setViewName( prefix + "/functionIcon");
+        model.setViewName(prefix + "/functionIcon");
         return model;
     }
 

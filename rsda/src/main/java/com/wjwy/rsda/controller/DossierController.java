@@ -34,7 +34,7 @@ import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/dossier")
 @RestController
-@Api(value = "案卷管理", tags = "A-案卷管理API维护")
+@Api(value = "案卷管理", tags = "A1-案卷管理API维护")
 public class DossierController{
  @Autowired
  private DossierService dossierService;

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:30
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-30 08:55:28
+ * @LastEditTime : 2020-01-06 17:27:48
  */
 package com.wjwy.rsda.controller;
 
@@ -42,7 +42,7 @@ import tk.mybatis.mapper.util.StringUtil;
  */
 @Controller
 @RequestMapping("/dictType")
-@Api(value = "字典类型数据配置", tags = "字典类型数据配置")
+@Api(value = "字典类型数据配置", tags = "H2-字典类型API维护")
 public class DictTypeController extends BaseController {
 
   private String prefix = "/webview/system/dict";
@@ -87,7 +87,7 @@ public class DictTypeController extends BaseController {
   @ResponseBody
   @PostMapping("/dateTypeList")
   @ApiOperation(value = "字典类型数据分页列表数据展示", notes = "DictType - 对象，page，limit ")
-  public ResponseWrapper datePageList(@RequestBody DictType dictType, 
+  public ResponseWrapper datePageList(@RequestBody DictType dictType,
       @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
       @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
     try {
@@ -113,8 +113,7 @@ public class DictTypeController extends BaseController {
 
     try {
 
-      if (MessageConstant.DICT_TYPE_NOT_UNIQUE
-          .equals(String.valueOf(dictTypeService.checkDictTypeUnique(dictType)))) {
+      if (MessageConstant.DICT_TYPE_NOT_UNIQUE.equals(String.valueOf(dictTypeService.checkDictTypeUnique(dictType)))) {
         return ResponseWrapper.success(HttpStatus.OK.value(), "新增字典'" + dictType.getDictName() + "'失败，字典类型已存在", null,
             null, null);
       }

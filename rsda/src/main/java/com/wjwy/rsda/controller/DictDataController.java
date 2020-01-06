@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 14:19:43
+ * @LastEditTime : 2020-01-06 17:27:17
  */
 package com.wjwy.rsda.controller;
 
@@ -48,7 +48,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Controller
 @RequestMapping("/dict")
-@Api(value = "字典管理数据信息", tags = "字典管理数据信息API")
+@Api(value = "字典管理数据信息", tags = "H1-字典管理API维护")
 public class DictDataController extends BaseController {
 
   private String prefix = "/webview/system/dict";

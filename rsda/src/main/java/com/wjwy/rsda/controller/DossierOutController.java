@@ -35,7 +35,7 @@ import tk.mybatis.mapper.util.StringUtil;
  */
 @RequestMapping("/dossierOut")
 @RestController
-@Api(value = "档案转出", tags = "档案转出API维护")
+@Api(value = "档案转出", tags = "C2-档案转出API维护")
 public class DossierOutController {
  @Autowired
  private DossierOutService dossierOutService;

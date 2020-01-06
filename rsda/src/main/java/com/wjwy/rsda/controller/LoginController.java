@@ -1,11 +1,12 @@
 /*
  * @Descripttion: 
- * @version: v0.0.1
- * @Author: zgr
- * @Date: 2019-11-30 18:24:05
+ * @version: 
+ * @Author: ZHANGQI
+ * @Date: 2019-12-16 09:05:48
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-04 10:18:06
+ * @LastEditTime : 2020-01-06 17:37:09
  */
+
 package com.wjwy.rsda.controller;
 
 import com.wjwy.rsda.common.util.ResponseWrapper;
@@ -27,14 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
-/**
- * @author 张广睿
- * @Description: 登录相关mvc及相关util方法
- * @date 2019年11月30日
- * @Description
- */
-@Api(value = "登录配置", tags = "登录配置维护")
+
+@Api(value = "登录配置", tags = "WJ-维佳科技注册中心")
 @RestController
 public class LoginController {
 	public Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -99,10 +96,16 @@ public class LoginController {
 		return model;
 	}
 
+	/**
+	 * 
+	 * @param loginName
+	 * @param passwordMd5
+	 * @return
+	 */
 	@PostMapping("/login")
 	public ResponseWrapper UserLogin(String loginName, String passwordMd5) {
 		try {
-			
+
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(loginName, passwordMd5);
 
@@ -119,6 +122,12 @@ public class LoginController {
 		}
 	}
 
+
+/**
+	* 
+	* @return
+ */
+	@ApiOperation(value = "/unauth")
 	@GetMapping("/unauth")
 	public String unauth() {
 		return "error/unauth";

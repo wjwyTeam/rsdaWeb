@@ -37,7 +37,7 @@ import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/person")
 @RestController
-@Api(value = "人员管理", tags = "人员管理API维护")
+@Api(value = "人员管理", tags = "F1-人员管理API维护")
 public class PersonalController {
  @Autowired
  private PersonalService personalService;

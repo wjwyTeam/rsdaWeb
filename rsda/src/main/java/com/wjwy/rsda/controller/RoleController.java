@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RequestMapping("/role")
 @RestController
-@Api(value = "用户所属角色", tags = "用户所属角色配置")
+@Api(value = "用户所属角色", tags = "J1-角色管理API维护")
 public class RoleController {
     /**
      * 所属角色业务层注入

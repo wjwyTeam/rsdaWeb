@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-03 11:24:10
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 14:10:00
+ * @LastEditTime : 2020-01-06 17:20:48
  */
 package com.wjwy.rsda.controller;
 
@@ -35,7 +35,7 @@ import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/dossierInto")
 @RestController
-@Api(value = "档案转入", tags = "档案转入API维护")
+@Api(value = "档案转入", tags = "C1-档案转入API维护")
 public class DossierIntoController {
  @Autowired
  private DossierIntoService dossierIntoService;

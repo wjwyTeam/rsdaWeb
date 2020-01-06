@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: ZHANGQI
+ * @Date: 2020-01-06 15:44:22
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2020-01-06 17:22:23
+ */
 package com.wjwy.rsda.controller;
 
 import com.wjwy.rsda.services.MaterialAcService;
@@ -14,19 +22,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tk.mybatis.mapper.util.StringUtil;
 
-/*
- * @Descripttion: 
- * @version: 
- * @Author: ZHANGQI
- * @Date: 2020-01-06 15:44:22
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 15:45:39
- */
 @RequestMapping("/materialAc")
 @RestController
-@Api(value = "散材料归档列表模块", tags = "散材料归档列表模块API维护")
+@Api(value = "散材料归档列表模块", tags = "D2-材料归档API维护")
 public class MaterialAController {
-
 
  public Logger logger = LoggerFactory.getLogger(MaterialAController.class);
  @Autowired
@@ -65,4 +64,3 @@ public class MaterialAController {
   return model;
  }
 }
-

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-03 09:35:54
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 11:27:45
+ * @LastEditTime : 2020-01-06 17:18:08
  */
 
 package com.wjwy.rsda.controller;
@@ -33,7 +33,7 @@ import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/borrow")
 @RestController
-@Api(value = "借阅管理", tags = "借阅管理API维护")
+@Api(value = "借阅管理", tags = "B2-借阅管理API维护")
 public class BorrowController {
  @Autowired
  private BorrowService borrowService;

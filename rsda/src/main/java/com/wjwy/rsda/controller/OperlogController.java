@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 18:13:24
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-20 16:26:13
+ * @LastEditTime : 2020-01-06 17:30:13
  */
 package com.wjwy.rsda.controller;
 
@@ -27,17 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-/*
- * @Descripttion:
- * @version: v0.0.1
- * @Author: ZHANGQI
- * @Date: 2019-12-17 18:13:24
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-17 18:15:03
- */
 @RequestMapping("/log")
 @RestController
-@Api(value = "日志管理", tags = "日志管理")
+@Api(value = "日志管理", tags = "K1-日志管理API维护")
 public class OperlogController {
   @Autowired
   private OperLogService operlogService;
@@ -79,7 +71,7 @@ public class OperlogController {
    */
   @PostMapping("/logPageInfoList")
   @ApiOperation(value = "日志分页列表", notes = "参数：pageNum-当前页,pageSize-每页条数")
-  public ResponseWrapper logPageInfoList(String operName, 
+  public ResponseWrapper logPageInfoList(String operName,
       @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
       @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
     try {

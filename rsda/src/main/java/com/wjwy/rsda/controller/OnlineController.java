@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 17:50:35
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-31 08:37:32
+ * @LastEditTime : 2020-01-06 17:34:04
  */
 package com.wjwy.rsda.controller;
 
@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/online")
-@Api(value = "在线用户监控", tags = "在线用户监控")
+@Api(value = "在线用户监控", tags = "L1-在线监控API维护")
 public class OnlineController {
   public Logger logger = LoggerFactory.getLogger(OnlineController.class);
   private String prefix = "/webview/system/online";

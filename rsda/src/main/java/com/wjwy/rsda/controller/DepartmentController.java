@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-31 15:19:16
+ * @LastEditTime : 2020-01-06 17:24:07
  */
 package com.wjwy.rsda.controller;
 
@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RequestMapping("/dept")
 @RestController
-@Api(value = "单位组织结构", tags = "机构树API维护")
+@Api(value = "单位组织结构", tags = "E1-机构管理API维护")
 public class DepartmentController {
 
 	@Autowired

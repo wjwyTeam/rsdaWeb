@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 @RequestMapping("/user")
 @RestController
-@Api(value = "用户管理数据信息API", tags = "用户管理数据信息API")
+@Api(value = "用户管理数据信息API", tags = "I1-用户管理API维护")
 
 public class UserController {
 	/**
@@ -150,8 +150,8 @@ public class UserController {
 			@RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit, String roleId) {
 		try {
 			if (isPage != null && isPage.equals(EnumEntitys.YES.getValue())) {
-				PageInfo<User> pageInfos = userService.getPageList(userId, userName, deptId, workDept, delFlag,
-						page, limit, roleId);
+				PageInfo<User> pageInfos = userService.getPageList(userId, userName, deptId, workDept, delFlag, page, limit,
+						roleId);
 				return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos, null,
 						Integer.parseInt(String.valueOf(pageInfos.getTotal())));
 			} else {
