@@ -41,7 +41,7 @@ public class DossierService{
   if (!StringUtil.isEmpty(dossierId)) {
    criteria.andEqualTo("dossierId", dossierId);
   }
-  return dossierMapper.selectByPrimaryKey(dossierId);
+  return dossierMapper.selectOneByExample(example);
  }
 
  /**

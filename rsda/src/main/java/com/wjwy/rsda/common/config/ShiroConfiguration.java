@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 14:16:07
+ * @LastEditTime : 2020-01-06 16:41:10
  */
 package com.wjwy.rsda.common.config;
 
@@ -223,7 +223,7 @@ public class ShiroConfiguration {
         // 设置全局session超时时间
         manager.setGlobalSessionTimeout(30 * 60 * 1000);
         // 去掉 JSESSIONID
-        manager.setSessionIdUrlRewritingEnabled(false);
+        manager.setSessionIdUrlRewritingEnabled(true);
         // 定义要使用的无效的Session定时调度器
         manager.setSessionValidationScheduler(SpringUtils.getBean(SpringSessionValidationScheduler.class));
         // 是否定时检查session

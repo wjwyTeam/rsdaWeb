@@ -93,42 +93,46 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
         List<Online> userOnlineList = onlineService.selectOnlineByExpired(expiredDate);
         // 批量过期删除
         List<String> needOfflineIdList = new ArrayList<String>();
-        for (Online userOnline : userOnlineList) {
-            try {
-                SessionKey key = new DefaultSessionKey(userOnline.getSessionId());
-                Session session = retrieveSession(key);
-                if (session != null) {
-                    throw new InvalidSessionException();
+
+        if (StringUtils.isNotNull(userOnlineList)) {
+            for (Online userOnline : userOnlineList) {
+                try {
+                    SessionKey key = new DefaultSessionKey(userOnline.getSessionId());
+                    Session session = retrieveSession(key);
+                    if (session != null) {
+                        throw new InvalidSessionException();
+                    }
+                } catch (InvalidSessionException e) {
+                    if (log.isDebugEnabled()) {
+                        boolean expired = (e instanceof ExpiredSessionException);
+                        String msg = "Invalidated session with id [" + userOnline.getSessionId() + "]"
+                                + (expired ? " (expired)" : " (stopped)");
+                        log.debug(msg);
+                    }
+                    invalidCount++;
+                    needOfflineIdList.add(userOnline.getSessionId());
                 }
-            } catch (InvalidSessionException e) {
-                if (log.isDebugEnabled()) {
-                    boolean expired = (e instanceof ExpiredSessionException);
-                    String msg = "Invalidated session with id [" + userOnline.getSessionId() + "]"
-                            + (expired ? " (expired)" : " (stopped)");
-                    log.debug(msg);
+
+            }
+            if (needOfflineIdList.size() > 0) {
+                try {
+                    onlineService.batchDeleteOnline(needOfflineIdList);
+                } catch (Exception e) {
+                    log.error("batch delete db session error.", e);
                 }
-                invalidCount++;
-                needOfflineIdList.add(userOnline.getSessionId());
             }
 
-        }
-        if (needOfflineIdList.size() > 0) {
-            try {
-                onlineService.batchDeleteOnline(needOfflineIdList);
-            } catch (Exception e) {
-                log.error("batch delete db session error.", e);
+            if (log.isInfoEnabled()) {
+                String msg = "Finished invalidation session.";
+                if (invalidCount > 0) {
+                    msg += " [" + invalidCount + "] sessions were stopped.";
+                } else {
+                    msg += " No sessions were stopped.";
+                }
+                log.info(msg);
             }
         }
-
-        if (log.isInfoEnabled()) {
-            String msg = "Finished invalidation session.";
-            if (invalidCount > 0) {
-                msg += " [" + invalidCount + "] sessions were stopped.";
-            } else {
-                msg += " No sessions were stopped.";
-            }
-            log.info(msg);
-        }
+       
 
     }
 
