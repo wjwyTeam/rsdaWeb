@@ -63,6 +63,9 @@ public class PersonalService {
   if (!StringUtil.isEmpty(personal.getPersonalName())) {
    criteria.andEqualTo("personalName", personal.getPersonalName());
   }
+   if (!StringUtil.isEmpty(personal.getDeptId())) {
+      criteria.andEqualTo("deptId", personal.getDeptId());
+   }
 
   List<Personal> personals = personalMapper.selectByExample(example);
   PageInfo<Personal> PageInfoDO = new PageInfo<Personal>(personals);

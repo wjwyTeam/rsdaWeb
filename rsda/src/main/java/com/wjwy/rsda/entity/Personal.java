@@ -112,4 +112,8 @@ public class Personal {
  @ApiModelProperty("创建人")
  @Column(name = "create_by")
  private String createBy;
+ @ApiModelProperty("所属机构")
+ @Column(name = "dept_id")
+ private String deptId;
+
 }

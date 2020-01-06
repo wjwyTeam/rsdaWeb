@@ -138,7 +138,7 @@
       if (treeNode.id != '' || treeNode.id != 'undefined') {
         window.tableObj.reload('dossierList', {
           where: {
-            id: treeNode.id
+            deptId: treeNode.id
           },
         }, 'data');
         $("#deptId").val(treeNode.id);
@@ -319,6 +319,10 @@
                 var field = dataLog.field;
                 field.personalId = data.personalId
                 field.politicalOutlook = politicalOutlookName;
+                if ($("#deptId").val().trim()!="") {
+                    field.deptId = $("#deptId").val();
+                }
+              
                 //获取提交的字段
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
@@ -481,7 +485,7 @@
                    //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                 var field = data.field; //获取提交的字段
-                // field.parentId = $("#deptId").val();
+                field.deptId = $("#deptId").val();
                 field.politicalOutlook = politicalOutlookName;
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
@@ -519,8 +523,6 @@
       //监听搜索查询条件
       form.on('submit(dept-front-search)', function (data) {
         var field = data.field;
-        field.id = "";
-
         //执行重载
         table.reload('dossierList', {
           where: field
@@ -539,8 +541,7 @@
     function tableLoad(table) {
       table.reload('dossierList', {
         where: {
-          id: $("#deptId").val(),
-          name: $("#unitName").val(),
+          deptId: $("#deptId").val()
         },
       }, 'data');
     }
