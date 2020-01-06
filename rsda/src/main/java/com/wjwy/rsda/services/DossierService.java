@@ -73,7 +73,7 @@ public class DossierService{
   */
  public int dossierInsert(Dossier dossier) {
   dossier.setDossierId(UUID.randomUUID().toString().toLowerCase());
-  return dossierMapper.insert(dossier);
+  return dossierMapper.insertSelective(dossier);
  }
 
  /**

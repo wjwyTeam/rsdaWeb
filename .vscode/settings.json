@@ -1,17 +1,3 @@
-// 文件头部注释
-"fileheader.customMade": {
- "Descripttion": "",
- "version": "",
- "Author": "ZHANGQI",
- "Date": "Do not edit",
- "LastEditors": "ZHANGQI",
- "LastEditTime": "Do not Edit"
-},
-//函数注释
-"fileheader.cursorMode": {
- "name": "",
- "test": "test font",
- "msg": "",
- "param": "",
- "return": ""
+{
+ "java.configuration.updateBuildConfiguration": "automatic"
 }
