@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-09 17:47:32
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-30 08:48:25
+ * @LastEditTime : 2020-01-06 17:47:00
  */
 package com.wjwy.rsda.entity;
 
@@ -23,27 +23,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-/*
- * @Descripttion: 
- * @version: v0.0.1
- * @Author: ZHANGQI
- * @Date: 2019-12-09 17:47:32
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-09 17:48:53
- */
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("功能组=>实体")
+@ApiModel("F2-菜单管理=>实体类")
 @Table(name = "sys_group")
-public class Group implements Serializable{
+public class Group implements Serializable {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("功能主键ID")
     @Column(name = "group_id")

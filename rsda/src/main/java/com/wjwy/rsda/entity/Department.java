@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:51:31
- * @LastEditors  : zgr
- * @LastEditTime : 2019-12-18 16:52:34
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-06 17:45:17
  */
 package com.wjwy.rsda.entity;
 
@@ -32,7 +32,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("单位=>实体")
+@ApiModel("E1-机构管理=>实体类")
 @Table(name = "sys_dapartment")
 public class Department implements Serializable {
 

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:06:40
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-23 10:13:11
+ * @LastEditTime : 2020-01-06 17:47:24
  */
 package com.wjwy.rsda.entity;
 
@@ -29,7 +29,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("字典类型=>实体")
+@ApiModel("G1-字典管理=>实体类")
 @Table(name = "sys_dict_data")
 public class DictData extends BaseEntity {
 

@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-06 15:02:00
- * @LastEditors  : zgr
- * @LastEditTime : 2019-12-23 18:15:09
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-06 17:48:36
  */
 package com.wjwy.rsda.entity;
 
@@ -34,7 +34,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("角色=>实体")
+@ApiModel("I1-角色管理=>实体类")
 @Table(name = "sys_role")
 public class Role implements Serializable{
 

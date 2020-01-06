@@ -6,7 +6,7 @@ package com.wjwy.rsda.entity;
  * @Author: ZHANGQI
  * @Date: 2020-01-06 15:20:49
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 15:56:00
+ * @LastEditTime : 2020-01-06 17:44:16
  */
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -23,7 +23,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("散材料上报=>实体")
+@ApiModel("D1-散材料上报=>实体类")
 @Table(name = "material_rp")
 public class MaterialRp {
  @ApiModelProperty("散材料上报ID")
@@ -31,4 +31,3 @@ public class MaterialRp {
  private String rpId;
 
 }
-

@@ -4,14 +4,12 @@
  * @Author: ZHANGQI
  * @String: 2020-01-02 18:12:32
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 14:58:33
+ * @LastEditTime : 2020-01-06 17:40:39
  */
 package com.wjwy.rsda.entity;
 
-
 import javax.persistence.Column;
 import javax.persistence.Table;
-
 
 import io.swagger.annotations.ApiModel;
 
@@ -25,7 +23,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("查阅管理=>实体")
+@ApiModel("B1-查阅管理=>实体类")
 @Table(name = "consult_apply")
 public class Consult {
  @ApiModelProperty("查阅申请ID")

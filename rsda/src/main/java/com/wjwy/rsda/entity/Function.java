@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 15:08:01
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-30 08:48:37
+ * @LastEditTime : 2020-01-06 17:46:31
  */
 package com.wjwy.rsda.entity;
 
@@ -28,7 +28,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("菜单=>实体")
+@ApiModel("F1-菜单管理=>实体类")
 @Table(name = "sys_function")
 public class Function implements Serializable {
 

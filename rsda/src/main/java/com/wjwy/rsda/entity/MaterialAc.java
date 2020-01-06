@@ -6,7 +6,7 @@ package com.wjwy.rsda.entity;
  * @Author: ZHANGQI
  * @Date: 2020-01-06 15:42:02
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 15:55:05
+ * @LastEditTime : 2020-01-06 17:44:30
  */
 
 import javax.persistence.Column;
@@ -24,7 +24,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("散材料归档列表=>实体")
+@ApiModel("D2-散材料归档列表=>实体类")
 @Table(name = "material_ac")
 public class MaterialAc {
 

@@ -4,16 +4,12 @@
  * @Author: ZHANGQI
  * @String: 2020-01-02 14:48:17
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 15:13:34
+ * @LastEditTime : 2020-01-06 17:43:27
  */
 package com.wjwy.rsda.entity;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Table;
-
-
 
 import io.swagger.annotations.ApiModel;
 
@@ -27,7 +23,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("案卷管理=>实体")
+@ApiModel("A1-案卷管理=>实体类")
 @Table(name = "dossier_manage")
 public class Dossier {
  @ApiModelProperty("案卷管理主键")
@@ -39,8 +35,8 @@ public class Dossier {
  @ApiModelProperty("档案箱号")
  @Column(name = "dossier_box_no")
  private String dossierBoxNo;
- @ApiModelProperty("档案正副本")    
- @Column(name = "dossier_charter" )  
+ @ApiModelProperty("档案正副本")
+ @Column(name = "dossier_charter")
  private String dossierCharter;
  @ApiModelProperty("来档单位BH")
  @Column(name = "department_id")

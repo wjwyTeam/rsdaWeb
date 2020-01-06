@@ -6,13 +6,11 @@ package com.wjwy.rsda.entity;
  * @Author: ZHANGQI
  * @String: 2020-01-03 09:31:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 14:57:58
+ * @LastEditTime : 2020-01-06 17:41:05
  */
-
 
 import javax.persistence.Column;
 import javax.persistence.Table;
-
 
 import io.swagger.annotations.ApiModel;
 
@@ -26,7 +24,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("借阅管理=>实体")
+@ApiModel("B2-借阅管理=>实体类")
 @Table(name = "borrow_apply")
 public class Borrow {
  @ApiModelProperty("借阅iD")

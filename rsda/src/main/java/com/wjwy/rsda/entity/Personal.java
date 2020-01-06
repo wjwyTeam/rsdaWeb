@@ -1,4 +1,5 @@
 package com.wjwy.rsda.entity;
+
 import javax.persistence.Column;
 import javax.persistence.Table;
 import io.swagger.annotations.ApiModel;
@@ -22,7 +23,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("个人档案=>实体")
+@ApiModel("E2-人员管理=>实体类")
 @Table(name = "person_info")
 public class Personal {
 

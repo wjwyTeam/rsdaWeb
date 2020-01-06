@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-11-30 22:58:25
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 17:48:19
+ * @LastEditTime : 2020-01-06 17:48:16
  */
 package com.wjwy.rsda.entity;
 
@@ -29,7 +29,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("用户=>实体")
+@ApiModel("H1-用户管理=>实体类")
 @Table(name = "sys_user")
 public class User implements Serializable {
 

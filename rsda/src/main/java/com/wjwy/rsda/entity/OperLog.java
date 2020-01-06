@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 18:19:36
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-30 08:37:36
+ * @LastEditTime : 2020-01-06 17:48:59
  */
 package com.wjwy.rsda.entity;
 
@@ -19,6 +19,7 @@ import java.util.Date;
 import javax.persistence.Table;
 import com.wjwy.rsda.common.util.Excel;
 import com.wjwy.rsda.common.util.Excel.ColumnType;
+
 /**
  * 操作日志记录表 oper_log
  */
@@ -27,9 +28,9 @@ import com.wjwy.rsda.common.util.Excel.ColumnType;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("日志=>实体")
+@ApiModel("J1-日志管理=>实体类")
 @Table(name = "sys_oper_log")
-public class OperLog implements Serializable{
+public class OperLog implements Serializable {
 
     /**
      *

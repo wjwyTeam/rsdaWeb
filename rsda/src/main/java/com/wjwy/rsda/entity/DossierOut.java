@@ -3,8 +3,8 @@
  * @version: 
  * @Author: ZHANGQI
  * @Date: 2020-01-03 13:55:13
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2020-01-06 15:00:02
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-06 17:43:04
  */
 package com.wjwy.rsda.entity;
 
@@ -12,31 +12,19 @@ import javax.persistence.Column;
 
 import io.swagger.annotations.ApiModelProperty;
 
-
 import javax.persistence.Table;
-
-
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-/*
- * @Descripttion: 
- * @version: 
- * @Author: ZHANGQI
- * @Date: 2020-01-03 13:55:13
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 13:56:16
- */
 @ToString
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("转入档案=>实体")
-@Table(name = "dossier_into")
+@ApiModel("C2-转出档案=>实体类")
+@Table(name = "dossier_out")
 public class DossierOut {
  @ApiModelProperty("档案转入ID")
  @Column(name = "transfer_id")
