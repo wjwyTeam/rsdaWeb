@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 16:41:10
+ * @LastEditTime : 2020-01-07 11:11:06
  */
 package com.wjwy.rsda.common.config;
 
@@ -17,6 +17,7 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -82,106 +83,7 @@ public class ShiroConfiguration {
         }
     }
 
-    @Bean
-    public AuthRealm authRealms(EhCacheManager cacheManager) {
-        AuthRealm authRealm = new AuthRealm();
-        authRealm.setCacheManager(cacheManager);
-        return authRealm;
-    }
-
-  
-
-  
-    /**
-     * ShiroFilter<br/>
-     * 注意这里参数中的 StudentService 和 IScoreDao 只是一个例子，因为我们在这里可以用这样的方式获取到相关访问数据库的对象，
-     * 然后读取数据库相关配置，配置到 shiroFilterFactoryBean 的访问规则中。实际项目中，请使用自己的Service来处理业务逻辑。
-     *
-     * @param securityManager 安全管理器
-     * @return ShiroFilterFactoryBean
-     */
-    @Bean(name = "shiroFilter")
-    public ShiroFilterFactoryBean getShiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        // 必须设置 SecurityManager
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
-        // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        // 登录成功后要跳转的连接
-        shiroFilterFactoryBean.setSuccessUrl("/index");
-
-        shiroFilterFactoryBean.setUnauthorizedUrl("/login");
-
-        loadShiroFilterChain(shiroFilterFactoryBean);
-        return shiroFilterFactoryBean;
-    }
-
-    /**
-     * 加载shiroFilter权限控制规则（从数据库读取然后配置）
-     */
-    private void loadShiroFilterChain(ShiroFilterFactoryBean shiroFilterFactoryBean) {
-        /////////////////////// 下面这些规则配置最好配置到配置文件中 ///////////////////////
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // 需要验证的写 authc 不需要的写 anon
-        filterChainDefinitionMap.put("/templates/**", "anon");
-        filterChainDefinitionMap.put("/static/**", "anon");
-        filterChainDefinitionMap.put("/login", "anon");
-        // anon：它对应的过滤器里面是空的,什么都没做
-
-        // 不用注解也可以通过 API 方式加载权限规则
-        // Map<String, String> permissions = new LinkedHashMap<>();
-        // permissions.put("/users/find", "perms[user:find]");
-        // filterChainDefinitionMap.putAll(permissions);
-        filterChainDefinitionMap.put("/layuiadmin/**", "anon");
-        filterChainDefinitionMap.put("/druid/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/log /**", "anon");
-        filterChainDefinitionMap.put("/image/**", "anon");
-        filterChainDefinitionMap.put("/webviews/**", "anon");
-        // 退出 logout地址，shiro去清除session
-        filterChainDefinitionMap.put("/logout", "logout");
-        // 不需要拦截的访问
-        filterChainDefinitionMap.put("/login", "anon,captchaValidate");
-        // 系统权限列表
-        // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
-
-        Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
-        filters.put("online", onlineFilter());
-        filters.put("onlineSession", onlineSessionFilter());
-        filters.put("captchaValidate", captchaValidateFilter());
-        filters.put("kickout", kickoutSessionFilter());
-        // 注销成功，则跳转到指定页面
-        filters.put("logout", logoutFilter());
-        shiroFilterFactoryBean.setFilters(filters);
-
-        // 所有请求需要认证
-        filterChainDefinitionMap.put("/**", "user,kickout,online,onlineSession");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-    }
-
-
-
-    /**
-     * 自定义在线用户同步过滤器
-     */
-    @Bean
-    public OnlineFilter onlineFilter() {
-        OnlineFilter onlineFilter = new OnlineFilter();
-        onlineFilter.setLoginUrl("/login");
-        return onlineFilter;
-    }
-
-    /**
-     * 自定义在线用户同步过滤器
-     */
-    @Bean
-    public OnlineSessionFilter onlineSessionFilter() {
-        OnlineSessionFilter onlineSessionFilter = new OnlineSessionFilter();
-        return onlineSessionFilter;
-    }
-
-
-
+    
     /**
      * 自定义Realm
      */
@@ -261,7 +163,97 @@ public class ShiroConfiguration {
         logoutFilter.setLoginUrl("/login");
         return logoutFilter;
     }
-    
+
+  
+    /**
+     * ShiroFilter<br/>
+     * 注意这里参数中的 StudentService 和 IScoreDao 只是一个例子，因为我们在这里可以用这样的方式获取到相关访问数据库的对象，
+     * 然后读取数据库相关配置，配置到 shiroFilterFactoryBean 的访问规则中。实际项目中，请使用自己的Service来处理业务逻辑。
+     *
+     * @param securityManager 安全管理器
+     * @return ShiroFilterFactoryBean
+     */
+    @Bean(name = "shiroFilter")
+    public ShiroFilterFactoryBean getShiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        // 必须设置 SecurityManager
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
+        shiroFilterFactoryBean.setLoginUrl("/login");
+        // 登录成功后要跳转的连接
+        shiroFilterFactoryBean.setSuccessUrl("/index");
+
+        shiroFilterFactoryBean.setUnauthorizedUrl("/login");
+
+        loadShiroFilterChain(shiroFilterFactoryBean);
+        return shiroFilterFactoryBean;
+    }
+
+    /**
+     * 加载shiroFilter权限控制规则（从数据库读取然后配置）
+     */
+    private void loadShiroFilterChain(ShiroFilterFactoryBean shiroFilterFactoryBean) {
+        /////////////////////// 下面这些规则配置最好配置到配置文件中 ///////////////////////
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        // 需要验证的写 authc 不需要的写 anon
+        filterChainDefinitionMap.put("/templates/**", "anon");
+        filterChainDefinitionMap.put("/static/**", "anon");
+        // anon：它对应的过滤器里面是空的,什么都没做
+
+        // 不用注解也可以通过 API 方式加载权限规则
+        // Map<String, String> permissions = new LinkedHashMap<>();
+        // permissions.put("/users/find", "perms[user:find]");
+        // filterChainDefinitionMap.putAll(permissions);
+        filterChainDefinitionMap.put("/layuiadmin/**", "anon");
+        filterChainDefinitionMap.put("/druid/**", "anon");
+        filterChainDefinitionMap.put("/js/**", "anon");
+        filterChainDefinitionMap.put("/log /**", "anon");
+        filterChainDefinitionMap.put("/image/**", "anon");
+        filterChainDefinitionMap.put("/webviews/**", "anon");
+        // 退出 logout地址，shiro去清除session
+        filterChainDefinitionMap.put("/logout", "logout");
+        // 不需要拦截的访问
+        filterChainDefinitionMap.put("/login", "anon,captchaValidate");
+        // 系统权限列表
+        // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
+
+        Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
+        filters.put("online", onlineFilter());
+        filters.put("onlineSession", onlineSessionFilter());
+        filters.put("captchaValidate", captchaValidateFilter());
+        filters.put("kickout", kickoutSessionFilter());
+        // 注销成功，则跳转到指定页面
+        filters.put("logout", logoutFilter());
+        shiroFilterFactoryBean.setFilters(filters);
+
+        // 所有请求需要认证
+        filterChainDefinitionMap.put("/**", "user,kickout,online,onlineSession");
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+    }
+
+
+
+    /**
+     * 自定义在线用户处理过滤器
+     */
+    @Bean
+    public OnlineFilter onlineFilter() {
+        OnlineFilter onlineFilter = new OnlineFilter();
+        onlineFilter.setLoginUrl("/login");
+        return onlineFilter;
+    }
+
+    /**
+     * 自定义在线用户同步过滤器
+     */
+    @Bean
+    public OnlineSessionFilter onlineSessionFilter() {
+        OnlineSessionFilter onlineSessionFilter = new OnlineSessionFilter();
+        return onlineSessionFilter;
+    }
+
+
+
     /**
      * 自定义验证码过滤器
      */
@@ -320,14 +312,11 @@ public class ShiroConfiguration {
     }
 
     /**
-     * 开启shiro aop注解支持. 使用代理方式;所以需要开启代码支持;
-     * 
-     * @param securityManager
-     * @return
+     * 开启Shiro注解通知器
      */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
-            org.apache.shiro.mgt.SecurityManager securityManager) {
+            @Qualifier("securityManager") SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
