@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 16:00:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-31 09:01:55
+ * @LastEditTime : 2020-01-07 10:49:51
  */
 package com.wjwy.rsda.common.tool.server.service;
 
@@ -15,6 +15,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.wjwy.rsda.common.tool.server.system.Online;
+import com.wjwy.rsda.common.util.DateUtils;
 import com.wjwy.rsda.mapper.UserOnlineMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,9 @@ public class OnlineService {
      * @return 在线用户信息
      */
     public Online selectOnlineById(String sessionId) {
-        return userOnlineDao.selectByPrimaryKey(sessionId);
+        Online on = new Online();
+        on.setSessionId(sessionId);
+        return userOnlineDao.selectOne(on);
 
     }
 
@@ -45,10 +48,14 @@ public class OnlineService {
      * 通过会话序号删除信息
      * 
      * @param sessionId 会话ID
+     * @return
      * @return 在线用户信息
      */
     public void deleteOnlineById(String sessionId) {
-
+        if (selectOnlineById(sessionId) != null) {
+            userOnlineDao.deleteByPrimaryKey(sessionId);
+        }
+       
     }
 
     /**
@@ -58,6 +65,9 @@ public class OnlineService {
      * @return 在线用户信息
      */
     public void batchDeleteOnline(List<String> sessions) {
+        for (String string : sessions) {
+            deleteOnlineById(string);
+        }
 
     }
 
@@ -101,7 +111,7 @@ public class OnlineService {
      * @param sessionId 会话ID
      */
     public void forceLogout(String sessionId) {
-
+        deleteOnlineById(sessionId);
     }
 
     /**
@@ -111,7 +121,8 @@ public class OnlineService {
      * @return 会话集合
      */
     public List<Online> selectOnlineByExpired(Date expiredDate) {
-        return null;
+        String lastAccessTime = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, expiredDate);
+        return userOnlineDao.selectOnlineByExpired(lastAccessTime);
 
     }
 }

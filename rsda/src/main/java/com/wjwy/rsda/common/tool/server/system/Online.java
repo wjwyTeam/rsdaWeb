@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:35:18
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-31 08:15:59
+ * @LastEditTime : 2020-01-07 14:13:46
  */
 package com.wjwy.rsda.common.tool.server.system;
 
@@ -14,20 +14,18 @@ import javax.persistence.Table;
 
 import com.wjwy.rsda.enums.EnumEntitys;
 
-import io.swagger.annotations.ApiModel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * 当前在线会话 sys_user_online
  */
 @Data
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("在线用户=>")
 @Table(name = "sys_user_online")
 public class Online {
 
@@ -62,5 +60,15 @@ public class Online {
     private Long expireTime;
 
     /** 在线状态 */
-    private EnumEntitys status = (EnumEntitys) EnumEntitys.ONLINE;
+    private EnumEntitys status ;
+
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("sessionId", getSessionId())
+                .append("loginName", getLoginName()).append("deptName", getDeptName()).append("ipaddr", getIpaddr())
+                .append("loginLocation", getLoginLocation()).append("browser", getBrowser()).append("os", getOs())
+                .append("status", getStatus()).append("startTimestamp", getStartTimestamp())
+                .append("lastAccessTime", getLastAccessTime()).append("expireTime", getExpireTime()).toString();
+    }
 }

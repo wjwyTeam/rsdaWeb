@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-07 10:54:20
+ * @LastEditTime : 2020-01-07 16:11:14
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -46,6 +46,10 @@
 
 <body class="page-no-scroll">
   <div>
+    <div class="deptTableToolbar" style="margin-left:10px;">
+      <button class="layui-btn" data-type="addOne">添加</button>
+      <!-- <button class="layui-btn" data-type="batchdel">批量删除</button> -->
+    </div>
     <table class="layui-hide" id = "functionTable" lay-filter="functionTable"></table> 
     <!-- 表格操作列 -->
     <script type="text/html" id="demoTreeTableBar1">
@@ -80,6 +84,8 @@
         , table = layui.table
         , util = layui.util
         , treeTable = layui.treeTable;
+
+        console.log(table);
 
            // 渲染表格
            var renderTreeTable = function(){
@@ -175,50 +181,49 @@
             });
             
           }else if(obj.event === "edit"){
-             //open 方法合作共用json串
-          layer.open({
-            type: 2,
-            title: '编辑菜单',
-            maxmin: true,
-            area: ['700px', '600px'],
-            btn: ['确定', '取消'],
-            fixed: true,
-            shadeClose: false,
-            shade: 0.2,
-            moveType: 1,  //拖拽模式，0或者1 
-            content: '/function/functionEdit?id=' + data.id,
-            yes: function (index, layero) {
-              var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'functionConfirm'
-                , submit = layero.find('iframe').contents().find('#' + submitID);
-              //监听提交
-              iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
-                var field = dataLog.field;
-                if (field.visible == "true") {
-                  field.visible = true;
-                } else {
-                  field.visible = false;
-                }
-                //获取提交的字段
-                //提交 Ajax 成功后，静态更新表格中的数据
-                $.ajax({
-                  type: "post",
-                  url: "/function/updateFunction",
-                  data: JSON.stringify(field),
-                  dataType: "json",
-                  contentType: "application/json;charset-UTF-8",
-                  success: function (resultJSONObject) {
-                    if (resultJSONObject.success) {
-                      renderTreeTable();
-                    }
-                    layer.msg(resultJSONObject.msg);
+            layer.open({
+              type: 2,
+              title: '编辑菜单',
+              maxmin: true,
+              area: ['700px', '600px'],
+              btn: ['确定', '取消'],
+              fixed: true,
+              shadeClose: false,
+              shade: 0.2,
+              moveType: 1,  //拖拽模式，0或者1 
+              content: '/function/functionEdit?id=' + data.id,
+              yes: function (index, layero) {
+                var iframeWindow = window['layui-layer-iframe' + index]
+                  , submitID = 'functionConfirm'
+                  , submit = layero.find('iframe').contents().find('#' + submitID);
+                //监听提交
+                iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                  var field = dataLog.field;
+                  if (field.visible == "true") {
+                    field.visible = true;
+                  } else {
+                    field.visible = false;
                   }
+                  //获取提交的字段
+                  //提交 Ajax 成功后，静态更新表格中的数据
+                  $.ajax({
+                    type: "post",
+                    url: "/function/updateFunction",
+                    data: JSON.stringify(field),
+                    dataType: "json",
+                    contentType: "application/json;charset-UTF-8",
+                    success: function (resultJSONObject) {
+                      if (resultJSONObject.success) {
+                        renderTreeTable();
+                      }
+                      layer.msg(resultJSONObject.msg);
+                    }
+                  });
+                  layer.close(index); //关闭弹层
                 });
-                layer.close(index); //关闭弹层
-              });
-              submit.trigger('click');
-            }
-          });
+                submit.trigger('click');
+              }
+            });
           }else if(obj.event == "add"){
             // 新增菜单
             layer.open({
@@ -269,8 +274,107 @@
             }
           });
          }
-       })
+       });
+      
+       var active = {
+         addOne:function(){
+          // 新增菜单
+          layer.open({
+            type: 2,
+            title: '新增菜单',
+            maxmin: true,
+            area: ['700px', '600px'],
+            btn: ['确定', '取消'],
+            fixed: true,
+            shadeClose: false,
+            shade: 0.2,
+            moveType: 1,  //拖拽模式，0或者1 
+            content: '/function/functionEdit',
+            yes: function (index, layero) {
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'functionConfirm'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                var field = dataLog.field;
+                field.pid="";
+                field.isCandel=false;
+                field.delFlag=false; 
+                console.log(field);
+                if (field.visible == "true") {
+                  field.visible = true;
+                } else {
+                  field.visible = false;
+                }
+                //获取提交的字段
+                //提交 Ajax 成功后，静态更新表格中的数据
+                $.ajax({
+                  type: "post",
+                  url: "/function/functionInsert",
+                  data: JSON.stringify(field),
+                  dataType: "json",
+                  contentType: "application/json;charset-UTF-8",
+                  success: function (resultJSONObject) {
+                    if (resultJSONObject.success) {
+                      renderTreeTable();
+                    }
+                    layer.msg(resultJSONObject.msg);
+                  }
+                });
+                layer.close(index); //关闭弹层
+              });
+              submit.trigger('click');
+            }
+          });
+         }
+         ,batchdel:function(){
+           console.log(treeTable);
+             //两种方式
+            var checkStatus = treeTable.checkStatus('functionTable')
+              , checkData = checkStatus.data; //得到选中的数据
+            if (checkData.length === 0) {
+              return layer.msg('请选择数据');
+            }
+            console.log(checkData)
+            //捉到所有被选中的，发异步进行删除
+            var ids = [];
+            if (checkData.length > 0) {
+              console.log(123);
+              for (var i = 0; i < checkData.length; i++) { 
+                ids.push(checkData[i].personalId)
+              }
+            }
+            console.log(ids);
+            layer.confirm('确定删除吗？', function (index) {
+              //执行 Ajax 后重载
+              $.ajax({
+                type: "post",
+                url: "/person/personalRemove",
+                data: "ids="+ids,
+                success: function (data) {
+                  if (data.success) {
+                    var node = zTreeObj.getNodeByParam("id", 0, null);
+                    zTreeObj.reAsyncChildNodes(node, "refresh");
+                    tableLoad(table);
+                  
+                  }      
+                  layer.msg(data.msg);
+                  
+                }
+              });
+            });
+         }
+      }
+     
+      $('.layui-btn').on('click', function () {
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
       });
+
+
+    });
+
+   
      
 
 

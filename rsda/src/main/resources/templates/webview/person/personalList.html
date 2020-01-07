@@ -80,14 +80,9 @@
   <div class="container">
 
     <div class="leftTree">
-      <div th:if="${hiddenType}"  style="width: 100%;
-                                height: 40px;
-                                text-align: center;
-                                border-bottom: solid 1px #efefef;
-                            "><span style="
-                                line-height: 40px;
-                                font-size: 16px;
-                            ">单位机构树</span></div>
+      <div style="width: 100%;height: 40px; text-align: center;border-bottom: solid 1px #efefef;">
+          <span style="line-height: 40px; font-size: 16px;">单位机构树</span>
+      </div>
       <ul id="deptTree" class="ztree"></ul>
     </div>
     <!-- th:if="${hiddenType}" -->
@@ -102,17 +97,27 @@
           <button class="layui-btn" data-type="add">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
         </div>
+        
         <div class="deptTableSearch layui-form">
-          <input type="text" name="name" id="unitName" placeholder="请输入人员名称" autocomplete="off" class="layui-input"
-            style="display: inline-block;width: auto;">
+          <!-- <input type="text" name="name" id="unitName" placeholder="请输入人员名称" autocomplete="off" class="layui-input"
+            style="display: inline-block;width: auto;"> -->
           <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
-            <select name="unitType">
-              <option value="" selected="true">请选择</option>
-              <option value="0">法人单位</option>
-              <option value="1">内设部门</option>
-              <option value="2">机构分组</option>
+            <select name="personType">
+              <option value="0" checked="true">在职人员</option>
+              <option value="1">离退人员</option>
+              <option value="2">历史人员</option>
+              <option value="3">不在任干部</option>
             </select>
           </div>
+          <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
+              <select name="managementType">
+                  <option value="0" selected="true">全部</option>
+                  <option value="1">中管干部</option>
+                  <option value="2">省管干部</option>
+                  <option value="3">市管干部</option>
+                  <option value="4">非市管干部</option>
+                </select>
+          </div>  
           <button class="layui-btn" lay-submit lay-filter="dept-front-search"> 搜索</button>
         </div>
       </div>
@@ -523,6 +528,7 @@
       //监听搜索查询条件
       form.on('submit(dept-front-search)', function (data) {
         var field = data.field;
+        console.log(field);
         //执行重载
         table.reload('dossierList', {
           where: field

@@ -3,8 +3,13 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
+<<<<<<< HEAD
  * @LastEditors  : zgr
  * @LastEditTime : 2020-01-07 10:55:10
+=======
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-06 18:48:18
+>>>>>>> ff6edb729c15d538b703cd5c702894e09c2c938e
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -108,10 +113,10 @@
               templet: function(d){
 											var state = "";
 											if (d.status == true) {
-												state = "<input type='checkbox' value='" + d.dictId + "' id='status' lay-filter='statTwo' checked='checked' name='status'  lay-skin='switch' lay-text='正常|作废' >";
+												state = "<input type='checkbox' value='" + d.dictId + "' id='status' lay-filter='statTwo' checked='checked' name='status'  lay-skin='switch' lay-text='启用|停用' >";
 											}
 											else {
-												state = "<input type='checkbox' value='" + d.dictId + "' id='status' lay-filter='statTwo'  name='status'  lay-skin='switch' lay-text='正常|作废' >";
+												state = "<input type='checkbox' value='" + d.dictId + "' id='status' lay-filter='statTwo'  name='status'  lay-skin='switch' lay-text='启用|停用' >";
 											}
 											return state;
 									}
@@ -355,16 +360,16 @@
         var contexts;
         var sta;
         var x = data.elem.checked;//判断开关状态
-        if (x=="true") {
-            contexts = "正常";
+        if (x==true) {
+            contexts = "停用";
         } else {
-            contexts = "作废";
+            contexts = "启用";
         }
         var obj = {
-                        //上下架的参数
-                        "dictId": data.value,
-                        "status":x
-                  }
+                  //上下架的参数
+                  "dictId": data.value,
+                  "status":x
+          }
         //自定义弹窗
         layer.open({
             content: "你确定要"+contexts+"?"
@@ -380,7 +385,7 @@
                     dataType: "json",
                     contentType: "application/json;charset-UTF-8",
                     success: function (data) {
-                      layer.msg(data.msg,
+                      layer.msg(contexts,
                           // 提示的样式
                           {icon: 1, time: 2000,});
                       // 数据重载

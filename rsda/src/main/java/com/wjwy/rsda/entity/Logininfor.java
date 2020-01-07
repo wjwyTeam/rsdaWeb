@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 17:04:51
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-19 17:06:42
+ * @LastEditTime : 2020-01-07 16:00:36
  */
 package com.wjwy.rsda.entity;
 
@@ -30,18 +30,15 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("登录用户=>实体")
+@ApiModel("J1-登录日志=>实体类")
 @Table(name = "sys_logininfor")
 public class Logininfor implements Serializable {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     /** ID */
     @Excel(name = "序号", cellType = ColumnType.NUMERIC)
-    private Long infoId;
+    private String infoId;
 
     /** 用户账号 */
     @Excel(name = "用户账号")

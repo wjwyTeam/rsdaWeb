@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-31 09:37:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 14:34:43
+ * @LastEditTime : 2020-01-07 15:10:23
  */
 package com.wjwy.rsda.common.tool.server.session;
 
@@ -49,7 +49,9 @@ public class OnlineFilter extends AccessControlFilter {
 
         try {
             Session session = onlineSessionDAO.readSession(subject.getSession().getId());
-
+            if (session == null) {
+                return false;
+            }
             if (session != null && session instanceof OnlineSession) {
                 OnlineSession onlineSession = (OnlineSession) session;
                 request.setAttribute(ShiroConstants.ONLINE_SESSION, onlineSession);
@@ -66,12 +68,12 @@ public class OnlineFilter extends AccessControlFilter {
                     }
                 }
 
-                if (onlineSession.getStatus() == EnumEntitys.OFFLINE) {
+                if (onlineSession.getStatus() == EnumEntitys.OFFLINE.getDesc()) {
                     return false;
                 }
             }
         } catch (UnknownSessionException e) {
-          
+           
         }
      
 

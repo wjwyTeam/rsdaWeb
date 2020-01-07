@@ -116,6 +116,8 @@ public class LoginController {
 			}
 			HttpSession session = request.getSession(true);// 获取库内session
 			session.setAttribute("userInfo", user);
+
+			
 			return ResponseWrapper.success(HttpStatus.OK.value(), "登陆中,请稍候...", user, "/index", null);
 		} catch (AuthenticationException e) {
 			return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null, "/login", null);
