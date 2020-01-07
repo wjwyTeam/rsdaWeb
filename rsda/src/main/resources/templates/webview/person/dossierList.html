@@ -65,8 +65,9 @@
     }
 
     .deptTableSearch {
-      width: calc(100% - 180px);
-      text-align: right;
+      width: calc(100% - 580px);
+      text-align: left;
+      padding-left: 10px;
     }
     .layui-btn-normal {
       background-color: #009688;
@@ -98,30 +99,49 @@
           display: inline-flex;
           align-items: center;
       ">
-        <div class="deptTableToolbar" style="margin-left:10px;">
+        <!-- <div class="deptTableToolbar" style="margin-left:10px;">
           <button class="layui-btn" data-type="add">添加</button>
           <button class="layui-btn" data-type="batchdel">批量删除</button>
-        </div>
+        </div> -->
         <div class="deptTableSearch layui-form">
-          <input type="text" name="name" id="unitName" placeholder="请输入机构名称" autocomplete="off" class="layui-input"
-            style="display: inline-block;width: auto;">
           <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
-            <select name="unitType">
-              <option value="" selected="true">请选择</option>
-              <option value="0">法人单位</option>
-              <option value="1">内设部门</option>
-              <option value="2">机构分组</option>
+            <select name="personType">
+              <option value="" selected="true">全部</option>
+              <option value="0">在职人员</option>
+              <option value="1">离退人员</option>
+              <option value="1">历史人员</option>
+              <option value="2">不在任干部</option>
             </select>
           </div>
-          <button class="layui-btn" lay-submit lay-filter="dept-front-search"> 搜索</button>
+          <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
+              <select name="statusArchives">
+                <option value="" selected="true">全部</option>
+                <option value="0">暂存</option>
+                <option value="1">在库</option>
+                <option value="2">转出</option>
+                <option value="2">借阅</option>
+              </select>
+          </div>
+          <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
+                <select name="managementType">
+                  <option value="" selected="true">全部</option>
+                  <option value="0">中管干部</option>
+                  <option value="1">省管干部</option>
+                  <option value="2">市管干部</option>
+                  <option value="2">非市管干部</option>
+                </select>
+          </div>
+          <!-- <button class="layui-btn" lay-submit lay-filter="dept-front-search"> 搜索</button> -->
         </div>
       </div>
       <table id="dossierList" lay-filter="dossierList" class="layui-hide" style="border: 1px solid red;"> </table>
       <script type="text/html" id="barDemo" th:inline="none">
           <a class="layui-btn  layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-          <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
-          <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="up"><i class="layui-icon layui-icon-up"></i>上移</a>
-          <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="down"><i class="layui-icon layui-icon-down"></i>下移</a> 
+          <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="infoDetails"><i class="layui-icon layui-icon-tips"></i>查看</a>
+
+          <!-- <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="del"><i class="layui-icon ayui-icon-tips"></i>删除</a> -->
+
+
       </script>
     </div>
   </div>
@@ -217,16 +237,16 @@
         , url: '/dossier/dossierFindList' //数据接口
         , cols: [[ //表头
             {  checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test' }
-          , {  type: 'numbers', title: '序号',width:70 }
-          , {  field: 'personName', title: '姓名' }
-          , { field: 'id', title: 'id',hide:true}
-          , { field: 'personDuty', title: '工作单位及职务'}
-          , { field: 'dossierNo', title: '档案号'}
-          , { field: 'dossierBox', title: '档案箱号'}
-          , { field: 'dossierCharter', title: '档案正副本'}
-          , { field: 'departmentName', title: '来档单位'}
-          , { field: 'transferTime', title: '转入时间'}
-          , { field: 'dossierStatus', title: '档案状态',templet:function(d){
+          , {  type: 'numbers',align: 'center', title: '序号',width:70 }
+          , {  field: 'personName',align: 'center', title: '姓名' }
+          , { field: 'dossierId', title: 'id',hide:true}
+          , { field: 'personDuty', align: 'center',title: '工作单位及职务'}
+          , { field: 'dossierNo', align: 'center',title: '档案号'}
+          , { field: 'dossierBox', align: 'center',title: '档案箱号'}
+          , { field: 'dossierCharter', align: 'center',title: '档案正副本'}
+          , { field: 'departmentName', title: '来档单位',align: 'center'}
+          , { field: 'transferTime', title: '转入时间',align: 'center'}
+          , { field: 'dossierStatus', title: '档案状态',align: 'center',templet:function(d){
               if(d.dossierStatus == 0){
                 return "转入"
               }else{
@@ -234,11 +254,11 @@
               }
           }}
           , {
-            field: 'createTime', title: '创建时间', templet: function (time) {
+            field: 'createTime', title: '创建时间',width:150, align: 'center', templet: function (time) {
               return "<div>" + layui.util.toDateString(Date(time.createTime, 'yyyy-MM-dd HH:mm:ss')) + "</div>";
             }
           }
-          , { fixed: 'right', title: '操作', width: 180, align: 'center', toolbar: '#barDemo' }
+          , { fixed: 'right', title: '操作', width: 240, align: 'center', toolbar: '#barDemo' }
         ]]
         , page: false
         , response: {
@@ -269,11 +289,10 @@
         var tr = $(data_tr).parent().parent().parent();
         //列表删除方法
         if (obj.event === 'del') {
-          layer.confirm('真的删除行么', function (index) {
+          layer.confirm('确定要删除吗？', function (index) {
             layer.close(index);
-            $.post("/dept/deleteUnit", { id: data.id }, function (resultJSONObject) {
+            $.post("/dossier/dossierRemove", { ids: data.dossierId }, function (resultJSONObject) {
               if (resultJSONObject.success) {
-
                 obj.del();
                 var node;
                 if ($("#deptId").val() == data.id || $("#deptId").val() == data.parentId) {
@@ -293,13 +312,13 @@
           //open 方法合作共用json串
           layer.open({
             type: 2,
-            title: '更新机构',
+            title: '案卷信息',
             maxmin: true
-            , area: ['500px', '450px']
-            , btn: ['确定', '取消']
+            , area: ['800px', '600px']
+            , btn: ['保存', '取消']
             , shadeClose: false,
             shade: 0.2,
-            content: '/dept/deptInfo?id=' + data.id,
+            content: '/dossier/dossierFormPage?dossierId=' + data.dossierId,
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
                 , submitID = 'deptconfirm'
@@ -314,10 +333,10 @@
                 // field.unitTypeName = unitTypeName;
                 // field.pipeTypeName = pipeTypeName;
 
-                if (field.isPipe == "true")
-                  field.isPipe = true;
-                else
-                  field.isPipe = false;
+                // if (field.isPipe == "true")
+                //   field.isPipe = true;
+                // else
+                //   field.isPipe = false;
                 //获取提交的字段
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
@@ -428,14 +447,14 @@
           var ids = "";
           if (checkData.length > 0) {
             for (var i = 0; i < checkData.length; i++) {
-              ids += checkData[i].id + ",";
+              ids += checkData[i].dossierId + ",";
             }
           }
           layer.confirm('确定删除吗？', function (index) {
             //执行 Ajax 后重载
             $.ajax({
               type: "post",
-              url: "/dept/deleteUnitAll",
+              url: "/dossier/dossierRemove",
               data: { "ids": ids },
               success: function (data) {
                 if (data.success) {
@@ -458,7 +477,7 @@
             , content: '/dossier/dossierFormPage'
             , maxmin: true
             , moveType: 1 //拖拽模式，0或者1
-            , area: ['600px', '550px']
+            , area: ['700px', '550px']
             , skin: 'layer_bg' //layer_bg是自定义的css样式
             , shade: 0.2
             , fixed: true

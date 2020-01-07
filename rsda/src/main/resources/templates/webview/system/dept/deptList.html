@@ -131,9 +131,12 @@
   <script src="/js/jquery.ztree.core.js" type="text/javascript" th:inline="none"></script>
   <script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
   <script type="text/javascript" th:inline="javascript">
-    //Ztree
+    //点击树节点筛选列表数据
     function zTreeOnClick(event, treeId, treeNode) {
       if (treeNode.id != '' || treeNode.id != 'undefined') {
+        console.log(event)
+        console.log(treeNode)
+        console.log(treeId)
         window.tableObj.reload('deptList', {
           where: {
             id: treeNode.id
@@ -144,6 +147,7 @@
       }
     }
     var newCount = 1;
+    // 添加树形节点
     function addHoverDom(treeId, treeNode) {
       var sObj = $("#" + treeNode.tId + "_span");
       if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
@@ -157,6 +161,7 @@
         return false;
       });
     };
+    // 删除树形节点
     function removeHoverDom(treeId, treeNode) {
       $("#addBtn_" + treeNode.tId).unbind().remove();
     };
@@ -194,7 +199,6 @@
         callback: {
           onClick: zTreeOnClick
         }
-
       };
       window.zTreeObj = $.fn.zTree.init($("#deptTree"), setting);
     });
@@ -523,6 +527,7 @@
 
 
     function tableLoad(table) {
+      // 列表重载的条件
       table.reload('deptList', {
         where: {
           id: $("#deptId").val(),

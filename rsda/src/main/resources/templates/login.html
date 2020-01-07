@@ -12,26 +12,36 @@
 	<link rel="stylesheet" href="layuiadmin/style/admin.css" media="all">
 	<link rel="stylesheet" href="layuiadmin/style/login.css" media="all">
 	<link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon" />
+	<style>
+	   html,body{
+		height: 100%;
+		width: 100%;
+	  }
+	</style>
 	<script src="js/MD5.js"></script>
 
 </head>
 
-<body class="login" style="background-color:#0d76ca !important;overflow:-Scroll;overflow-y:hidden">
-	<div style="margin: 0px auto;width:1000px;">
+<body class="login" style="overflow: hidden; width: 100%;height: 100%; overflow:-scroll; background-image: url('/image/background/login_background.jpg');background-repeat:no-repeat;background-size: cover;">
+	<!-- <div style="margin: 0px auto;width:100%;border: 1px solid red;">
 		<div class="jianbian">
 			<div class="Toplog">
 				<h1>数字化干部人事档案系统</h1>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<div class="backgroudBg">
+			<!-- style="float:right;margin-right:70px;margin-top:105px; width:300px;height:300px;padding:0px" -->
 		<!-- BEGIN LOGIN -->
-		<div class="content"
-			style="float:right;margin-right:70px;margin-top:105px; width:300px;height:300px;padding:0px">
+		<div class="content">
 			<!-- BEGIN LOGIN FORM -->
 			<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+				<div class="Toplog">
+							<h1>数字化干部人事档案系统</h1>
+						</div>
 				<div class="layadmin-user-login-main">
 					<div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+						
 						<div class="layui-form-item">
 							<label class="layadmin-user-login-icon layui-icon layui-icon-username"
 								for="LAY-user-login-username"></label> <input type="text" autocomplete="off"

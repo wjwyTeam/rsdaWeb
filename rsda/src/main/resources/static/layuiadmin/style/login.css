@@ -1,28 +1,43 @@
 /** layuiAdmin.std-v1.2.1 LPPL License By http://www.layui.com/admin/ */
+html,body{
+  height: 100%;
+  width: 100%;
+}
+
 #LAY_app,body,html {
   height: 100%
 }
 
 .backgroudBg {
-  margin: 0 auto;
-  width: 1000px;
-  height: 600px;
+  position: relative;
+  margin: 0 auto;top: 25%;
+  width: 60%;
+  height: 55%;
   border-top: 1px solid;
   border-color: #0d76ca;
-  background-image: url('/image/background/login_background.jpg');
+  /* background-image: url('/image/background/login_background.jpg'); */
   background-size: 850px 550px;
   background-repeat: no-repeat;
   box-shadow: -7px 0px 100px 23px #032229;
-  border-radius: 1%;
+  border-radius: 40px;
+  border: 0.1px solid #fff;
+  z-index: 10;
+  /* background-color:rgba(255,255,255,0.1) */
+  background-color:transparent;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#26FFFFFF, endColorstr=#26FFFFFF)
 }
+
+
+
 
 .jianbian {
 /*z-index: 2;*/
+  border: 1px solid red;
   height: 60px;
   margin: 0 auto;
   position: relative;
-  top: 200px;
-  left: 200px;
+  /* top: 200px;
+  left: 200px; */
   width: 600px;
   border-radius: 1%;
   padding-bottom: 15px;
@@ -37,18 +52,20 @@
 }
 
 .Toplog {
+  position: relative;
   height: 70px;
   text-align: center;
 }
 
 h1 {
   color: #fff;
-  margin-left: 10px;
   height: 70px;
+  text-align: center;
   line-height: 70px;
-  padding-left: 80px;
+  /* padding-left: 80px; */
   display: inline-block;
-  background-image: url('/image/danghui.png');
+  /* background-image: url('/image/danghui.png'); */
+  margin-bottom: 5px;
   background-repeat: no-repeat;
   font-size: 35px;
 }
@@ -65,17 +82,19 @@ h1 {
   position: relative;
   left: 0;
   top: 0;
-  padding: 110px 0;
   min-height: 100%;
-  box-sizing: border-box
+  box-sizing: border-box;
+  /* border:1px solid red; */
+  margin-top: 10%;
+
 }
 
 .layadmin-user-login-main {
   position: relative;
-  right: 82px;
   width: 360px;
   margin: 0 auto;
-  box-sizing: border-box
+  box-sizing: border-box;
+
 }
 
 .layadmin-user-login-box {

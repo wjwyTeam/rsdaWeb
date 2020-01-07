@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-03 10:35:36
+ * @LastEditTime : 2020-01-07 10:55:10
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -89,18 +89,21 @@
             {
               field: "dictType",
               title: "字典类型",
+              align: 'center',
               sort: true
 
             },
             {
               field: "dictName",
               title: "字典名称",
+              align: 'center',
               sort: true
 
             },
             {
               field: "status",
               title: "状态",
+              align: 'center',
               sort: true,
               templet: function(d){
 											var state = "";
@@ -116,6 +119,7 @@
             {
               field: "remark",
               title: "备注",
+              align: 'center',
               sort: true
 
             },
@@ -123,7 +127,7 @@
             {
               field: "createTime",
               title: "操作时间",
-
+              align: 'center',
               sort: true,
               templet: function (time) {
                 return (

@@ -1,0 +1,555 @@
+<!--
+ * @Descripttion: 
+ * @version: v0.0.1
+ * @Author: zgr
+ * @Date: 2020-01-07 08:41:21
+ * @LastEditors  : zgr
+ * @LastEditTime : 2020-01-07 10:52:22
+ -->
+<!-- 散材料归档 -->
+
+
+<!DOCTYPE html>
+ <html lang="zh" xmlns:th="http://www.thymeleaf.org">
+ <head>
+ <th:block th:include="include :: header('服务器监控')" />
+    <style>
+     
+        .layui-btn-normal{
+            background-color: #3c8dbc;
+        }
+        .layui-form-item {
+            margin-bottom: -4px;
+            clear: both;
+         }
+    </style>
+</head>
+
+<body> 
+        
+        <div class="hesder" style="width: 100%;height: 100%;height: 50px;">
+            <!-- 散材料上报内容 -->
+                <div style="height: 100%; width: 98%; line-height: 50px;margin: 0 30px;margin: 0 auto;">
+                        <span style="font-size: 24px;padding-left: 10px;">
+                            散材料归档列表
+                        </span>
+                        <span style="font-size: 14px;font-weight: lighter;">散材料归档列表</span>
+                </div>
+        </div>
+
+        <div class="content">
+             <div class="layui-col-xs12" style="padding-left: 28px;">
+                 <div class="userTableSearch layui-form" style="display: inline-block">
+                        <span>姓名</span>
+                        <input type="text" name="userName" id="userName"  autocomplete="off" class="layui-input"
+                            style="display: inline-block;width: auto;" />
+                        <a class="layui-btn layui-btn-normal" lay-event="user-front-search"><i class="layui-icon layui-icon-search"></i>搜索</a>
+                  </div>
+                  <a class="layui-btn " lay-event="edit" style="background-color: #00a65a;"><i class="layui-icon layui-icon-list"></i>纸质归档</a>
+             </div>
+             <!-- 散材料归档表格 -->
+             <div class="layui-col-xs12">
+               <div class="materialAcList"> 
+                    <table id="materialAcList" lay-filter="materialAcList" class="layui-hide"></table>
+                    <!-- <script type="text/html" id="table-toolbar" th:inline="none">
+                        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script> -->
+               </div>
+            </div>
+        </div>
+      
+      
+        
+       
+ 
+<script type="text/javascript" >
+
+var inlineInfo = null;
+var borrowPersonId = ""
+layui.use(["table", "form", "util", "laydate","upload","laydate"], function() {
+        var $ = layui.$,
+                form = layui.form,
+                table = layui.table,
+                laydate = layui.laydate,
+                upload = layui.upload,
+                laydate = layui.laydate,
+                util = layui.util;
+      
+        
+                table.render({
+                    elem: "#materialAcList",
+                    even: true,
+                    // height: "full-40",
+                    title: "用户数据表",
+                    method: "get",
+                    id: "materialAcList",
+                    cellMinWidth:80,
+                    contentType:"application/json",
+                    data:[],
+                    // url: "/consult/consultListPage"+ $("#dictType").val(), //数据接口
+                    cols: [ [
+                            {
+                                    field: "dictLabel",
+                                    title: "姓名",
+                                    sort: true,
+                                    align: "center",
+                            },
+                            {
+                                    field: "dictValue",
+                                    title: "单位及职务",
+                                    sort: true,
+                                    align: "center",
+                            },
+                            {
+                                    field: "dictSort",
+                                    title: "纸质材料份数",
+                                    sort: true,
+                                    align: "center",
+                            },
+                            {
+                                    field: "dictSort",
+                                    title: "纸质材料数量",
+                                    sort: true,
+                                    align: "center",
+                            },
+                            {
+                                    field: "dictSort",
+                                    title: "材料整理时间",
+                                    sort: true,
+                                    align: "center",
+                            },
+                            // {
+                            //         fixed: "right",
+                            //         title: "操作",
+                            //         width: 310,
+                            //         align: "center",
+                            //         toolbar: "#table-toolbar"
+                            // }
+                    ]
+                ],
+                    response: {
+                            statusName: "code", //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                            statusCode: 200, //成功的状态码，默认：0
+                            msgName: "msg", //状态信息的字段名称，默认：msg
+                            countName: "count", //数据总数的字段名称，默认：count
+                            dataName: "data" //数据列表的字段名称，默认：data
+                    },
+             })
+ 
+         laydate.render({
+           elem: '#start'
+        });
+        laydate.render({
+           elem: '#end'
+        });
+
+
+
+        // 选择文件
+        var demoListView = $('#demoList')
+          ,uploadListIns = upload.render({
+            elem: '#selectFile'
+            ,url: '/upload/'
+            ,accept: 'file'
+            ,multiple: true
+            ,auto: false
+            ,bindAction: '#startUpload'
+            ,choose: function(obj){   
+              var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+              //读取本地文件
+              obj.preview(function(index, file, result){
+                var tr = $(['<tr id="upload-'+ index +'">'
+                  ,'<td>'+ file.name +'</td>'
+                  ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+                  ,'<td>等待上传</td>'
+                  ,'<td>'
+                    ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                    ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                  ,'</td>'
+                ,'</tr>'].join(''));
+                
+                //单个重传
+                tr.find('.demo-reload').on('click', function(){ 
+                  obj.upload(index, file);
+                });
+                
+                //删除
+                tr.find('.demo-delete').on('click', function(){
+                  delete files[index]; //删除对应的文件
+                  tr.remove();
+                  uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                });
+                
+                demoListView.append(tr);
+              });
+            }
+            ,done: function(res, index, upload){
+              if(res.code == 0){ //上传成功
+                var tr = demoListView.find('tr#upload-'+ index)
+                ,tds = tr.children();
+                tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                tds.eq(3).html(''); //清空操作
+                return delete this.files[index]; //删除文件队列已经上传成功的文件
+              }
+              this.error(index, upload);
+            }
+            ,error: function(index, upload){
+              var tr = demoListView.find('tr#upload-'+ index)
+              ,tds = tr.children();
+              tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+              tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+      });
+      //监听搜索
+      form.on("submit(dict-front-search)", function (data) {
+              var field = data.field;
+              
+              //执行重载
+              table.reload("inputTable", {
+                      where: field
+              });
+      });
+      //监听工具条删除
+      table.on("tool(inputTable)", function (obj) {
+              var data = obj.data;
+              if (obj.event === 'delete') {
+                      layer.confirm('真的删除行么', function (index) {
+                                  layer.close(index);
+                                  $.post("/dict/dictDataRemove", { ids: data.dictCode }, function (resultJSONObject) {
+                                          if (resultJSONObject.success) {
+                                                  obj.del();
+                                                  tableLoad(table);
+                                          } 
+                                          layer.msg(resultJSONObject.msg);
+                                  }, "json");
+                          });
+              } else if (obj.event === "edit") {
+              layer.open({
+                type: 2,
+                title: "字典数据编辑",
+                maxmin: true,
+                area: ["500px", "100%"],
+                btn: ["确定", "取消"],
+                fixed: true,
+                shadeClose: false,
+                shade: 0.2,
+                moveType: 1, //拖拽模式，0或者1
+                content: "/dict/dictDataFormPage?dictCode=" + data.dictCode,
+                yes: function (index, layero) {
+                  var iframeWindow = window["layui-layer-iframe" + index],
+                    submitID = "dictFormSubmit",
+                    submit = layero
+                      .find("iframe")
+                      .contents()
+                      .find("#" + submitID);
+                  //监听提交
+                  iframeWindow.layui.form.on(
+                    "submit(" + submitID + ")",
+                    function (dataLog) {
+                      var field = dataLog.field;
+                            if (field.status == "true")
+                                field.status = true;
+                        else
+                                field.dataType = false;
+                      //获取提交的字段
+                      //提交 Ajax 成功后，静态更新表格中的数据
+                      $.ajax({
+                        type: "post",
+                        url: "/dict/dictDataEdit",
+                        data: JSON.stringify(field),
+                        dataType: "json",
+                        contentType: "application/json;charset-UTF-8",
+                        success: function (resultJSONObject) {
+                          if (resultJSONObject.success) {
+                            tableLoad(table);
+                          }
+                          layer.msg(resultJSONObject.msg);
+                        }
+                      });
+                      layer.close(index); //关闭弹层
+                    }
+                  );
+                  submit.trigger("click");
+                }
+              });
+                                                  }
+                                          });
+      
+      
+      
+      
+      
+      //监听搜索查询条件
+      form.on('submit(dict-front-search)', function (data) {
+          var field = data.field;
+
+          //执行重载
+          table.reload('inputTable', {
+            where: field
+          });
+        });
+
+
+      
+
+      //批量删除事件
+      var active = {
+          batchdel: function () {
+            //两种方式
+            var checkStatus = table.checkStatus('inputTable')
+              , checkData = checkStatus.data; //得到选中的数据
+            if (checkData.length === 0) {
+              return layer.msg('请选择数据');
+            }
+            //捉到所有被选中的，发异步进行删除
+            var ids = "";
+            if (checkData.length > 0) {
+              for (var i = 0; i < checkData.length; i++) {
+                ids += checkData[i].dictCode + ",";
+              }
+            }
+            layer.confirm('确定删除吗？', function (index) {
+              //执行 Ajax 后重载
+              $.ajax({
+                type: "post",
+                url: "/dict/dictDataRemove",
+                data: { "ids": ids },
+                success: function (data) {
+                  if (data.success) {
+                    tableLoad(table);
+                  }      
+                    layer.msg(data.msg);
+                  
+                }
+              });
+            });
+
+          }
+          , add: function () {
+            layer.open({
+              type: 2
+              , title: "字典基础数据新增"
+              , content: '/dict/dictDataFormPage?dictType='+$("#dictType").val()
+              , maxmin: true
+              , moveType: 1 //拖拽模式，0或者1
+              , area: ['500px', '100%']
+              , skin: 'layer_bg' //layer_bg是自定义的css样式
+              , shade: 0.2
+              , fixed: true
+              , shadeClose: true//开启遮罩关
+              , btn: ['确定', '取消']
+              , yes: function (index, layero) {
+                var iframeWindow = window['layui-layer-iframe' + index]
+                  , submitID = 'dictFormSubmit'
+                  , submit = layero.find('iframe').contents().find('#' + submitID);
+                  
+                      //监听提交
+                iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                  var field = data.field; //获取提交的字段
+                  if (field.status == "true")
+                          field.status = true;
+                  else
+                          field.status = false;
+                  //提交 Ajax 成功后，静态更新表格中的数据
+                  $.ajax({
+                    type: "post",
+                    url: "/dict/dictDataInsert",
+                    data: JSON.stringify(field),
+                    dataType: "json",
+                    contentType: "application/json;charset-UTF-8",
+                    success: function (resultJSONObject) {
+                      if (resultJSONObject.success) {
+                        tableLoad(table);
+                      }      
+                      layer.msg(resultJSONObject.msg);
+                    }, complete: function () {
+                      layer.close(index); //关闭弹层
+                    }
+                  });
+                });
+
+                submit.trigger('click');
+              }
+            });
+          }
+          ,selectPersonInfo:function(){
+            selectType = $(this).attr("typeSelect")
+            //  选择查档人员的信息
+            index = layer.open({
+              type: 2
+              , title: "人员信息查询"
+              , method: 'get'
+              , content: '/person/personalListPage'
+              , maxmin: true
+              , moveType: 1 //拖拽模式，0或者1
+              , area: ['1200px', '600px']  
+              , skin: 'layer_bg'//layer_bg是自定义的css样式
+              , shade: 0.2
+              , fixed: true
+              , shadeClose: true//开启遮罩关
+              , btn: ['确定', '取消']
+              , yes: function (index, layero) {
+                  
+                var iframeWindow = window['layui-layer-iframe' + index]
+                  , submitID = 'consultSubmit'
+                  , submit = layero.find('iframe').contents().find('#' + submitID);
+                //监听提交
+                iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                  var field = data.field; //获取提交的字段
+                  //提交 Ajax 成功后，静态更新表格中的数据
+                  $.ajax({
+                    type: "post",
+                    url: "/dict/dictDataInsert",
+                    data: JSON.stringify(field),
+                    dataType: "json",
+                    contentType: "application/json;charset-UTF-8",
+                    success: function (resultJSONObject) {
+                      if (resultJSONObject.success) {
+                        tableLoad(table);
+                      }      
+                      layer.msg(resultJSONObject.msg);
+                    }, complete: function () {
+                      layer.close(index); //关闭弹层
+                    }
+                  });
+                });
+
+                submit.trigger('click');
+              }
+            });
+            
+            if(inlineInfo != null){
+              alert(111);
+            }
+
+
+          }
+        };
+        
+        form.on('submit(borrowsubmit)', function (data) {
+            data.field.file = "";
+            console.log(data.field);
+            var field = data.field
+            field.personId = borrowPersonId
+            $.ajax({
+                type: "post",
+                url: "/borrow/borrowInsert",
+                data: JSON.stringify(field),
+                dataType: "application/json",
+                contentType: "application/json;charset-UTF-8",
+                success: function (resultJSONObject) {
+                  layer.msg(resultJSONObject.msg);
+                }
+            });
+            return false;
+        });
+
+
+
+
+
+
+        form.on('switch(stat)', function(data){
+
+              var contexts;
+              var sta;
+              var x = data.elem.checked;//判断开关状态
+              if (x==true) {
+                  contexts = "打开";
+                  sta=1;
+              } else {
+                  contexts = "关闭";
+                  sta=0;
+              }
+              var obj = {
+                              //上下架的参数
+                              "dictCode": data.value,
+                              "status":x
+                          }
+              console.log(data.value)
+            //自定义弹窗
+            layer.open({
+                  content: "你确定要"+contexts+"?"
+                  , btn: ['确定', '取消']
+                  , yes: function (index, layero) {
+                      //按钮确定【按钮一】的回调
+                      data.elem.checked = x;
+                      //对商品进行上架或下架处理
+                      $.ajax({
+                          type: "post",
+                          url: "/dict/dictDataEdit",
+                          data: JSON.stringify(obj),
+                          
+                          dataType: "json",
+                          contentType: "application/json;charset-UTF-8",
+                          success: function (data) {
+                            layer.msg(data.msg,
+                                // 提示的样式
+                                {icon: 1, time: 2000,});
+                            // 数据重载
+                                                                                                          tableLoad(table);
+                          }
+                        
+                      });
+                      form.render();
+                      layer.close(index);
+                  }
+                  , btn2: function (index, layero) {
+                      //按钮【按钮二】的回调
+                      data.elem.checked = !x;
+                      form.render();
+                      layer.close(index);
+                  }
+                  , cancel: function () {
+                      //右上角关闭回调
+                      data.elem.checked = !x;
+                      form.render();
+                  }
+              });
+              return false;
+          });
+
+          $('.layui-btn').on('click', function () {
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+
+          
+      });
+      function tableLoad(table) {
+              table.reload(
+                "inputTable",
+                {
+                where: {
+                    dictLabel: $("#dictLabel").val()
+                }
+                },
+                "data"
+            );
+        }
+      function GetChildValue(obj){
+        console.log(obj);
+        if(selectType  == "one"){
+          // 借阅表
+         var tr = ""
+         tr +=      '<tr><td>'+obj.personalName+'</td>'+
+                    '<td>'+obj.workDuty+'</td>'+
+                    '<td>'+obj.politicalOutlook+'</td>'+
+                    '<td><button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button></td></tr>'
+         borrowPersonId += obj.personalId + ","
+         $("#personList").append(tr);
+        }else if(selectType  == "two"){
+          // 借阅input信息框
+          $("input[name=borrowName]").val(obj.personalName);
+          $("input[name=deptDuty]").val(obj.workDuty);
+          $("input[name=borrowId]").val(obj.personalId)
+        }
+        layer.close(index);
+      }
+
+     </script>
+   </body>
+ </html>
+ 
+
