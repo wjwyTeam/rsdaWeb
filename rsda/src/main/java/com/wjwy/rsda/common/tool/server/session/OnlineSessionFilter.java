@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-31 09:19:17
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 07:57:22
+ * @LastEditTime : 2020-01-07 13:27:10
  */
 package com.wjwy.rsda.common.tool.server.session;
 
@@ -32,7 +32,7 @@ public class OnlineSessionFilter extends PathMatchingFilter {
         OnlineSession session = (OnlineSession) request.getAttribute(ShiroConstants.ONLINE_SESSION);
         // 如果session stop了 也不同步
         // session停止时间，如果stopTimestamp不为null，则代表已停止
-        if (session != null && session.getUserId() != null && session.getStopTimestamp() == null) {
+         if (session != null && session.getUserId() != null && session.getStopTimestamp() == null) {
             onlineSessionDAO.syncToDb(session);
         }
         return true;

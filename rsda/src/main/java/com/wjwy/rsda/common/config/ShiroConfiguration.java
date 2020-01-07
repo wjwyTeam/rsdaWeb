@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-07 11:11:06
+ * @LastEditTime : 2020-01-07 15:01:55
  */
 package com.wjwy.rsda.common.config;
 
@@ -13,11 +13,13 @@ import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.io.ResourceUtils;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -48,6 +50,14 @@ import com.wjwy.rsda.common.util.StringUtils;
 @Configuration
 public class ShiroConfiguration {
 
+
+    @Value("10")
+    private int tomcatTimeout;
+
+    @Bean
+    public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
     /**
      * 缓存管理器 使用Ehcache实现
      */
@@ -274,6 +284,7 @@ public class ShiroConfiguration {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setName("jeesite.session.id");
         return cookie;
     }
 
