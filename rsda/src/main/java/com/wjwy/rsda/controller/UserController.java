@@ -118,6 +118,7 @@ public class UserController {
 	 * @date 2019年11月28日
 	 */
 	@GetMapping(value = "/updateInfo")
+	@Log(title = "用户管理", businessType = EnumEntitys.UPDATE)
 	@ApiOperation(value = "用户管理数据表单信息主页")
 	public ModelAndView updateInfo(User user, ModelAndView model) {
 		if (StringUtils.isNotEmpty(user.getUserId())) {
@@ -173,7 +174,7 @@ public class UserController {
 	 */
 	@ResponseBody
 	@PostMapping("/deleteUserAlls")
-	@Log(title = "用户管理数据列表数据批量移除", businessType = EnumEntitys.DELETE)
+	@Log(title = "用户管理", businessType = EnumEntitys.DELETE)
 	@ApiOperation(value = "用户管理数据列表数据批量移除", notes = "参数:ids")
 	public ResponseWrapper deleteUserAlls(String[] ids) {
 		ResponseWrapper rmAll = null;
@@ -193,7 +194,7 @@ public class UserController {
 	 */
 	@PostMapping("/deleteUser")
 	@ApiOperation(value = "用户管理数据列表数据移除", notes = "参数:userId")
-	@Log(title = "用户管理数据列表数据移除", businessType = EnumEntitys.DELETE)
+	@Log(title = "用户管理", businessType = EnumEntitys.DELETE)
 	public ResponseWrapper deleteUser(String userId) {
 		try {
 			User user = new User();
@@ -221,7 +222,7 @@ public class UserController {
 	 */
 	@PostMapping("/insertUser")
 	@ApiOperation(value = "用户管理数据列表数据新增", notes = "参数：user")
-	@Log(title = "用户管理数据列表数据新增", businessType = EnumEntitys.INSERT)
+	@Log(title = "用户管理", businessType = EnumEntitys.INSERT)
 	public ResponseWrapper insertUser(@RequestBody User user) {
 		try {
 			int resultTotal = userService.insert(user);
@@ -245,7 +246,7 @@ public class UserController {
 	 */
 	@ApiOperation(value = "用户管理数据列表数据更新", notes = "user")
 	@PostMapping("/updateUser")
-	@Log(title = "用户管理数据列表数据更新", businessType = EnumEntitys.UPDATE)
+	@Log(title = "用户管理", businessType = EnumEntitys.UPDATE)
 	public ResponseWrapper toUpdateUser(@RequestBody User user) {
 		try {
 			int resultTotal = userService.update(user);
@@ -269,7 +270,7 @@ public class UserController {
 	 * @return ResponseWrapper
 	 */
 	@ApiOperation(value = "用户管理数据列表用户选择角色", notes = "参数：userId-用户主键,ids-角色数组")
-	@Log(title = "用户管理数据列表用户选择角色", businessType = EnumEntitys.INSERT)
+	@Log(title = "用户管理", businessType = EnumEntitys.INSERT)
 	@GetMapping("/userSelRole")
 	public ResponseWrapper userSelRole(String userId, String ids[]) {
 
@@ -294,7 +295,7 @@ public class UserController {
 	 * @return
 	 */
 	@ApiOperation(value = "用户管理数据列表取消授权", notes = "参数：userId-用户主键,roleId-角色")
-	@Log(title = "用户管理数据列表取消授权", businessType = EnumEntitys.UPDATE)
+	@Log(title = "用户管理", businessType = EnumEntitys.UPDATE)
 	@GetMapping("/userDelRole")
 	public ResponseWrapper userDelRole(String userId, String roleId) {
 
@@ -319,7 +320,7 @@ public class UserController {
 	 * @return
 	 */
 	@ApiOperation(value = "用户管理数据列表授权", notes = "参数：userId-用户主键,roleId-角色")
-	@Log(title = "用户管理数据列表授权", businessType = EnumEntitys.INSERT)
+	@Log(title = "用户管理", businessType = EnumEntitys.INSERT)
 	@GetMapping("/userInRole")
 	public ResponseWrapper userInRole(String userId, String roleId) {
 

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-03 09:35:54
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:18:08
+ * @LastEditTime : 2020-01-07 17:10:52
  */
 
 package com.wjwy.rsda.controller;
@@ -104,7 +104,7 @@ public class BorrowController {
   * @return ResponseWrapper
   */
  @PostMapping("/borrowInsert")
- @Log(title = "借阅管理表单数据新增", businessType = EnumEntitys.INSERT)
+ @Log(title = "借阅管理", businessType = EnumEntitys.INSERT)
  @ApiOperation(value = "借阅管理表单数据新增", notes = "参数:Borrow-对象")
  public ResponseWrapper BorrowInsert(@RequestBody Borrow borrow) {
 
@@ -128,7 +128,7 @@ public class BorrowController {
   * @return ResponseWrapper
   */
  @PostMapping("/borrowUpdate")
- @Log(title = "借阅管理表单数据更新", businessType = EnumEntitys.UPDATE)
+ @Log(title = "借阅管理", businessType = EnumEntitys.UPDATE)
  @ApiOperation(value = "借阅管理表单数据更新", notes = "参数:Borrow-对象")
  public ResponseWrapper BorrowUpdate(@RequestBody Borrow borrow) {
   try {
@@ -152,7 +152,7 @@ public class BorrowController {
   */
  @ResponseBody
  @PostMapping("/borrowRemove")
- @Log(title = "借阅管理移除数据", businessType = EnumEntitys.DELETE)
+ @Log(title = "借阅管理", businessType = EnumEntitys.DELETE)
  @ApiOperation(value = "借阅管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {

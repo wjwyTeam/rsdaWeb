@@ -131,7 +131,7 @@ public class FunctionController {
      * @return ResponseWrapper
      */
     @PostMapping("/functionInsert")
-    @Log(title = "菜单管理表单数据新增", businessType = EnumEntitys.INSERT)
+    @Log(title = "菜单管理", businessType = EnumEntitys.INSERT)
     @ApiOperation(value = "菜单管理表单数据新增", notes = "参数:function-对象")
     public ResponseWrapper functionInsert(@RequestBody Function function) {
 
@@ -155,7 +155,7 @@ public class FunctionController {
      * @return ResponseWrapper
      */
     @PostMapping("/updateFunction")
-    @Log(title = "菜单管理表单数据更新", businessType = EnumEntitys.UPDATE)
+    @Log(title = "菜单管理", businessType = EnumEntitys.UPDATE)
     @ApiOperation(value = "菜单管理表单数据更新", notes = "参数:function-对象")
     public ResponseWrapper updateFunction(@RequestBody Function function) {
         try {
@@ -179,7 +179,7 @@ public class FunctionController {
      */
     @ResponseBody
     @PostMapping("/deleteFunctionAlls")
-    @Log(title = "菜单管理表单数据批量移除", businessType = EnumEntitys.DELETE)
+    @Log(title = "菜单管理", businessType = EnumEntitys.DELETE)
     @ApiOperation(value = "菜单管理表单数据批量移除", notes = "根据用户ID批量删除功能")
     public ResponseWrapper deleteFunctionAlls(String[] ids) {
         ResponseWrapper rmAll = null;
@@ -198,7 +198,7 @@ public class FunctionController {
      * @return ResponseWrapper
      */
     @PostMapping("/deleteFunction")
-    @Log(title = "菜单管理表单数据移除", businessType = EnumEntitys.DELETE)
+    @Log(title = "菜单管理", businessType = EnumEntitys.DELETE)
     @ApiOperation(value = "菜单管理表单数据移除", notes = "参数:id-主键")
     public ResponseWrapper deleteFunction(String id) {
 

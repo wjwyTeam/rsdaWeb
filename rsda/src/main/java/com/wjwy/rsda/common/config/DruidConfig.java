@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-06 10:06:15
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 10:46:01
+ * @LastEditTime : 2020-01-07 16:39:12
  */
 package com.wjwy.rsda.common.config;
 
@@ -37,9 +37,6 @@ public class DruidConfig {
         DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
         return druidProperties.dataSource(dataSource);
     }
-
-  
-  
 
     /**
      * 去除监控页面底部的广告

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:30
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:27:48
+ * @LastEditTime : 2020-01-07 17:13:13
  */
 package com.wjwy.rsda.controller;
 
@@ -106,7 +106,7 @@ public class DictTypeController extends BaseController {
    */
   @ResponseBody
   @PostMapping("/dictTypeInsert")
-  @Log(title = "字典数据", businessType = EnumEntitys.INSERT)
+  @Log(title = "字典类型", businessType = EnumEntitys.INSERT)
   @ApiOperation(value = "新增保存字典类型", notes = "DictType - 对象")
   public ResponseWrapper addSave(@RequestBody DictType dictType) {
     dictType.setCreateBy(ShiroUtils.getLoginName());
@@ -135,7 +135,7 @@ public class DictTypeController extends BaseController {
    */
   @ResponseBody
   @PostMapping("/dictTypeEdit")
-  @Log(title = "字典数据", businessType = EnumEntitys.UPDATE)
+  @Log(title = "字典类型", businessType = EnumEntitys.UPDATE)
   @ApiOperation(value = "修改保存字典类型", notes = "dictData - 对象")
   public ResponseWrapper edit(@RequestBody DictType dict) {
 
@@ -160,7 +160,7 @@ public class DictTypeController extends BaseController {
   @ResponseBody
   @PostMapping("/dictTypeRemove")
   @ApiOperation(value = "移除字典数据", notes = "ids - 数组-ids")
-  @Log(title = "字典数据", businessType = EnumEntitys.DELETE)
+  @Log(title = "字典类型", businessType = EnumEntitys.DELETE)
   public ResponseWrapper remove(String ids) {
     try {
       int resultTotal = dictTypeService.deleteDictTypeByIds(Convert.toStrArray(ids));

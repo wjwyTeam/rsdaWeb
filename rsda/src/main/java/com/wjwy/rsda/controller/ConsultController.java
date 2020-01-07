@@ -98,7 +98,7 @@ public class ConsultController {
    * @return ResponseWrapper
    */
   @PostMapping("/consultInsert")
-  @Log(title = "查阅管理表单数据新增", businessType = EnumEntitys.INSERT)
+  @Log(title = "查阅管理", businessType = EnumEntitys.INSERT)
   @ApiOperation(value = "查阅管理表单数据新增", notes = "参数:Consult-对象")
   public ResponseWrapper ConsultInsert(@RequestBody Consult Consult) {
 
@@ -122,7 +122,7 @@ public class ConsultController {
    * @return ResponseWrapper
    */
   @PostMapping("/consultUpdate")
-  @Log(title = "查阅管理表单数据更新", businessType = EnumEntitys.UPDATE)
+  @Log(title = "查阅管理", businessType = EnumEntitys.UPDATE)
   @ApiOperation(value = "查阅管理表单数据更新", notes = "参数:Consult-对象")
   public ResponseWrapper ConsultUpdate(@RequestBody Consult consult) {
     try {
@@ -146,7 +146,7 @@ public class ConsultController {
    */
   @ResponseBody
   @PostMapping("/consultRemove")
-  @Log(title = "查阅管理移除数据", businessType = EnumEntitys.DELETE)
+  @Log(title = "查阅管理", businessType = EnumEntitys.DELETE)
   @ApiOperation(value = "查阅管理移除数据", notes = "参数：数组-ids")
   public ResponseWrapper remove(String ids) {
     try {

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:24:07
+ * @LastEditTime : 2020-01-07 17:11:38
  */
 package com.wjwy.rsda.controller;
 
@@ -150,7 +150,7 @@ public class DepartmentController {
 	 */
 	@ApiOperation(value = "机构管理表单数据新增", notes = "参数:department")
 	@PostMapping(value = "/insertUnit")
-	@Log(title = "机构管理表单数据新增", businessType = EnumEntitys.INSERT)
+	@Log(title = "机构管理", businessType = EnumEntitys.INSERT)
 	public ResponseWrapper insertUnit(@RequestBody Department department) {
 		try {
 			int resultTotal = deptService.insertUnitTree(department);
@@ -175,7 +175,7 @@ public class DepartmentController {
 	@ResponseBody
 	@PostMapping(value = "/updateUnitTree")
 	@ApiOperation(value = "机构管理表单数据更新", notes = "参数:department")
-	@Log(title = "机构管理表单数据更新", businessType = EnumEntitys.UPDATE)
+	@Log(title = "机构管理", businessType = EnumEntitys.UPDATE)
 	public ResponseWrapper updateUnitTree(@RequestBody Department department) {
 		try {
 			int resultTotal = deptService.updateUnitTree(department);
@@ -199,7 +199,7 @@ public class DepartmentController {
 	 */
 	@PostMapping(value = "/deleteUnit")
 	@ApiOperation(value = "机构管理表单数据移除", notes = "参数:id")
-	@Log(title = "机构管理表单数据移除", businessType = EnumEntitys.DELETE)
+	@Log(title = "机构管理", businessType = EnumEntitys.DELETE)
 	public ResponseWrapper deleteUnit(String id) {
 		try {
 			Department department = new Department();
@@ -227,7 +227,7 @@ public class DepartmentController {
 	 */
 	@PostMapping(value = "/deleteUnitAll")
 	@ApiOperation(value = "机构管理表单数据批量移除", notes = "参数:ids")
-	@Log(title = "机构管理表单数据批量移除", businessType = EnumEntitys.DELETE)
+	@Log(title = "机构管理", businessType = EnumEntitys.DELETE)
 	public ResponseWrapper deleteUnitAll(String[] ids) {
 		ResponseWrapper rmAll = null;
 		for (String deptId : ids) {

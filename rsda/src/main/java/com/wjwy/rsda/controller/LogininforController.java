@@ -4,10 +4,9 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-07 15:16:28
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-07 15:49:39
+ * @LastEditTime : 2020-01-07 17:15:19
  */
 package com.wjwy.rsda.controller;
-
 
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.tool.server.service.PasswordService;
@@ -39,7 +38,7 @@ import tk.mybatis.mapper.util.StringUtil;
  */
 @RequestMapping("/logininfo")
 @RestController
-@Api(value = "登录日志", tags = "J1-登录日志API维护")
+@Api(value = "登录日志", tags = "K2-登录日志API维护")
 public class LogininforController extends BaseController {
 
     @Autowired
@@ -106,7 +105,7 @@ public class LogininforController extends BaseController {
      * @return ResponseWrapper
      */
     @PostMapping("/logininforInsert")
-    @Log(title = "登录日志表单数据新增", businessType = EnumEntitys.INSERT)
+    @Log(title = "登录日志", businessType = EnumEntitys.INSERT)
     @ApiOperation(value = "登录日志表单数据新增", notes = "参数:logininfor-对象")
     public ResponseWrapper logininforInsert(@RequestBody Logininfor logininfor) {
 
@@ -130,7 +129,7 @@ public class LogininforController extends BaseController {
      * @return ResponseWrapper
      */
     @PostMapping("/logininforUpdate")
-    @Log(title = "登录日志表单数据更新", businessType = EnumEntitys.UPDATE)
+    @Log(title = "登录日志", businessType = EnumEntitys.UPDATE)
     @ApiOperation(value = "登录日志表单数据更新", notes = "参数:logininfor-对象")
     public ResponseWrapper logininforUpdate(@RequestBody Logininfor logininfor) {
         try {
@@ -154,7 +153,7 @@ public class LogininforController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/logininforRemove")
-    @Log(title = "登录日志移除数据", businessType = EnumEntitys.DELETE)
+    @Log(title = "登录日志", businessType = EnumEntitys.DELETE)
     @ApiOperation(value = "登录日志移除数据", notes = "参数：数组-ids")
     public ResponseWrapper logininforRemove(String ids) {
         try {
@@ -171,15 +170,14 @@ public class LogininforController extends BaseController {
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
 
-
-  /**
-   * 
-   * @param loginName
-   * @return
-   */
+    /**
+     * 
+     * @param loginName
+     * @return
+     */
     @ResponseBody
     @PostMapping("/unlock")
-    @Log(title = "登录日志账户解锁", businessType = EnumEntitys.OTHER)
+    @Log(title = "登录日志", businessType = EnumEntitys.OTHER)
     @ApiOperation(value = "登录日志账户解锁", notes = "参数：账号-loginName")
     public ResponseWrapper unlock(String loginName) {
         try {
@@ -193,14 +191,14 @@ public class LogininforController extends BaseController {
         return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
     }
-    
+
     /**
      * 
      * @return
      */
     @ResponseBody
     @PostMapping("/clear")
-    @Log(title = "登录日志清空", businessType = EnumEntitys.DELETE)
+    @Log(title = "登录日志", businessType = EnumEntitys.DELETE)
     @ApiOperation(value = "登录日志账户解锁", notes = "参数：账号-loginName")
     public ResponseWrapper clear() {
         try {

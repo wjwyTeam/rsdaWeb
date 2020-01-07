@@ -23,7 +23,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
     /**
      * 同步session到数据库的周期 单位为毫秒（默认1分钟）
      */
-    private int dbSyncPeriod = 1;
+    private int dbSyncPeriod = 30;
 
     /**
      * 上次同步数据库的时间戳

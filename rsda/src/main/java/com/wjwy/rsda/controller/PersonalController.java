@@ -106,7 +106,7 @@ public class PersonalController {
   * @return ResponseWrapper
   */
  @PostMapping("/personalInsert")
- @Log(title = "人员管理表单数据新增", businessType = EnumEntitys.INSERT)
+ @Log(title = "人员管理", businessType = EnumEntitys.INSERT)
  @ApiOperation(value = "人员管理表单数据新增", notes = "参数:personal-对象")
  public ResponseWrapper personalInsert(@RequestBody Personal personal) {
 
@@ -130,7 +130,7 @@ public class PersonalController {
   * @return ResponseWrapper
   */
  @PostMapping("/personalUpdate")
- @Log(title = "人员管理表单数据更新", businessType = EnumEntitys.UPDATE)
+ @Log(title = "人员管理", businessType = EnumEntitys.UPDATE)
  @ApiOperation(value = "人员管理表单数据更新", notes = "参数:personal-对象")
  public ResponseWrapper personalUpdate(@RequestBody Personal personal) {
   try {
@@ -153,7 +153,7 @@ public class PersonalController {
   */
  @ResponseBody
  @PostMapping("/personalRemove")
- @Log(title = "人员管理移除数据", businessType = EnumEntitys.DELETE)
+ @Log(title = "人员管理", businessType = EnumEntitys.DELETE)
  @ApiOperation(value = "人员管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {

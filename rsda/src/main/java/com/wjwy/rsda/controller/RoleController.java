@@ -119,7 +119,7 @@ public class RoleController {
      * @return ResponseWrapper
      */
     @PostMapping("/roleInsert")
-    @Log(title = "角色管理数据新增", businessType = EnumEntitys.INSERT)
+    @Log(title = "角色管理", businessType = EnumEntitys.INSERT)
     @ApiOperation(value = "角色管理数据新增", notes = "参数:Role-对象")
     public ResponseWrapper insertRole(@RequestBody Role role) {
 
@@ -143,7 +143,7 @@ public class RoleController {
      * @return ResponseWrapper
      */
     @PostMapping("/updateRole")
-    @Log(title = "角色管理数据更新", businessType = EnumEntitys.UPDATE)
+    @Log(title = "角色管理", businessType = EnumEntitys.UPDATE)
     @ApiOperation(value = "角色管理数据更新", notes = "参数:Role-对象")
     public ResponseWrapper updateRole(@RequestBody Role role) {
         try {
@@ -166,7 +166,7 @@ public class RoleController {
      * @return ResponseWrapper
      */
     @ResponseBody
-    @Log(title = "角色管理数据批量移除", businessType = EnumEntitys.DELETE)
+    @Log(title = "角色管理", businessType = EnumEntitys.DELETE)
     @ApiOperation(value = "角色管理数据批量移除", notes = "参数：ids")
     @PostMapping("/deleteRoleAlls")
     public ResponseWrapper deleteRoleAlls(String[] ids) {
@@ -186,7 +186,7 @@ public class RoleController {
      * @return ResponseWrapper
      */
     @PostMapping("/deleteRole")
-    @Log(title = "角色管理数据移除", businessType = EnumEntitys.DELETE)
+    @Log(title = "角色管理", businessType = EnumEntitys.DELETE)
     @ApiOperation(value = "角色管理数据移除", notes = "参数:id-主键")
     public ResponseWrapper deleteRole(String id) {
 
@@ -216,7 +216,7 @@ public class RoleController {
      * @return ResponseWrapper
      */
     @GetMapping("/roleSelFunction")
-    @Log(title = "根据角色选择菜单", businessType = EnumEntitys.INSERT)
+    @Log(title = "角色管理", businessType = EnumEntitys.INSERT)
     @ApiOperation(value = "根据角色选择菜单", notes = "参数：id-角色主键,ids-功能数组")
     public ResponseWrapper roleSelFunction(String id, String ids[]) {
 

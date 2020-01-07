@@ -106,7 +106,7 @@ public class DossierOutController {
   * @return ResponseWrapper
   */
  @PostMapping("/dossierOutInsert")
- @Log(title = "档案转出管理表单数据新增", businessType = EnumEntitys.INSERT)
+ @Log(title = "档案转出", businessType = EnumEntitys.INSERT)
  @ApiOperation(value = "档案转出管理表单数据新增", notes = "参数:DossierOut-对象")
  public ResponseWrapper dossierOutInsert(@RequestBody DossierOut dossierOut) {
 
@@ -130,7 +130,7 @@ public class DossierOutController {
   * @return ResponseWrapper
   */
  @PostMapping("/dossierOutUpdate")
- @Log(title = "档案转出管理表单数据更新", businessType = EnumEntitys.UPDATE)
+ @Log(title = "档案转出", businessType = EnumEntitys.UPDATE)
  @ApiOperation(value = "档案转出管理表单数据更新", notes = "参数:DossierOut-对象")
  public ResponseWrapper dossierOutUpdate(@RequestBody DossierOut dossierOut) {
   try {
@@ -154,7 +154,7 @@ public class DossierOutController {
   */
  @ResponseBody
  @PostMapping("/dossierOutRemove")
- @Log(title = "档案转出管理移除数据", businessType = EnumEntitys.DELETE)
+ @Log(title = "档案转出", businessType = EnumEntitys.DELETE)
  @ApiOperation(value = "档案转出管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {

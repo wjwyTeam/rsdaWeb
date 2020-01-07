@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-03 11:24:10
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:20:48
+ * @LastEditTime : 2020-01-07 17:13:54
  */
 package com.wjwy.rsda.controller;
 
@@ -106,7 +106,7 @@ public class DossierIntoController {
   * @return ResponseWrapper
   */
  @PostMapping("/dossierIntoInsert")
- @Log(title = "档案转入管理表单数据新增", businessType = EnumEntitys.INSERT)
+ @Log(title = "档案转入", businessType = EnumEntitys.INSERT)
  @ApiOperation(value = "档案转入管理表单数据新增", notes = "参数:DossierInto-对象")
  public ResponseWrapper dossierIntoInsert(@RequestBody DossierInto dossierInto) {
 
@@ -130,7 +130,7 @@ public class DossierIntoController {
   * @return ResponseWrapper
   */
  @PostMapping("/dossierIntoUpdate")
- @Log(title = "档案转入管理表单数据更新", businessType = EnumEntitys.UPDATE)
+ @Log(title = "档案转入", businessType = EnumEntitys.UPDATE)
  @ApiOperation(value = "档案转入管理表单数据更新", notes = "参数:DossierInto-对象")
  public ResponseWrapper dossierIntoUpdate(@RequestBody DossierInto dossierInto) {
   try {
@@ -154,7 +154,7 @@ public class DossierIntoController {
   */
  @ResponseBody
  @PostMapping("/dossierIntoRemove")
- @Log(title = "档案转入管理移除数据", businessType = EnumEntitys.DELETE)
+ @Log(title = "档案转入", businessType = EnumEntitys.DELETE)
  @ApiOperation(value = "档案转入管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {

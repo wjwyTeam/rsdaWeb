@@ -105,7 +105,7 @@ public class DossierController{
   * @return ResponseWrapper
   */
  @PostMapping("/dossierInsert")
- @Log(title = "案卷管理表单数据新增", businessType = EnumEntitys.INSERT)
+ @Log(title = "案卷管理", businessType = EnumEntitys.INSERT)
  @ApiOperation(value = "案卷管理表单数据新增", notes = "参数:dossier-对象")
  public ResponseWrapper dossierInsert(@RequestBody Dossier dossier) {
 
@@ -129,7 +129,7 @@ public class DossierController{
   * @return ResponseWrapper
   */
  @PostMapping("/dossierUpdate")
- @Log(title = "案卷管理表单数据更新", businessType = EnumEntitys.UPDATE)
+ @Log(title = "案卷管理", businessType = EnumEntitys.UPDATE)
  @ApiOperation(value = "案卷管理表单数据更新", notes = "参数:dossier-对象")
  public ResponseWrapper dossierUpdate(@RequestBody Dossier dossier) {
   try {
@@ -153,7 +153,7 @@ public class DossierController{
   */
  @ResponseBody
  @PostMapping("/dossierRemove")
- @Log(title = "案卷管理移除数据", businessType = EnumEntitys.DELETE)
+ @Log(title = "案卷管理", businessType = EnumEntitys.DELETE)
  @ApiOperation(value = "案卷管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {
