@@ -72,7 +72,7 @@
         
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img"> <cite
-                th:text=" ${user.userName}"></cite></a>
+                th:text=" ${user.userRealName}"></cite></a>
             <dl class="layui-nav-child">
               <dd><a th:attr="lay-href=@{'/user/personInfo?userId='+${user.userId}}">基本资料</a></dd>
               <dd><a lay-href="/webviews/set/user/password.html">修改密码</a></dd>
