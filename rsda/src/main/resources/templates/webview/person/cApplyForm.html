@@ -6,4 +6,118 @@
  * @LastEditors: ZHANGQI
  * @LastEditTime: 2020-01-08 08:55:11
  -->
-干部人事档案查阅审批表
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>干部人事档案查阅审批表</title>
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+<!-- <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" href="/css/zTreeStyle.css" media="all">
+<link rel="stylesheet" href="/css/metroStyle.css" type="text/css"> -->
+<style>
+    html,body{
+        width: 100%;
+        height: 100%;
+    }
+    .layui-input-block{
+        margin-left: 50px;
+    }
+    .layui-form-checkbox[lay-skin=primary] i {
+       width: 13px;
+       height: 13px;
+    }
+</style>
+</head>
+
+<body>
+    <div style="width: 90%; margin: 0 auto;">
+            <table width="658" height="805" border="1" cellspacing="0" style="margin:30px auto;">
+                    <caption style="margin: 20px 0; font-size: 28px;">干部人事档案查阅审批表</caption>               
+                    <tr>
+                      <td width="50" valign="bottom" style="border-right: 1px solid #f2f2f2;">项目</td>
+                      <td width="50" align="right" valign="top" style="border-left: 1px solid #f2f2f2;">内容</td>
+                      <td><div align="center">姓 名</div></td>
+                      <td><div align="center">工作单位及职务</div></td>
+                      <td><div align="center">政治面貌</div></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" rowspan="3" ><div align="center">查阅对象</div></td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" rowspan="2"><div align="center">查阅人员</div></td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td height="118" colspan="2"><div align="center">查阅事由</div></td>
+                      <td colspan="3">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td height="94" colspan="2"><div align="center">查阅内容</div></td>
+                      <td colspan="3">
+                          <div class="layui-form">
+                                <div class="layui-form-item" pane="">
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="查阅" >
+                                        <input type="checkbox" name="like1[read]" lay-skin="primary" title="摘录">
+                                        <input type="checkbox" name="like1[game]" lay-skin="primary" title="复制" >
+                                    </div>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="履历类" checked="">
+                                        <input type="checkbox" name="like1[read]" lay-skin="primary" title="自传类">
+                                        <input type="checkbox" name="like1[game]" lay-skin="primary" title="鉴定考核类" >
+                                        <input type="checkbox" name="like1[game]" lay-skin="primary" title="学历学位类" >
+                                        <input type="checkbox" name="like1[game]" lay-skin="primary" title="职称类" >
+                                        <input type="checkbox" name="like1[game]" lay-skin="primary" title="鉴定考核类">
+                                        <input type="checkbox" name="like1[game]" lay-skin="primary" title="学术类" >
+                                        <input type="checkbox" name="like1[game]" lay-skin="primary" title="培训类">
+                                        <input type="checkbox" name="like1[game]" lay-skin="primary" title="政审类" >
+                                    </div>
+                                </div>
+                          </div>
+                    
+
+                      </td>
+                    </tr>
+                    <tr>
+                      <td height="169" colspan="2"><div align="center">查档处室意见</div></td>
+                      <td colspan="3">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td height="169" colspan="2"><div align="center">部领导意见</div></td>
+                      <td colspan="3">&nbsp;</td>
+                    </tr>
+                  </table>
+    </div>
+    <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
+    <script src="/js/jquery.ztree.core.js" type="text/javascript" th:inline="none"></script>
+    <script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
+    <script  type="text/javascript" th:inline="none">
+       layui.use(["form"],function(){
+        var $ = layui.$,
+                form = layui.form;
+       })
+    </script>
+
+</body>
+</html>
