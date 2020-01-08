@@ -68,6 +68,23 @@ public class ConsultController {
   }
 
   /**
+   * 跳转查阅审批表单主页
+   * 
+   * @param ConsultId
+   * @param model
+   * @return ModelAndView
+   */
+  @ApiOperation(value = "跳转查阅审批表单主页", notes = "consultId - 查阅编号")
+  @GetMapping("/applyFormPage")
+  public ModelAndView applyFormPage(String consultId, ModelAndView model) {
+    if (StringUtil.isNotEmpty(consultId)) {
+      model.addObject("consultOne", consultService.getById(consultId));
+    }
+    model.setViewName(prefix + "/cApplyForm");
+    return model;
+  }
+
+  /**
    * 列表数据查询
    * 
    * @param Consult

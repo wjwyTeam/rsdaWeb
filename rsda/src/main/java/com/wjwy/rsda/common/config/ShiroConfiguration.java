@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-07 15:01:55
+ * @LastEditTime : 2020-01-08 08:24:21
  */
 package com.wjwy.rsda.common.config;
 
@@ -284,7 +284,6 @@ public class ShiroConfiguration {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(30 * 24 * 60 * 60);
-        cookie.setName("jeesite.session.id");
         return cookie;
     }
 

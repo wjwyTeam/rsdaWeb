@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-03 09:35:54
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-07 17:10:52
+ * @LastEditTime : 2020-01-08 08:43:40
  */
 
 package com.wjwy.rsda.controller;
@@ -65,13 +65,31 @@ public class BorrowController {
   */
  @ApiOperation(value = "跳转借阅管理表单主页", notes = "borrowId - 借阅编号")
  @GetMapping("/borrowFormPage")
- public ModelAndView BorrowFormPage(String borrowId, ModelAndView model) {
-  if (StringUtil.isNotEmpty(borrowId)) {
-   model.addObject("BorrowOne", borrowService.getById(borrowId));
+  public ModelAndView BorrowFormPage(String borrowId, ModelAndView model) {
+    if (StringUtil.isNotEmpty(borrowId)) {
+      model.addObject("BorrowOne", borrowService.getById(borrowId));
+    }
+    model.setViewName(prefix + "/borrowForm");
+    return model;
   }
-  model.setViewName(prefix + "/borrowForm");
-  return model;
- }
+
+ 
+  /**
+   * 跳转借阅审批表单主页
+   * 
+   * @param ConsultId
+   * @param model
+   * @return ModelAndView
+   */
+  @ApiOperation(value = "跳转借阅审批表单主页", notes = "borrowId - 借阅编号")
+  @GetMapping("/applyFormPage")
+  public ModelAndView applyFormPage(String borrowId, ModelAndView model) {
+    if (StringUtil.isNotEmpty(borrowId)) {
+      model.addObject("consultOne", borrowService.getById(borrowId));
+    }
+    model.setViewName(prefix + "/bApplyForm");
+    return model;
+  }
 
  /**
   * 列表数据查询

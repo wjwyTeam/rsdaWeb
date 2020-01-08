@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-06 15:21:36
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:21:55
+ * @LastEditTime : 2020-01-08 08:53:22
  */
 package com.wjwy.rsda.controller;
 
@@ -63,4 +63,37 @@ public class MaterialRpController {
   return model;
  }
 
+ /**
+  * 跳转散材料上报干部人事档案材料转递通知单主页
+  * 
+  * @param BorrowId
+  * @param model
+  * @return ModelAndView
+  */
+ @ApiOperation(value = "跳转散材料上报干部人事档案材料转递通知单主页", notes = "materialRpId - 借阅编号")
+ @GetMapping("/rpNoticePage")
+ public ModelAndView materialRpNoticePage(String materialRpId, ModelAndView model) {
+  if (StringUtil.isNotEmpty(materialRpId)) {
+   model.addObject("materialRpOne", materialRpService.getById(materialRpId));
+  }
+  model.setViewName(prefix + "/mNoticeForm");
+  return model;
+ }
+
+ /**
+  * 跳转散材料上报干部人事档案材料转递通知单主页
+  * 
+  * @param BorrowId
+  * @param model
+  * @return ModelAndView
+  */
+ @ApiOperation(value = "跳转散材料上报干部人事档案材料转递清单主页")
+ @GetMapping("/detailPage")
+ public ModelAndView detailPage(String materialRpId, ModelAndView model) {
+  if (StringUtil.isNotEmpty(materialRpId)) {
+   model.addObject("materialRpOne", materialRpService.getById(materialRpId));
+  }
+  model.setViewName(prefix + "/mDetailForm");
+  return model;
+ }
 }
