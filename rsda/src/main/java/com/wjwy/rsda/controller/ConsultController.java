@@ -61,8 +61,12 @@ public class ConsultController {
    */
   @ApiOperation(value = "跳转查阅管理表单主页", notes = "ConsultId - 查阅编号")
   @GetMapping("/consultFormPage")
-  public ModelAndView ConsultFormPage(String consultId, ModelAndView model) {
-      model.addObject("personalList", personalService.getList());
+  public ModelAndView ConsultFormPage(String consultId, ModelAndView model,String[] ids) {
+    model.addObject("personalList", personalService.getList());
+    if (ids != null) {
+      model.addObject("ids", ids);
+    }
+    model.addObject("personalList", personalService.getList());
     if (StringUtil.isNotEmpty(consultId)) {
       model.addObject("consultOne", consultService.getById(consultId));
     }

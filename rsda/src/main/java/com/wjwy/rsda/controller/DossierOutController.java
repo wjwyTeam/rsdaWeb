@@ -69,7 +69,10 @@ public class DossierOutController {
   */
  @ApiOperation(value = "跳转档案转出管理表单主页", notes = "DossierOutId - 档案转出编号")
  @GetMapping("/dossierOutFormPage")
-  public ModelAndView DossierOutFormPage(String dossierOutId, ModelAndView model) {
+  public ModelAndView DossierOutFormPage(String dossierOutId, ModelAndView model,String[] ids) {
+    if (ids != null) {
+      model.addObject("ids", ids);
+    }
     model.addObject("personalList", personalService.getList());
   if (StringUtil.isNotEmpty(dossierOutId)) {
    model.addObject("dossierOutOne", dossierOutService.getById(dossierOutId));

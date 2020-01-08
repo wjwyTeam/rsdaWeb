@@ -79,11 +79,6 @@ spring:
         basename: static/i18n/messages
     profiles:
         active: druid
-    redis:
-        host: 127.0.0.1
-        password: root
-        port: 6379
-        timeout: 10000
     session:
         store-type: none
     thymeleaf:

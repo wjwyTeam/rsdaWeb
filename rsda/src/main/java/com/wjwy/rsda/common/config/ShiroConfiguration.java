@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 14:47:51
+ * @LastEditTime : 2020-01-08 16:49:37
  */
 package com.wjwy.rsda.common.config;
 
@@ -263,10 +263,9 @@ public class ShiroConfiguration {
      * cookie 属性设置
      */
     public SimpleCookie rememberMeCookie() {
-        SimpleCookie cookie = new SimpleCookie("rememberMe");
-        cookie.setDomain("");
-        cookie.setPath("/");
+        SimpleCookie cookie = new SimpleCookie();
         cookie.setHttpOnly(true);
+        cookie.setName("shiro.sesssion");
         cookie.setMaxAge(30 * 24 * 60 * 60);
         return cookie;
     }

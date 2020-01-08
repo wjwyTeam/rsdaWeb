@@ -9,6 +9,7 @@ import com.wjwy.rsda.common.tool.factory.AsyncManager;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.ShiroService;
 
+import org.apache.shiro.cache.Cache;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
@@ -102,4 +103,27 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
         onlineSession.setStatus(EnumEntitys.OFFLINE);
         shiroService.deleteSession(onlineSession);
     }
+
+
+   
+
+    protected Session getCachedSession(Serializable sessionId) {
+        Session cached = null;
+        if (sessionId != null) {
+            Cache<Serializable, Session> cache = getActiveSessionsCacheLazy();
+            if (cache != null) {
+                cached = getCachedSession(sessionId, cache);
+            }
+        }
+        return cached;
+    }
+
+    private Cache<Serializable, Session> getActiveSessionsCacheLazy() {
+        if (this.activeSessions == null) {
+            this.activeSessions = createActiveSessionsCache();
+        }
+        return activeSessions;
+    }
+    
+    private Cache<Serializable, Session> activeSessions;
 }
