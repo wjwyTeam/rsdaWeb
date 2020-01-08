@@ -46,8 +46,11 @@
                                     <a class="layui-btn layui-btn-normal" data-type="addMaterial"><i class="layui-icon layui-icon-file-b"></i>添加材料</a>
                                     <a class="layui-btn " data-type="attachment"><i class="layui-icon layui-icon-upload-drag"></i>附件</a>
                                     <a class="layui-btn " lay-event="edit"><i class="layui-icon layui-icon-download-circle"></i>导出Excel</a>
-                                    <a class="layui-btn " lay-event="edit"><i class="layui-icon layui-icon-read"></i>打印通知单</a>
-                                    <a class="layui-btn " lay-event="edit"><i class="layui-icon layui-icon-read"></i>打印材料清单</a>
+                                    <!-- <a href="/HtmlTable/HtmlScatterMaterial?bAppID=" id="printTZD" target="_self" class="layui-btn layui-btn-normal"><i class="fa fa-print" aria-hidden="true"></i> 打印通知单</a>
+                                    th:attr="lay-href=@{/materialRp/rpNoticePage}" -->
+                                    <a class="layui-btn " href="/materialRp/rpNoticePage" target="_self"  ><i class="layui-icon layui-icon-read"></i>打印通知单</a>
+                                    <a class="layui-btn " href="/materialRp/detailPage" target="_self"  ><i class="layui-icon layui-icon-read"></i>打印材料清单</a>
+                                    <!-- <a class="layui-btn "  th:attr="lay-href=@{/materialRp/detailPage}" ><i class="layui-icon layui-icon-read"></i>打印材料清单</a> -->
                             </div>
                             <div style="float: right;margin-right: 10px;" class="layui-form-item layui-inline">
                                     <a class="layui-btn " lay-event="edit" lay-submit  id="staging" lay-filter="staging" >暂存</a>
@@ -104,7 +107,11 @@
 
 var inlineInfo = null;
 var borrowPersonId = ""
-layui.use(["table", "form", "util", "laydate","upload","laydate"], function() {
+layui.config({
+      base: '../layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(["table", "form", "util", "laydate","upload","laydate","index"], function() {
         var $ = layui.$,
                 form = layui.form,
                 table = layui.table,

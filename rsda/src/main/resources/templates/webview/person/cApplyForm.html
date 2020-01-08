@@ -19,6 +19,8 @@
     html,body{
         width: 100%;
         height: 100%;
+        margin: 0;
+        padding: 0;
     }
     .layui-input-block{
         margin-left: 50px;
@@ -27,13 +29,20 @@
        width: 13px;
        height: 13px;
     }
+    .layui-form-checkbox[lay-skin=primary] span {
+        color: #000;
+    }
 </style>
 </head>
 
 <body>
-    <div style="width: 90%; margin: 0 auto;">
-            <table width="658" height="805" border="1" cellspacing="0" style="margin:30px auto;">
-                    <caption style="margin: 20px 0; font-size: 28px;">干部人事档案查阅审批表</caption>               
+    <div style="width: 100%; margin: 0 auto;">
+            <div style="width:100%;height:5%;border:0px;padding:5px 5px 5px 50px;">
+                <a href="javascript:history.back(-1)">返回上页 |</a>
+                <a href="javascript:prn1_preview()">打印本页</a>
+            </div>
+            <table width="658" height="805" border="1" cellspacing="0" style="margin:0px auto;margin-bottom: 80px; font-size: 16px;">   
+                    <caption style="margin-bottom:30px; font-size: 28px;">干部人事档案查阅审批表</caption>               
                     <tr>
                       <td width="50" valign="bottom" style="border-right: 1px solid #f2f2f2;">项目</td>
                       <td width="50" align="right" valign="top" style="border-left: 1px solid #f2f2f2;">内容</td>
@@ -83,7 +92,7 @@
                                         <input type="checkbox" name="like1[game]" lay-skin="primary" title="复制" >
                                     </div>
                                     <div class="layui-input-block">
-                                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="履历类" checked="">
+                                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="履历类" >
                                         <input type="checkbox" name="like1[read]" lay-skin="primary" title="自传类">
                                         <input type="checkbox" name="like1[game]" lay-skin="primary" title="鉴定考核类" >
                                         <input type="checkbox" name="like1[game]" lay-skin="primary" title="学历学位类" >
@@ -101,11 +110,23 @@
                     </tr>
                     <tr>
                       <td height="169" colspan="2"><div align="center">查档处室意见</div></td>
-                      <td colspan="3">&nbsp;</td>
+                      <td colspan="3">
+                          <span style="padding-left: 400px;">(公章)</span>
+                          <div class="layui-row" style="text-align: center;">
+                                &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;处室负责的同事签字
+                              <span style="padding-left: 105px;">年 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 月  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  日  </span>
+                          </div>
+                      </td>
                     </tr>
                     <tr>
                       <td height="169" colspan="2"><div align="center">部领导意见</div></td>
-                      <td colspan="3">&nbsp;</td>
+                      <td colspan="3">&nbsp;
+                            <span style="padding-left: 400px;">(公章)</span>
+                            <div class="layui-row" style="text-align: center;">
+                                  &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;分管领导签字
+                                <span style="padding-left: 155px;">年 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 月  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  日  </span>
+                            </div>
+                      </td>
                     </tr>
                   </table>
     </div>

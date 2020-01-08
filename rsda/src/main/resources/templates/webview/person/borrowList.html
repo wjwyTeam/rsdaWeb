@@ -57,7 +57,7 @@
                     <div style="width: 3%;"> ———</div>
                     <div style="width: 8%;color: #676a6c;font-size: 20px;">
                         借阅对象
-                        <i class="layui-icon layui-icon-tabs"></i>
+                        <a href="/borrow/applyFormPage" target="_self"  ><i class="layui-icon layui-icon-tabs"></i></a>
                     </div>
                     <div  style="width: 88%;height: 100%;overflow: hidden;"> ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</div>    
               </div>
@@ -177,10 +177,13 @@
        
  
 <script type="text/javascript" th:inline="none">
-
 var inlineInfo = null;
 var borrowPersonId = ""
-layui.use(["table", "form", "util", "laydate","upload","laydate"], function() {
+layui.config({
+      base: '../layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(["table", "form", "util", "laydate","upload","laydate","index"], function() {
         var $ = layui.$,
                 form = layui.form,
                 table = layui.table,
@@ -194,10 +197,6 @@ layui.use(["table", "form", "util", "laydate","upload","laydate"], function() {
         laydate.render({
            elem: '#end'
         });
-
-
-
-
         // 选择文件
         var demoListView = $('#demoList')
           ,uploadListIns = upload.render({
