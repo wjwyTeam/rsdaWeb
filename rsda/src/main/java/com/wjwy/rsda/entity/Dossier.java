@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @String: 2020-01-02 14:48:17
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:43:27
+ * @LastEditTime : 2020-01-08 11:40:28
  */
 package com.wjwy.rsda.entity;
 
@@ -67,4 +67,41 @@ public class Dossier {
  @ApiModelProperty("是否能删除")
  @Column(name = "is_candel")
  private Boolean isCandel;
+
+ @ApiModelProperty("性别")
+ @Column(name = "person_sex")
+ private String personSex;
+ @ApiModelProperty("籍贯")
+ @Column(name = "native_place")
+ private String nativePlace;
+ @ApiModelProperty("政治面貌")
+ @Column(name = "political_outlook")
+ private String politicalOutlook;
+ @ApiModelProperty("身份证号")
+ @Column(name = "person_no")
+ private String personNo;
+ @ApiModelProperty("出生年月")
+ @Column(name = "birth_date")
+ private String birthDate;
+ @ApiModelProperty("人员类别")
+ @Column(name = "personal_type")
+ private String personalType;
+ @ApiModelProperty("管理类别")
+ @Column(name = "management_category")
+ private String managementCategory;
+ @ApiModelProperty("档案份数")
+ @Column(name = "dossier_fs")
+ private Integer dossierFs;
+ @ApiModelProperty("档案卷数")
+ @Column(name = "dossier_js")
+ private Integer dossierJs;
+ @ApiModelProperty("转出单位BH")
+ @Column(name = "deptout_id")
+ private String deptoutId;
+ @ApiModelProperty("转出单位MC")
+ @Column(name = "deptout_name")
+ private String deptoutName;
+ @ApiModelProperty("转出时间")
+ @Column(name = "transferout_time")
+ private String transferoutTime;
 }

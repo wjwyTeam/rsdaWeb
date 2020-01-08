@@ -3,8 +3,8 @@
   @version: v0.0.1
   @Author: ZHANGQI
   @Date: 2019-12-12 08:17:42
- * @LastEditors  : zgr
- * @LastEditTime : 2020-01-07 11:24:31
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-08 11:21:29
  -->
  <!DOCTYPE html>
  <html>
@@ -136,7 +136,7 @@
      <div class="layui-col-xs12">
         <div class="layui-form-item">
                 <label class="layui-form-label"><i ></i>单位及职务</label>      
-                <div class="layui-input-inline" >
+                <div class="layui-input-block" style="padding-right: 39px;">
                   <input type="text" name="personDuty" placeholder="单位及职务" autocomplete="off"
                     class="layui-input">
                 </div>
@@ -283,7 +283,7 @@
             });
         
           form.val('dossierForm', dossierOne);
-          if(dossierOne.dossierStatus == 0){
+          if(dossierOne != null&& dossierOne.dossierStatus == 0){
             return "转入"
           }else{
             return "转出"
