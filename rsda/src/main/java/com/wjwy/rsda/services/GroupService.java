@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-10 08:26:54
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2019-12-11 19:03:53
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-08 09:46:41
  */
 package com.wjwy.rsda.services;
 
@@ -57,6 +57,7 @@ public  class GroupService{
      */
 	public List<Group> findList(String groupId, String groupName) {
         Example example = new Example(Group.class);
+        example.setOrderByClause("create_time DESC");
         Criteria criteria = example.createCriteria();
         if (!StringUtil.isEmpty(groupId)) {
             criteria.andEqualTo("groupId", groupId);

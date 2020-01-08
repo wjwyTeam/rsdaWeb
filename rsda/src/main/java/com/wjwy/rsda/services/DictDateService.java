@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-20 08:12:34
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-23 14:48:55
+ * @LastEditTime : 2020-01-08 09:48:00
  */
 package com.wjwy.rsda.services;
 
@@ -37,6 +37,7 @@ public class DictDateService {
 	public PageInfo<DictData> findList(DictData dictData, Integer page, Integer limit) {
 		PageHelper.startPage(page, limit);
 		Example example = new Example(DictData.class);
+		example.setOrderByClause("create_time DESC");
 		Criteria criteria = example.createCriteria();
 		if (StringUtil.isNotEmpty( dictData.getDictType())) {
 			criteria.andEqualTo("dictType", dictData.getDictType());

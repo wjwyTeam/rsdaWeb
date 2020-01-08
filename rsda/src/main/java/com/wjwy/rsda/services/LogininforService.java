@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 17:30:10
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-07 16:06:03
+ * @LastEditTime : 2020-01-08 09:46:34
  */
 package com.wjwy.rsda.services;
 
@@ -83,6 +83,7 @@ public class LogininforService {
     public PageInfo<Logininfor> findList(Logininfor logininfor, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         Example example = new Example(Logininfor.class);
+        example.setOrderByClause("create_time DESC");
         Criteria criteria = example.createCriteria();
         if (!StringUtil.isEmpty(logininfor.getInfoId())) {
             criteria.andEqualTo("infoId", logininfor.getInfoId());

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-20 10:28:39
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-02 10:06:21
+ * @LastEditTime : 2020-01-08 09:47:48
  */
 package com.wjwy.rsda.services;
 
@@ -105,6 +105,7 @@ public class DictTypeService {
 	public PageInfo<DictType> findList(DictType dictType, Integer page, Integer limit) {
 		PageHelper.startPage(page, limit);
 		Example example = new Example(DictType.class);
+		example.setOrderByClause("create_time DESC");
 		Criteria criteria = example.createCriteria();
 		if (StringUtil.isNotEmpty(dictType.getDictType())) {
 			criteria.andEqualTo("dictType", dictType.getDictType());
