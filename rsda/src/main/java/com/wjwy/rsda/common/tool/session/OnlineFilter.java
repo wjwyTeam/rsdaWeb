@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-31 09:37:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 16:43:30
+ * @LastEditTime : 2020-01-08 17:16:51
  */
 package com.wjwy.rsda.common.tool.session;
 
@@ -47,9 +47,8 @@ public class OnlineFilter extends AccessControlFilter {
             return true;
         }
 
-     
-            Session session=null;
-            onlineSessionDAO.readSession(subject.getSession().getId());
+            try {
+                Session session = onlineSessionDAO.readSession(subject.getSession().getId());
 
             if (session != null && session instanceof OnlineSession) {
                 OnlineSession onlineSession = (OnlineSession) session;
@@ -71,9 +70,9 @@ public class OnlineFilter extends AccessControlFilter {
                     return false;
                 }
             }
-        
-     
-
+            } catch (UnknownSessionException e) {
+               
+            }
         return true;
     }
 
