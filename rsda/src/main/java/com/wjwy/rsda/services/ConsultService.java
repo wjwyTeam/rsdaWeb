@@ -48,6 +48,7 @@ public class ConsultService {
  public PageInfo<Consult> findList(Consult consult, Integer page, Integer limit) {
   PageHelper.startPage(page, limit);
   Example example = new Example(Consult.class);
+  example.setOrderByClause("create_time DESC");
   Criteria criteria = example.createCriteria();
   if (!StringUtil.isEmpty(consult.getConsultId())) {
    criteria.andEqualTo("consultId", consult.getConsultId());

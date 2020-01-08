@@ -49,6 +49,7 @@ public class BorrowService {
  public PageInfo<Borrow> findList(Borrow borrow, Integer page, Integer limit) {
   PageHelper.startPage(page, limit);
   Example example = new Example(Borrow.class);
+  example.setOrderByClause("create_time DESC");
   Criteria criteria = example.createCriteria();
   if (!StringUtil.isEmpty(borrow.getBorrowId())) {
    criteria.andEqualTo("borrowId", borrow.getBorrowId());
