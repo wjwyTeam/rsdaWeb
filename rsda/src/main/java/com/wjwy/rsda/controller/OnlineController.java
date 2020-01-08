@@ -4,19 +4,19 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 17:50:35
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:34:04
+ * @LastEditTime : 2020-01-08 14:26:33
  */
 package com.wjwy.rsda.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.wjwy.rsda.common.tool.server.service.OnlineService;
-import com.wjwy.rsda.common.tool.server.session.OnlineSession;
-import com.wjwy.rsda.common.tool.server.session.OnlineSessionDAO;
-import com.wjwy.rsda.common.tool.server.system.Online;
+import com.wjwy.rsda.common.tool.session.OnlineSession;
+import com.wjwy.rsda.common.tool.session.OnlineSessionDAO;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.common.util.ShiroUtils;
-import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.entity.Online;
+import com.wjwy.rsda.common.enums.EnumEntitys;
+import com.wjwy.rsda.services.OnlineService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-31 16:36:29
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 07:58:08
+ * @LastEditTime : 2020-01-08 14:18:08
  */
 package com.wjwy.rsda.common.config;
 

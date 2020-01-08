@@ -8,7 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Date;
 
-import com.wjwy.rsda.enums.Convert;
+import com.wjwy.rsda.common.enums.Convert;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;

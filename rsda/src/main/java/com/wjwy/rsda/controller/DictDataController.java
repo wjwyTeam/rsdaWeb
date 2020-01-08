@@ -20,9 +20,9 @@ import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.common.util.ShiroUtils;
 import com.wjwy.rsda.entity.DictData;
-import com.wjwy.rsda.enums.AjaxResult;
-import com.wjwy.rsda.enums.Convert;
-import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.common.enums.AjaxResult;
+import com.wjwy.rsda.common.enums.Convert;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.DictDateService;
 
 import org.slf4j.Logger;

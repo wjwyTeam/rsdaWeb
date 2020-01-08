@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-03 16:08:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 09:48:16
+ * @LastEditTime : 2020-01-08 15:05:25
  */
 package com.wjwy.rsda.services;
 
@@ -16,8 +16,8 @@ import java.util.UUID;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.entity.Department;
-import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.mapper.DepartmentMapper;
 
 import org.apache.commons.lang3.StringUtils;

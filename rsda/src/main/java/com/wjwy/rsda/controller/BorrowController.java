@@ -13,8 +13,8 @@ import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Borrow;
-import com.wjwy.rsda.enums.Convert;
-import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.common.enums.Convert;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.BorrowService;
 import com.wjwy.rsda.services.PersonalService;
 

@@ -7,7 +7,7 @@ import com.github.pagehelper.util.StringUtil;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Role;
-import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.RoleService;
 
 import org.apache.commons.lang3.StringUtils;

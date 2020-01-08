@@ -1,47 +1,44 @@
+package com.wjwy.rsda.common.config;
+
+import java.util.Set;
+import org.slf4j.Logger;
+import java.util.HashSet;
+import org.slf4j.LoggerFactory;
+import com.wjwy.rsda.entity.User;
+import org.apache.shiro.SecurityUtils;
+import com.wjwy.rsda.services.RoleService;
+import com.wjwy.rsda.services.UserService;
+import com.wjwy.rsda.common.util.ShiroUtils;
+import com.wjwy.rsda.services.FunctionService;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import com.wjwy.rsda.common.tool.except.CaptchaException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.springframework.context.annotation.Configuration;
+import com.wjwy.rsda.common.tool.except.RoleBlockedException;
+import com.wjwy.rsda.common.tool.except.UserBlockedException;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.wjwy.rsda.common.tool.except.UserNotExistsException;
+import com.wjwy.rsda.common.tool.except.UserPasswordNotMatchException;
+import com.wjwy.rsda.common.tool.except.UserPasswordRetryLimitExceedException;
 /*
  * @Descripttion: 认证领域
  * @version: 
  * @Author: ZHANGQI
  * @Date: 2019-12-16 09:05:48
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 17:03:10
+ * @LastEditTime : 2020-01-08 14:34:50
  */
-
-package com.wjwy.rsda.common.config;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import com.wjwy.rsda.common.tool.server.except.CaptchaException;
-import com.wjwy.rsda.common.tool.server.except.RoleBlockedException;
-import com.wjwy.rsda.common.tool.server.except.UserBlockedException;
-import com.wjwy.rsda.common.tool.server.except.UserNotExistsException;
-import com.wjwy.rsda.common.tool.server.except.UserPasswordNotMatchException;
-import com.wjwy.rsda.common.tool.server.except.UserPasswordRetryLimitExceedException;
-import com.wjwy.rsda.common.util.ShiroUtils;
-import com.wjwy.rsda.entity.User;
-import com.wjwy.rsda.services.FunctionService;
-import com.wjwy.rsda.services.RoleService;
-import com.wjwy.rsda.services.UserService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-
 
 @Configuration
 public class AuthRealm extends AuthorizingRealm {
@@ -54,7 +51,6 @@ public class AuthRealm extends AuthorizingRealm {
 
     @Autowired
     private FunctionService functionService;
-    
 
     /**
      * 认证回调函数,登录时调用
@@ -70,11 +66,12 @@ public class AuthRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         // StringBuffer passWord = new StringBuffer();
         // for (char p : (char[]) token.getCredentials()) {
-        //     passWord.append(p);
+        // passWord.append(p);
         // }
         // User user = Optional
-        //         .ofNullable(userService.getUserByLogin(token.getPrincipal().toString(), passWord.toString()))
-        //         .orElseThrow(UnknownAccountException::new);
+        // .ofNullable(userService.getUserByLogin(token.getPrincipal().toString(),
+        // passWord.toString()))
+        // .orElseThrow(UnknownAccountException::new);
         // 锁定账户先空着， 暂时用不上
         // if (!user.isLocked()) {
         // throw new LockedAccountException();
@@ -88,8 +85,9 @@ public class AuthRealm extends AuthorizingRealm {
         // List<Object> principals = new ArrayList<Object>();
         // principals.add(user.getUserName());
         // principals.add(user);
-        // SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principals, user.getPassWord(),
-        //         getName());
+        // SimpleAuthenticationInfo authenticationInfo = new
+        // SimpleAuthenticationInfo(principals, user.getPassWord(),
+        // getName());
         // Session session = SecurityUtils.getSubject().getSession();
         // session.setAttribute("USER_SESSION", user);
 
@@ -133,7 +131,7 @@ public class AuthRealm extends AuthorizingRealm {
      * 如果需要动态权限,但是又不想每次去数据库校验,可以存在ehcache中.自行完善
      */
 
-     /**
+    /**
      * 授权
      */
     @Override

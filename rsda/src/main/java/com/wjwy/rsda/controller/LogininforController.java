@@ -4,19 +4,20 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-07 15:16:28
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-07 17:15:19
+ * @LastEditTime : 2020-01-08 14:09:15
  */
 package com.wjwy.rsda.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.wjwy.rsda.common.tool.server.service.PasswordService;
 import com.wjwy.rsda.common.util.BaseController;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Logininfor;
-import com.wjwy.rsda.enums.Convert;
-import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.common.enums.Convert;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.LogininforService;
+import com.wjwy.rsda.services.PasswordService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

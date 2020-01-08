@@ -11,7 +11,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.StringUtils;
 import com.wjwy.rsda.entity.Function;
-import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.mapper.FunctionMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 09:16:29
+ * @LastEditTime : 2020-01-08 14:47:51
  */
 package com.wjwy.rsda.common.config;
 
@@ -34,21 +34,19 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
-import com.wjwy.rsda.common.tool.server.session.KickoutSessionFilter;
-import com.wjwy.rsda.common.tool.server.session.LogoutFilter;
-import com.wjwy.rsda.common.tool.server.session.OnlineFilter;
-import com.wjwy.rsda.common.tool.server.session.OnlineSessionDAO;
-import com.wjwy.rsda.common.tool.server.session.OnlineSessionFactory;
-import com.wjwy.rsda.common.tool.server.session.OnlineSessionFilter;
-import com.wjwy.rsda.common.tool.server.session.OnlineWebSessionManager;
-import com.wjwy.rsda.common.tool.server.session.SpringSessionValidationScheduler;
+import com.wjwy.rsda.common.tool.session.KickoutFilter;
+import com.wjwy.rsda.common.tool.session.LogoutFilter;
+import com.wjwy.rsda.common.tool.session.OnlineFilter;
+import com.wjwy.rsda.common.tool.session.OnlineSessionDAO;
+import com.wjwy.rsda.common.tool.session.OnlineSessionFactory;
+import com.wjwy.rsda.common.tool.session.OnlineSessionFilter;
+import com.wjwy.rsda.common.tool.session.OnlineWebSessionManager;
+import com.wjwy.rsda.common.tool.session.SpringSessionValidationScheduler;
 import com.wjwy.rsda.common.util.SpringUtils;
 import com.wjwy.rsda.common.util.StringUtils;
 
-
 @Configuration
 public class ShiroConfiguration {
-
 
     @Value("10")
     private int tomcatTimeout;
@@ -57,6 +55,7 @@ public class ShiroConfiguration {
     public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
+
     /**
      * 缓存管理器 使用Ehcache实现
      */
@@ -92,7 +91,6 @@ public class ShiroConfiguration {
         }
     }
 
-    
     /**
      * 自定义Realm
      */
@@ -229,7 +227,7 @@ public class ShiroConfiguration {
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         filters.put("online", onlineFilter());
         filters.put("onlineSession", onlineSessionFilter());
-        filters.put("kickout", kickoutSessionFilter());
+        filters.put("kickout", kickoutFilter());
         // 注销成功，则跳转到指定页面
         filters.put("logout", logoutFilter());
         shiroFilterFactoryBean.setFilters(filters);
@@ -286,8 +284,8 @@ public class ShiroConfiguration {
     /**
      * 同一个用户多设备登录限制
      */
-    public KickoutSessionFilter kickoutSessionFilter() {
-        KickoutSessionFilter kickoutSessionFilter = new KickoutSessionFilter();
+    public KickoutFilter kickoutFilter() {
+        KickoutFilter kickoutSessionFilter = new KickoutFilter();
         kickoutSessionFilter.setCacheManager(getEhCacheManager());
         kickoutSessionFilter.setSessionManager(sessionManager());
         // 同一个用户最大的会话数，默认-1无限制；比如2的意思是同一个用户允许最多同时两个人登录

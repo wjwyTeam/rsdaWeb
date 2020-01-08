@@ -2,7 +2,7 @@ package com.wjwy.rsda.common.util;
 
 import java.util.Collection;
 import java.util.Map;
-import com.wjwy.rsda.enums.MessageConstant;
+import com.wjwy.rsda.common.enums.MessageConstant;
 
 /**
  * 字符串工具类

@@ -1,15 +1,20 @@
+
 package com.wjwy.rsda.common.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-/**
- * 
- * 跨域请求
+/*
+ * @Descripttion: 跨域请求
+ * @version: 
+ * @Author: ZHANGQI
+ * @Date: 2019-12-20 13:47:21
+ * @LastEditors: ZHANGQI
+ * @LastEditTime: 2020-01-08 14:56:31
  */
 @Configuration
 public class GlobalCorsConfig {

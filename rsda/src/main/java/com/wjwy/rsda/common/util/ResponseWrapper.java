@@ -6,7 +6,7 @@ import org.springframework.validation.ObjectError;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wjwy.rsda.enums.MessageConstant;
+import com.wjwy.rsda.common.enums.MessageConstant;
 
 /**
  * @author xmpu

@@ -1,8 +1,6 @@
 package com.wjwy.rsda.common.tool.factory;
-
 import java.lang.reflect.Method;
 import java.util.Map;
-
 import com.wjwy.rsda.common.util.JSON;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ServletUtils;
@@ -10,8 +8,8 @@ import com.wjwy.rsda.common.util.ShiroUtils;
 import com.wjwy.rsda.common.util.StringUtils;
 import com.wjwy.rsda.entity.OperLog;
 import com.wjwy.rsda.entity.User;
-import com.wjwy.rsda.enums.BusinessStatus;
- import org.aspectj.lang.JoinPoint;
+import com.wjwy.rsda.common.enums.EnumEntitys;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -69,7 +67,7 @@ public class LogAspect {
 
             // *========数据库日志=========*//
             OperLog operLog = new OperLog();
-            operLog.setStatus(BusinessStatus.SUCCESS.ordinal());
+            operLog.setStatus(EnumEntitys.SUCCESS.ordinal());
             // 请求的地址
             String ip = ShiroUtils.getIp();
             operLog.setOperIp(ip);
@@ -85,7 +83,7 @@ public class LogAspect {
             }
 
             if (e != null) {
-                operLog.setStatus(BusinessStatus.FAIL.ordinal());
+                operLog.setStatus(EnumEntitys.FAIL.ordinal());
                 operLog.setErrorMsg(StringUtils.substring(e.getMessage(), 0, 2000));
             }
             // 设置方法名称

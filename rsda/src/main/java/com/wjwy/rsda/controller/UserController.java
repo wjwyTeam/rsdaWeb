@@ -10,7 +10,7 @@ import com.wjwy.rsda.common.util.MD5Util;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.User;
-import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.RoleService;
 import com.wjwy.rsda.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

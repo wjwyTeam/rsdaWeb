@@ -10,7 +10,7 @@ package com.wjwy.rsda.mapper;
 
 import java.util.List;
 
-import com.wjwy.rsda.common.tool.server.system.Online;
+import com.wjwy.rsda.entity.Online;
 
 import org.apache.ibatis.annotations.Select;
 

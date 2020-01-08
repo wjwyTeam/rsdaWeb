@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.wjwy.rsda.enums.EnumEntitys;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 
 /**
  * 自定义操作日志记录注解
