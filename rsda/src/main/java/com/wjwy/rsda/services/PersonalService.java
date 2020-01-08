@@ -27,9 +27,8 @@ import tk.mybatis.mapper.util.StringUtil;
 @Service("personalService")
 @Transactional
 public class PersonalService {
- @Autowired
+   @Autowired
    private PersonalMapper personalMapper;
- 
 
    /**
     * 获取List对象
@@ -40,86 +39,87 @@ public class PersonalService {
       return personalMapper.selectAll();
    }
 
- /**
-  * 通过ID获取对象
-  * 
-  * @param personalId
-  * @return
-  */
- public Personal getById(String personalId) {
-    Example example = new Example(Personal.class);
-    Criteria criteria = example.createCriteria();
-    if (!StringUtil.isEmpty(personalId)) {
-        criteria.andEqualTo("personalId",personalId);
-     }
-  return personalMapper.selectOneByExample(example);
- }
-
- /**
-  * 人员管理列表数据查询
-  * 
-  * @param personal
-  * @param page
-  * @param limit
-  * @return
-  */
- public PageInfo<Personal> findList(Personal personal, Integer page, Integer limit) {
-  PageHelper.startPage(page, limit);
-  Example example = new Example(Personal.class);
-  Criteria criteria = example.createCriteria();
-  if (!StringUtil.isEmpty(personal.getPersonalId())) {
-   criteria.andEqualTo("personalId", personal.getPersonalId());
-  }
-  if (!StringUtil.isEmpty(personal.getPersonalName())) {
-   criteria.andEqualTo("personalName", personal.getPersonalName());
-  }
-   if (!StringUtil.isEmpty(personal.getDeptId())) {
-      criteria.andEqualTo("deptId", personal.getDeptId());
+   /**
+    * 通过ID获取对象
+    * 
+    * @param personalId
+    * @return
+    */
+   public Personal getById(String personalId) {
+      Example example = new Example(Personal.class);
+      Criteria criteria = example.createCriteria();
+      if (!StringUtil.isEmpty(personalId)) {
+         criteria.andEqualTo("personalId", personalId);
+      }
+      return personalMapper.selectOneByExample(example);
    }
 
-  List<Personal> personals = personalMapper.selectByExample(example);
-  PageInfo<Personal> PageInfoDO = new PageInfo<Personal>(personals);
-  return PageInfoDO;
- }
+   /**
+    * 人员管理列表数据查询
+    * 
+    * @param personal
+    * @param page
+    * @param limit
+    * @return
+    */
+   public PageInfo<Personal> findList(Personal personal, Integer page, Integer limit) {
+      PageHelper.startPage(page, limit);
+      Example example = new Example(Personal.class);
+      example.setOrderByClause("create_time DESC");
+      Criteria criteria = example.createCriteria();
+      if (!StringUtil.isEmpty(personal.getPersonalId())) {
+         criteria.andEqualTo("personalId", personal.getPersonalId());
+      }
+      if (!StringUtil.isEmpty(personal.getPersonalName())) {
+         criteria.andEqualTo("personalName", personal.getPersonalName());
+      }
+      if (!StringUtil.isEmpty(personal.getDeptId())) {
+         criteria.andEqualTo("deptId", personal.getDeptId());
+      }
 
- /**
-  * 人员管理表单数据新增
-  * 
-  * @param personal
-  * @return int
-  */
- public int personalInsert(Personal personal) {
-  personal.setPersonalId(UUID.randomUUID().toString().toLowerCase());
-  return personalMapper.insertSelective(personal);
- }
+      List<Personal> personals = personalMapper.selectByExample(example);
+      PageInfo<Personal> PageInfoDO = new PageInfo<Personal>(personals);
+      return PageInfoDO;
+   }
 
- /**
-  * 人员管理表单数据更新
-  * 
-  * @param personal
-  * @return int
-  */
- public int personalUpdate(Personal personal) {
-  Example example = new Example(Personal.class);
-  Criteria criteria = example.createCriteria();
-  criteria.andEqualTo("personalId", personal.getPersonalId());
-  return personalMapper.updateByExampleSelective(personal, example);
- }
+   /**
+    * 人员管理表单数据新增
+    * 
+    * @param personal
+    * @return int
+    */
+   public int personalInsert(Personal personal) {
+      personal.setPersonalId(UUID.randomUUID().toString().toLowerCase());
+      return personalMapper.insertSelective(personal);
+   }
 
- /**
-  * 人员管理移除数据
-  * 
-  * @param ids
-  * @return int
-  */
- public int personalRemove(String[] ids) {
-  int res = 0;
-  for (String id : ids) {
-   Example example = new Example(Personal.class);
-   Criteria criteria = example.createCriteria();
-   criteria.andEqualTo("personalId", id);
-   res = personalMapper.deleteByExample(example);
-  }
-  return res;
- }
+   /**
+    * 人员管理表单数据更新
+    * 
+    * @param personal
+    * @return int
+    */
+   public int personalUpdate(Personal personal) {
+      Example example = new Example(Personal.class);
+      Criteria criteria = example.createCriteria();
+      criteria.andEqualTo("personalId", personal.getPersonalId());
+      return personalMapper.updateByExampleSelective(personal, example);
+   }
+
+   /**
+    * 人员管理移除数据
+    * 
+    * @param ids
+    * @return int
+    */
+   public int personalRemove(String[] ids) {
+      int res = 0;
+      for (String id : ids) {
+         Example example = new Example(Personal.class);
+         Criteria criteria = example.createCriteria();
+         criteria.andEqualTo("personalId", id);
+         res = personalMapper.deleteByExample(example);
+      }
+      return res;
+   }
 }

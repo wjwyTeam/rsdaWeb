@@ -3,39 +3,90 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
- * @LastEditors  : zgr
- * @LastEditTime : 2020-01-07 17:11:58
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-08 10:57:19
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <th:block th:include="include :: header('服务器监控')" />
-  <link href="/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+  <link href="/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
   <script src="/js/jquery-1.4.4.min.js"></script>
   <style>
-    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
-        position: relative;
-        min-height: 1px;
-        padding-right: 0px;
-        padding-left: 10px;
-   }
+    .col-lg-1,
+    .col-lg-10,
+    .col-lg-11,
+    .col-lg-12,
+    .col-lg-2,
+    .col-lg-3,
+    .col-lg-4,
+    .col-lg-5,
+    .col-lg-6,
+    .col-lg-7,
+    .col-lg-8,
+    .col-lg-9,
+    .col-md-1,
+    .col-md-10,
+    .col-md-11,
+    .col-md-12,
+    .col-md-2,
+    .col-md-3,
+    .col-md-4,
+    .col-md-5,
+    .col-md-6,
+    .col-md-7,
+    .col-md-8,
+    .col-md-9,
+    .col-sm-1,
+    .col-sm-10,
+    .col-sm-11,
+    .col-sm-12,
+    .col-sm-2,
+    .col-sm-3,
+    .col-sm-4,
+    .col-sm-5,
+    .col-sm-6,
+    .col-sm-7,
+    .col-sm-8,
+    .col-sm-9,
+    .col-xs-1,
+    .col-xs-10,
+    .col-xs-11,
+    .col-xs-12,
+    .col-xs-2,
+    .col-xs-3,
+    .col-xs-4,
+    .col-xs-5,
+    .col-xs-6,
+    .col-xs-7,
+    .col-xs-8,
+    .col-xs-9 {
+      position: relative;
+      min-height: 1px;
+      padding-right: 0px;
+      padding-left: 10px;
+    }
+
     .functionTableSearch {
       width: 100%;
       text-align: right;
       position: relative;
       top: 6px;
     }
+
     .layui-btn-normal {
       background-color: #8a8eee;
     }
-    #type-button{
+
+    #type-button {
       padding: 3px 10px;
       color: #ffffff;
       background-color: #1c84c6;
       border-radius: 5px;
     }
-    #visible-button{
+
+    #visible-button {
       padding: 3px 10px;
       color: #ffffff;
       background-color: #1ab394;
@@ -46,31 +97,29 @@
 
 <body class="page-no-scroll">
   <div>
-    <div class="deptTableToolbar" style="margin-left:10px;">
-      <button class="layui-btn" data-type="addOne">添加</button>
-      <!-- <button class="layui-btn" data-type="batchdel">批量删除</button> -->
-    </div>
-    <table class="layui-hide" id = "functionTable" lay-filter="functionTable"></table> 
+    <table class="layui-hide" id="functionTable" lay-filter="functionTable"></table>
     <!-- 表格操作列 -->
     <script type="text/html" id="demoTreeTableBar1">
       <a class="layui-btn layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-      <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>新增</a>
-      <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+      <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
+          class="layui-icon layui-icon-add-1"></i>新增</a>
+      <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i
+          class="layui-icon layui-icon-delete"></i>删除</a>
     </script>
 
     <!-- 表格状态列 -->
     <script type="text/html" id="demoTreeTableState1">
-      <input type="checkbox" lay-filter="ckState" value="{{d.id}}" lay-skin="switch"
-            lay-text="正常|锁定" {{d.state==0?'checked':''}}/>
+      <input type="checkbox" lay-filter="ckState" value="{{d.id}}" lay-skin="switch" lay-text="正常|锁定"
+        {{d.state==0?'checked':''}} />
     </script>
 
   </div>
   <div class="page-loading">
     <div class="ball-loader sm">
-        <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
     </div>
-</div>
- 
+  </div>
+
   <input type="hidden" id="deptId">
   <script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
   <script>
@@ -78,161 +127,204 @@
       base: '/layuiadmin/' //静态资源所在路径
     }).extend({
       treeTable: 'treetable-lay/treeTable',
-    }).use(["util", 'treeTable','layer','table'], function () {
-      var $ = layui.$
-        , form = layui.form
-        , table = layui.table
-        , util = layui.util
-        , treeTable = layui.treeTable;
+    }).use(["util", 'treeTable', 'layer', 'table'], function () {
+      var $ = layui.$,
+        form = layui.form,
+        table = layui.table,
+        util = layui.util,
+        treeTable = layui.treeTable;
 
-        console.log(table);
+      console.log(table);
 
-           // 渲染表格
-           var renderTreeTable = function(){
-                treeTable.render({
-                      elem: '#functionTable',
-                      treeDefaultClose: true,
-                      tree: {
-                          iconIndex: 2,
-                          arrowType: 'arrow2',
-                      },
-                      cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
-                      id: "functionTable",
-                      cols: [
-                          { type:"checkbox", align: 'center', LAY_CHECKED: false, filter: 'test' }
-                          , { type: 'numbers', title: '编号', align: 'center',width:70}
-                          , { field: 'functionName',align: 'center', title: '菜单名称', templet: function(d) {
-                                  // $(".ew-tree-icon").css("display","none");
-                                  return '<i class="' + d.icon + '"></i> <span class="nav-label">' + d.functionName + '</span>';
-                              }
-                          }
-                          // , { field: 'forder', title: '排序', align: 'center' }
-                          , { field: 'url', title: '请求地址', align: 'center' }
-                          , { field: 'functionType', title: '类型', align: 'center',templet:function(d){
-                                return  '<span id="type-button">'+d.functionType+'</span>'
-                            }}
-                          , { field: 'visible', title: '可见', align: 'center' ,templet:function(d){
-                              var visible = "";
-                              if(d.visible == true){
-                                return  '<span id="visible-button">显示</span>'
-                              }else{
-                                return  '<span id="visible-button">不显示</span>'
-                              }
-                          }}
-                          , { field: 'perms', title: '权限标识', align: 'center' }
-                          , {
-                              field: 'createTime', title: '创建时间',align: 'center', templet: function (d) {
-                                  return util.toDateString(d.createTime);
-                              },
-                          },
-                          // {templet: '#demoTreeTableState1', title: '状态',align: 'center'},
-                          {align: 'center', toolbar: '#demoTreeTableBar1', title: '操作', width: 280}
-                  
-                      ],
-                      // page: false
-                      // , response: {
-                      //   statusName: 'code' //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
-                      //   , statusCode: 200 //成功的状态码，默认：0
-                      //   , msgName: 'msg' //状态信息的字段名称，默认：msg
-                      //   , countName: 'count' //数据总数的字段名称，默认：count
-                      //   , dataName: 'data' //数据列表的字段名称，默认：data
-                      // }
-                      // , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
-                      //   layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局 
-                      //   //,curr: 5 //设定初始在第 5 页
-                      //   , groups: 5 //只显示 1 个连续页码
-                      //   , limit: 20
-                      //   , first: true //不显示首页  
-                      //   , last: true //不显示尾页
-                      // },
-                      reqData: function (data, callback) {
-                          setTimeout(function () {  // 故意延迟一下
-                              // // var url = '/webviews/list.json';
-                              var url = "/function/functionTree?groupId=";
-                              url += (data ? (data.id) : '');
-                              $.get(url, function (res) {
-                                  callback(res.data);
-                                  $(".ew-tree-icon").css("display","none");
-                                
-                              });
-                          }, 800);
-                      },
-                      style: 'margin-top:0;'
-                  });
-                  
-           }
-    
-        
-      
-        setTimeout(function () {
-            $('body').children('.page-loading').hide();
-            $('body').removeClass('page-no-scroll');
-        }, 100);
+      // 渲染表格
+      var renderTreeTable = function () {
+        treeTable.render({
+          elem: '#functionTable',
+          treeDefaultClose: true,
+          tree: {
+            iconIndex: 2,
+            arrowType: 'arrow2',
+          },
+          cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
+          id: "functionTable",
+          cols: [{
+              type: "checkbox",
+              align: 'center',
+              LAY_CHECKED: false,
+              filter: 'test'
+            }, {
+              type: 'numbers',
+              title: '编号',
+              align: 'center',
+              width: 70
+            }, {
+              field: 'functionName',
+              align: 'center',
+              title: '菜单名称',
+              templet: function (d) {
+                // $(".ew-tree-icon").css("display","none");
+                return '<i class="' + d.icon + '"></i> <span class="nav-label">' + d.functionName +
+                  '</span>';
+              }
+            }
+            // , { field: 'forder', title: '排序', align: 'center' }
+            , {
+              field: 'url',
+              title: '请求地址',
+              align: 'center'
+            }, {
+              field: 'functionType',
+              title: '类型',
+              align: 'center',
+              templet: function (d) {
+                var c;
+                if (d.functionType == '0') {
+                  c = "目录";
+                } else if (d.functionType == '1') {
+                  c = "菜单";
+                } else
+                  c = "按钮";
+                return '<span id="type-button">' + c + '</span>'
+              }
+            }, {
+              field: 'visible',
+              title: '可见',
+              align: 'center',
+              templet: function (d) {
+                var visible = "";
+                if (d.visible == true) {
+                  return '<span id="visible-button">显示</span>'
+                } else {
+                  return '<span id="visible-button">不显示</span>'
+                }
+              }
+            }, {
+              field: 'perms',
+              title: '权限标识',
+              align: 'center'
+            }, {
+              field: 'createTime',
+              title: '创建时间',
+              align: 'center',
+              templet: function (d) {
+                return util.toDateString(d.createTime);
+              },
+            },
+            // {templet: '#demoTreeTableState1', title: '状态',align: 'center'},
+            {
+              align: 'center',
+              toolbar: '#demoTreeTableBar1',
+              title: '操作  /  <button class="layui-btn layui-btn-warm layui-btn-radius  layui-btn-sm" data-type="addOne">   新增  </button>',
+              width: 280
+            }
 
-        renderTreeTable();
-        // treeTable.expandAll('#functionTable');
+          ],
+          // page: false
+          // , response: {
+          //   statusName: 'code' //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+          //   , statusCode: 200 //成功的状态码，默认：0
+          //   , msgName: 'msg' //状态信息的字段名称，默认：msg
+          //   , countName: 'count' //数据总数的字段名称，默认：count
+          //   , dataName: 'data' //数据列表的字段名称，默认：data
+          // }
+          // , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+          //   layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局 
+          //   //,curr: 5 //设定初始在第 5 页
+          //   , groups: 5 //只显示 1 个连续页码
+          //   , limit: 20
+          //   , first: true //不显示首页  
+          //   , last: true //不显示尾页
+          // },
+          reqData: function (data, callback) {
+            setTimeout(function () { // 故意延迟一下
+              // // var url = '/webviews/list.json';
+              var url = "/function/functionTree?groupId=";
+              url += (data ? (data.id) : '');
+              $.get(url, function (res) {
+                callback(res.data);
+                $(".ew-tree-icon").css("display", "none");
 
-        
-       treeTable.on('tool(functionTable)', function (obj) {
-          var data = obj.data;
-          if(obj.event === "del"){
-            layer.confirm('确认要删除吗？', function (index) {
+              });
+            }, 800);
+          },
+          style: 'margin-top:0;'
+        });
+
+      }
+
+
+
+      setTimeout(function () {
+        $('body').children('.page-loading').hide();
+        $('body').removeClass('page-no-scroll');
+      }, 100);
+
+      renderTreeTable();
+      // treeTable.expandAll('#functionTable');
+
+
+      treeTable.on('tool(functionTable)', function (obj) {
+        var data = obj.data;
+        if (obj.event === "del") {
+          layer.confirm('确认要删除吗？', function (index) {
             layer.close(index);
-            $.post("/function/deleteFunction", {id: data.id }, function (resultJSONObject) {
-              if (resultJSONObject.success) { 
+            $.post("/function/deleteFunction", {
+              id: data.id
+            }, function (resultJSONObject) {
+              if (resultJSONObject.success) {
                 renderTreeTable();
               }
               layer.msg(resultJSONObject.msg);
             }, "json");
-            });
-            
-          }else if(obj.event === "edit"){
-            layer.open({
-              type: 2,
-              title: '编辑菜单',
-              maxmin: true,
-              area: ['700px', '600px'],
-              btn: ['确定', '取消'],
-              fixed: true,
-              shadeClose: false,
-              shade: 0.2,
-              moveType: 1,  //拖拽模式，0或者1 
-              content: '/function/functionEdit?id=' + data.id,
-              yes: function (index, layero) {
-                var iframeWindow = window['layui-layer-iframe' + index]
-                  , submitID = 'functionConfirm'
-                  , submit = layero.find('iframe').contents().find('#' + submitID);
-                //监听提交
-                iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
-                  var field = dataLog.field;
-                  if (field.visible == "true") {
-                    field.visible = true;
-                  } else {
-                    field.visible = false;
-                  }
-                  //获取提交的字段
-                  //提交 Ajax 成功后，静态更新表格中的数据
-                  $.ajax({
-                    type: "post",
-                    url: "/function/updateFunction",
-                    data: JSON.stringify(field),
-                    dataType: "json",
-                    contentType: "application/json;charset-UTF-8",
-                    success: function (resultJSONObject) {
-                      if (resultJSONObject.success) {
-                        renderTreeTable();
-                      }
-                      layer.msg(resultJSONObject.msg);
+          });
+
+        } else if (obj.event === "edit") {
+          layer.open({
+            type: 2,
+            title: '编辑菜单',
+            maxmin: true,
+            area: ['700px', '600px'],
+            btn: ['确定', '取消'],
+            fixed: true,
+            shadeClose: false,
+            shade: 0.2,
+            moveType: 1, //拖拽模式，0或者1 
+            content: '/function/functionEdit?id=' + data.id,
+            yes: function (index, layero) {
+              var iframeWindow = window['layui-layer-iframe' + index],
+                submitID = 'functionConfirm',
+                submit = layero.find('iframe').contents().find('#' + submitID);
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
+                var field = dataLog.field;
+                if (field.visible == "true") {
+                  field.visible = true;
+                } else {
+                  field.visible = false;
+                }
+                //获取提交的字段
+                //提交 Ajax 成功后，静态更新表格中的数据
+                $.ajax({
+                  type: "post",
+                  url: "/function/updateFunction",
+                  data: JSON.stringify(field),
+                  dataType: "json",
+                  contentType: "application/json;charset-UTF-8",
+                  success: function (resultJSONObject) {
+                    if (resultJSONObject.success) {
+                      renderTreeTable();
                     }
-                  });
-                  layer.close(index); //关闭弹层
+                    layer.msg(resultJSONObject.msg);
+                  }
                 });
-                submit.trigger('click');
-              }
-            });
-          }else if(obj.event == "add"){
-            // 新增菜单
-            layer.open({
+                layer.close(index); //关闭弹层
+              });
+              submit.trigger('click');
+            }
+          });
+        } else if (obj.event == "add") {
+          // 新增菜单
+          layer.open({
             type: 2,
             title: '新增菜单',
             maxmin: true,
@@ -241,19 +333,19 @@
             fixed: true,
             shadeClose: false,
             shade: 0.2,
-            moveType: 1,  //拖拽模式，0或者1 
+            moveType: 1, //拖拽模式，0或者1 
             content: '/function/functionEdit',
             yes: function (index, layero) {
-              var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'functionConfirm'
-                , submit = layero.find('iframe').contents().find('#' + submitID);
+              var iframeWindow = window['layui-layer-iframe' + index],
+                submitID = 'functionConfirm',
+                submit = layero.find('iframe').contents().find('#' + submitID);
 
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 var field = dataLog.field;
-                field.pid=data.id;
-                field.isCandel=false;
-                field.delFlag=false; 
+                field.pid = data.id;
+                field.isCandel = false;
+                field.delFlag = false;
                 if (field.visible == "true") {
                   field.visible = true;
                 } else {
@@ -279,11 +371,11 @@
               submit.trigger('click');
             }
           });
-         }
-       });
-      
-       var active = {
-         addOne:function(){
+        }
+      });
+
+      var active = {
+        addOne: function () {
           // 新增菜单
           layer.open({
             type: 2,
@@ -294,18 +386,18 @@
             fixed: true,
             shadeClose: false,
             shade: 0.2,
-            moveType: 1,  //拖拽模式，0或者1 
+            moveType: 1, //拖拽模式，0或者1 
             content: '/function/functionEdit',
             yes: function (index, layero) {
-              var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'functionConfirm'
-                , submit = layero.find('iframe').contents().find('#' + submitID);
+              var iframeWindow = window['layui-layer-iframe' + index],
+                submitID = 'functionConfirm',
+                submit = layero.find('iframe').contents().find('#' + submitID);
               //监听提交
               iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
                 var field = dataLog.field;
-                field.pid="";
-                field.isCandel=false;
-                field.delFlag=false; 
+                field.pid = "";
+                field.isCandel = false;
+                field.delFlag = false;
                 console.log(field);
                 if (field.visible == "true") {
                   field.visible = true;
@@ -332,46 +424,46 @@
               submit.trigger('click');
             }
           });
-         }
-         ,batchdel:function(){
-           console.log(treeTable);
-             //两种方式
-            var checkStatus = treeTable.checkStatus('functionTable')
-              , checkData = checkStatus.data; //得到选中的数据
-            if (checkData.length === 0) {
-              return layer.msg('请选择数据');
+        },
+        batchdel: function () {
+          console.log(treeTable);
+          //两种方式
+          var checkStatus = treeTable.checkStatus('functionTable'),
+            checkData = checkStatus.data; //得到选中的数据
+          if (checkData.length === 0) {
+            return layer.msg('请选择数据');
+          }
+          console.log(checkData)
+          //捉到所有被选中的，发异步进行删除
+          var ids = [];
+          if (checkData.length > 0) {
+            console.log(123);
+            for (var i = 0; i < checkData.length; i++) {
+              ids.push(checkData[i].personalId)
             }
-            console.log(checkData)
-            //捉到所有被选中的，发异步进行删除
-            var ids = [];
-            if (checkData.length > 0) {
-              console.log(123);
-              for (var i = 0; i < checkData.length; i++) { 
-                ids.push(checkData[i].personalId)
-              }
-            }
-            console.log(ids);
-            layer.confirm('确定删除吗？', function (index) {
-              //执行 Ajax 后重载
-              $.ajax({
-                type: "post",
-                url: "/person/personalRemove",
-                data: "ids="+ids,
-                success: function (data) {
-                  if (data.success) {
-                    var node = zTreeObj.getNodeByParam("id", 0, null);
-                    zTreeObj.reAsyncChildNodes(node, "refresh");
-                    tableLoad(table);
-                  
-                  }      
-                  layer.msg(data.msg);
-                  
+          }
+          console.log(ids);
+          layer.confirm('确定删除吗？', function (index) {
+            //执行 Ajax 后重载
+            $.ajax({
+              type: "post",
+              url: "/person/personalRemove",
+              data: "ids=" + ids,
+              success: function (data) {
+                if (data.success) {
+                  var node = zTreeObj.getNodeByParam("id", 0, null);
+                  zTreeObj.reAsyncChildNodes(node, "refresh");
+                  tableLoad(table);
+
                 }
-              });
+                layer.msg(data.msg);
+
+              }
             });
-         }
+          });
+        }
       }
-     
+
       $('.layui-btn').on('click', function () {
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
@@ -379,13 +471,6 @@
 
 
     });
-
-   
-     
-
-
-    
-        
   </script>
 </body>
 

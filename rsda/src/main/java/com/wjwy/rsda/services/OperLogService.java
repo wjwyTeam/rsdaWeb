@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 18:17:36
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-20 16:15:00
+ * @LastEditTime : 2020-01-08 09:50:56
  */
 package com.wjwy.rsda.services;
 
@@ -37,6 +37,7 @@ public class OperLogService {
 	public PageInfo<OperLog> getPageList(String operName, Integer pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		Example example = new Example(OperLog.class);
+		example.setOrderByClause("oper_time DESC");
 		Criteria criteria = example.createCriteria();
 		criteria.andEqualTo("operName", operName);
 		List<OperLog> logs = operLoguserDao.selectByExample(example);

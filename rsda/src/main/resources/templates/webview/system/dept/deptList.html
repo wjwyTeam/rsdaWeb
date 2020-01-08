@@ -368,7 +368,8 @@
                       tbData[tr.next().index()] = tem2;
                       layer.msg(resultJSconsole.msg, {icon: 1})
                   }
-                  
+                  var node = zTreeObj.getNodeByParam("id", tem1.parentId, null);
+                  zTreeObj.reAsyncChildNodes(node, "refresh");
                 } 
             });
           }
@@ -404,6 +405,9 @@
                       tbData[tr.prev().index()] = tem4;
                       layer.msg(resultJSconsole.msg, {icon: 1})
                   }
+                   var node = zTreeObj.getNodeByParam("id", tem3.parentId, null);
+                   zTreeObj.reAsyncChildNodes(node, "refresh");
+                  
                 } 
             });
           }

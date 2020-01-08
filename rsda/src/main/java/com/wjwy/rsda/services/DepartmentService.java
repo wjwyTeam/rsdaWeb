@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-03 16:08:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2019-12-31 10:51:08
+ * @LastEditTime : 2020-01-08 09:48:16
  */
 package com.wjwy.rsda.services;
 
@@ -116,6 +116,7 @@ public class DepartmentService {
 	public List<Department> findList(Department department) {
         List<Department> dList = new ArrayList<Department>();
         Example example = new Example(Department.class);
+        example.setOrderByClause("create_time DESC");
         Criteria criteria = example.createCriteria();
         if (!StringUtil.isEmpty(department.getId())) {
             criteria.andEqualTo("id", department.getId());

@@ -56,7 +56,8 @@ public class DossierIntoService {
   */
  public PageInfo<DossierInto> findList(DossierInto dossierInto, Integer page, Integer limit) {
   PageHelper.startPage(page, limit);
-  Example example = new Example(DossierInto.class);
+    Example example = new Example(DossierInto.class);
+    example.setOrderByClause("create_time DESC");
   Criteria criteria = example.createCriteria();
   if (!StringUtil.isEmpty(dossierInto.getTransferId())) {
    criteria.andEqualTo("transferId", dossierInto.getTransferId());

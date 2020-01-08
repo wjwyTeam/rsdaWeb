@@ -338,7 +338,7 @@
                   contentType: "application/json; charset=UTF-8",
                   success: function (resultJSONObject) {
                     if (resultJSONObject.success) {
-                      var node = zTreeObj.getNodeByParam("id", field.parentId, null);
+                      var node = zTreeObj.getNodeByParam("id", field.deptId, null);
                       zTreeObj.reAsyncChildNodes(node, "refresh");
                       tableLoad(table);
                     } 

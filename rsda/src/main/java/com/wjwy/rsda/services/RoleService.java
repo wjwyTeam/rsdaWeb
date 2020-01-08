@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 15:33:35
+ * @LastEditTime : 2020-01-08 09:45:22
  */
 package com.wjwy.rsda.services;
 
@@ -69,6 +69,7 @@ public class RoleService {
     public PageInfo<Role> findList(String id, String name, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         Example example = new Example(Role.class);
+        example.setOrderByClause("create_time DESC");
         Criteria criteria = example.createCriteria();
         if (!StringUtil.isEmpty(id)) {
             criteria.andEqualTo("id", id);
@@ -226,6 +227,7 @@ public class RoleService {
 
 	public List<Role> getRoleList() {
         Example example = new Example(Role.class);
+        example.setOrderByClause("create_time DESC");
         Criteria criteria = example.createCriteria();
         criteria.andEqualTo("delFlag", false);
         criteria.andEqualTo("roleStatus", true);

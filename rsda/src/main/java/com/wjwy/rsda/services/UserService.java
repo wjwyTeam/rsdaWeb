@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-04 10:02:20
+ * @LastEditTime : 2020-01-08 09:42:28
  */
 package com.wjwy.rsda.services;
 
@@ -188,8 +188,10 @@ public class UserService {
 			String roleId) {
 
 		Example example = new Example(User.class);
-
+		// 注意：排序使用的是列名
+		example.setOrderByClause("create_time DESC");
 		Criteria criteria = example.createCriteria();
+
 		if (delFlag != null) {
 			criteria.andEqualTo("delFlag", delFlag);
 		}
@@ -349,14 +351,14 @@ public class UserService {
 
 		// 验证码校验。
 		if (ServletUtils.getRequest().getAttribute(ShiroConstants.CURRENT_CAPTCHA) != null) {
-			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
-					MessageUtils.message("user.jcaptcha.error")));
+			AsyncManager.me().execute(
+					AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.error")));
 			throw new CaptchaException();
 		}
 		// 用户名或密码为空 错误
 		if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(passWord)) {
-			AsyncManager.me().execute(
-					AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL, MessageUtils.message("not.null")));
+			AsyncManager.me()
+					.execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL, MessageUtils.message("not.null")));
 			throw new UserNotExistsException();
 		}
 		// 密码如果不在指定范围内 错误
@@ -382,14 +384,14 @@ public class UserService {
 		}
 
 		if (user == null) {
-			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
-					MessageUtils.message("user.not.exists")));
+			AsyncManager.me().execute(
+					AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL, MessageUtils.message("user.not.exists")));
 			throw new UserNotExistsException();
 		}
 
 		if (EnumEntitys.DELETED.getValue().equals(user.getDelFlag())) {
-			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
-					MessageUtils.message("user.password.delete")));
+			AsyncManager.me().execute(
+					AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL, MessageUtils.message("user.password.delete")));
 			throw new UserDeleteException();
 		}
 

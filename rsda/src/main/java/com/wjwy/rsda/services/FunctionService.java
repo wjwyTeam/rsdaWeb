@@ -100,6 +100,7 @@ public class FunctionService {
     public PageInfo<Function> findList(String id, String functionName,Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         Example example = new Example(Function.class);
+        example.setOrderByClause("create_time DESC");
         Criteria criteria = example.createCriteria();
         if (!StringUtil.isEmpty(id)) {
             criteria.andEqualTo("id", id);

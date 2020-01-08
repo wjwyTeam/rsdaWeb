@@ -55,6 +55,7 @@ public class DossierService{
  public PageInfo<Dossier> findList(Dossier dossier, Integer page, Integer limit) {
   PageHelper.startPage(page, limit);
   Example example = new Example(Dossier.class);
+  example.setOrderByClause("create_time DESC");
   Criteria criteria = example.createCriteria();
   if (!StringUtil.isEmpty(dossier.getDossierId())) {
    criteria.andEqualTo("dossierId", dossier.getDossierId());
