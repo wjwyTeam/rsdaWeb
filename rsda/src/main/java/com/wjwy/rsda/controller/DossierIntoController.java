@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-03 11:24:10
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-07 17:13:54
+ * @LastEditTime : 2020-01-08 09:27:49
  */
 package com.wjwy.rsda.controller;
 
@@ -15,6 +15,7 @@ import com.wjwy.rsda.entity.DossierInto;
 import com.wjwy.rsda.enums.Convert;
 import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.DossierIntoService;
+import com.wjwy.rsda.services.PersonalService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,8 @@ import tk.mybatis.mapper.util.StringUtil;
 public class DossierIntoController {
  @Autowired
  private DossierIntoService dossierIntoService;
-
+  @Autowired
+  private PersonalService personalService;
  public Logger logger = LoggerFactory.getLogger(DossierIntoController.class);
 
  // 跳转界面前缀
@@ -67,7 +69,8 @@ public class DossierIntoController {
   */
  @ApiOperation(value = "跳转档案转入管理表单主页", notes = "DossierIntoId - 档案转入编号")
  @GetMapping("/dossierIntoFormPage")
- public ModelAndView DossierIntoFormPage(String dossierIntoId, ModelAndView model) {
+  public ModelAndView DossierIntoFormPage(String dossierIntoId, ModelAndView model) {
+    model.addObject("personalList", personalService.getList());
   if (StringUtil.isNotEmpty(dossierIntoId)) {
    model.addObject("DossierIntoOne", dossierIntoService.getById(dossierIntoId));
   }

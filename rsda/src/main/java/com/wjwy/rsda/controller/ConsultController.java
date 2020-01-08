@@ -7,6 +7,7 @@ import com.wjwy.rsda.entity.Consult;
 import com.wjwy.rsda.enums.Convert;
 import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.ConsultService;
+import com.wjwy.rsda.services.PersonalService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,8 @@ import tk.mybatis.mapper.util.StringUtil;
 public class ConsultController {
   @Autowired
   private ConsultService consultService;
-
+  @Autowired
+  private PersonalService personalService;
   public Logger logger = LoggerFactory.getLogger(ConsultController.class);
 
   // 跳转界面前缀
@@ -60,6 +62,7 @@ public class ConsultController {
   @ApiOperation(value = "跳转查阅管理表单主页", notes = "ConsultId - 查阅编号")
   @GetMapping("/consultFormPage")
   public ModelAndView ConsultFormPage(String consultId, ModelAndView model) {
+      model.addObject("personalList", personalService.getList());
     if (StringUtil.isNotEmpty(consultId)) {
       model.addObject("consultOne", consultService.getById(consultId));
     }

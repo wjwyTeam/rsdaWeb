@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-16 09:05:48
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 08:28:18
+ * @LastEditTime : 2020-01-08 09:13:02
  */
 
 package com.wjwy.rsda.controller;
@@ -84,7 +84,7 @@ public class LoginController {
 	public ModelAndView Index(ModelAndView model) {
 		HttpSession session = request.getSession(false);// 获取库内session
 		if (session != null) {
-			User userobj = (User) session.getAttribute("userInfo");// 若获取到session内容，说明此端已经登录，跳转到index页面
+			Object userobj = session.getAttribute("userInfo");// 若获取到session内容，说明此端已经登录，跳转到index页面
 			if (userobj != null) {
 				model.addObject("user", userobj);// session 内用户信息提供给首页用以用户显示
 				model.setViewName("webview/index");// 设置返回界面为首页

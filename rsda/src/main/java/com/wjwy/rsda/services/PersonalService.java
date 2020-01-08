@@ -28,7 +28,17 @@ import tk.mybatis.mapper.util.StringUtil;
 @Transactional
 public class PersonalService {
  @Autowired
- private PersonalMapper personalMapper;
+   private PersonalMapper personalMapper;
+ 
+
+   /**
+    * 获取List对象
+    * 
+    * @return
+    */
+   public List<Personal> getList() {
+      return personalMapper.selectAll();
+   }
 
  /**
   * 通过ID获取对象

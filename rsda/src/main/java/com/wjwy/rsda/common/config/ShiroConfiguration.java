@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 08:24:21
+ * @LastEditTime : 2020-01-08 09:16:29
  */
 package com.wjwy.rsda.common.config;
 
@@ -34,7 +34,6 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
-import com.wjwy.rsda.common.tool.server.session.CaptchaValidateFilter;
 import com.wjwy.rsda.common.tool.server.session.KickoutSessionFilter;
 import com.wjwy.rsda.common.tool.server.session.LogoutFilter;
 import com.wjwy.rsda.common.tool.server.session.OnlineFilter;
@@ -223,14 +222,13 @@ public class ShiroConfiguration {
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
-        filterChainDefinitionMap.put("/login", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/login", "anon");
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
 
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         filters.put("online", onlineFilter());
         filters.put("onlineSession", onlineSessionFilter());
-        filters.put("captchaValidate", captchaValidateFilter());
         filters.put("kickout", kickoutSessionFilter());
         // 注销成功，则跳转到指定页面
         filters.put("logout", logoutFilter());
@@ -262,18 +260,6 @@ public class ShiroConfiguration {
         return onlineSessionFilter;
     }
 
-
-
-    /**
-     * 自定义验证码过滤器
-     */
-    @Bean
-    public CaptchaValidateFilter captchaValidateFilter() {
-        CaptchaValidateFilter captchaValidateFilter = new CaptchaValidateFilter();
-        captchaValidateFilter.setCaptchaEnabled(false);
-        captchaValidateFilter.setCaptchaType("math");
-        return captchaValidateFilter;
-    }
 
     /**
      * cookie 属性设置

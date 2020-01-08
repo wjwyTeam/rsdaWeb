@@ -7,6 +7,7 @@ import com.wjwy.rsda.entity.DossierOut;
 import com.wjwy.rsda.enums.Convert;
 import com.wjwy.rsda.enums.EnumEntitys;
 import com.wjwy.rsda.services.DossierOutService;
+import com.wjwy.rsda.services.PersonalService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,8 @@ import tk.mybatis.mapper.util.StringUtil;
 public class DossierOutController {
  @Autowired
  private DossierOutService dossierOutService;
-
+  @Autowired
+  private PersonalService personalService;
  public Logger logger = LoggerFactory.getLogger(DossierOutController.class);
 
  // 跳转界面前缀
@@ -67,7 +69,8 @@ public class DossierOutController {
   */
  @ApiOperation(value = "跳转档案转出管理表单主页", notes = "DossierOutId - 档案转出编号")
  @GetMapping("/dossierOutFormPage")
- public ModelAndView DossierOutFormPage(String dossierOutId, ModelAndView model) {
+  public ModelAndView DossierOutFormPage(String dossierOutId, ModelAndView model) {
+    model.addObject("personalList", personalService.getList());
   if (StringUtil.isNotEmpty(dossierOutId)) {
    model.addObject("dossierOutOne", dossierOutService.getById(dossierOutId));
   }
