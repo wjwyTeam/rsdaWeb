@@ -135,9 +135,6 @@
     //点击树节点筛选列表数据
     function zTreeOnClick(event, treeId, treeNode) {
       if (treeNode.id != '' || treeNode.id != 'undefined') {
-        console.log(event)
-        console.log(treeNode)
-        console.log(treeId)
         window.tableObj.reload('deptList', {
           where: {
             id: treeNode.id

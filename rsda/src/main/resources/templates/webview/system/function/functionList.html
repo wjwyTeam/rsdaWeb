@@ -3,8 +3,8 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 10:57:19
+ * @LastEditors  : zgr
+ * @LastEditTime : 2020-01-09 16:19:47
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -91,6 +91,10 @@
       color: #ffffff;
       background-color: #1ab394;
       border-radius: 10px;
+    }
+    #newAddFunction{
+      background:#f2f2f2 ;
+      color: #666666;
     }
   </style>
 </head>
@@ -214,7 +218,7 @@
             {
               align: 'center',
               toolbar: '#demoTreeTableBar1',
-              title: '操作  /  <button class="layui-btn layui-btn-warm layui-btn-radius  layui-btn-sm" data-type="addOne">   新增  </button>',
+              title: '操作&nbsp;  /<span id="newAddFunction" class="layui-btn  layui-btn-sm" data-type="addOne">新增</span>',
               width: 280
             }
 
@@ -249,20 +253,12 @@
           },
           style: 'margin-top:0;'
         });
-
       }
-
-
-
       setTimeout(function () {
         $('body').children('.page-loading').hide();
         $('body').removeClass('page-no-scroll');
       }, 100);
-
       renderTreeTable();
-      // treeTable.expandAll('#functionTable');
-
-
       treeTable.on('tool(functionTable)', function (obj) {
         var data = obj.data;
         if (obj.event === "del") {

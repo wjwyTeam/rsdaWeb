@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2019-12-31 15:15:41
+ * @LastEditTime : 2020-01-09 10:38:44
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -31,43 +31,21 @@
         <input
           type="text"
           class="layui-input"
-          id="startTime"
-          placeholder="开始时间"
-          name="beginTime"  style="display: inline-block;width: auto;"
-        />
-        <span>-</span>
-        <input
-          type="text"
-          class="layui-input"
-          id="endTime"
-          placeholder="结束时间"
-          name="endTime"  style="display: inline-block;width: auto;"
+          id="operTime"
+          placeholder="操作时间"
+          name="operTime"  style="display: inline-block;width: auto;"
         />
 
         <input
         type="text"
-        name="userName"
-        id="userName"
-        placeholder="请输入用户名"
+        name="operName"
+        id="operName"
+        placeholder="请输入操作人员"
         autocomplete="off"
         class="layui-input"
         style="display: inline-block;width: auto;"
       />
-
-      
-        <div
-          class="layui-form-item"
-          style="display: inline-block;width: auto;text-align: left;margin:0;"
-        >
-          <select name="userType">
-            <option value="" selected="true">请选择</option>
-            <option value="0">固定账号</option>
-            <option value="1">临时账号</option>
-            <option value="2">游客</option>
-          </select>
-        </div>
-
-        <button class="layui-btn" lay-submit lay-filter="user-front-search">
+        <button class="layui-btn" lay-submit lay-filter="operlog-search">
           搜索
         </button>
       </div>
@@ -156,7 +134,7 @@
                 align:"center"
               },
               {
-                field: "operTime",
+                field: "oper_time",
                 title: "操作时间",
                 sort: true,
                 align:"center",
@@ -207,15 +185,15 @@
         });
 
         laydate.render({
-          elem: "#endTime",
+          elem: "#operTime",
           type: "datetime"
         });
 
 
         //监听搜索
-        form.on("submit(user-front-search)", function (data) {
+        form.on("submit(operlog-search)", function (data) {
           var field = data.field;
-
+          console.log(field);
           //执行重载
           table.reload("logTable", {
             where: field

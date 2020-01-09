@@ -35,7 +35,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i style="color:red">* </i>用户名</label>
           <div class="layui-input-inline">
-            <input type="text" name="userName" lay-verify="required" autocomplete="off" placeholder="请输入用户名"
+            <input type="text"  name="userName" lay-verify="required|userNameEglish" autocomplete="off" placeholder="请输入用户名"
               class="layui-input" />
           </div>
         </div>
@@ -44,9 +44,9 @@
     <div class="layui-col-xs6">
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>密码</label>
+          <label class="layui-form-label">密码</label>
           <div class="layui-input-inline">
-            <input type="password" name="passWord" id="firstPassword" lay-verify="passfirst" required autocomplete="off"
+            <input type="password" name="passWord" id="firstPassword" lay-verify="passfirst"  autocomplete="off"
               placeholder="请输入密码" class="layui-input" />
           </div>
         </div>
@@ -67,9 +67,9 @@
     <div class="layui-col-xs6">
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>确认密码</label>
+          <label class="layui-form-label"> </i>确认密码</label>
           <div class="layui-input-inline">
-            <input type="password" name="repassword" th:value="${userOne.passWord}" required lay-verify="confirmPass"
+            <input type="password" name="repassword" th:value="${userOne.passWord}"  lay-verify="confirmPass"
               autocomplete="off" placeholder="再次输入密码" class="layui-input" />
           </div>
         </div>
@@ -78,7 +78,7 @@
     <div class="layui-col-xs6">
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label"><i style="color:red">* </i>绑定IP</label>
+          <label class="layui-form-label">绑定IP</label>
           <div class="layui-input-inline">
             <input type="text" name="userIp" id="UserIP" autocomplete="off" placeholder="" class="layui-input" />
           </div>
@@ -108,6 +108,7 @@
   <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
   <script th:inline="javascript">
     var userOne = [[${ userOne }]];
+    console.log(userOne);
     layui.config({
       base: '../../../layuiadmin/' //静态资源所在路径
     }).extend({
@@ -156,13 +157,14 @@
       });
 
       form.verify({
+        userNameEglish: [/[A-Za-z]$/ , '用户名必须为字母'],
         passfirst: [ /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/ , '密码必须6到12位字母和数字的组合'],
         confirmPass: function (value) {
           var firstPass = $("#firstPassword").val();
           if (value.trim() != firstPass) {
             return "两次输入的密码不一致"
           }
-        }
+        },
       });
     })
 
