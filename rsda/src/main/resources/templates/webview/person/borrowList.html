@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-06 14:54:29
+ * @LastEditTime : 2020-01-09 09:10:47
  -->
  <!-- 借阅申请 -->
  <!DOCTYPE html>
@@ -429,17 +429,17 @@ layui.config({
             //  选择查档人员的信息
             index = layer.open({
               type: 2
-              , title: "人员信息查询"
+              // , title: "人员信息查询"
               , method: 'get'
               , content: '/person/personalListPage'
               , maxmin: true
               , moveType: 1 //拖拽模式，0或者1
-              , area: ['1200px', '600px']  
+              , area: ['700px', '600px']  
               , skin: 'layer_bg'//layer_bg是自定义的css样式
               , shade: 0.2
               , fixed: true
               , shadeClose: true//开启遮罩关
-              , btn: ['确定', '取消']
+              // , btn: ['确定', '取消']
               , yes: function (index, layero) {
                   
                 var iframeWindow = window['layui-layer-iframe' + index]

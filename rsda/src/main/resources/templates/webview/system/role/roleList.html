@@ -158,10 +158,10 @@
             templet: function (d) {
               var state = ""
               if (d.roleStatus == true) {
-                state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat' checked='checked' name='status'  lay-skin='switch' lay-text='开启|关闭' >";
+                state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat' checked='checked' name='status'  lay-skin='switch' lay-text='启用|停用' >";
               }
               else {
-                state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat'  name='status'  lay-skin='switch' lay-text='开启|关闭' >";
+                state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='stat'  name='status'  lay-skin='switch' lay-text='启用|停用' >";
               }
               return state;
             }
@@ -384,10 +384,10 @@
         var sta;
         var x = data.elem.checked;//判断开关状态
         if (x == true) {
-          contexts = "打开";
+          contexts = "启用";
           sta = 1;
         } else {
-          contexts = "关闭";
+          contexts = "停用";
           sta = 0;
         }
         var obj = {
@@ -411,7 +411,7 @@
               dataType: "json",
               contentType: "application/json;charset-UTF-8",
               success: function (data) {
-                layer.msg(data.msg,
+                layer.msg(contexts,
                   // 提示的样式
                   { icon: 1, time: 2000, });
                 // 数据重载
