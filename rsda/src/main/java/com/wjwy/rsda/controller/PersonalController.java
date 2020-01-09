@@ -1,5 +1,6 @@
 package com.wjwy.rsda.controller;
 
+import javax.servlet.http.HttpServletRequest;
 
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
@@ -45,8 +46,10 @@ public class PersonalController {
  public Logger logger = LoggerFactory.getLogger(PersonalController.class);
 
  // 跳转界面前缀
- private String prefix = "/webview/person";
-
+  private String prefix = "/webview/person";
+ 
+  @Autowired
+  private HttpServletRequest request;
  /**
   * 跳转人员管理列表主页
   * 
@@ -55,7 +58,12 @@ public class PersonalController {
   */
  @GetMapping("/personalListPage")
  @ApiOperation(value = "跳转人员管理列表主页")
- public ModelAndView personalListPage(ModelAndView model) {
+  public ModelAndView personalListPage(ModelAndView model) {
+    model.addObject("xzStatus",true);
+    if (StringUtil.isNotEmpty(request.getParameter("xz"))) {
+      //选择控制List - 隐藏按钮
+      model.addObject("xzStatus", request.getParameter("xz"));
+  }
   model.setViewName(prefix + "/personalList");
   return model;
  }
