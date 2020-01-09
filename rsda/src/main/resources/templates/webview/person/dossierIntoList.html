@@ -41,7 +41,6 @@
         }
     </style>
 </head>
-
 <body> 
 
         <div class="hesder" style="width: 100%;height: 100%;height: 50px;">
@@ -60,20 +59,14 @@
                     </div>
                     <div  style="width: 88%;height: 100%;overflow: hidden;"> ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</div>    
               </div>
-              <div class="layui-upload">
-                  <div class="layui-upload-list">
-                    <table class="layui-table">
-                      <thead>
-                        <tr><th>姓名</th>
-                        <th>工作单位及职务</th>
-                        <th>政治面貌</th>
-                        <th>操作</th>
-                      </tr></thead>
-                      <tbody id="personList"></tbody>
-                    </table>
-                  </div>
-                  <button type="button" class="layui-btn layui-btn-xm" style="margin-left: 95%;" data-type="selectPerson">选择</button>
-                </div> 
+
+                <div class="personTable"> 
+                    <table id="inputTable" lay-filter="inputTable" class="layui-hide"></table>
+                    <script type="text/html" id="table-toolbar" th:inline="none">
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                    <button type="button" class="layui-btn layui-btn-xm" style="margin-left: 95%;" data-type="selectPerson">选择</button>
+               </div>
      
                <!--具体转入的信息 -->
                <form class="layui-form layui-form-pane" action="" style="padding: 0 20px;">
@@ -136,37 +129,31 @@
                     <!-- <div class="layui-form-item">
                       <button class="layui-btn" lay-submit="" lay-filter="demo2">跳转式提交</button>
                     </div> -->
-
+                    
+                      <!-- 附件表格 -->
+                      <div class="layui-upload">
+                          <div class="layui-upload-list">
+                            <table class="layui-table">
+                              <thead>
+                                <tr><th>文件名</th>
+                                <th>大小</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                              </tr></thead>
+                              <tbody id="demoList"></tbody>
+                            </table>
+                          </div>
+                          <button type="button" class="layui-btn layui-btn-xm" id="selectFile">选择文件</button> 
+                          <button type="button" class="layui-btn layui-btn-xm" id="startUpload">开始上传</button>
+                        </div> 
+            
+                    </div>
+                    <div class="layui-form-item layui-inline">
+                        <button type="button" lay-submit class="layui-btn layui-btn-xm" id="stagingsubmit" lay-filter="stagingsubmit"  style="margin-left: 30px;">暂存</button> 
+                        <button type="button" lay-submit class="layui-btn layui-btn-xm" id="submit" lay-filter="submit"  style="margin-left: 15px;">提交</button> 
+                    </div>
                </form>
-            <!-- 附件上传 -->
-            <!-- <div class="two" style="width: 98%;height: 50px;line-height: 50px;margin: 0 auto;font-size: 20px; font-size: 0.1px;color: #cccccc;">
-                <div style="width: 3%;"> ———</div>
-                <div style="width: 8%;color: #676a6c;font-size: 20px;">
-                    附件上传
-                </div>
-                <div  style="width: 88%;height: 100%;overflow: hidden;"> ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</div>    
-            </div> -->
-            <!-- 附件表格 -->
-            <div class="layui-upload">
-              <div class="layui-upload-list">
-                <table class="layui-table">
-                  <thead>
-                    <tr><th>文件名</th>
-                    <th>大小</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                  </tr></thead>
-                  <tbody id="demoList"></tbody>
-                </table>
-              </div>
-              <button type="button" class="layui-btn layui-btn-xm" id="selectFile">选择文件</button> 
-              <button type="button" class="layui-btn layui-btn-xm" id="startUpload">开始上传</button>
-            </div> 
-
-        </div>
-        <div style="position: absolute;bottom: 10px;">
-            <button type="button" class="layui-btn layui-btn-xm" style="margin-left: 30px;">借阅</button> 
-        </div>
+         </div>  
         
        
  
@@ -194,21 +181,24 @@ layui.use(["table", "form", "util", "laydate","upload"], function() {
                 // url: "/consult/consultListPage"+ $("#dictType").val(), //数据接口
                 cols: [ [
                          {
-                                 field: "dictLabel",
+                                 field: "personalId",
+                                 title: "id",
+                                 align: "center",
+                                 hide:true
+                         },
+                         {
+                                 field: "personalName",
                                  title: "姓名",
-                                 sort: true,
                                  align: "center",
                          },
                          {
-                                 field: "dictValue",
+                                 field: "workDuty",
                                  title: "工作单位及职务",
-                                 sort: true,
                                  align: "center",
                          },
-                         {
-                                 field: "dictSort",
+                         {        
+                                 field: "politicalOutlook",
                                  title: "政治面貌",
-                                 sort: true,
                                  align: "center",
                          },
                          {
@@ -285,25 +275,26 @@ layui.use(["table", "form", "util", "laydate","upload"], function() {
             }
       });
         
-        
 
-
-      //监听搜索
-      form.on("submit(dict-front-search)", function (data) {
-              var field = data.field;
-
-              //执行重载
-              table.reload("inputTable", {
-                      where: field
-              });
+      //监听暂存
+      form.on('submit(stagingsubmit)', function (data) {
+            console.log(data.field);
+            return false;
       });
+      // 提交查档信息
+      form.on('submit(submit)', function (data) {
+            console.log(data.field);
+            return false;
+      });
+
+
       //监听工具条删除
       table.on("tool(inputTable)", function (obj) {
               var data = obj.data;
               if (obj.event === 'delete') {
                       layer.confirm('真的删除行么', function (index) {
                                   layer.close(index);
-                                  $.post("/dict/dictDataRemove", { ids: data.dictCode }, function (resultJSONObject) {
+                                  $.post("/dossierInto/dossierIntoRemove", { ids: data.personalId }, function (resultJSONObject) {
                                           if (resultJSONObject.success) {
                                                   obj.del();
                                                   tableLoad(table);
@@ -378,7 +369,7 @@ layui.use(["table", "form", "util", "laydate","upload"], function() {
         });
 
 
-
+        tableReloadData = [];
 
       //批量删除事件
       var active = {
@@ -464,10 +455,18 @@ layui.use(["table", "form", "util", "laydate","upload"], function() {
           }
           ,selectPerson:function() {
               // 选择查档人员
+               // 选择查档对象
+               var ids = [];
+              $.each(tableReloadData,function(k,v){
+                 ids.push(v.personalId)
+              })
               layer.open({
               type: 2
               , title: "人员查询"
-              , content: '/consult/consultFormPage'
+              , method:"get"
+              , dataType: "json"
+              , contentType: "application/json;charset-UTF-8"
+              , content: '/consult/consultFormPage?ids='+ids
               , maxmin: true
               , moveType: 1 //拖拽模式，0或者1
               , area: ['700px', '600px']
@@ -483,22 +482,31 @@ layui.use(["table", "form", "util", "laydate","upload"], function() {
                 //监听提交
                 iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                   var field = data.field; //获取提交的字段
-                  //提交 Ajax 成功后，静态更新表格中的数据
-                  $.ajax({
-                    type: "post",
-                    url: "/dict/dictDataInsert",
-                    data: JSON.stringify(field),
-                    dataType: "json",
-                    contentType: "application/json;charset-UTF-8",
-                    success: function (resultJSONObject) {
-                      if (resultJSONObject.success) {
-                        tableLoad(table);
-                      }      
-                      layer.msg(resultJSONObject.msg);
-                    }, complete: function () {
-                      layer.close(index); //关闭弹层
-                    }
+                  var obj = JSON.parse(field.bootString);
+                    //执行重载
+                  $.each(obj,function(k,v){
+                      switch(v.politicalOutlook){
+                          case "0" : v.politicalOutlook = "中共党员"; break;
+                          case "1" : v.politicalOutlook = "中共预备党员" ;break;
+                          case "2" : v.politicalOutlook = "共青团员" ;break;
+                          case "3":  v.politicalOutlook = "民革会员" ;break;
+                          case "4":  v.politicalOutlook = "民盟盟员" ;break;
+                          case "5":  v.politicalOutlook = "民建会员" ;break;
+                          case "6":  v.politicalOutlook = "民建进会员" ;break;
+                          case "7":  v.politicalOutlook = "农工党党员" ;break;
+                          case "8":  v.politicalOutlook = "致公党党员" ;break;
+                          case "9":  v.politicalOutlook = "九三学社社员" ;break;
+                          case "10" : v.politicalOutlook = "台盟盟员" ;break;
+                          case "11" : v.politicalOutlook = "无党派民主人士" ;break;
+                          case "12" : v.politicalOutlook = "群众" ;break;
+                          case "13" : v.politicalOutlook = "其他" ;break;
+                      }
+                      tableReloadData = obj
+                  })
+                  table.reload("inputTable", {
+                      data:tableReloadData
                   });
+                  layer.close(index); //关闭弹层
                 });
                 submit.trigger('click');
               }

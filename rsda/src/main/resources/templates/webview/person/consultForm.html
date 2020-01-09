@@ -48,6 +48,8 @@
    <script src="/js/jquery-1.4.4.min.js" type="text/javascript" th:inline="none"></script>
    <script th:inline="javascript">
      var personalList = [[${ personalList }]];
+    //  已选中的人员ids列表
+     var ids = [[${ ids }]];
      var data = [];
      $.each(personalList, function (k, v) {
        var obj = {
@@ -60,24 +62,19 @@
        }
        data.push(obj);
      })
- 
+
      var checkedValue = []
-    //  $.each(data, function (k, v) {
-    //    $.each(roleUserList, function (k2, v2) {
-    //      if (v2 != null && v != null) {
-    //        if (v2.id == v.id) {
-    //          checkedValue.push(v.value);
-    //        }
-    //      } else if (v2 != null && v == null) {
-    //        checkedValue.push(v2.value);
-    //      }
- 
- 
-    //    })
-    //  })
- 
- 
- 
+     $.each(data, function (k, v) {
+       $.each(ids, function (k2, v2) {
+         if (v2 != null && v != null) {
+           if (v2 == v.personalId) {
+             checkedValue.push(v.value);
+           }
+         } else if (v2 != null && v == null) {
+           checkedValue.push(v2.value);
+         }
+       })
+     })
      layui.config({
        base: '../../../layuiadmin/' //静态资源所在路径
      }).extend({
@@ -99,6 +96,13 @@
        util.event('lay-demoTransferActive', {
          getData: function (othis) {
            var getData = transfer.getData('key123'); //获取右侧数据;
+          //  $.each(JSON.stringify(getData),function(k,v){
+          //    $.each(ids,function(k1,v2){
+          //       if(v.personalId == v2){
+          //          getData.pop(k)
+          //       }
+          //    })
+          //  })
            $("#bootRole").val(JSON.stringify(getData));
          }
        });
