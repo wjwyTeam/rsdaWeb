@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-07 17:11:38
+ * @LastEditTime : 2020-01-09 13:43:06
  */
 package com.wjwy.rsda.controller;
 
@@ -245,7 +245,7 @@ public class DepartmentController {
 	 * @return
 	 */
 	@PostMapping(value = "/moveUpOrDown")
-	@Log(title = "机构上移/下移", businessType = EnumEntitys.UPDATE)
+	@Log(title = "机构管理", businessType = EnumEntitys.UPDATE)
 	@ApiOperation(value = "机构上移/下移", notes = "参数:+" + "ids:机构选中移动的数组ID," + "id-移动参考数据行ID," + "option-true 上移/false 下移"
 			+ "注意:上/下移数组中按照列表顺序传递组织ID拼接 以移动参考行为标准 就近数组重组" + "/")
 	public ResponseWrapper moveUpOrDown(@RequestBody Department department) {

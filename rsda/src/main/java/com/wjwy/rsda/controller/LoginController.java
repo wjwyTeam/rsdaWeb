@@ -4,6 +4,8 @@ package com.wjwy.rsda.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.wjwy.rsda.entity.User;
+import com.wjwy.rsda.services.FunctionService;
+
 import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import javax.servlet.http.HttpSession;
@@ -35,6 +37,8 @@ public class LoginController {
 	public Logger logger = LoggerFactory.getLogger(LoginController.class);
 	@Autowired
 	private HttpServletRequest request;
+	@Autowired
+	private FunctionService functionService;
 
 	/**
 	 * 
@@ -85,6 +89,8 @@ public class LoginController {
 		User userobj = subject.getPrincipals().oneByType(User.class);
 			if (userobj != null) {
 				model.addObject("user", userobj);// session 内用户信息提供给首页用以用户显示
+				//展示菜单列表(首页)
+			 model.addObject("manuList", functionService.getList());
 				model.setViewName("webview/index");// 设置返回界面为首页
 				return model;
 			}

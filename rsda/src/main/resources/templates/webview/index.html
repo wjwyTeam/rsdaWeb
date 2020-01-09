@@ -2,42 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="utf-8">
-  <title>人事档案阅档端管理系统</title>
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <link rel="stylesheet" href="layuiadmin/layui/css/layui.css" media="all">
-  <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="layuiadmin/style/admin.css" media="all">
+  <th:block th:include="public :: header('人事档案阅档端管理系统')" />
+  <link href="/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+  <script th:src="@{/js/jquery-1.4.4.min.js}"></script>
   <script>
-    /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+    /^http(s*):\/\//.test(location.href) ||
+      alert("请先部署到 localhost 下再访问");
   </script>
   <style>
     .Toplog {
       width: 50px;
       height: 45px;
       float: left;
-      margin: 0px;
-      margin: 0px;
-      margin-left: 10px;
-      margin-top: 5px;
+      margin-top: 7px;
       margin-bottom: 5px;
       background-image: url(image/danghui.png);
       background-repeat: no-repeat;
-      background-size: 35px 35px;
+      background-size: 40px 35px;
     }
-    /* .layui-nav-tree .layui-this, .layui-nav-tree .layui-this>a, .layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a{
-        background-color: #1e9FFF !important;
-    } */
-     
+  i{    
+    position: absolute;
+    top: 72%;
+    left: 20px;
+    margin-top: -19px;
+  }
 
   </style>
 </head>
 
 <body class="layui-layout-body">
-
   <div id="LAY_app">
     <div class="layui-layout layui-layout-admin">
       <div class="layui-header">
@@ -69,28 +62,33 @@
               <i class="layui-icon layui-icon-theme"></i>
             </a>
           </li> -->
-        
+
           <li class="layui-nav-item" lay-unselect>
-            <a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img"> <cite
-                th:text=" ${user.userRealName}"></cite></a>
+            <a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img" />
+              <cite th:text=" ${user.userRealName}"></cite></a>
             <dl class="layui-nav-child">
-              <dd><a th:attr="lay-href=@{'/user/personInfo?userId='+${user.userId}}">基本资料</a></dd>
-              <dd><a lay-href="/webviews/set/user/password.html">修改密码</a></dd>
-              <hr>
-              <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+              <dd>
+                <a th:attr="lay-href=@{'/user/personInfo?userId='+${user.userId}}">基本资料</a>
+              </dd>
+              <dd>
+                <a lay-href="/webviews/set/user/password.html">修改密码</a>
+              </dd>
+              <hr />
+              <dd layadmin-event="logout" style="text-align: center;">
+                <a>退出</a>
+              </dd>
             </dl>
           </li>
-       
-  
+
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="fullscreen">
               <i class="layui-icon layui-icon-screen-full"></i>
             </a>
           </li>
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
-              <a href="javascript:;" layadmin-event="note">
-                <i class="layui-icon layui-icon-note"></i>
-              </a>
+            <a href="javascript:;" layadmin-event="note">
+              <i class="layui-icon layui-icon-note"></i>
+            </a>
           </li>
         </ul>
       </div>
@@ -107,188 +105,22 @@
 
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
             lay-filter="layadmin-system-side-menu">
-            
 
-            <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="管理首页" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite>管理首页</cite>
+            <!--ZHANGQI -->
+            <li data-name="set" class="layui-nav-item" th:each="m : ${manuList}">
+               <a th:attr="lay-tips=${m.functionName}" lay-direction="1" th:if="${m.pid eq '0'}">
+                <i th:attr="class=${m.icon} "></i>
+                <cite th:text="${m.functionName}"></cite>
               </a>
-
-            </li>
-            <!-- <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="我的待办" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite>我的待办</cite>
-              </a>
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">我的消息</a>
-                </dd>
-              </dl>
-
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">我的申请</a>
-                </dd>
-              </dl>
-
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">待办业务</a>
-                </dd>
-              </dl>
-
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">审批记录</a>
-                </dd>
-              </dl>
-            </li> -->
-
-            <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="档案管理" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite>档案管理</cite>
-              </a>
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/dossier/dossierListPage}">案卷管理</a>
+              <!-- 子菜单 -->   
+           
+              <dl class="layui-nav-child"  th:each="n:${manuList}">
+                <dd class="layui-nav-itemed" th:if="${n.pid ne '0' and m.id eq n.pid}">
+                  <a th:text="${n.functionName}" th:attr="lay-href=@{${n.url}}"></a>
                 </dd>
               </dl>
             </li>
 
-            <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="查借阅申请" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite>查借阅申请</cite>
-              </a>
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                    <a th:attr="lay-href=@{/consult/consultListPage}">查阅申请</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/borrow/borrowListPage}">借阅申请</a>
-                </dd>
-              </dl>
-            </li>
-
-            <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="档案转递" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite>档案转递</cite>
-              </a>
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/dossierInto/dossierIntoListPage}">档案转入</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/dossierOut/dossierOutListPage}">档案转出</a>
-                </dd>
-              </dl>
-            </li>
-
-            <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="散材料" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite>散材料</cite>
-              </a>
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/materialRp/materialRpListPage}">散材料上报</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/materialAc/materialAcListPage}">散材料归档列表</a>
-                </dd>
-              </dl>
-            </li>
-
-            <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="组织架构" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite>组织架构</cite>
-              </a>
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/dept/departmentInfo}">机构管理</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/person/personalListPage?xz=false}">人员管理</a>
-                </dd>
-              </dl>
-            </li>
-
-
-            <!-- <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="历史记录" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite>历史记录</cite>
-              </a>
-              <dl class="layui-nav-child">
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">查阅记录</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">打印记录</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">借阅记录</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;">散材料记录</a>
-                </dd>
-              </dl>
-            </li> -->
-
-      
-
-            <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="系统管理" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite>系统管理</cite>
-              </a>
-              <dl class="layui-nav-child">
-
-                <dd class="layui-nav-itemed">
-                    <a th:attr="lay-href=@{/function/functionList}" >菜单管理</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                    <a th:attr="lay-href=@{/dictType/dictTypeListPage}">字典管理</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/user/userInfo}">用户管理</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/role/roleInfo}">角色管理</a>
-                </dd>
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/log/operlogList}">日志浏览</a>
-                </dd>
-              </dl>
-            </li>
-
-            <!-- <li data-name="set" class="layui-nav-item">
-              <a href="javascript:;" lay-tips="系统监控" lay-direction="2">
-                <i class="layui-icon layui-icon-video"></i>
-                <cite>系统监控</cite>
-              </a>
-              <dl class="layui-nav-child">
-               
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/monitor/server}">服务监控</a>
-                </dd>
-
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/monitor/data}">数据监控</a>
-                </dd>
-
-                <dd class="layui-nav-itemed">
-                  <a th:attr="lay-href=@{/online/onlineList}">在线监控</a>
-                </dd>
-               
-               
-              </dl>
-            </li> -->
           </ul>
         </div>
       </div>
@@ -302,21 +134,27 @@
             <li class="layui-nav-item" lay-unselect>
               <a href="javascript:;"></a>
               <dl class="layui-nav-child layui-anim-fadein">
-                <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
-                <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
-                <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+                <dd layadmin-event="closeThisTabs">
+                  <a href="javascript:;">关闭当前标签页</a>
+                </dd>
+                <dd layadmin-event="closeOtherTabs">
+                  <a href="javascript:;">关闭其它标签页</a>
+                </dd>
+                <dd layadmin-event="closeAllTabs">
+                  <a href="javascript:;">关闭全部标签页</a>
+                </dd>
               </dl>
             </li>
           </ul>
         </div>
         <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
           <ul class="layui-tab-title" id="LAY_app_tabsheader">
-            <li lay-id="/webviews/home/console.html" lay-attr="/webviews/home/console.html" class="layui-this"><i
-                class="layui-icon layui-icon-home"></i></li>
+            <li lay-id="/webviews/home/console.html" lay-attr="/webviews/home/console.html" class="layui-this">
+              <i class="layui-icon layui-icon-home"></i>
+            </li>
           </ul>
         </div>
       </div>
-
 
       <!-- 主体内容 -->
       <div class="layui-body" id="LAY_app_body">
@@ -330,28 +168,20 @@
     </div>
   </div>
 
-  <script src="layuiadmin/layui/layui.js"></script>
   <script>
-    layui.config({
-      base: 'layuiadmin/' //静态资源所在路径
-    }).extend({
-      index: 'lib/index' //主入口模块
-    }).use('index');
+    layui
+      .config({
+        base: "layuiadmin/" //静态资源所在路径
+      })
+      .extend({
+        index: "lib/index" //主入口模块
+      })
+      .use(["index"],function(){
+          console.log($(".layui-nav-child:empty").empty())
+          $(".layui-nav-child:empty").html("123");
+
+      });
   </script>
-
-  <!-- 百度统计 -->
-  <!--   <script>
-  var _hmt = _hmt || [];
-  (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
-    var s = document.getElementsByTagName("script")[0]; 
-    s.parentNode.insertBefore(hm, s);
-  })();
-  </script> -->
-
-
-
 </body>
 
 </html>

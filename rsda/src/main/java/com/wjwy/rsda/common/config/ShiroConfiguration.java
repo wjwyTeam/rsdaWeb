@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 17:20:09
+ * @LastEditTime : 2020-01-09 16:08:02
  */
 package com.wjwy.rsda.common.config;
 
@@ -212,11 +212,11 @@ public class ShiroConfiguration {
         // permissions.put("/users/find", "perms[user:find]");
         // filterChainDefinitionMap.putAll(permissions);
         filterChainDefinitionMap.put("/layuiadmin/**", "anon");
-        filterChainDefinitionMap.put("/druid/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/log /**", "anon");
         filterChainDefinitionMap.put("/image/**", "anon");
         filterChainDefinitionMap.put("/webviews/**", "anon");
+        
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
