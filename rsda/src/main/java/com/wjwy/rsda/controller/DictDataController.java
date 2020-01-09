@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 18:01:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:27:17
+ * @LastEditTime : 2020-01-09 10:32:12
  */
 package com.wjwy.rsda.controller;
 
@@ -113,6 +113,10 @@ public class DictDataController extends BaseController {
       @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
       @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
     try {
+      if (StringUtil.isNotEmpty(request.getParameter("dictType"))) {
+        dictData.setDictType(request.getParameter("dictType"));
+      }
+     
       PageInfo<DictData> pageInfos = dictDataService.findList(dictData, page, limit);
       return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
           Integer.parseInt(String.valueOf(pageInfos.getTotal())));
