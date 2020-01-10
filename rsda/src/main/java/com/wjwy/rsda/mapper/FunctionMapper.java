@@ -5,6 +5,7 @@ import java.util.List;
 import com.wjwy.rsda.common.TkMapper;
 import com.wjwy.rsda.entity.Function;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /*
@@ -31,5 +32,27 @@ public  interface FunctionMapper extends TkMapper<Function> {
 			+ " left join sys_user_role ur on rm.role_id = ur.role_id "
 			+ "where ur.user_id = #{userId}" )
 	List<String> selectRolesByUserId(String userId);
-    
+
+
+	/**
+		* 
+		* @return
+	 */
+@Select("select * from sys_function where visible=true ORDER BY  forder ASC")
+	List<Function> findList();
+				
+
+	/**
+	 * 获取Frder策略方法
+	 * 
+	 * @param maxCodeById
+	 * @param string
+	 * @param i
+	 * @return
+	 */
+	@Select("SELECT  MAX(forder) FROM  sys_function  where forder  LIKE CONCAT(#{pstr}, '%')")
+	String getMaxCodeById(@Param("pstr") String pstr);
+
+	@Select("SELECT  IFNULL(MAX(length(forder)),1) FROM  sys_function  ")
+	int selectMax();
 }

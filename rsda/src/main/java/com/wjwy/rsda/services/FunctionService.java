@@ -33,7 +33,7 @@ import tk.mybatis.mapper.util.StringUtil;
  */
 @Service("functionService")
 @Transactional
-public class FunctionService {
+public class FunctionService extends BaseService{
 
     @Autowired
     private FunctionMapper functionMapper;
@@ -47,6 +47,10 @@ public class FunctionService {
     public int insertFunction(Function function) {
         function.setId(UUID.randomUUID().toString().toLowerCase());
         function.setCreateTime(new Date());
+        if (StringUtil.isEmpty(function.getPid())) {
+            function.setPid(String.valueOf(EnumEntitys.GJD.getValue()));
+        }
+        function.setForder(Integer.parseInt(this.getMaxCodeById(functionMapper.getMaxCodeById(""), "", functionMapper.selectMax())));
         return functionMapper.insert(function);
     }
 
@@ -136,7 +140,7 @@ public class FunctionService {
      * @return
      */
     public List<Function> getList() {
-        return functionMapper.selectAll();
+        return functionMapper.findList();
     }
     
     

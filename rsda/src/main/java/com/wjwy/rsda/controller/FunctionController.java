@@ -3,6 +3,8 @@ package com.wjwy.rsda.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
@@ -41,6 +43,9 @@ import tk.mybatis.mapper.util.StringUtil;
 public class FunctionController {
     @Autowired
     private FunctionService functionService;
+
+    @Autowired
+    private HttpServletRequest request;
     public Logger logger = LoggerFactory.getLogger(FunctionController.class);
     private String prefix = "/webview/system/function";
 
@@ -49,8 +54,14 @@ public class FunctionController {
      * @return String
      */
     @GetMapping("/functionList")
-    @ApiOperation(value = "菜单管理列表主页")
+    @ApiOperation(value = "菜单管理列表主页",notes = "接参：fStatus,传参:fxz  格式：true 显示 false 隐藏")
     public ModelAndView functionData(ModelAndView model) {
+
+        model.addObject("fStatus", true);
+        if (StringUtil.isNotEmpty(request.getParameter("fxz"))) {
+            // 选择控制List - 隐藏按钮
+            model.addObject("fStatus", request.getParameter("fxz"));
+        }
         model.setViewName(prefix + "/functionList");
         return model;
     }

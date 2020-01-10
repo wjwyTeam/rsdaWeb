@@ -4,11 +4,9 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-03 16:08:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 15:05:25
+ * @LastEditTime : 2020-01-10 09:09:10
  */
 package com.wjwy.rsda.services;
-
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,8 +17,6 @@ import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.entity.Department;
 import com.wjwy.rsda.mapper.DepartmentMapper;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,7 +28,7 @@ import tk.mybatis.mapper.util.StringUtil;
 
 @Service("departmentService")
 @Transactional
-public class DepartmentService {
+public class DepartmentService extends BaseService{
 
     /**
      * 
@@ -201,27 +197,7 @@ public class DepartmentService {
 	 * @return
 	 */
  
-	public String getMaxCodeById(String maxId,String preStr,int length) {
-		String serialNumberStr = "";
-		if (StringUtils.isEmpty(maxId)) {
-			maxId = "0000000000000";
-		}
-		int serialNumber = 0;
-		int maxSerialNumber = Integer.valueOf(maxId.substring(
-				maxId.length() - length, maxId.length()));
-		serialNumber = maxSerialNumber + 1;
-		
-		NumberFormat nf = NumberFormat.getInstance();
-        //设置是否使用分组
-        nf.setGroupingUsed(false);
-        //设置最大整数位数
-        nf.setMaximumIntegerDigits(length);
-        //设置最小整数位数   
-        nf.setMinimumIntegerDigits(length);
-		serialNumberStr = nf.format(serialNumber);
-		StringBuilder emailIdBuilder = new StringBuilder(preStr).append(serialNumberStr);
-		return emailIdBuilder.toString();
-    }
+
     /**
      * 上移数据
      * @param ids
