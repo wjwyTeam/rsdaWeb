@@ -4,13 +4,11 @@ package com.wjwy.rsda.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.wjwy.rsda.entity.User;
-import com.wjwy.rsda.services.FunctionService;
-
 import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.HttpStatus;
-import javax.servlet.http.HttpServletRequest;
+import com.wjwy.rsda.services.FunctionService;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import org.springframework.web.servlet.ModelAndView;
 import org.apache.shiro.authc.UsernamePasswordToken;
