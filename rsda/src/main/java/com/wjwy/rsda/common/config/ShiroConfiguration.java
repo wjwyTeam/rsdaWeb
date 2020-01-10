@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-10 17:50:41
+ * @LastEditTime : 2020-01-10 18:01:58
  */
 package com.wjwy.rsda.common.config;
 
@@ -239,7 +239,6 @@ public class ShiroConfiguration {
 
         // 所有请求需要认证
         filterChainDefinitionMap.put("/**", "user,kickout,online,onlineSession");
-        filterChainDefinitionMap.put("/swagger/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
 

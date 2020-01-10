@@ -148,9 +148,16 @@ public class LoginController {
 		}
 	}
 
-	@GetMapping("/")
+	@GetMapping("/*")
 	public ModelAndView login(ModelAndView model) {
 		model.setViewName("redirect:/login");// 设置返回界面为首页
+		return model;
+	}
+
+
+	@GetMapping("/swagger-ui/*")
+	public ModelAndView swagger(ModelAndView model) {
+		model.setViewName("redirect:/swagger-ui.html");// 设置接口文档页
 		return model;
 	}
 }
