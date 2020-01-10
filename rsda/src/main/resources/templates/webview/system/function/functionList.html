@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-10 09:14:46
+ * @LastEditTime : 2020-01-10 17:35:08
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -124,7 +124,12 @@
     </div>
   </div>
 
+  <div class="layui-form">
+    <input type="text" id="seleceIds" lay-filter="seleceIds" lay-submit  class="layui-hide">
+  </div>
   <input type="hidden" id="deptId">
+ 
+
   <script src="/layuiadmin/layui/layui.js" type="text/javascript" th:inline="none"></script>
   <script>
     layui.config({
@@ -138,20 +143,27 @@
         util = layui.util,
         treeTable = layui.treeTable;
 
-      console.log(table);
-
       // 渲染表格
       var renderTreeTable = function () {
-        treeTable.render({
-          elem: '#functionTable',
-          treeDefaultClose: true,
-          tree: {
-            iconIndex: 2,
-            arrowType: 'arrow2',
-          },
-          cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
-          id: "functionTable",
-          cols: [{
+        var cols ;
+        if([[${fStatus}]] == false){
+          idsSelect=[];
+          // 隐藏表头
+          cols =  [
+             {type:'numbers',width:"30"}
+            , {type: 'checkbox',width:"40",align:"center"}
+            ,{
+              field: 'functionName',
+              title: '菜单名称',
+              align:"left",
+              templet: function (d) {
+                return '<i class="' + d.icon + '"></i> <span class="nav-label">' + d.functionName +
+                  '</span>';
+              }
+            } 
+          ]
+        }else if([[${fStatus}]] == true){
+           cols =  [{
               type: "checkbox",
               align: 'center',
               LAY_CHECKED: false,
@@ -214,7 +226,6 @@
                 return util.toDateString(d.createTime);
               },
             },
-            // {templet: '#demoTreeTableState1', title: '状态',align: 'center'},
             {
               align: 'center',
               toolbar: '#demoTreeTableBar1',
@@ -222,7 +233,22 @@
               width: 280
             }
 
-          ],
+          ]
+
+        }
+
+
+
+        treeTable.render({
+          elem: '#functionTable',
+          treeDefaultClose: true,
+          tree: {
+            iconIndex: 2,
+            arrowType: 'arrow2',
+          },
+          cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
+          id: "functionTable",
+          cols:cols,
           reqData: function (data, callback) {
             setTimeout(function () { // 故意延迟一下
               // // var url = '/webviews/list.json';
@@ -423,7 +449,7 @@
         },
         batchdel: function () {
           console.log(treeTable);
-          //两种方式
+          // 选中的数据
           var checkStatus = treeTable.checkStatus('functionTable'),
             checkData = checkStatus.data; //得到选中的数据
           if (checkData.length === 0) {
@@ -459,7 +485,24 @@
           });
         }
       }
-
+      
+      var idsSelect = [];
+      treeTable.on('checkbox(functionTable)', function (obj) {
+          if(obj.checked == true){
+            if (obj.data!=null) {
+              idsSelect.push(obj.data.id);
+            }
+            
+          }else{
+            // 如果为false的话判断当前的行是够在之前已经选中过，选中过的话就拿出去
+             $.each(idsSelect,function(k,v){
+                 if(v== obj.data.id){
+                    idsSelect.pop(obj.data.id)
+                 }
+             })
+          }
+          $("#seleceIds").val(idsSelect);
+      })
       $('.layui-btn').on('click', function () {
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
@@ -467,6 +510,7 @@
 
 
     });
+
   </script>
 </body>
 

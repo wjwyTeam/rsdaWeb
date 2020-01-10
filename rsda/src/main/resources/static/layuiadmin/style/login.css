@@ -9,21 +9,19 @@ html,body{
 }
 
 .backgroudBg {
-
     position: relative;
-    left: 56%;
-    top: 32%;
-    width: 19%;
-    border: 1px solid red;
+    left: 57%;
+    top: 29%;
+    width: 16%;
     height: 38%;
     border-top: -8px solid;
     background-size: 989px 593px;
     background-repeat: no-repeat;
-    box-shadow: 15px 5px 15px 7px #217cc2;
+    /* box-shadow: 15px 5px 15px 7px #217cc2; */
     border-radius: 18px;
     border: 0.1px solid #fff;
     z-index: 9;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255,0.8);
 }
 
 
@@ -69,6 +67,10 @@ h1 {
   font-size: 35px;
 }
 
+/* .layui-input{
+  width: 84%;
+} */
+
 .layui-layout-body {
   overflow: auto
 }
@@ -87,17 +89,19 @@ h1 {
   margin-top: 10%;
 
 }
-
+.layui-timeline-item:before, hr {
+  background-color: #cccccc;
+}
 .layadmin-user-login-main {
   position: relative;
-  width: 360px;
+  width: 300px;
   margin: 0 auto;
   box-sizing: border-box;
 
 }
 
 .layadmin-user-login-box {
-  padding: 20px
+  padding:0px 20px
 }
 
 .layadmin-user-login-header {
@@ -158,8 +162,21 @@ h1 {
 .layadmin-user-login-other .layui-icon {
   position: relative;
   top: 2px;
-  font-size: 26px
+  font-size: 26px;
 }
+.layadmin-user-login-icon {
+  /* position: absolute;
+  left: 1px;
+  top: 1px;
+  width: 38px;
+  line-height: 36px;
+  text-align: center;
+  color: #000; */
+  color: #3e3d3d;
+}
+
+
+
 
 .layadmin-user-login-other a:hover {
   opacity: .8
@@ -196,7 +213,7 @@ h1 {
 
 .layadmin-user-login-main[bgimg] {
   background-color: #fff;
-  box-shadow: 0 0 5px rgba(0,0,0,.05)
+  box-shadow: 0 0 5px rgba(0,0,0,.5)
 }
 
 .ladmin-user-login-theme {

@@ -91,7 +91,7 @@
           </div>
 
           <button class="layui-btn" lay-submit lay-filter="user-front-search"> 搜索</button>
-
+          
         </div>
       </div>
       <table id="userList" lay-filter="userList" class="layui-hide"> </table>
@@ -115,6 +115,7 @@
                   {{# } }}
 
       </script>
+      <!-- <input type="text" id="seleceIds" class="layui-hide"> -->
     </div>
   </div>
 
@@ -127,7 +128,7 @@
 
 
 
-
+    
     layui.config({
       base: '/layuiadmin/' //静态资源所在路径
     }).extend({
@@ -262,37 +263,28 @@
             }
           });
         } else if (obj.event === "impower") {
-
           // 授权用户对话框
           layer.open({
             type: 2,
-            title: '用户授权',
+            title: '',
             maxmin: true,
-            area: ['927px', '654px'],
+            area: ['450px', '504px'],
             btn: ['确定', '取消'],
             fixed: true,
             shadeClose: false,
             shade: 0.2,
             moveType: 1,  //拖拽模式，0或者1 
-            content: '/function/functionList?id=' + data.id + "&type=false",
+            content: '/function/functionList?id=' + data.id + "&fxz=false",
             yes: function (index, layero) {
               var iframeWindow = window['layui-layer-iframe' + index]
-                , submitID = 'roleSubmitTwo'
+                , submitID = 'seleceIds'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
-              //监听提交
-              iframeWindow.layui.form.on('submit(' + submitID + ')', function (dataLog) {
-                var field = dataLog.field;
-                if (field.roleStatus == "true") {
-                  field.roleStatus = true;
-                } else {
-                  field.roleStatus = false;
-                }
-                //获取提交的字段
-                //提交 Ajax 成功后，静态更新表格中的数据
+                var ids = [layero.find('iframe').contents().find('#seleceIds').val()];
+                console.log(ids);
+                //提交授权的数据的对应id;
                 $.ajax({
-                  type: "post",
-                  url: "/role/updateRole",
-                  data: JSON.stringify(field),
+                  type: "get",
+                  url: "/role/roleSelFunction?id="+data.id+"&ids="+ids,
                   dataType: "json",
                   contentType: "application/json;charset-UTF-8",
                   success: function (resultJSONObject) {
@@ -303,8 +295,7 @@
                   }
                 });
                 layer.close(index); //关闭弹层
-              });
-              submit.trigger('click');
+                submit.trigger('click');
             }
           });
         } else if (obj.event === "assignRoles") {
@@ -437,7 +428,7 @@
         , add: function () {
           layer.open({
             type: 2
-            , title: '添加用户'
+            , title: '添加角色'
             , content: '/role/roleUpdateInfo'
             , maxmin: true
             , area: ['700px', '550px']
