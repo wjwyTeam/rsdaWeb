@@ -5,21 +5,18 @@ import java.util.Date;
 
 import com.wjwy.rsda.common.tool.factory.AsyncFactory;
 import com.wjwy.rsda.common.tool.factory.AsyncManager;
-
+import com.github.pagehelper.util.StringUtil;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.ShiroService;
-
-import org.apache.shiro.cache.Cache;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * 针对自定义的ShiroSession的db操作
  */
-@Service("onlineSessionDAO")
+
 public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
     /**
      * 同步session到数据库的周期 单位为毫秒（默认1分钟）
@@ -71,7 +68,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
                 needSync = false;
             }
             // isGuest = true 访客
-            boolean isGuest = onlineSession.getUserId() == null || onlineSession.getUserId() == 0L;
+            boolean isGuest = onlineSession.getUserId() == null || StringUtil.isEmpty(onlineSession.getUserId());
 
             // session 数据变更了 同步
             if (isGuest == false && onlineSession.isAttributeChanged()) {
@@ -100,30 +97,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
         if (null == onlineSession) {
             return;
         }
-        onlineSession.setStatus(EnumEntitys.OFFLINE);
+        onlineSession.setStatus(EnumEntitys.OFFLINE.getDesc());
         shiroService.deleteSession(onlineSession);
     }
-
-
-   
-
-    protected Session getCachedSession(Serializable sessionId) {
-        Session cached = null;
-        if (sessionId != null) {
-            Cache<Serializable, Session> cache = getActiveSessionsCacheLazy();
-            if (cache != null) {
-                cached = getCachedSession(sessionId, cache);
-            }
-        }
-        return cached;
-    }
-
-    private Cache<Serializable, Session> getActiveSessionsCacheLazy() {
-        if (this.activeSessions == null) {
-            this.activeSessions = createActiveSessionsCache();
-        }
-        return activeSessions;
-    }
-    
-    private Cache<Serializable, Session> activeSessions;
 }

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 17:50:35
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 14:26:33
+ * @LastEditTime : 2020-01-10 12:48:13
  */
 package com.wjwy.rsda.controller;
 
@@ -104,7 +104,7 @@ public class OnlineController {
         }
         onlineSession.setStatus(EnumEntitys.OFFLINE);
         onlineSessionDAO.update(onlineSession);
-        online.setStatus(EnumEntitys.OFFLINE);
+        online.setStatus(EnumEntitys.OFFLINE.getDesc());
         userOnlineService.saveOnline(online);
         return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", null, null, null);
       }

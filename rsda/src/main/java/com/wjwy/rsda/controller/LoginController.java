@@ -3,15 +3,27 @@ package com.wjwy.rsda.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.wjwy.rsda.entity.Online;
 import com.wjwy.rsda.entity.User;
 import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.HttpStatus;
 import com.wjwy.rsda.services.FunctionService;
+import com.wjwy.rsda.services.OnlineService;
+
+import java.util.Collection;
+
+import com.wjwy.rsda.common.tool.session.OnlineSession;
+import com.wjwy.rsda.common.tool.session.OnlineSessionDAO;
 import com.wjwy.rsda.common.util.ResponseWrapper;
+import com.wjwy.rsda.common.util.ShiroUtils;
+
 import org.springframework.web.servlet.ModelAndView;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +46,11 @@ public class LoginController {
 
 	@Autowired
 	private FunctionService functionService;
-
+	@Autowired
+	private OnlineService userOnlineService;
+	
+	@Autowired
+	private OnlineSessionDAO onlineSessionDAO;
 	/**
 	 * 
 	 * @Title: Login
@@ -46,17 +62,17 @@ public class LoginController {
 	public ModelAndView Login(ModelAndView model) {
 
 		Subject subject = SecurityUtils.getSubject();
-		if (subject.getPrincipal()!=null) {
+		if (subject.getPrincipal() != null) {
 			User userobj = subject.getPrincipals().oneByType(User.class);
 			if (userobj != null) {
 				model.setViewName("redirect:/index");// 设置返回界面为首页
 				return model;
+
 			}
 		}
 		model.setViewName("login");
 		return model;
 	}
-
 
 	/**
 	 * @author zgr @Title: Logout
@@ -65,7 +81,7 @@ public class LoginController {
 	 */
 	@GetMapping("/logout")
 	public ModelAndView Logout(ModelAndView model) {
-		SecurityUtils.getSubject().logout();
+		ShiroUtils.clearCachedAuthorizationInfo();
 		model.setViewName("login");// 返回到登录界面
 		return model;
 	}
@@ -105,6 +121,27 @@ public class LoginController {
 			UsernamePasswordToken token = new UsernamePasswordToken(loginName, passwordMd5);
 			Subject subject = SecurityUtils.getSubject();
 			subject.login(token);
+
+				Online on = userOnlineService.getOnline(loginName);
+				if (on != null) {
+					
+					// 以下为只允许同一账户单个登录
+					Collection<Session> sessions = onlineSessionDAO.getActiveSessions();
+					if (sessions.size() > 0) {
+						for (Session session : sessions) {
+							OnlineSession onlineSession = (OnlineSession) session;
+							// 获得session中已经登录用户的名字
+							if (null != onlineSession.getLoginName()){
+								if (loginName.equals(onlineSession.getLoginName())) { // 这里的username也就是当前登录的username
+									session.setTimeout(0); // 这里就把session清除，
+								userOnlineService.deleteOnlineById(on.getSessionId());
+									logger.info("[ IP:"+onlineSession.getHost() +"《=================》用户" + onlineSession.getLoginName() + "] 已下线...");
+								}
+							}
+						}
+					}
+				}
+
 			return ResponseWrapper.success(HttpStatus.OK.value(), "登陆中,请稍候...", null, "/index", null);
 		} catch (AuthenticationException e) {
 			return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null, "/login", null);

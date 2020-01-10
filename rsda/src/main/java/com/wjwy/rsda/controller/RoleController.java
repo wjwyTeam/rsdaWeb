@@ -239,10 +239,7 @@ public class RoleController {
     public ResponseWrapper getFunction(String id) {
 
         try {
-            boolean flag = roleService.getFunction(id);
-            if (!flag) {
-                return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "查询失败", null, null, null);
-            }
+            roleService.getFunction(id);   
             return ResponseWrapper.success(HttpStatus.OK.value(), "查询成功", null, null, null);
         } catch (Exception e) {
             e.printStackTrace();

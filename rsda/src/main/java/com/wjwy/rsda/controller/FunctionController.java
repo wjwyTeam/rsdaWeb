@@ -11,6 +11,7 @@ import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.FunctionService;
+import com.wjwy.rsda.services.RoleService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,8 @@ import tk.mybatis.mapper.util.StringUtil;
 public class FunctionController {
     @Autowired
     private FunctionService functionService;
-
+    @Autowired
+    private RoleService roleService;
     @Autowired
     private HttpServletRequest request;
     public Logger logger = LoggerFactory.getLogger(FunctionController.class);
@@ -54,12 +56,13 @@ public class FunctionController {
      * @return String
      */
     @GetMapping("/functionList")
-    @ApiOperation(value = "菜单管理列表主页",notes = "接参：fStatus,传参:fxz  格式：true 显示 false 隐藏")
+    @ApiOperation(value = "菜单管理列表主页",notes = "接参：fStatus,传参:fxz  格式：true 显示 false 隐藏 /roleFunctionList 遍历  取值：functionId")
     public ModelAndView functionData(ModelAndView model) {
 
         model.addObject("fStatus", true);
         if (StringUtil.isNotEmpty(request.getParameter("fxz"))) {
             // 选择控制List - 隐藏按钮
+            model.addObject("roleFunctionList", roleService.getFunction(request.getParameter("roleId")));
             model.addObject("fStatus", request.getParameter("fxz"));
         }
         model.setViewName(prefix + "/functionList");

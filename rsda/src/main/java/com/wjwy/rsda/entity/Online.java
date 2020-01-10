@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:35:18
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 14:05:39
+ * @LastEditTime : 2020-01-10 12:48:35
  */
 package com.wjwy.rsda.entity;
 
@@ -12,7 +12,6 @@ import java.util.Date;
 
 import javax.persistence.Table;
 
-import com.wjwy.rsda.common.enums.EnumEntitys;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -59,6 +58,6 @@ public class Online {
     private Long expireTime;
 
     /** 在线状态 */
-    private EnumEntitys status = EnumEntitys.ONLINE;
+    private Object status;
 
 }

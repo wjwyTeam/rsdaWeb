@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:27:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 15:02:29
+ * @LastEditTime : 2020-01-10 12:46:01
  */
 package com.wjwy.rsda.common.enums;
 import io.swagger.annotations.ApiModel;
@@ -12,7 +12,7 @@ import io.swagger.annotations.ApiModel;
 @ApiModel("枚举>大全")
 public enum EnumEntitys {
 
-    ONLINE("在线"), OFFLINE("离线"),
+    ONLINE("ONLINE","在线"), OFFLINE("OFFLINE","离线"),
 
     /**
      * 成功
@@ -116,7 +116,7 @@ public enum EnumEntitys {
         this.desc = desc;
     }
 
-    private EnumEntitys(Object value) {
+    private EnumEntitys(String value) {
         this.value = value;
     }
 

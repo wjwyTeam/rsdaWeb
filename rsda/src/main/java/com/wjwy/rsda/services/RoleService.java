@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 09:45:22
+ * @LastEditTime : 2020-01-10 17:31:42
  */
 package com.wjwy.rsda.services;
 
@@ -172,39 +172,14 @@ public class RoleService {
 
     /**
      * 根据角色查询功能
+     * 
+     * @return
      */
-    public boolean getFunction(String id) {
-
-        // List<Role> roles = roleMapper.selectByExample(example);
-        // if (roles == null) {
-        // return false;
-        // }
-
-        // List<Role> roleNew = new ArrayList<Role>();
-        // for (Role role : roles) {
-
-        // Example exampleRoleFunction = new Example(RoleFunction.class);
-        // Criteria criteriaRoleFunction = exampleRoleFunction.createCriteria();
-        // criteriaRoleFunction.andEqualTo("roleId", role.getId());
-        // List<RoleFunction> roleFunctionNew =
-        // roleFunctionMapper.selectByExample(exampleRoleFunction);
-
-        // List<Function> functionNewList = new ArrayList<Function>();
-        // if (!roleFunctionNew.isEmpty()) {
-        // for (RoleFunction roleFunction : roleFunctionNew) {
-        // Function function = new Function();
-        // Example exampleFunction = new Example(Function.class);
-        // Criteria criteriaFunction = exampleFunction.createCriteria();
-        // criteriaFunction.andEqualTo("functionId", roleFunction.getFunctionId());
-        // function = functionMapper.selectOneByExample(exampleFunction);
-        // functionNewList.add(function);
-        // }
-        // role.setFunctions(functionNewList);
-        // roleNew.add(role);
-        // }
-
-        // }
-        return true;
+    public List<RoleFunction> getFunction(String id) {
+        Example exampleRoleFunction = new Example(RoleFunction.class);
+        Criteria criteriaRoleFunction = exampleRoleFunction.createCriteria();
+        criteriaRoleFunction.andEqualTo("roleId", id);
+        return roleFunctionMapper.selectByExample(exampleRoleFunction);
     }
 
     /**
@@ -276,4 +251,7 @@ public class RoleService {
         }
         return permsSet;
     }
+
+	public void getFunctionIds(String parameter) {
+	}
 }

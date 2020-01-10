@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-09 16:08:02
+ * @LastEditTime : 2020-01-10 16:53:20
  */
 package com.wjwy.rsda.common.config;
 
@@ -18,6 +18,7 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.mgt.SecurityManager;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,23 +44,28 @@ import com.wjwy.rsda.common.tool.session.OnlineWebSessionManager;
 import com.wjwy.rsda.common.tool.session.SpringSessionValidationScheduler;
 import com.wjwy.rsda.common.util.SpringUtils;
 import com.wjwy.rsda.common.util.StringUtils;
+import com.wjwy.rsda.services.OnlineService;
 
 @Configuration
 public class ShiroConfiguration {
 
     @Value("10")
     private int tomcatTimeout;
-
+    
+    @Autowired
+    private OnlineService onlineService;
     @Bean
     public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
 
+  
     /**
      * 缓存管理器 使用Ehcache实现
      */
     @Bean
     public EhCacheManager getEhCacheManager() {
+        onlineService.clear();
         net.sf.ehcache.CacheManager cacheManager = net.sf.ehcache.CacheManager.getCacheManager("wjwy");
         EhCacheManager em = new EhCacheManager();
         if (StringUtils.isNull(cacheManager)) {
@@ -76,7 +81,7 @@ public class ShiroConfiguration {
      * 返回配置文件流 避免ehcache配置文件一直被占用，无法完全销毁项目重新部署
      */
     protected InputStream getCacheManagerConfigFileInputStream() {
-        String configFile = "classpath:ehcache/ehcache-shiro.xml";
+        String configFile = "classpath:ehcache/ehcache.xml";
         InputStream inputStream = null;
         try {
             inputStream = ResourceUtils.getInputStreamForPath(configFile);
@@ -288,7 +293,7 @@ public class ShiroConfiguration {
         kickoutSessionFilter.setCacheManager(getEhCacheManager());
         kickoutSessionFilter.setSessionManager(sessionManager());
         // 同一个用户最大的会话数，默认-1无限制；比如2的意思是同一个用户允许最多同时两个人登录
-        kickoutSessionFilter.setMaxSession(-1);
+        kickoutSessionFilter.setMaxSession(1);
         // 是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；踢出顺序
         kickoutSessionFilter.setKickoutAfter(false);
         // 被踢出后重定向到的地址；
@@ -314,4 +319,7 @@ public class ShiroConfiguration {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
+
+
+ 
 }

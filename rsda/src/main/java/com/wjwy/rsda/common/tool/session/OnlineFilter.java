@@ -4,24 +4,21 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-31 09:37:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 17:16:51
+ * @LastEditTime : 2020-01-10 12:51:35
  */
 package com.wjwy.rsda.common.tool.session;
 
 import java.io.IOException;
+import com.wjwy.rsda.entity.User;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-
-import com.wjwy.rsda.common.util.ShiroUtils;
-import com.wjwy.rsda.entity.User;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.web.util.WebUtils;
+import com.github.pagehelper.util.StringUtil;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.common.enums.ShiroConstants;
-
-import org.apache.shiro.session.Session;
-import org.apache.shiro.session.UnknownSessionException;
-import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
-import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -36,6 +33,13 @@ public class OnlineFilter extends AccessControlFilter {
     @Autowired
     private OnlineSessionDAO onlineSessionDAO;
 
+    public OnlineFilter(OnlineSessionDAO onlineSessionDAO) {
+        this.onlineSessionDAO = onlineSessionDAO;
+    }
+
+    public OnlineFilter() {
+     
+    }
     /**
      * 表示是否允许访问；mappedValue就是[urls]配置中拦截器参数部分，如果允许访问返回true，否则false；
      */
@@ -46,32 +50,29 @@ public class OnlineFilter extends AccessControlFilter {
         if (subject == null || subject.getSession() == null) {
             return true;
         }
-
-            try {
-                Session session = onlineSessionDAO.readSession(subject.getSession().getId());
-
+             Session session = onlineSessionDAO.readSession(subject.getSession().getId());
             if (session != null && session instanceof OnlineSession) {
                 OnlineSession onlineSession = (OnlineSession) session;
                 request.setAttribute(ShiroConstants.ONLINE_SESSION, onlineSession);
                 // 把user对象设置进去
-                boolean isGuest = onlineSession.getUserId() == null || onlineSession.getUserId() == 0L;
+                boolean isGuest = onlineSession.getUserId() == null || StringUtil.isEmpty(onlineSession.getUserId());
                 if (isGuest == true) {
-                    User user = ShiroUtils.getUser();
-                    if (user != null) {
-                        onlineSession.setUserId(Long.valueOf(user.getUserId()));
-                        onlineSession.setLoginName(user.getUserName());
-
-                        onlineSession.setDeptName(user.getDeptId());
-
+                    if (subject.getPrincipal() != null) {
+                        User user = subject.getPrincipals().oneByType(User.class);
+                        if (user != null) {
+                            onlineSession.setUserId(user.getUserId());
+                            onlineSession.setLoginName(user.getUserName());
+                            onlineSession.setDeptName(user.getDeptId());
+                            onlineSession.setAvatar(user.getBase64Photo());
+                            onlineSession.setStatus(EnumEntitys.ONLINE.getDesc());
+                            onlineSession.markAttributeChanged();
+                        }
                     }
                 }
 
-                if (onlineSession.getStatus() == EnumEntitys.OFFLINE) {
+                if (onlineSession.getStatus() == EnumEntitys.OFFLINE.getDesc()) {
                     return false;
                 }
-            }
-            } catch (UnknownSessionException e) {
-               
             }
         return true;
     }

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 16:00:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 14:11:17
+ * @LastEditTime : 2020-01-10 14:24:23
  */
 package com.wjwy.rsda.services;
 
@@ -55,7 +55,10 @@ public class OnlineService {
      */
     public void deleteOnlineById(String sessionId) {
         if (selectOnlineById(sessionId) != null) {
-            userOnlineDao.deleteByPrimaryKey(sessionId);
+            Example example = new Example(Online.class);
+            Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("sessionId", sessionId);
+            userOnlineDao.deleteByExample(example);
         }
 
     }
@@ -79,7 +82,16 @@ public class OnlineService {
      * @param online 会话信息
      */
     public void saveOnline(Online online) {
-        userOnlineDao.insert(online);
+        if (StringUtil.isNotEmpty(online.getSessionId())) {
+            Example example = new Example(Online.class);
+            Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("sessionId", online.getSessionId());
+            Online onlineL = userOnlineDao.selectOneByExample(example);
+            if (onlineL==null) {
+                userOnlineDao.insert(online);
+            }
+        }
+      
     }
 
     /**
@@ -127,4 +139,25 @@ public class OnlineService {
         return userOnlineDao.selectOnlineByExpired(lastAccessTime);
 
     }
+
+
+    /**
+     * 
+     * @param userName
+     */
+    public Online getOnline(String userName) {
+        Example example = new Example(Online.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("loginName", userName);
+        return userOnlineDao.selectOneByExample(example);
+
+    }
+
+    
+    /**
+     * 清空用户缓存
+     */
+    public void clear() {
+        userOnlineDao.clear();
+	}
 }

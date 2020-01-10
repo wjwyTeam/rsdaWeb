@@ -4,11 +4,9 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:47:31
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 14:22:42
+ * @LastEditTime : 2020-01-10 12:47:33
  */
 package com.wjwy.rsda.common.tool.session;
-
-import com.wjwy.rsda.common.enums.EnumEntitys;
 
 import org.apache.shiro.session.mgt.SimpleSession;
 
@@ -33,7 +31,7 @@ public class OnlineSession extends SimpleSession {
     private static final long serialVersionUID = 1L;
 
     /** 用户ID */
-    private Long userId;
+    private String userId;
 
     /** 用户名称 */
     private String loginName;
@@ -54,7 +52,7 @@ public class OnlineSession extends SimpleSession {
     private String os;
 
     /** 在线状态 */
-    private EnumEntitys status = EnumEntitys.ONLINE;
+    private Object status;
 
     /** 属性是否改变 优化session数据同步 */
     private transient boolean attributeChanged = false;
