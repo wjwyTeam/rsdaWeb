@@ -63,7 +63,7 @@ public class PersonalController {
     if (StringUtil.isNotEmpty(request.getParameter("xz"))) {
       //选择控制List - 隐藏按钮
       model.addObject("xzStatus", request.getParameter("xz"));
-  }
+    }
   model.setViewName(prefix + "/personalList");
   return model;
  }

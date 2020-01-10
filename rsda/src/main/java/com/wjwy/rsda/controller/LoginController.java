@@ -8,9 +8,7 @@ import com.wjwy.rsda.services.FunctionService;
 
 import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
-import javax.servlet.http.HttpSession;
 import org.apache.shiro.subject.Subject;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import javax.servlet.http.HttpServletRequest;
 import com.wjwy.rsda.common.util.ResponseWrapper;
@@ -35,8 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController {
 	public Logger logger = LoggerFactory.getLogger(LoginController.class);
-	@Autowired
-	private HttpServletRequest request;
+
 	@Autowired
 	private FunctionService functionService;
 
@@ -46,11 +43,13 @@ public class LoginController {
 	 * @Description: TODO方法描述:(登录页面)
 	 * @return string 返回类型--文件名login页面
 	 */
+
 	@GetMapping("/login")
 	public ModelAndView Login(ModelAndView model) {
-		HttpSession session = request.getSession(false);// 获取库内session
-		if (session != null) {// 判断session区分是否登录
-			Object userobj = session.getAttribute("userInfo");// 若获取到session内容，说明此端已经登录，跳转到index页面
+
+		Subject subject = SecurityUtils.getSubject();
+		if (subject.getPrincipal()!=null) {
+			User userobj = subject.getPrincipals().oneByType(User.class);
 			if (userobj != null) {
 				model.setViewName("redirect:/index");// 设置返回界面为首页
 				return model;
@@ -60,6 +59,7 @@ public class LoginController {
 		return model;
 	}
 
+
 	/**
 	 * @author zgr @Title: Logout
 	 * @Description: TODO方法描述:(退出登录跳转到登录页面，并清除对应用户session内缓存)
@@ -67,11 +67,6 @@ public class LoginController {
 	 */
 	@GetMapping("/logout")
 	public ModelAndView Logout(ModelAndView model) {
-		HttpSession session = request.getSession(false);// 获取库内session
-		if (session != null) {
-			session.removeAttribute("userInfo");// 剔除对应缓存
-
-		}
 		SecurityUtils.getSubject().logout();
 		model.setViewName("login");// 返回到登录界面
 		return model;
@@ -87,14 +82,14 @@ public class LoginController {
 
 		Subject subject = SecurityUtils.getSubject();
 		User userobj = subject.getPrincipals().oneByType(User.class);
-			if (userobj != null) {
-				model.addObject("user", userobj);// session 内用户信息提供给首页用以用户显示
-				//展示菜单列表(首页)
-			 model.addObject("manuList", functionService.getList());
-				model.setViewName("webview/index");// 设置返回界面为首页
-				return model;
-			}
-	
+		if (userobj != null) {
+			model.addObject("user", userobj);// session 内用户信息提供给首页用以用户显示
+			// 展示菜单列表(首页)
+			model.addObject("manuList", functionService.getList());
+			model.setViewName("webview/index");// 设置返回界面为首页
+			return model;
+		}
+
 		subject.logout();
 		model.setViewName("redirect:/login");// 设置返回界面为首页
 		return model;
@@ -118,13 +113,9 @@ public class LoginController {
 		}
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	@ApiOperation(value = "/unauth")
-	@GetMapping("/unauth")
-	public String unauth() {
-		return "error/unauth";
+	@GetMapping("/*")
+	public ModelAndView login(ModelAndView model) {
+		model.setViewName("redirect:/login");// 设置返回界面为首页
+		return model;
 	}
 }
