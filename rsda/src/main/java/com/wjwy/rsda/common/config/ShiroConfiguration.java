@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-10 16:53:20
+ * @LastEditTime : 2020-01-10 17:50:41
  */
 package com.wjwy.rsda.common.config;
 
@@ -221,7 +221,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/log /**", "anon");
         filterChainDefinitionMap.put("/image/**", "anon");
         filterChainDefinitionMap.put("/webviews/**", "anon");
-        
+      
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
@@ -239,6 +239,7 @@ public class ShiroConfiguration {
 
         // 所有请求需要认证
         filterChainDefinitionMap.put("/**", "user,kickout,online,onlineSession");
+        filterChainDefinitionMap.put("/swagger/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
 

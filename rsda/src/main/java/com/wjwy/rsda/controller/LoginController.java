@@ -148,7 +148,7 @@ public class LoginController {
 		}
 	}
 
-	@GetMapping("/*")
+	@GetMapping("/")
 	public ModelAndView login(ModelAndView model) {
 		model.setViewName("redirect:/login");// 设置返回界面为首页
 		return model;
