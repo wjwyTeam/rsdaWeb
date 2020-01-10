@@ -501,18 +501,18 @@ html {
     padding-right: 15px
 }
 
+
 .layadmin-pagetabs .layui-tab-title li .layui-tab-close {
     position: absolute;
-    right: 8px;
-    top: 50%;
-    margin: -7px 0 0;
-    width: 16px;
+    left: 76px;
+    top: 53%;
+    margin: -8px 0 0;
+    width: 19px;
     height: 16px;
     line-height: 16px;
     border-radius: 50%;
-    font-size: 12px
+    font-size: 12px;
 }
-
 .layadmin-pagetabs .layui-tab-title li:after {
     content: '';
     position: absolute;
