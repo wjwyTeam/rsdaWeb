@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-09 16:19:47
+ * @LastEditTime : 2020-01-10 09:14:46
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -199,7 +199,7 @@
                 if (d.visible == true) {
                   return '<span id="visible-button">显示</span>'
                 } else {
-                  return '<span id="visible-button">不显示</span>'
+                  return '<span id="visible-button">隐藏</span>'
                 }
               }
             }, {
@@ -223,22 +223,6 @@
             }
 
           ],
-          // page: false
-          // , response: {
-          //   statusName: 'code' //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
-          //   , statusCode: 200 //成功的状态码，默认：0
-          //   , msgName: 'msg' //状态信息的字段名称，默认：msg
-          //   , countName: 'count' //数据总数的字段名称，默认：count
-          //   , dataName: 'data' //数据列表的字段名称，默认：data
-          // }
-          // , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
-          //   layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局 
-          //   //,curr: 5 //设定初始在第 5 页
-          //   , groups: 5 //只显示 1 个连续页码
-          //   , limit: 20
-          //   , first: true //不显示首页  
-          //   , last: true //不显示尾页
-          // },
           reqData: function (data, callback) {
             setTimeout(function () { // 故意延迟一下
               // // var url = '/webviews/list.json';
@@ -250,6 +234,22 @@
 
               });
             }, 800);
+          },
+          page: false
+          , response: {
+            statusName: 'code' //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+            , statusCode: 200 //成功的状态码，默认：0
+            , msgName: 'msg' //状态信息的字段名称，默认：msg
+            , countName: 'count' //数据总数的字段名称，默认：count
+            , dataName: 'data' //数据列表的字段名称，默认：data
+          }
+          , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+            layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局 
+            //,curr: 5 //设定初始在第 5 页
+            , groups: 5 //只显示 1 个连续页码
+            , limit: 20
+            , first: true //不显示首页  
+            , last: true //不显示尾页
           },
           style: 'margin-top:0;'
         });

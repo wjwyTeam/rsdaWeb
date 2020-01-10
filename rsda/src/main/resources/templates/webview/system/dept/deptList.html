@@ -38,6 +38,8 @@
     body {
       width: 100%;
       height: 100%;
+      margin: 0;
+      padding: 0;
     }
 
     .container {
@@ -54,12 +56,11 @@
     }
 
     .ztree {
-      height: calc(100% - 51px);
+      height: calc(100% - 60px);
       overflow: auto;
     }
 
     .rightGrid {
-      /* width: calc(100% - 320px); */
       width: 100%;
       height: 100%;
     }
@@ -82,20 +83,21 @@
 
     <div class="leftTree">
       <div th:if="${hiddenType}" style="width: 100%;
-                                height: 40px;
+                                height: 49px;
                                 text-align: center;
                                 border-bottom: solid 1px #efefef;
                             "><span style="
-                                line-height: 40px;
+                                line-height: 49px;
                                 font-size: 16px;
                             ">单位机构树</span></div>
       <ul id="deptTree" class="ztree"></ul>
     </div>
 
     <div class="rightGrid" th:if="${hiddenType}">
-      <div style="width: 100%;
+      <div style="width: 99%;
           height: 40px;
           text-align: center;
+          padding:5px;
           display: inline-flex;
           align-items: center;
       ">
@@ -210,7 +212,7 @@
       //第一个实例
       table.render({
         elem: '#deptList'
-        , height: "full-40"
+        , height: "full-60"
         , even: true
         , title: '用户数据表'
         , method: 'post'
