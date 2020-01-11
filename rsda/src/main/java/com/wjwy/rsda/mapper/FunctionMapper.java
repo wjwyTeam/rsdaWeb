@@ -19,7 +19,7 @@ import org.apache.ibatis.annotations.Select;
 public  interface FunctionMapper extends TkMapper<Function> {
 
 
- @Select("SELECT a.*,case (select count(1) from sys_function where pid=a.id AND del_flag=false) when 0 then FALSE else TRUE end as haveChild FROM sys_function a where a.pid = #{groupId} and a.del_flag = false order by a.forder ASC")
+ @Select("SELECT a.*,case (select count(1) from sys_function where pid=a.id AND del_flag=false) when 0 then FALSE else TRUE end as LAY_CHECKED FROM sys_function a where a.pid = #{groupId} and a.del_flag = false order by a.forder ASC")
 	List<Function> selectTreeList(String groupId);
 
 /**

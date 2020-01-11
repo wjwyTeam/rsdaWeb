@@ -53,9 +53,6 @@ public class AuthRealm extends AuthorizingRealm {
     @Autowired
     private FunctionService functionService;
 
-    
-
-    
     /**
      * 认证回调函数,登录时调用
      * 首先根据传入的用户名获取User信息；然后如果user为空，那么抛出没找到帐号异常UnknownAccountException；
@@ -101,8 +98,6 @@ public class AuthRealm extends AuthorizingRealm {
         if (upToken.getPassword() != null) {
             passWord = new String(upToken.getPassword());
         }
-
-      
 
         User user = null;
         try {

@@ -1,5 +1,6 @@
 package com.wjwy.rsda.common.tool.factory;
 
+import java.util.Date;
 import java.util.TimerTask;
 
 import com.wjwy.rsda.common.tool.session.OnlineSession;
@@ -12,6 +13,7 @@ import com.wjwy.rsda.entity.Logininfor;
 import com.wjwy.rsda.entity.Online;
 import com.wjwy.rsda.entity.OperLog;
 import com.wjwy.rsda.common.enums.MessageConstant;
+import com.wjwy.rsda.services.LogininforService;
 import com.wjwy.rsda.services.OnlineService;
 import com.wjwy.rsda.services.OperLogService;
 
@@ -110,6 +112,7 @@ public class AsyncFactory {
                 logininfor.setBrowser(browser);
                 logininfor.setOs(os);
                 logininfor.setMsg(message);
+                logininfor.setLoginTime(new Date());
                 // 日志状态
                 if (MessageConstant.LOGIN_SUCCESS.equals(status) || MessageConstant.LOGOUT.equals(status)) {
                     logininfor.setStatus(MessageConstant.SUCCESS);
@@ -117,7 +120,7 @@ public class AsyncFactory {
                     logininfor.setStatus(MessageConstant.FAIL);
                 }
                 // 插入数据
-                // SpringUtils.getBean(LogininforService.class).insertLogininfor(logininfor);
+                SpringUtils.getBean(LogininforService.class).logininforInsert(logininfor);
             }
         };
     }

@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 15:08:01
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:46:31
+ * @LastEditTime : 2020-01-11 10:00:35
  */
 package com.wjwy.rsda.entity;
 
@@ -99,6 +99,6 @@ public class Function implements Serializable {
     private String perms;
 
     @Transient
-    private Boolean haveChild;
+    private Boolean LAY_CHECKED;
 
 }

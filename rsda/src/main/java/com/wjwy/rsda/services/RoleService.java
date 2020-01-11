@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-11 08:32:09
+ * @LastEditTime : 2020-01-11 09:58:23
  */
 package com.wjwy.rsda.services;
 
@@ -186,7 +186,7 @@ public class RoleService {
         for (RoleFunction roleFunction : functions) {
             RoleFunction r = new RoleFunction();
             r.setFunctionId(roleFunction.getFunctionId());
-            r.setChecked(true);
+            r.setLAY_CHECKED(true);
             fids.add(r);
         }
         return fids;

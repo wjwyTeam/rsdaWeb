@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-09 17:37:40
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-11 08:29:43
+ * @LastEditTime : 2020-01-11 09:58:04
  */
 package com.wjwy.rsda.entity;
 
@@ -46,5 +46,5 @@ public class RoleFunction implements Serializable{
 
 
     @Transient
-    private Boolean checked;
+    private Boolean LAY_CHECKED;
 }
