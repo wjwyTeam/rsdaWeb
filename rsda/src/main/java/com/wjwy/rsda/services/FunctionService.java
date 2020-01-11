@@ -33,7 +33,7 @@ import tk.mybatis.mapper.util.StringUtil;
  */
 @Service("functionService")
 @Transactional
-public class FunctionService extends BaseService{
+public class FunctionService extends BaseService {
 
     @Autowired
     private FunctionMapper functionMapper;
@@ -50,7 +50,8 @@ public class FunctionService extends BaseService{
         if (StringUtil.isEmpty(function.getPid())) {
             function.setPid(String.valueOf(EnumEntitys.GJD.getValue()));
         }
-        function.setForder(Integer.parseInt(this.getMaxCodeById(functionMapper.getMaxCodeById(""), "", functionMapper.selectMax())));
+        function.setForder(Integer
+                .parseInt(this.getMaxCodeById(functionMapper.getMaxCodeById(""), "", functionMapper.selectMax())));
         return functionMapper.insert(function);
     }
 
@@ -72,7 +73,6 @@ public class FunctionService extends BaseService{
         List<Function> functionNew = functionMapper.selectByExample(example);
 
         criteria.andEqualTo("isCandel", false);
-
 
         int count = functionMapper.deleteByExample(example);
         if (functionNew.size() == 0) {
@@ -101,7 +101,7 @@ public class FunctionService extends BaseService{
      * @param name
      * @return List<Function>
      */
-    public PageInfo<Function> findList(String id, String functionName,Integer page, Integer limit) {
+    public PageInfo<Function> findList(String id, String functionName, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         Example example = new Example(Function.class);
         example.setOrderByClause("create_time DESC");
@@ -113,26 +113,26 @@ public class FunctionService extends BaseService{
             criteria.andEqualTo("functionName", functionName);
         }
 
-
         List<Function> functions = functionMapper.selectByExample(example);
         PageInfo<Function> PageInfoDO = new PageInfo<Function>(functions);
-		return PageInfoDO;
+        return PageInfoDO;
     }
 
-	public Set<String> listPerms(String userId) {
-		return null;
+    public Set<String> listPerms(String userId) {
+        return null;
     }
-    
+
     /**
      * 通过ID查询数据
+     * 
      * @param id
      * @return
      */
-	public Function selectFunctionById(String id) {
+    public Function selectFunctionById(String id) {
         Example example = new Example(Function.class);
         Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", id);
-		return functionMapper.selectOneByExample(example);
+        return functionMapper.selectOneByExample(example);
     }
 
     /**
@@ -142,19 +142,19 @@ public class FunctionService extends BaseService{
     public List<Function> getList() {
         return functionMapper.findList();
     }
-    
-    
-
-
-
-	public List<Function> list(String groupId) {
-		 if(StringUtil.isEmpty(groupId)|| groupId.equalsIgnoreCase("{}")){
-            groupId=String.valueOf(EnumEntitys.GJD.getValue());
+    /**
+     * 
+     * @param groupId
+     * @return
+     */
+    public List<Function> list(String groupId) {
+        if (StringUtil.isEmpty(groupId) || groupId.equalsIgnoreCase("{}")) {
+            groupId = String.valueOf(EnumEntitys.GJD.getValue());
         }
         List<Function> functionlists = functionMapper.selectTreeList(groupId);
         return functionlists;
-	}
-    
+    }
+
     /**
      * 根据用户ID查询权限
      * 
@@ -171,6 +171,15 @@ public class FunctionService extends BaseService{
         }
         return permsSet;
     }
-    
 
+    /**
+     * 
+     */
+    // public List<Function> treeList() {
+
+    //     return null;
+    // }
+
+
+ 
 }

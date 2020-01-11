@@ -4,38 +4,30 @@
  * @Author: zgr
  * @Date: 2019-12-03 15:08:01
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-11 10:00:35
+ * @LastEditTime : 2020-01-11 12:17:43
  */
 package com.wjwy.rsda.entity;
-
-import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import com.alibaba.fastjson.annotation.JSONField;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
-
+@Setter
+@Getter
 @ToString
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("F1-菜单管理=>实体类")
 @Table(name = "sys_function")
-public class Function implements Serializable {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+public class Function{
 
     @ApiModelProperty("主键id")
     @Column(name = "id")
@@ -100,5 +92,6 @@ public class Function implements Serializable {
 
     @Transient
     private Boolean LAY_CHECKED;
+    private List<Function> children;
 
 }

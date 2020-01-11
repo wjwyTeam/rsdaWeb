@@ -2,9 +2,7 @@ package com.wjwy.rsda.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
@@ -12,7 +10,6 @@ import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.FunctionService;
 import com.wjwy.rsda.services.RoleService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
@@ -57,11 +53,11 @@ public class FunctionController {
      * @return String
      */
     @GetMapping("/functionList")
-    @ApiOperation(value = "菜单管理列表主页",notes = "接参：fStatus,传参:fxz  格式：true 显示 false 隐藏 /roleFunctionList 遍历  取值：functionId")
-    public ModelAndView functionData(@ApiIgnore ModelAndView model,String id) {
+    @ApiOperation(value = "菜单管理列表主页", notes = "接参：fStatus,传参:fxz  格式：true 显示 false 隐藏 /roleFunctionList 遍历  取值：functionId")
+    public ModelAndView functionData(@ApiIgnore ModelAndView model, String id) {
         model.addObject("fStatus", true);
         if (StringUtil.isNotEmpty(request.getParameter("fxz"))) {
-            // 选择控制List - 隐藏按钮    
+            // 选择控制List - 隐藏按钮
             model.addObject("roleFunctionList", roleService.getFunction(id));
             model.addObject("fStatus", request.getParameter("fxz"));
         }
@@ -103,7 +99,6 @@ public class FunctionController {
     @GetMapping(value = "/functionTree")
     public ResponseWrapper loadDepartmentLeftTreeJson(String groupId) {
         List<Function> functionList = new ArrayList<Function>();
-
         try {
             functionList = functionService.list(groupId);
             return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", functionList, null, null);
@@ -230,6 +225,47 @@ public class FunctionController {
 
         return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+    }
+
+    @ApiOperation(value = "菜单树展示列表 ", notes = "同步处理json")
+    @GetMapping(value = "/functionTreeJson")
+    public List<Function> treeJsonsFunctions() {
+        List<Function> treeList = functionService.getList();
+        List<Function> rootList = new ArrayList<Function>();
+        for (Function function : treeList) {
+            if (function.getPid().equals(EnumEntitys.GJD.getValue())) {
+                rootList.add(function);
+            }
+        }
+
+        for (Function nav : rootList) {
+            List<Function> child = getChild(nav.getId(), treeList);
+            nav.setChildren(child);
+        }
+        return rootList;
+
+    }
+
+    /**
+     * 
+     * @param id
+     * @param functions
+     */
+    public List<Function> getChild(String id, List<Function> functions) {
+        List<Function> chilList = new ArrayList<Function>();
+        for (Function function : functions) {
+            if (function.getPid().equals(id)) {
+                chilList.add(function);
+            }
+        }
+
+        for (Function functionC : chilList) {
+            functionC.setChildren(getChild(functionC.getId(), functions));
+        }
+        if (chilList.size() == 0) {
+            return null;
+        }
+        return chilList;
     }
 
 }
