@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-10 17:31:42
+ * @LastEditTime : 2020-01-11 08:32:09
  */
 package com.wjwy.rsda.services;
 
@@ -176,10 +176,20 @@ public class RoleService {
      * @return
      */
     public List<RoleFunction> getFunction(String id) {
+        List<RoleFunction> fids = new ArrayList<RoleFunction>();
         Example exampleRoleFunction = new Example(RoleFunction.class);
         Criteria criteriaRoleFunction = exampleRoleFunction.createCriteria();
         criteriaRoleFunction.andEqualTo("roleId", id);
-        return roleFunctionMapper.selectByExample(exampleRoleFunction);
+
+        List<RoleFunction> functions = roleFunctionMapper.selectByExample(exampleRoleFunction);
+
+        for (RoleFunction roleFunction : functions) {
+            RoleFunction r = new RoleFunction();
+            r.setFunctionId(roleFunction.getFunctionId());
+            r.setChecked(true);
+            fids.add(r);
+        }
+        return fids;
     }
 
     /**

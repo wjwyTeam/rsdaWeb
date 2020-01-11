@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 18:13:24
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:30:13
+ * @LastEditTime : 2020-01-11 08:39:47
  */
 package com.wjwy.rsda.controller;
 
@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RequestMapping("/log")
 @RestController
@@ -35,7 +36,7 @@ public class OperlogController {
   private OperLogService operlogService;
 
   private String prefix = "webview/system/log/";
-  public Logger logger = LoggerFactory.getLogger(DepartmentController.class);
+  public Logger logger = LoggerFactory.getLogger(OperlogController.class);
 
   /**
    * 日志展示列数据
@@ -44,7 +45,7 @@ public class OperlogController {
    */
   @ApiOperation(value = "日志列表页", notes = "参数：operlog JSON 对象")
   @GetMapping(value = "/operlogList")
-  public ModelAndView operlogList(ModelAndView model) {
+  public ModelAndView operlogList(@ApiIgnore ModelAndView model) {
     model.setViewName(prefix + "operlogList");
     return model;
   }
@@ -56,7 +57,7 @@ public class OperlogController {
    */
   @ApiOperation(value = "日志表单页", notes = "参数：operlog JSON 对象")
   @GetMapping(value = "/operlogForm")
-  public ModelAndView operlogForm(String operId, ModelAndView model) {
+  public ModelAndView operlogForm(String operId, @ApiIgnore ModelAndView model) {
     OperLog operLogOne = operlogService.getId(Long.parseLong(operId));
     model.addObject("operLog", operLogOne);
     model.setViewName(prefix + "operlogForm");

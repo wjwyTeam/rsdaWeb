@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 /*
@@ -55,7 +56,7 @@ public class DossierOutController {
   */
  @GetMapping("/dossierOutListPage")
  @ApiOperation(value = "跳转档案转出管理列表主页")
- public ModelAndView dossierOutListPage(ModelAndView model) {
+ public ModelAndView dossierOutListPage(@ApiIgnore ModelAndView model) {
   model.setViewName(prefix + "/dossierOutList");
   return model;
  }
@@ -69,7 +70,7 @@ public class DossierOutController {
   */
  @ApiOperation(value = "跳转档案转出管理表单主页", notes = "DossierOutId - 档案转出编号")
  @GetMapping("/dossierOutFormPage")
-  public ModelAndView DossierOutFormPage(String dossierOutId, ModelAndView model,String[] ids) {
+  public ModelAndView DossierOutFormPage(String dossierOutId, @ApiIgnore ModelAndView model,String[] ids) {
     if (ids != null) {
       model.addObject("ids", ids);
     }

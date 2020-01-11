@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 /*
@@ -58,7 +59,7 @@ public class PersonalController {
   */
  @GetMapping("/personalListPage")
  @ApiOperation(value = "跳转人员管理列表主页")
-  public ModelAndView personalListPage(ModelAndView model) {
+  public ModelAndView personalListPage(@ApiIgnore ModelAndView model) {
     model.addObject("xzStatus",true);
     if (StringUtil.isNotEmpty(request.getParameter("xz"))) {
       //选择控制List - 隐藏按钮
@@ -77,7 +78,7 @@ public class PersonalController {
   */
  @ApiOperation(value = "跳转人员管理表单主页", notes = "personalId - 人员编号")
  @GetMapping("/personalFormPage")
- public ModelAndView personalFormPage(String personalId, ModelAndView model) {
+ public ModelAndView personalFormPage(String personalId, @ApiIgnore ModelAndView model) {
   if (StringUtil.isNotEmpty(personalId)) {
    model.addObject("personalOne", personalService.getById(personalId));
   }

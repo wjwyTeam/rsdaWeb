@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-10 18:01:58
+ * @LastEditTime : 2020-01-11 09:06:24
  */
 package com.wjwy.rsda.common.config;
 
@@ -210,6 +210,7 @@ public class ShiroConfiguration {
         // 需要验证的写 authc 不需要的写 anon
         filterChainDefinitionMap.put("/templates/**", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
+        filterChainDefinitionMap.put("/swagger-ui/**", "anon");
         // anon：它对应的过滤器里面是空的,什么都没做
 
         // 不用注解也可以通过 API 方式加载权限规则

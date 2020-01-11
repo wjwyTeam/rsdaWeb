@@ -24,8 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/consult")
@@ -49,7 +48,7 @@ public class ConsultController {
    */
   @GetMapping("/consultListPage")
   @ApiOperation(value = "跳转查阅管理列表主页")
-  public ModelAndView ConsultListPage(ModelAndView model) {
+  public ModelAndView ConsultListPage(@ApiIgnore ModelAndView model) {
     model.setViewName(prefix + "/consultList");
     return model;
   }
@@ -63,7 +62,7 @@ public class ConsultController {
    */
   @ApiOperation(value = "跳转查阅管理表单主页", notes = "ConsultId - 查阅编号")
   @GetMapping("/consultFormPage")
-  public ModelAndView ConsultFormPage(String consultId, ModelAndView model,String[] ids) {
+  public ModelAndView ConsultFormPage(String consultId, @ApiIgnore ModelAndView model,String[] ids) {
     model.addObject("personalList", personalService.getList());
     if (ids != null) {
       model.addObject("ids", ids);
@@ -85,7 +84,7 @@ public class ConsultController {
    */
   @ApiOperation(value = "跳转查阅审批表单主页", notes = "consultId - 查阅编号")
   @GetMapping("/applyFormPage")
-  public ModelAndView applyFormPage(String consultId, ModelAndView model) {
+  public ModelAndView applyFormPage(String consultId, @ApiIgnore ModelAndView model) {
     if (StringUtil.isNotEmpty(consultId)) {
       model.addObject("consultOne", consultService.getById(consultId));
     }

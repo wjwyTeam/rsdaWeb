@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import com.wjwy.rsda.entity.Online;
 import com.wjwy.rsda.entity.User;
 import io.swagger.annotations.Api;
+import springfox.documentation.annotations.ApiIgnore;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.HttpStatus;
@@ -41,16 +43,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api(value = "登录配置", tags = "WJ-维佳科技注册中心")
 @RestController
-public class LoginController {
+public class LoginController{
 	public Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	@Autowired
 	private FunctionService functionService;
 	@Autowired
 	private OnlineService userOnlineService;
-	
 	@Autowired
 	private OnlineSessionDAO onlineSessionDAO;
+
 	/**
 	 * 
 	 * @Title: Login
@@ -59,7 +61,7 @@ public class LoginController {
 	 */
 
 	@GetMapping("/login")
-	public ModelAndView Login(ModelAndView model) {
+	public ModelAndView Login(@ApiIgnore ModelAndView model) {
 
 		Subject subject = SecurityUtils.getSubject();
 		if (subject.getPrincipal() != null) {
@@ -80,7 +82,7 @@ public class LoginController {
 	 * @return string 返回类型--文件名login页面
 	 */
 	@GetMapping("/logout")
-	public ModelAndView Logout(ModelAndView model) {
+	public ModelAndView Logout(@ApiIgnore ModelAndView model) {
 		ShiroUtils.clearCachedAuthorizationInfo();
 		model.setViewName("login");// 返回到登录界面
 		return model;
@@ -92,7 +94,7 @@ public class LoginController {
 	 * @return string 返回类型--文件名login页面
 	 */
 	@GetMapping("/index")
-	public ModelAndView Index(ModelAndView model) {
+	public ModelAndView Index(@ApiIgnore ModelAndView model) {
 
 		Subject subject = SecurityUtils.getSubject();
 		User userobj = subject.getPrincipals().oneByType(User.class);
@@ -122,25 +124,26 @@ public class LoginController {
 			Subject subject = SecurityUtils.getSubject();
 			subject.login(token);
 
-				Online on = userOnlineService.getOnline(loginName);
-				if (on != null) {
-					
-					// 以下为只允许同一账户单个登录
-					Collection<Session> sessions = onlineSessionDAO.getActiveSessions();
-					if (sessions.size() > 0) {
-						for (Session session : sessions) {
-							OnlineSession onlineSession = (OnlineSession) session;
-							// 获得session中已经登录用户的名字
-							if (null != onlineSession.getLoginName()){
-								if (loginName.equals(onlineSession.getLoginName())) { // 这里的username也就是当前登录的username
-									session.setTimeout(0); // 这里就把session清除，
+			Online on = userOnlineService.getOnline(loginName);
+			if (on != null) {
+
+				// 以下为只允许同一账户单个登录
+				Collection<Session> sessions = onlineSessionDAO.getActiveSessions();
+				if (sessions.size() > 0) {
+					for (Session session : sessions) {
+						OnlineSession onlineSession = (OnlineSession) session;
+						// 获得session中已经登录用户的名字
+						if (null != onlineSession.getLoginName()) {
+							if (loginName.equals(onlineSession.getLoginName())) { // 这里的username也就是当前登录的username
+								session.setTimeout(0); // 这里就把session清除，
 								userOnlineService.deleteOnlineById(on.getSessionId());
-									logger.info("[ IP:"+onlineSession.getHost() +"《=================》用户" + onlineSession.getLoginName() + "] 已下线...");
-								}
+								logger.info(
+										"[ IP:" + onlineSession.getHost() + "《=================》用户" + onlineSession.getLoginName() + "] 已下线...");
 							}
 						}
 					}
 				}
+			}
 
 			return ResponseWrapper.success(HttpStatus.OK.value(), "登陆中,请稍候...", null, "/index", null);
 		} catch (AuthenticationException e) {
@@ -148,16 +151,9 @@ public class LoginController {
 		}
 	}
 
-	@GetMapping("/*")
-	public ModelAndView login(ModelAndView model) {
+	@GetMapping("/")
+	public ModelAndView getErrorPath(@ApiIgnore ModelAndView model) {
 		model.setViewName("redirect:/login");// 设置返回界面为首页
-		return model;
-	}
-
-
-	@GetMapping("/swagger-ui/*")
-	public ModelAndView swagger(ModelAndView model) {
-		model.setViewName("redirect:/swagger-ui.html");// 设置接口文档页
 		return model;
 	}
 }

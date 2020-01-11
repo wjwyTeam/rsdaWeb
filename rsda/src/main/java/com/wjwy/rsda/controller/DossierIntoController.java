@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-03 11:24:10
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 17:13:38
+ * @LastEditTime : 2020-01-11 08:38:02
  */
 package com.wjwy.rsda.controller;
 
@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/dossierInto")
@@ -55,7 +56,7 @@ public class DossierIntoController {
   */
  @GetMapping("/dossierIntoListPage")
  @ApiOperation(value = "跳转档案转入管理列表主页")
- public ModelAndView dossierIntoListPage(ModelAndView model) {
+ public ModelAndView dossierIntoListPage(@ApiIgnore ModelAndView model) {
   model.setViewName(prefix + "/dossierIntoList");
   return model;
  }
@@ -69,7 +70,7 @@ public class DossierIntoController {
   */
  @ApiOperation(value = "跳转档案转入管理表单主页", notes = "DossierIntoId - 档案转入编号")
  @GetMapping("/dossierIntoFormPage")
-  public ModelAndView DossierIntoFormPage(String dossierIntoId, ModelAndView model, String[] ids) {
+  public ModelAndView DossierIntoFormPage(String dossierIntoId, @ApiIgnore ModelAndView model, String[] ids) {
     if (ids != null) {
       model.addObject("ids", ids);
     }

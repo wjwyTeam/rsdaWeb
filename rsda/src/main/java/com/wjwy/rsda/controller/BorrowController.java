@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-03 09:35:54
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 18:50:10
+ * @LastEditTime : 2020-01-11 08:35:56
  */
 
 package com.wjwy.rsda.controller;
@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/borrow")
@@ -55,7 +56,7 @@ public class BorrowController {
    */
   @GetMapping("/borrowListPage")
   @ApiOperation(value = "跳转借阅管理列表主页")
-  public ModelAndView BorrowListPage(ModelAndView model) {
+  public ModelAndView BorrowListPage(@ApiIgnore ModelAndView model) {
     model.setViewName(prefix + "/borrowList");
     return model;
   }
@@ -69,7 +70,7 @@ public class BorrowController {
    */
   @ApiOperation(value = "跳转借阅管理表单主页", notes = "borrowId - 借阅编号")
   @GetMapping("/borrowFormPage")
-  public ModelAndView BorrowFormPage(String borrowId, ModelAndView model) {
+  public ModelAndView BorrowFormPage(String borrowId, @ApiIgnore ModelAndView model) {
     model.addObject("personalList", personalService.getList());
     if (StringUtil.isNotEmpty(borrowId)) {
       model.addObject("BorrowOne", borrowService.getById(borrowId));
@@ -87,7 +88,7 @@ public class BorrowController {
    */
   @ApiOperation(value = "跳转借阅审批表单主页", notes = "borrowId - 借阅编号")
   @GetMapping("/applyFormPage")
-  public ModelAndView applyFormPage(String borrowId, ModelAndView model) {
+  public ModelAndView applyFormPage(String borrowId, @ApiIgnore ModelAndView model) {
     if (StringUtil.isNotEmpty(borrowId)) {
       model.addObject("consultOne", borrowService.getById(borrowId));
     }

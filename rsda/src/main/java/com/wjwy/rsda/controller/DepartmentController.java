@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:50:53
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-09 13:43:06
+ * @LastEditTime : 2020-01-11 08:36:42
  */
 package com.wjwy.rsda.controller;
 
@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RequestMapping("/dept")
 @RestController
@@ -55,7 +56,7 @@ public class DepartmentController {
 	 */
 	@ApiOperation(value = "跳转机构管理列表主页")
 	@GetMapping(value = "/departmentInfo")
-	public ModelAndView departmentInfo(Department department, ModelAndView model) {
+	public ModelAndView departmentInfo(@ApiIgnore Department department, @ApiIgnore ModelAndView model) {
 		boolean flag = true;
 		if (StringUtils.isNotEmpty(request.getParameter("hideshowType"))) {
 			flag = false;
@@ -75,7 +76,7 @@ public class DepartmentController {
 	 */
 	@ApiOperation(value = "跳转机构管理表单主页")
 	@GetMapping(value = "/deptInfo")
-	public ModelAndView deptInfo(Department department, ModelAndView model) {
+	public ModelAndView deptInfo(@ApiIgnore Department department, @ApiIgnore ModelAndView model) {
 		if (StringUtils.isNotEmpty(department.getId())) {
 			department = deptService.getDept(department.getId());
 		}

@@ -30,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/dossier")
@@ -52,7 +53,7 @@ public class DossierController{
   */
  @GetMapping("/dossierListPage")
  @ApiOperation(value = "跳转案卷管理列表主页")
- public ModelAndView dossierListPage(ModelAndView model) {
+ public ModelAndView dossierListPage(@ApiIgnore ModelAndView model) {
   model.setViewName(prefix + "/dossierList");
   return model;
  }
@@ -66,7 +67,7 @@ public class DossierController{
   */
  @ApiOperation(value = "跳转案卷管理表单主页", notes = "dossierId - 案卷编号")
  @GetMapping("/dossierFormPage")
- public ModelAndView dossierFormPage(String dossierId, ModelAndView model) {
+ public ModelAndView dossierFormPage(String dossierId, @ApiIgnore ModelAndView model) {
   if (StringUtil.isNotEmpty(dossierId)) {
    model.addObject("dossierOne", dossierService.getById(dossierId));
   }

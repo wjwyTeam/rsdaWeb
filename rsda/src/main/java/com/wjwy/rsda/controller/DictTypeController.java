@@ -35,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 /**
@@ -58,7 +59,7 @@ public class DictTypeController extends BaseController {
    */
   @GetMapping("/dictTypeListPage")
   @ApiOperation(value = "跳转字典数据类型列表页")
-  public ModelAndView dictType(ModelAndView model) {
+  public ModelAndView dictType(@ApiIgnore ModelAndView model) {
     model.setViewName(prefix + "/dictTypeList");
     return model;
   }
@@ -68,7 +69,7 @@ public class DictTypeController extends BaseController {
    */
   @ApiOperation(value = "跳转表单", notes = "dictId - 字典编号")
   @GetMapping("/dictTypeFormPage")
-  public ModelAndView dictTypeFormPage(String dictId, ModelAndView model) {
+  public ModelAndView dictTypeFormPage(String dictId, @ApiIgnore ModelAndView model) {
     if (StringUtil.isNotEmpty(dictId)) {
       model.addObject("dictType", dictTypeService.selectDictTypeById(dictId));
     }

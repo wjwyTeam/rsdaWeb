@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-07 15:16:28
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 14:09:15
+ * @LastEditTime : 2020-01-11 08:38:43
  */
 package com.wjwy.rsda.controller;
 
@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 /**
@@ -61,7 +62,7 @@ public class LogininforController extends BaseController {
      */
     @GetMapping("/logininforListPage")
     @ApiOperation(value = "跳转登录日志列表主页")
-    public ModelAndView logininforListPage(ModelAndView model) {
+    public ModelAndView logininforListPage(@ApiIgnore ModelAndView model) {
         model.setViewName(prefix + "/logininforList");
         return model;
     }
@@ -75,7 +76,7 @@ public class LogininforController extends BaseController {
      */
     @ApiOperation(value = "跳转登录日志表单主页", notes = "infoId - 人员编号")
     @GetMapping("/logininforFormPage")
-    public ModelAndView logininforFormPage(String infoId, ModelAndView model) {
+    public ModelAndView logininforFormPage(String infoId, @ApiIgnore ModelAndView model) {
         if (StringUtil.isNotEmpty(infoId)) {
             model.addObject("logininforOne", logininforService.getById(infoId));
         }

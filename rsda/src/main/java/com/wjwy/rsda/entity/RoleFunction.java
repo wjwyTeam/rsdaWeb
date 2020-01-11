@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-09 17:37:40
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 15:00:19
+ * @LastEditTime : 2020-01-11 08:29:43
  */
 package com.wjwy.rsda.entity;
 
@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -43,4 +44,7 @@ public class RoleFunction implements Serializable{
     @Column(name = "role_id")
     private String roleId;
 
+
+    @Transient
+    private Boolean checked;
 }

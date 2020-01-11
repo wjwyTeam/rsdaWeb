@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +67,7 @@ public class UserController {
 
 	@GetMapping(value = "/userInfo")
 	@ApiOperation(value = "用户管理列表查询主页")
-	public ModelAndView userInfo(User user, ModelAndView model) {
+	public ModelAndView userInfo(@ApiIgnore User user, @ApiIgnore ModelAndView model) {
 		model.addObject("type", true);
 		if (StringUtil.isNotEmpty(request.getParameter("type"))) {
 			model.addObject("type", request.getParameter("type"));
@@ -85,7 +86,7 @@ public class UserController {
 	 */
 	@GetMapping(value = "/userRole")
 	@ApiOperation(value = "用户管理列表授权主页")
-	public ModelAndView userRole(ModelAndView model) {
+	public ModelAndView userRole(@ApiIgnore ModelAndView model) {
 
 		model.addObject("roleList", roleService.getRoleList());
 		List<Role> roleList = roleService.getUserRoleList(request.getParameter("userId"));
@@ -102,7 +103,7 @@ public class UserController {
 	 */
 	@GetMapping("/personInfo")
 	@ApiOperation(value = "用户个人信息主页")
-	public ModelAndView PersonInfo(String userId, ModelAndView model) {
+	public ModelAndView PersonInfo(String userId, @ApiIgnore ModelAndView model) {
 		User user = userService.getPersonInfo(userId);
 		model.addObject("user", user);
 		model.setViewName(prefix + "userInfo");
@@ -120,7 +121,7 @@ public class UserController {
 	@GetMapping(value = "/updateInfo")
 	@Log(title = "用户管理", businessType = EnumEntitys.UPDATE)
 	@ApiOperation(value = "用户管理数据表单信息主页")
-	public ModelAndView updateInfo(User user, ModelAndView model) {
+	public ModelAndView updateInfo(@ApiIgnore User user, @ApiIgnore ModelAndView model) {
 		if (StringUtils.isNotEmpty(user.getUserId())) {
 			user = userService.getPersonInfo(user.getUserId());
 			user.setPassWord(MD5Util.convertMD5(MD5Util.convertMD5(user.getPassWord())));

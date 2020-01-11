@@ -3,8 +3,8 @@
  * @version: 
  * @Author: ZHANGQI
  * @Date: 2020-01-06 15:44:22
- * @LastEditors: ZHANGQI
- * @LastEditTime: 2020-01-06 17:22:23
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-11 08:39:06
  */
 package com.wjwy.rsda.controller;
 
@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/materialAc")
@@ -42,7 +43,7 @@ public class MaterialAController {
   */
  @GetMapping("/materialAcListPage")
  @ApiOperation(value = "跳转散材料归档列表主页")
- public ModelAndView materialAcListPage(ModelAndView model) {
+ public ModelAndView materialAcListPage(@ApiIgnore ModelAndView model) {
   model.setViewName(prefix + "/materialAcList");
   return model;
  }
@@ -56,7 +57,7 @@ public class MaterialAController {
   */
  @ApiOperation(value = "跳转散材料散材料归档表单主页", notes = "materialAcId - 散材料归档编号")
  @GetMapping("/materialAcFormPage")
- public ModelAndView materialAcFormPage(String materialAcId, ModelAndView model) {
+ public ModelAndView materialAcFormPage(String materialAcId, @ApiIgnore ModelAndView model) {
   if (StringUtil.isNotEmpty(materialAcId)) {
    model.addObject("materialAcOne", materialAcService.getById(materialAcId));
   }

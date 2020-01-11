@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /*
  * @Descripttion: 
@@ -59,7 +60,7 @@ public class RoleController {
      */
     @GetMapping(value = "/roleInfo")
     @ApiOperation(value = "角色管理列表主页", notes = "参数:role")
-    public ModelAndView roleInfo(Role role, ModelAndView model) {
+    public ModelAndView roleInfo(@ApiIgnore Role role, @ApiIgnore ModelAndView model) {
         model.setViewName("webview/system/role/roleList");
         return model;
     }
@@ -74,7 +75,7 @@ public class RoleController {
      */
     @GetMapping(value = "/roleUpdateInfo")
     @ApiOperation(value = "角色管理表单主页", notes = "参数:role")
-    public ModelAndView roleUpdateInfo(Role role, ModelAndView model) {
+    public ModelAndView roleUpdateInfo(@ApiIgnore Role role, @ApiIgnore ModelAndView model) {
         if (StringUtils.isNotEmpty(role.getId())) {
             role = roleService.getId(role.getId());
         }

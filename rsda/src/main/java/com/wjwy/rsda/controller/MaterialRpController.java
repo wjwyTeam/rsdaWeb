@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 @RequestMapping("/materialRp")
@@ -41,7 +42,7 @@ public class MaterialRpController {
   */
  @GetMapping("/materialRpListPage")
  @ApiOperation(value = "跳转散材料列表主页")
- public ModelAndView materialRpListPage(ModelAndView model) {
+ public ModelAndView materialRpListPage(@ApiIgnore ModelAndView model) {
   model.setViewName(prefix + "/materialRpList");
   return model;
  }
@@ -55,7 +56,7 @@ public class MaterialRpController {
   */
  @ApiOperation(value = "跳转散材料表单主页", notes = "materialRpId - 借阅编号")
  @GetMapping("/materialRpFormPage")
- public ModelAndView materialRpFormPage(String materialRpId, ModelAndView model) {
+ public ModelAndView materialRpFormPage(String materialRpId, @ApiIgnore ModelAndView model) {
   if (StringUtil.isNotEmpty(materialRpId)) {
    model.addObject("materialRpOne", materialRpService.getById(materialRpId));
   }
@@ -72,7 +73,7 @@ public class MaterialRpController {
   */
  @ApiOperation(value = "跳转散材料上报干部人事档案材料转递通知单主页", notes = "materialRpId - 借阅编号")
  @GetMapping("/rpNoticePage")
- public ModelAndView materialRpNoticePage(String materialRpId, ModelAndView model) {
+ public ModelAndView materialRpNoticePage(String materialRpId, @ApiIgnore ModelAndView model) {
   if (StringUtil.isNotEmpty(materialRpId)) {
    model.addObject("materialRpOne", materialRpService.getById(materialRpId));
   }
@@ -89,7 +90,7 @@ public class MaterialRpController {
   */
  @ApiOperation(value = "跳转散材料上报干部人事档案材料转递清单主页")
  @GetMapping("/detailPage")
- public ModelAndView detailPage(String materialRpId, ModelAndView model) {
+ public ModelAndView detailPage(String materialRpId, @ApiIgnore ModelAndView model) {
   if (StringUtil.isNotEmpty(materialRpId)) {
    model.addObject("materialRpOne", materialRpService.getById(materialRpId));
   }

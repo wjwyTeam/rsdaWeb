@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
 
 /*
@@ -57,12 +58,11 @@ public class FunctionController {
      */
     @GetMapping("/functionList")
     @ApiOperation(value = "菜单管理列表主页",notes = "接参：fStatus,传参:fxz  格式：true 显示 false 隐藏 /roleFunctionList 遍历  取值：functionId")
-    public ModelAndView functionData(ModelAndView model) {
-
+    public ModelAndView functionData(@ApiIgnore ModelAndView model,String id) {
         model.addObject("fStatus", true);
         if (StringUtil.isNotEmpty(request.getParameter("fxz"))) {
-            // 选择控制List - 隐藏按钮
-            model.addObject("roleFunctionList", roleService.getFunction(request.getParameter("roleId")));
+            // 选择控制List - 隐藏按钮    
+            model.addObject("roleFunctionList", roleService.getFunction(id));
             model.addObject("fStatus", request.getParameter("fxz"));
         }
         model.setViewName(prefix + "/functionList");
@@ -75,7 +75,7 @@ public class FunctionController {
      */
     @GetMapping("/icon")
     @ApiOperation(value = "菜单管理表单图标")
-    public ModelAndView functionIcon(ModelAndView model) {
+    public ModelAndView functionIcon(@ApiIgnore ModelAndView model) {
         model.setViewName(prefix + "/functionIcon");
         return model;
     }
@@ -85,7 +85,7 @@ public class FunctionController {
      */
     @ApiOperation(value = "菜单管理表单主页", notes = "id - 编号")
     @GetMapping("/functionEdit")
-    public ModelAndView functionedit(String id, ModelAndView model) {
+    public ModelAndView functionedit(String id, @ApiIgnore ModelAndView model) {
         if (StringUtil.isNotEmpty(id)) {
             model.addObject("functionOne", functionService.selectFunctionById(id));
         }

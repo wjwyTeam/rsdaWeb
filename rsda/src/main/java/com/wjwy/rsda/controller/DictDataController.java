@@ -42,6 +42,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 数据字典信息
@@ -64,7 +65,7 @@ public class DictDataController extends BaseController {
    */
   @GetMapping("/dataList")
   @ApiOperation(value = "字典管理数据信息列表主页")
-  public ModelAndView dictData(ModelAndView model, String dictType) {
+  public ModelAndView dictData(@ApiIgnore ModelAndView model, String dictType) {
     if (StringUtil.isNotEmpty(dictType)) {
       model.addObject("dictType", dictType);
     }
@@ -77,7 +78,7 @@ public class DictDataController extends BaseController {
    */
   @ApiOperation(value = "字典管理数据信息表单主页", notes = "dictCode - 字典编号")
   @GetMapping("/dictDataFormPage")
-  public ModelAndView dictDataFormPage(String dictCode, ModelAndView model) {
+  public ModelAndView dictDataFormPage(String dictCode, @ApiIgnore ModelAndView model) {
     if (StringUtil.isNotEmpty(dictCode)) {
       model.addObject("dictData", dictDataService.selectDictDataById(Long.valueOf(dictCode)));
     }

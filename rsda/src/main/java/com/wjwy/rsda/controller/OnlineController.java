@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 17:50:35
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-10 12:48:13
+ * @LastEditTime : 2020-01-11 08:39:32
  */
 package com.wjwy.rsda.controller;
 
@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 在线用户监控
@@ -56,7 +57,7 @@ public class OnlineController {
    */
   @GetMapping("/onlineList")
   @ApiOperation(value = "在线用户界面")
-  public ModelAndView dictData(ModelAndView model) {
+  public ModelAndView dictData(@ApiIgnore ModelAndView model) {
     model.setViewName(prefix + "/onlineUser");
     return model;
   }
