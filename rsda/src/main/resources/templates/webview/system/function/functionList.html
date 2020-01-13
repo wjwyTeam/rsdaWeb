@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-10 17:35:08
+ * @LastEditTime : 2020-01-13 08:43:24
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -144,7 +144,7 @@
         treeTable = layui.treeTable;
 
       // 渲染表格
-      var renderTreeTable = function () {
+      var renderTreeTable = function (data) {
         var cols ;
         if([[${fStatus}]] == false){
           idsSelect=[];
@@ -237,8 +237,6 @@
 
         }
 
-
-
         treeTable.render({
           elem: '#functionTable',
           treeDefaultClose: true,
@@ -249,18 +247,7 @@
           cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
           id: "functionTable",
           cols:cols,
-          reqData: function (data, callback) {
-            setTimeout(function () { // 故意延迟一下
-              // // var url = '/webviews/list.json';
-              var url = "/function/functionTree?groupId=";
-              url += (data ? (data.id) : '');
-              $.get(url, function (res) {
-                callback(res.data);
-                $(".ew-tree-icon").css("display", "none");
-
-              });
-            }, 800);
-          },
+          data:data,
           page: false
           , response: {
             statusName: 'code' //数据状态的字段名称，默认：code'<div>{{ layui.util.toDateString(d.starttime, "yyyy-MM-dd HH:mm:ss") }}</div>'
@@ -284,7 +271,15 @@
         $('body').children('.page-loading').hide();
         $('body').removeClass('page-no-scroll');
       }, 100);
-      renderTreeTable();
+      var url = "/function/functionTreeJson?roleid=";
+      var roleid =  "[[${roleid}]]";
+      if (roleid + "" !== "") {
+        url += roleid;
+      }
+      $.get(url, function (res) {
+        renderTreeTable(res);
+        // $(".ew-tree-icon").css("display", "none");
+      });
       treeTable.on('tool(functionTable)', function (obj) {
         var data = obj.data;
         if (obj.event === "del") {
@@ -507,8 +502,6 @@
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
       });
-
-
     });
 
   </script>
