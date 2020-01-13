@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-13 11:34:19
+ * @LastEditTime : 2020-01-13 18:14:38
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -100,6 +100,10 @@
 </head>
 
 <body class="page-no-scroll">
+    <div style="width: 99%; padding: 5px; text-align: center;display: inline-flex; align-items: center;">
+        <button class="layui-btn " data-type="expandAll" id="expandAll">展开全部</button>
+        <button class="layui-btn layui-btn-disabled" data-type="foldAll" id="foldAll">折叠全部</button>
+    </div>
   <div>
     <table class="layui-hide" id="functionTable" lay-filter="functionTable"></table>
     <!-- 表格操作列 -->
@@ -124,6 +128,7 @@
     </div>
   </div>
 
+
   <div class="layui-form">
     <input type="text" id="seleceIds" lay-filter="seleceIds" lay-submit  class="layui-hide">
   </div>
@@ -142,7 +147,7 @@
         table = layui.table,
         util = layui.util,
         treeTable = layui.treeTable;
-window.treeTable = treeTable;
+        window.treeTable = treeTable;
       // 渲染表格
       var renderTreeTable = function (data) {
         var cols ;
@@ -239,9 +244,9 @@ window.treeTable = treeTable;
 
         }
 
-        treeTable.render({
+      mm = treeTable.render({
           elem: '#functionTable',
-          treeDefaultClose: true,
+          // treeDefaultClose: false,
           id:"treeTable",
           tree: {
             iconIndex: 2,
@@ -285,12 +290,16 @@ window.treeTable = treeTable;
           renderTreeTable(res);
           window.functionData = res;
           $(".ew-tree-icon").css("display", "none");
+          idsSelect = [];
+          $.each(window.functionData,function(index,ele){
+            idsSelect.push(ele.id);
+            $.each(ele.children,function(index3,ele3){
+              idsSelect.push(ele3.id);
+            });
+          })
         });
       }
       getData(url)
-     
-
-
 
       treeTable.on('tool(functionTable)', function (obj) {
         var data = obj.data;
@@ -497,19 +506,30 @@ window.treeTable = treeTable;
             });
           });
         }
+        ,expandAll:function(){
+          mm.expandAll();
+          $(this).addClass("layui-btn-disabled")
+          $("#foldAll").removeClass("layui-btn-disabled")
+        },
+        foldAll:function(){
+          mm.foldAll();
+          $(this).addClass("layui-btn-disabled");
+          $("#expandAll").removeClass("layui-btn-disabled")
+        }
       }
      
 
-      var idsSelect = [];
-
-        $.each(window.functionData,function(index,ele){
-          idsSelect.push(els.id);
-        })
       
+     
+
+      
+     
+
       treeTable.on('checkbox(functionTable)', function (obj) {
+          console.log(obj);
           if(obj.checked == true){
             if(obj.type=="all"){
-              idsSelect = [];
+              // idsSelect = [];
               $.each(window.functionData,function(index, ele){
                 idsSelect.push(ele.id);
                 $.each(ele.children,function(index1,ele1){
@@ -525,7 +545,7 @@ window.treeTable = treeTable;
             }         
           }else{
             if(obj.type=="all"){
-              idsSelect = [];
+              // idsSelect = [];
               $.each(window.functionData,function(index, ele){
                 idsSelect.pop(ele.id);
                 $.each(ele.children,function(index1,ele1){
@@ -536,13 +556,13 @@ window.treeTable = treeTable;
               // 去除勾选
               $.each(idsSelect, function (k, v) {
                 if (v == obj.data.id) {
-                  idsSelect.pop(obj.data.id)
+                  idsSelect.splice(k,1)
                 }
-                $.each(obj.data.children, function (index, ele) {
-                  if (v == ele.id) {
-                    idsSelect.pop(ele.id)
-                  }
-                });
+                // $.each(obj.data.children, function (index, ele) {
+                //   if (v == ele.id) {
+                //     idsSelect.pop(ele.id)
+                //   }
+                // });
               });
             }
           }

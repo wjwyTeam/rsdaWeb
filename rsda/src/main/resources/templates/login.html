@@ -35,17 +35,17 @@
 				</div>
 				<div class="layui-form-item">
 					<label class="layadmin-user-login-icon layui-icon layui-icon-username"
-						for="LAY-user-login-username"></label> <input type="text" autocomplete="off" name="userName"
+						for="LAY-user-login-username"></label> <input type="text" autocomplete="on" name="userName"
 						id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input">
 				</div>
 				<div class="layui-form-item">
 					<label class="layadmin-user-login-icon layui-icon layui-icon-password"
 						for="LAY-user-login-password"></label> <input type="password" name="passWord"
-						id="LAY-user-login-password" lay-verify="required" autocomplete="off" placeholder="密码"
+						id="LAY-user-login-password" lay-verify="required" autocomplete="on" placeholder="密码"
 						class="layui-input">
 				</div>
 				<div class="layui-form-item">
-					<button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">登陆</button>
+					<button class="layui-btn layui-btn-fluid" @click="login" lay-submit lay-filter="LAY-user-login-submit">登陆</button>
 				</div>
 			</div>
 		</div>
@@ -55,12 +55,7 @@
 	   
 
 
-		// document.onkeydown = function () {
-		// 	e = e || window.event 
-		// 	alert(e);
 		
-		
-		// }
 		layui.config({
 			base: 'layuiadmin/' //静态资源所在路径
 		}).extend({
@@ -73,7 +68,9 @@
 				search = router.search;
 			form.render();
 			//提交
-			form.on('submit(LAY-user-login-submit)', function (obj) {
+		$("#LAY-user-login-username").focus().val("");
+
+		function login(){
 				var index = layer.load(1);
 				// 加密前的原文
 				var passWord = $("#LAY-user-login-password").val();
@@ -102,7 +99,6 @@
 							}
 						});
 					},
-
 					error: function (data) {
 						layer.msg("登录超时，请重新登录或联系系统管理员！", { icon: 2 });
 					}, complete: function () {
@@ -110,7 +106,17 @@
 					}
 				});
 
-			});
+			}
+	    var flag = 1;
+		document.onkeydown = function (event) {
+			 e = event ? event : (window.event ? window.event : null);
+			  if (e.keyCode == 13 && flag == 1) {
+				$("#LAY-user-login-password").val("").focus();
+				flag++
+		      }else if(e.keyCode == 13 && flag == 2){
+				login();
+			  }
+	    	}
 		});
 	</script>
 </body>
