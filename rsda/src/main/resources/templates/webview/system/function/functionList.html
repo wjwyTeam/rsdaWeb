@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-13 08:43:24
+ * @LastEditTime : 2020-01-13 10:42:01
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -142,7 +142,7 @@
         table = layui.table,
         util = layui.util,
         treeTable = layui.treeTable;
-
+window.treeTable = treeTable;
       // 渲染表格
       var renderTreeTable = function (data) {
         var cols ;
@@ -240,6 +240,7 @@
         treeTable.render({
           elem: '#functionTable',
           treeDefaultClose: true,
+          id:"treeTable",
           tree: {
             iconIndex: 2,
             arrowType: 'arrow2',
@@ -278,7 +279,8 @@
       }
       $.get(url, function (res) {
         renderTreeTable(res);
-        // $(".ew-tree-icon").css("display", "none");
+        window.functionData = res;
+         $(".ew-tree-icon").css("display", "none");
       });
       treeTable.on('tool(functionTable)', function (obj) {
         var data = obj.data;
@@ -289,7 +291,10 @@
               id: data.id
             }, function (resultJSONObject) {
               if (resultJSONObject.success) {
-                renderTreeTable();
+                $.get(url, function (res) {
+                  renderTreeTable(res);
+                  $(".ew-tree-icon").css("display", "none");
+                });
               }
               layer.msg(resultJSONObject.msg);
             }, "json");
@@ -480,21 +485,41 @@
           });
         }
       }
-      
       var idsSelect = [];
+      window.idsSelect = idsSelect;
       treeTable.on('checkbox(functionTable)', function (obj) {
           if(obj.checked == true){
-            if (obj.data!=null) {
-              idsSelect.push(obj.data.id);
+            if(obj.type=="all"){
+              idsSelect = [];
+              $.each(window.functionData,function(index, ele){
+                idsSelect.push(ele.id);
+              });
             }
-            
+            else if (obj.data!=null) {
+              idsSelect.push(obj.data.id);
+              $.each(obj.data.children,function(index, ele){
+                idsSelect.push(ele.id);
+              });
+            }         
           }else{
-            // 如果为false的话判断当前的行是够在之前已经选中过，选中过的话就拿出去
-             $.each(idsSelect,function(k,v){
-                 if(v== obj.data.id){
-                    idsSelect.pop(obj.data.id)
-                 }
-             })
+            if(obj.type=="all"){
+              idsSelect = [];
+              $.each(window.functionData,function(index, ele){
+                idsSelect.push(ele.id);
+              });
+            } else {
+              // 去除勾选
+              $.each(idsSelect, function (k, v) {
+                if (v == obj.data.id) {
+                  idsSelect.pop(obj.data.id)
+                }
+                $.each(obj.data.children, function (index, ele) {
+                  if (v == ele.id) {
+                    idsSelect.pop(ele.id)
+                  }
+                });
+              });
+            }
           }
           $("#seleceIds").val(idsSelect);
       })
