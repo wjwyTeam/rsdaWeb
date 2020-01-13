@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 15:08:01
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-11 12:17:43
+ * @LastEditTime : 2020-01-13 10:14:05
  */
 package com.wjwy.rsda.entity;
 import java.util.Date;
@@ -13,6 +13,8 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -91,6 +93,7 @@ public class Function{
     private String perms;
 
     @Transient
+    @JsonProperty("LAY_CHECKED")
     private Boolean LAY_CHECKED;
     private List<Function> children;
 

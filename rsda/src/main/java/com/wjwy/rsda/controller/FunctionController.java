@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Function;
+import com.wjwy.rsda.entity.RoleFunction;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.FunctionService;
 import org.slf4j.Logger;
@@ -227,17 +228,26 @@ public class FunctionController {
 
     @ApiOperation(value = "菜单树展示列表 ", notes = "同步处理json")
     @GetMapping(value = "/functionTreeJson")
-    public List<Function> treeJsonsFunctions() {
+    public List<Function> treeJsonsFunctions(String roleid) {
         List<Function> treeList = functionService.getList();
+        List<RoleFunction> roleFunctions = functionService.findRoleList(roleid);
+
         List<Function> rootList = new ArrayList<Function>();
         for (Function function : treeList) {
             if (function.getPid().equals(EnumEntitys.GJD.getValue())) {
+                function.setLAY_CHECKED(false);
+                for (RoleFunction functionList : roleFunctions) {
+                   if (functionList.getFunctionId().equals(function.getId()) 
+                            || functionList.getFunctionId().equals(function.getPid())) {
+                        function.setLAY_CHECKED(true);
+                   }
+                }
                 rootList.add(function);
             }
         }
 
         for (Function nav : rootList) {
-            List<Function> child = getChild(nav.getId(), treeList);
+            List<Function> child = getChild(nav.getId(), treeList, roleFunctions);
             nav.setChildren(child);
         }
         return rootList;
@@ -249,16 +259,26 @@ public class FunctionController {
      * @param id
      * @param functions
      */
-    public List<Function> getChild(String id, List<Function> functions) {
+    public List<Function> getChild(String id, List<Function> functions, List<RoleFunction> roleFunctions) {
         List<Function> chilList = new ArrayList<Function>();
+    
         for (Function function : functions) {
             if (function.getPid().equals(id)) {
+                function.setLAY_CHECKED(false);
+                if (roleFunctions != null) {
+                    for (RoleFunction functionList : roleFunctions) {
+                        if (functionList.getFunctionId().equals(function.getId())) {
+                            function.setLAY_CHECKED(true);
+                        }
+                    }
+                }
+               
                 chilList.add(function);
             }
         }
 
         for (Function functionC : chilList) {
-            functionC.setChildren(getChild(functionC.getId(), functions));
+            functionC.setChildren(getChild(functionC.getId(), functions, roleFunctions));
         }
         if (chilList.size() == 0) {
             return null;

@@ -100,8 +100,8 @@ public class LoginController{
 		if (userobj != null) {
 			model.addObject("user", userobj);// session 内用户信息提供给首页用以用户显示
 			// 展示菜单列表(首页)
-			// model.addObject("manuList", functionService.getList());
-			model.addObject("manuList", functionService.findUserList(userobj.getUserId()));
+			model.addObject("manuList", functionService.getList());
+			// model.addObject("manuList", functionService.findUserList(userobj.getUserId()));
 			model.setViewName("webview/index");// 设置返回界面为首页
 			return model;
 		}

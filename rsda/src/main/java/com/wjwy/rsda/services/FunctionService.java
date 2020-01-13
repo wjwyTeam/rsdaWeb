@@ -213,15 +213,15 @@ public class FunctionService extends BaseService {
                     Function ffq = new Function();
                     ffq = fun;
                     f.add(ffq);
-                    Example exampleFs = new Example(Function.class);
-                    Criteria criteriaFs = exampleFs.createCriteria();
-                    criteriaFs.andEqualTo("pid", fun.getId());
-                    List<Function> functionList = functionMapper.selectByExample(exampleFs);
-                    for (Function funT : functionList) {
-                        Function fft = new Function();
-                        fft = funT;
-                        f.add(fft);
-                    }
+                    // Example exampleFs = new Example(Function.class);
+                    // Criteria criteriaFs = exampleFs.createCriteria();
+                    // criteriaFs.andEqualTo("pid", fun.getId());
+                    // List<Function> functionList = functionMapper.selectByExample(exampleFs);
+                    // for (Function funT : functionList) {
+                    //     Function fft = new Function();
+                    //     fft = funT;
+                    //     f.add(fft);
+                    // }
 
                 }
             }
@@ -231,5 +231,18 @@ public class FunctionService extends BaseService {
         return listW;
 
     }
+
+
+    /**
+     * 角色查询菜单Id
+     * @param roleid
+     * @return
+     */
+    public List<RoleFunction> findRoleList(String roleid) {
+        Example exampleU = new Example(RoleFunction.class);
+        Criteria criteriaU = exampleU.createCriteria();
+        criteriaU.andEqualTo("roleId", roleid);
+        return roleFunctionMapper.selectByExample(exampleU);
+	}
 
 }
