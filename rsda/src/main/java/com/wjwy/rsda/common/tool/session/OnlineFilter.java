@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-31 09:37:57
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-10 12:51:35
+ * @LastEditTime : 2020-01-13 14:19:50
  */
 package com.wjwy.rsda.common.tool.session;
 
@@ -64,7 +64,7 @@ public class OnlineFilter extends AccessControlFilter {
                             onlineSession.setLoginName(user.getUserName());
                             onlineSession.setDeptName(user.getDeptId());
                             onlineSession.setAvatar(user.getBase64Photo());
-                            onlineSession.setStatus(EnumEntitys.ONLINE.getDesc());
+                            onlineSession.setStatus((String)EnumEntitys.ONLINE.getDesc());
                             onlineSession.markAttributeChanged();
                         }
                     }

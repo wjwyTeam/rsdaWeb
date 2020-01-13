@@ -97,7 +97,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
         if (null == onlineSession) {
             return;
         }
-        onlineSession.setStatus(EnumEntitys.OFFLINE.getDesc());
+        onlineSession.setStatus((String) EnumEntitys.OFFLINE.getDesc());
         shiroService.deleteSession(onlineSession);
     }
 }

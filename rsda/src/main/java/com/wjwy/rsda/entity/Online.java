@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:35:18
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-10 12:48:35
+ * @LastEditTime : 2020-01-13 14:17:12
  */
 package com.wjwy.rsda.entity;
 
@@ -58,6 +58,6 @@ public class Online {
     private Long expireTime;
 
     /** 在线状态 */
-    private Object status;
+    private String status;
 
 }

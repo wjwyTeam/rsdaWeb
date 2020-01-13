@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 14:47:31
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-10 12:47:33
+ * @LastEditTime : 2020-01-13 14:18:51
  */
 package com.wjwy.rsda.common.tool.session;
 
@@ -52,7 +52,7 @@ public class OnlineSession extends SimpleSession {
     private String os;
 
     /** 在线状态 */
-    private Object status;
+    private String status;
 
     /** 属性是否改变 优化session数据同步 */
     private transient boolean attributeChanged = false;

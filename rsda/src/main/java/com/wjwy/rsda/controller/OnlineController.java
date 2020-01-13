@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 17:50:35
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-11 08:39:32
+ * @LastEditTime : 2020-01-13 14:19:43
  */
 package com.wjwy.rsda.controller;
 
@@ -103,9 +103,9 @@ public class OnlineController {
         if (sessionId.equals(ShiroUtils.getSessionId())) {
           return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "当前登陆用户无法强退", null);
         }
-        onlineSession.setStatus(EnumEntitys.OFFLINE);
+        onlineSession.setStatus((String)EnumEntitys.OFFLINE.getDesc());
         onlineSessionDAO.update(onlineSession);
-        online.setStatus(EnumEntitys.OFFLINE.getDesc());
+        online.setStatus((String)EnumEntitys.OFFLINE.getDesc());
         userOnlineService.saveOnline(online);
         return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", null, null, null);
       }
@@ -134,9 +134,9 @@ public class OnlineController {
       if (onlineSession == null) {
         return ResponseWrapper.error(HttpStatus.BAD_REQUEST.value(), "用户已下线", null);
       }
-      onlineSession.setStatus(EnumEntitys.OFFLINE);
+      onlineSession.setStatus((String) EnumEntitys.OFFLINE.getDesc());
       onlineSessionDAO.update(onlineSession);
-      online.setStatus(EnumEntitys.OFFLINE);
+      online.setStatus((String)EnumEntitys.OFFLINE.getDesc());
       userOnlineService.saveOnline(online);
     } catch (Exception e) {
       logger.error(e.getMessage());

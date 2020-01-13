@@ -50,7 +50,7 @@ public class AsyncFactory {
                 online.setLoginLocation(AddressUtils.getRealAddressByIP(session.getHost()));
                 online.setBrowser(session.getBrowser());
                 online.setOs(session.getOs());
-                online.setStatus(session.getStatus());
+                online.setStatus((String)session.getStatus());
                 SpringUtils.getBean(OnlineService.class).saveOnline(online);
 
             }
