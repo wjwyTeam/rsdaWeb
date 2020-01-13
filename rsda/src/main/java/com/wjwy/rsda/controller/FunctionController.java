@@ -237,10 +237,10 @@ public class FunctionController {
             if (function.getPid().equals(EnumEntitys.GJD.getValue())) {
                 function.setLAY_CHECKED(false);
                 for (RoleFunction functionList : roleFunctions) {
-                   if (functionList.getFunctionId().equals(function.getId()) 
+                    if (functionList.getFunctionId().equals(function.getId())
                             || functionList.getFunctionId().equals(function.getPid())) {
                         function.setLAY_CHECKED(true);
-                   }
+                    }
                 }
                 rootList.add(function);
             }
@@ -261,7 +261,7 @@ public class FunctionController {
      */
     public List<Function> getChild(String id, List<Function> functions, List<RoleFunction> roleFunctions) {
         List<Function> chilList = new ArrayList<Function>();
-    
+
         for (Function function : functions) {
             if (function.getPid().equals(id)) {
                 function.setLAY_CHECKED(false);
@@ -272,7 +272,7 @@ public class FunctionController {
                         }
                     }
                 }
-               
+
                 chilList.add(function);
             }
         }

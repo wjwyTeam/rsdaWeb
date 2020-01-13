@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-13 11:58:21
+ * @LastEditTime : 2020-01-13 13:59:57
  */
 package com.wjwy.rsda.services;
 
@@ -187,9 +187,9 @@ public class UserService {
 	 */
 	public List<User> getList(String userId, String userName, String deptId, String workDept, Boolean delFlag,
 			String roleId) {
-  Subject subject = SecurityUtils.getSubject();
+		Subject subject = SecurityUtils.getSubject();
 
-		if (subject!=null && subject.getPrincipals() != null) {
+		if (subject != null && subject.getPrincipals() != null) {
 			User userobj = subject.getPrincipals().oneByType(User.class);
 			if (userobj != null) {
 				userId = userobj.getUserId();
@@ -198,17 +198,17 @@ public class UserService {
 			Criteria criteriaR = exampleR.createCriteria();
 			criteriaR.andEqualTo("userId", userId);
 			List<UserRole> ur = userRoleDao.selectByExample(exampleR);
-				for (UserRole userRole : ur) {
-					Example exampleT = new Example(Role.class);
-					Criteria criteriaT = exampleT.createCriteria();
-				 criteriaT.andEqualTo("id", userRole.getRoleId());
-					List<Role> r = roleDao.selectByExample(exampleT);
-					for (Role role : r) {
-					if (role.getEnName().equals("super")) {
+			for (UserRole userRole : ur) {
+				Example exampleT = new Example(Role.class);
+				Criteria criteriaT = exampleT.createCriteria();
+				criteriaT.andEqualTo("id", userRole.getRoleId());
+				List<Role> r = roleDao.selectByExample(exampleT);
+				for (Role role : r) {
+					if (role.getEnName().equals(EnumEntitys.SUPER.getValue())) {
 						userId = null;
 					}
-					}
 				}
+			}
 
 		}
 		Example example = new Example(User.class);

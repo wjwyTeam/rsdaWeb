@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 08:34:07
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-11 09:58:23
+ * @LastEditTime : 2020-01-13 14:05:59
  */
 package com.wjwy.rsda.services;
 
@@ -15,18 +15,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.common.util.StringUtils;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.RoleFunction;
+import com.wjwy.rsda.entity.User;
 import com.wjwy.rsda.entity.UserRole;
 import com.wjwy.rsda.mapper.RoleFunctionMapper;
 import com.wjwy.rsda.mapper.RoleMapper;
 import com.wjwy.rsda.mapper.UserRoleMapper;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +53,11 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 public class RoleService {
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private UserRoleMapper userRoleDao;
 
+    @Autowired
+    private RoleMapper roleDao;
     @Autowired
     private RoleFunctionMapper roleFunctionMapper;
     @Autowired
@@ -78,6 +85,31 @@ public class RoleService {
             criteria.andEqualTo("name", name);
         }
         criteria.andEqualTo("delFlag", false);
+
+        Subject subject = SecurityUtils.getSubject();
+        if (subject != null && subject.getPrincipals() != null) {
+            User userobj = subject.getPrincipals().oneByType(User.class);
+            if (userobj != null) {
+                Example exampleR = new Example(UserRole.class);
+                Criteria criteriaR = exampleR.createCriteria();
+                criteriaR.andEqualTo("userId", userobj.getUserId());
+                List<UserRole> ur = userRoleDao.selectByExample(exampleR);
+                for (UserRole userRole : ur) {
+                    Example exampleT = new Example(Role.class);
+                    Criteria criteriaT = exampleT.createCriteria();
+                    criteriaT.andEqualTo("id", userRole.getRoleId());
+                    List<Role> r = roleDao.selectByExample(exampleT);
+                    for (Role role : r) {
+                        if (!role.getEnName().equals(EnumEntitys.SUPER.getValue())) {
+                            criteria.andNotEqualTo("enName", EnumEntitys.SUPER.getValue());
+                        }
+                    }
+                }
+            }
+        }
+
+
+
         List<Role> roles = roleMapper.selectByExample(example);
 
         if (roles == null) {
@@ -216,6 +248,27 @@ public class RoleService {
         Criteria criteria = example.createCriteria();
         criteria.andEqualTo("delFlag", false);
         criteria.andEqualTo("roleStatus", true);
+        Subject subject = SecurityUtils.getSubject();
+        if (subject != null && subject.getPrincipals() != null) {
+            User userobj = subject.getPrincipals().oneByType(User.class);
+            if (userobj != null) {
+                Example exampleR = new Example(UserRole.class);
+                Criteria criteriaR = exampleR.createCriteria();
+                criteriaR.andEqualTo("userId", userobj.getUserId());
+                List<UserRole> ur = userRoleDao.selectByExample(exampleR);
+                for (UserRole userRole : ur) {
+                    Example exampleT = new Example(Role.class);
+                    Criteria criteriaT = exampleT.createCriteria();
+                    criteriaT.andEqualTo("id", userRole.getRoleId());
+                    List<Role> r = roleDao.selectByExample(exampleT);
+                    for (Role role : r) {
+                        if (!role.getEnName().equals(EnumEntitys.SUPER.getValue())) {
+                            criteria.andNotEqualTo("enName", EnumEntitys.SUPER.getValue());
+                        }
+                    }
+                }
+            }
+        }
 		return roleMapper.selectByExample(example);
 	}
 
