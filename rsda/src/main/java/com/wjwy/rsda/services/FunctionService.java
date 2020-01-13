@@ -207,6 +207,8 @@ public class FunctionService extends BaseService {
             for (RoleFunction roleFunctionList : roleFunctions) {
                 Example exampleF = new Example(Function.class);
                 Criteria criteriaF = exampleF.createCriteria();
+                exampleF.setOrderByClause("forder ASC");
+                criteriaF.andEqualTo("visible", true);
                 criteriaF.andEqualTo("id", roleFunctionList.getFunctionId());
                 List<Function> functions = functionMapper.selectByExample(exampleF);
                 for (Function fun : functions) {

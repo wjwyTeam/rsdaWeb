@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 14:33:53
+ * @LastEditTime : 2020-01-13 11:58:21
  */
 package com.wjwy.rsda.services;
 
@@ -37,6 +37,8 @@ import com.wjwy.rsda.mapper.RoleMapper;
 import com.wjwy.rsda.mapper.UserMapper;
 import com.wjwy.rsda.mapper.UserRoleMapper;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,7 +187,30 @@ public class UserService {
 	 */
 	public List<User> getList(String userId, String userName, String deptId, String workDept, Boolean delFlag,
 			String roleId) {
+  Subject subject = SecurityUtils.getSubject();
 
+		if (subject!=null && subject.getPrincipals() != null) {
+			User userobj = subject.getPrincipals().oneByType(User.class);
+			if (userobj != null) {
+				userId = userobj.getUserId();
+			}
+			Example exampleR = new Example(UserRole.class);
+			Criteria criteriaR = exampleR.createCriteria();
+			criteriaR.andEqualTo("userId", userId);
+			List<UserRole> ur = userRoleDao.selectByExample(exampleR);
+				for (UserRole userRole : ur) {
+					Example exampleT = new Example(Role.class);
+					Criteria criteriaT = exampleT.createCriteria();
+				 criteriaT.andEqualTo("id", userRole.getRoleId());
+					List<Role> r = roleDao.selectByExample(exampleT);
+					for (Role role : r) {
+					if (role.getEnName().equals("super")) {
+						userId = null;
+					}
+					}
+				}
+
+		}
 		Example example = new Example(User.class);
 		// 注意：排序使用的是列名
 		example.setOrderByClause("create_time DESC");
