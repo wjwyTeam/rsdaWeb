@@ -6,8 +6,7 @@
   <link href="/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
   <script th:src="@{/js/jquery-1.4.4.min.js}"></script>
   <script>
-    /^http(s*):\/\//.test(location.href) ||
-      alert("请先部署到 localhost 下再访问");
+
   </script>
   <style>
     .Toplog {
@@ -66,7 +65,7 @@
 
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img" />
-              <cite th:text=" ${user.userRealName}"></cite></a>
+              <cite th:text=" ${user.userRealName}"></cite><input id="include" th:value=" ${n}"></a>
             <dl class="layui-nav-child">
               <dd>
                 <a th:attr="lay-href=@{'/user/personInfo?userId='+${user.userId}}">基本资料</a>

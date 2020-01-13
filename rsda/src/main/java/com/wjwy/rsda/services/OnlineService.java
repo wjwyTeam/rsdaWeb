@@ -4,13 +4,12 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 16:00:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-10 14:24:23
+ * @LastEditTime : 2020-01-11 13:15:39
  */
 package com.wjwy.rsda.services;
-
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
@@ -159,5 +158,17 @@ public class OnlineService {
      */
     public void clear() {
         userOnlineDao.clear();
+    }
+
+    /**
+     * 
+     * @param serializable
+     * @return
+     */
+	public List<Online> getId(Serializable serializable) {
+		Example example = new Example(Online.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("sessionId", serializable);
+        return userOnlineDao.selectByExample(example);
 	}
 }

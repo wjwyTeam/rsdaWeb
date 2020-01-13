@@ -95,7 +95,6 @@ public class LoginController{
 	 */
 	@GetMapping("/index")
 	public ModelAndView Index(@ApiIgnore ModelAndView model) {
-
 		Subject subject = SecurityUtils.getSubject();
 		User userobj = subject.getPrincipals().oneByType(User.class);
 		if (userobj != null) {
@@ -119,6 +118,7 @@ public class LoginController{
 	 */
 	@PostMapping("/login")
 	public ResponseWrapper UserLogin(String loginName, String passwordMd5) {
+		int n = 0;
 		try {
 			UsernamePasswordToken token = new UsernamePasswordToken(loginName, passwordMd5);
 			Subject subject = SecurityUtils.getSubject();
@@ -126,7 +126,6 @@ public class LoginController{
 
 			Online on = userOnlineService.getOnline(loginName);
 			if (on != null) {
-
 				// 以下为只允许同一账户单个登录
 				Collection<Session> sessions = onlineSessionDAO.getActiveSessions();
 				if (sessions.size() > 0) {
@@ -137,6 +136,7 @@ public class LoginController{
 							if (loginName.equals(onlineSession.getLoginName())) { // 这里的username也就是当前登录的username
 								session.setTimeout(0); // 这里就把session清除，
 								userOnlineService.deleteOnlineById(on.getSessionId());
+							 n = userOnlineService.getId(onlineSession.getId()).size();
 								logger.info(
 										"[ IP:" + onlineSession.getHost() + "《=================》用户" + onlineSession.getLoginName() + "] 已下线...");
 							}
@@ -145,7 +145,7 @@ public class LoginController{
 				}
 			}
 
-			return ResponseWrapper.success(HttpStatus.OK.value(), "登陆中,请稍候...", null, "/index", null);
+			return ResponseWrapper.success(HttpStatus.OK.value(), "登陆中,请稍候...", String.valueOf(n), "/index", null);
 		} catch (AuthenticationException e) {
 			return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null, "/login", null);
 		}
@@ -153,7 +153,7 @@ public class LoginController{
 
 	@GetMapping("/")
 	public ModelAndView getErrorPath(@ApiIgnore ModelAndView model) {
-		model.setViewName("redirect:/login");// 设置返回界面为首页
+		model.setViewName("redirect:/login");// 设置返回界面为首页loginSession
 		return model;
 	}
 }
