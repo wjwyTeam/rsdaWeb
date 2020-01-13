@@ -9,7 +9,6 @@ import com.wjwy.rsda.common.util.ResponseWrapper;
 import com.wjwy.rsda.entity.Function;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.FunctionService;
-import com.wjwy.rsda.services.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +40,7 @@ import tk.mybatis.mapper.util.StringUtil;
 public class FunctionController {
     @Autowired
     private FunctionService functionService;
-    @Autowired
-    private RoleService roleService;
+
     @Autowired
     private HttpServletRequest request;
     public Logger logger = LoggerFactory.getLogger(FunctionController.class);
@@ -58,7 +56,7 @@ public class FunctionController {
         model.addObject("fStatus", true);
         if (StringUtil.isNotEmpty(request.getParameter("fxz"))) {
             // 选择控制List - 隐藏按钮
-            model.addObject("roleFunctionList", roleService.getFunction(id));
+            model.addObject("roleid", id);
             model.addObject("fStatus", request.getParameter("fxz"));
         }
         model.setViewName(prefix + "/functionList");

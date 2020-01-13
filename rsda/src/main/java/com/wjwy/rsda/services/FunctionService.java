@@ -1,8 +1,10 @@
 package com.wjwy.rsda.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -11,8 +13,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.StringUtils;
 import com.wjwy.rsda.entity.Function;
+import com.wjwy.rsda.entity.RoleFunction;
+import com.wjwy.rsda.entity.UserRole;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.mapper.FunctionMapper;
+import com.wjwy.rsda.mapper.RoleFunctionMapper;
+import com.wjwy.rsda.mapper.UserRoleMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +43,10 @@ public class FunctionService extends BaseService {
 
     @Autowired
     private FunctionMapper functionMapper;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+    @Autowired
+    private RoleFunctionMapper roleFunctionMapper;
 
     /**
      * 增加
@@ -142,6 +152,7 @@ public class FunctionService extends BaseService {
     public List<Function> getList() {
         return functionMapper.findList();
     }
+
     /**
      * 
      * @param groupId
@@ -173,13 +184,52 @@ public class FunctionService extends BaseService {
     }
 
     /**
+     * 角色关联菜单树
      * 
+     * @param userId
+     * @return
      */
-    // public List<Function> treeList() {
+    public List<Function> findUserList(String userId) {
+        List<Function> f = new ArrayList<Function>();
 
-    //     return null;
-    // }
+        Example example = new Example(UserRole.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId", userId);
+        List<UserRole> userRoles = userRoleMapper.selectByExample(example);
+        if (userRoles == null) {
+            return null;
+        }
+        for (UserRole userRole : userRoles) {
+            Example exampleU = new Example(RoleFunction.class);
+            Criteria criteriaU = exampleU.createCriteria();
+            criteriaU.andEqualTo("roleId", userRole.getRoleId());
+            List<RoleFunction> roleFunctions = roleFunctionMapper.selectByExample(exampleU);
+            for (RoleFunction roleFunctionList : roleFunctions) {
+                Example exampleF = new Example(Function.class);
+                Criteria criteriaF = exampleF.createCriteria();
+                criteriaF.andEqualTo("id", roleFunctionList.getFunctionId());
+                List<Function> functions = functionMapper.selectByExample(exampleF);
+                for (Function fun : functions) {
+                    Function ffq = new Function();
+                    ffq = fun;
+                    f.add(ffq);
+                    Example exampleFs = new Example(Function.class);
+                    Criteria criteriaFs = exampleFs.createCriteria();
+                    criteriaFs.andEqualTo("pid", fun.getId());
+                    List<Function> functionList = functionMapper.selectByExample(exampleFs);
+                    for (Function funT : functionList) {
+                        Function fft = new Function();
+                        fft = funT;
+                        f.add(fft);
+                    }
 
+                }
+            }
+        }
+        LinkedHashSet<Function> hashSet = new LinkedHashSet<Function>(f);
+        ArrayList<Function> listW = new ArrayList<Function>(hashSet);
+        return listW;
 
- 
+    }
+
 }

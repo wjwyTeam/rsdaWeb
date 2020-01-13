@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-06 15:02:00
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-03 09:28:35
+ * @LastEditTime : 2020-01-13 08:24:32
  */
 package com.wjwy.rsda.entity;
 
@@ -15,8 +15,9 @@ import javax.persistence.Table;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 /*
@@ -28,7 +29,8 @@ import lombok.ToString;
  * @LastEditTime: 2019-12-06 08:07:23
  */
 
-@Data
+@Setter
+@Getter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
