@@ -19,13 +19,13 @@
       background-repeat: no-repeat;
       background-size: 40px 35px;
     }
-  i{    
-    position: absolute;
-    top: 72%;
-    left: 20px;
-    margin-top: -19px;
-  }
 
+    i {
+      position: absolute;
+      top: 72%;
+      left: 20px;
+      margin-top: -19px;
+    }
   </style>
 </head>
 
@@ -48,6 +48,13 @@
           </li>
         </ul>
         <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:;" layadmin-event="note">
+              <i class="layui-icon layui-icon-note"></i>
+            </a>
+          </li>
+          
           <li class="layui-nav-item" lay-unselect>
             <a lay-href="/webviews/app/message/index.html" layadmin-event="message" lay-text="消息中心">
               <i class="layui-icon layui-icon-notice"></i>
@@ -56,16 +63,17 @@
               <span class="layui-badge-dot"></span>
             </a>
           </li>
-          
+
           <!-- <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="theme">
               <i class="layui-icon layui-icon-theme"></i>
             </a>
           </li> -->
 
+
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img" />
-              <cite th:text=" ${user.userRealName}"></cite></a>
+              <cite style="color:#f9f6f6" th:text=" ${user.userRealName}"></cite></a>
             <dl class="layui-nav-child">
               <dd>
                 <a th:attr="lay-href=@{'/user/personInfo?userId='+${user.userId}}">基本资料</a>
@@ -80,14 +88,11 @@
             </dl>
           </li>
 
+      
+
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="fullscreen">
               <i class="layui-icon layui-icon-screen-full"></i>
-            </a>
-          </li>
-          <li class="layui-nav-item layui-hide-xs" lay-unselect>
-            <a href="javascript:;" layadmin-event="note">
-              <i class="layui-icon layui-icon-note"></i>
             </a>
           </li>
         </ul>
@@ -96,7 +101,7 @@
       <!-- 侧边菜单 -->
       <div class="layui-side layui-side-menu">
         <div class="layui-side-scroll">
-          <div class="layui-logo" lay-href="/webviews/home/console.html">
+          <div class="layui-logo">
             <div class="Toplog"></div>
             <span>
               干部人事档案系统
@@ -108,13 +113,13 @@
 
             <!--ZHANGQI -->
             <li data-name="set" class="layui-nav-item" th:each="m : ${manuList}">
-               <a th:attr="lay-tips=${m.functionName}" lay-direction="1" th:if="${m.pid eq '0'}">
+              <a th:attr="lay-tips=${m.functionName}" lay-direction="1" th:if="${m.pid eq '0'}">
                 <i th:attr="class=${m.icon} "></i>
                 <cite th:text="${m.functionName}"></cite>
               </a>
-              <!-- 子菜单 -->   
-           
-              <dl class="layui-nav-child"  th:each="n:${manuList}">
+              <!-- 子菜单 -->
+
+              <dl class="layui-nav-child" th:each="n:${manuList}">
                 <dd class="layui-nav-itemed" th:if="${n.pid ne '0' and m.id eq n.pid}">
                   <a th:text="${n.functionName}" th:attr="lay-href=@{${n.url}}"></a>
                 </dd>
@@ -168,19 +173,15 @@
     </div>
   </div>
 
-  <script>
-    layui
-      .config({
-        base: "layuiadmin/" //静态资源所在路径
-      })
-      .extend({
-        index: "lib/index" //主入口模块
-      })
-      .use(["index"],function(){
-          console.log($(".layui-nav-child:empty").empty())
-          $(".layui-nav-child:empty").html("123");
 
-      });
+  <script>
+    layui.config({
+      base: 'layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['index'], function () {
+   
+    });
   </script>
 </body>
 

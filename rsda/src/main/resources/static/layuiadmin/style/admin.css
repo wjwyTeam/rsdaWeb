@@ -187,8 +187,9 @@ html {
     position: absolute;
     padding: 5px;
     right: 10px;
-    top: 12px;
+    top: 30px;
     color: #fff;
+    left: 250px;
     cursor: pointer
 }
 
@@ -229,7 +230,7 @@ html {
 }
 
 .layui-layout-admin .layui-layout-left {
-    padding: 0 10px
+    padding: 0 0px
 }
 
 .layui-layout-admin .layui-layout-left .layui-nav-item {
@@ -251,7 +252,8 @@ html {
 .layui-header .layui-nav-item .layui-icon {
     position: relative;
     top: 1px;
-    font-size: 16px
+    font-size: 18px;
+    color: white;
 }
 
 .layui-header .layui-layout-right .layui-badge-dot {
@@ -560,8 +562,8 @@ html {
 
 .layui-layout-admin .layui-header {
     border-bottom: 1px solid #f6f6f6;
-    box-sizing: border-box;
-    background-color: #fff
+    /* box-sizing: border-box; */
+    background-color: #03152A;
 }
 
 .layui-layout-admin .layui-header a,.layui-layout-admin .layui-header a cite {
@@ -586,8 +588,8 @@ html {
 }
 
 .layui-layout-admin .layui-logo {
-    background-color: #20222A;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.15)
+    background-color: #03152A;
+    /* box-shadow: 0 1px 2px 0 rgba(0,0,0,.15) */
 }
 
 .layui-layout-admin .layui-logo,.layui-layout-admin .layui-logo a {
@@ -957,7 +959,7 @@ html {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: #1e9FFF;
+    background-color: #03152A;
     margin-right: 15px
 }
 
