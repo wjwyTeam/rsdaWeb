@@ -45,7 +45,7 @@
 						class="layui-input">
 				</div>
 				<div class="layui-form-item">
-					<button class="layui-btn layui-btn-fluid" @click="login" lay-submit lay-filter="LAY-user-login-submit">登陆</button>
+					<button class="layui-btn layui-btn-fluid" @click="login" lay-submit lay-filter="LAY-user-login-submit" id="loginTo">登陆</button>
 				</div>
 			</div>
 		</div>
@@ -117,7 +117,12 @@
 				login();
 			  }
 	    	}
+			$("#loginTo").click(function(){
+			//  alert(123);
+		     login();
+		})
 		});
+	
 	</script>
 </body>
 
