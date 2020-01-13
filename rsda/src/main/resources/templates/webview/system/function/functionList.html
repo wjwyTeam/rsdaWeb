@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-13 10:42:01
+ * @LastEditTime : 2020-01-13 11:34:19
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -188,21 +188,23 @@ window.treeTable = treeTable;
               field: 'url',
               title: '请求地址',
               align: 'center'
-            }, {
-              field: 'functionType',
-              title: '类型',
-              align: 'center',
-              templet: function (d) {
-                var c;
-                if (d.functionType == '0') {
-                  c = "目录";
-                } else if (d.functionType == '1') {
-                  c = "菜单";
-                } else
-                  c = "按钮";
-                return '<span id="type-button">' + c + '</span>'
-              }
-            }, {
+            }, 
+            // {
+            //   field: 'functionType',
+            //   title: '类型',
+            //   align: 'center',
+            //   templet: function (d) {
+            //     var c;
+            //     if (d.functionType == '0') {
+            //       c = "目录";
+            //     } else if (d.functionType == '1') {
+            //       c = "菜单";
+            //     } else
+            //       c = "按钮";
+            //     return '<span id="type-button">' + c + '</span>'
+            //   }
+            // }, 
+            {
               field: 'visible',
               title: '可见',
               align: 'center',
@@ -272,16 +274,24 @@ window.treeTable = treeTable;
         $('body').children('.page-loading').hide();
         $('body').removeClass('page-no-scroll');
       }, 100);
+
       var url = "/function/functionTreeJson?roleid=";
       var roleid =  "[[${roleid}]]";
       if (roleid + "" !== "") {
         url += roleid;
       }
-      $.get(url, function (res) {
-        renderTreeTable(res);
-        window.functionData = res;
-         $(".ew-tree-icon").css("display", "none");
-      });
+      function getData(url){
+        $.get(url, function (res) {
+          renderTreeTable(res);
+          window.functionData = res;
+          $(".ew-tree-icon").css("display", "none");
+        });
+      }
+      getData(url)
+     
+
+
+
       treeTable.on('tool(functionTable)', function (obj) {
         var data = obj.data;
         if (obj.event === "del") {
@@ -292,7 +302,8 @@ window.treeTable = treeTable;
             }, function (resultJSONObject) {
               if (resultJSONObject.success) {
                 $.get(url, function (res) {
-                  renderTreeTable(res);
+                  getData(url)
+                  // renderTreeTable(res);
                   $(".ew-tree-icon").css("display", "none");
                 });
               }
@@ -334,7 +345,8 @@ window.treeTable = treeTable;
                   contentType: "application/json;charset-UTF-8",
                   success: function (resultJSONObject) {
                     if (resultJSONObject.success) {
-                      renderTreeTable();
+                      getData(url)
+                      // renderTreeTable(res);
                     }
                     layer.msg(resultJSONObject.msg);
                   }
@@ -383,7 +395,8 @@ window.treeTable = treeTable;
                   contentType: "application/json;charset-UTF-8",
                   success: function (resultJSONObject) {
                     if (resultJSONObject.success) {
-                      renderTreeTable();
+                      getData(url)
+                      // renderTreeTable(res);
                     }
                     layer.msg(resultJSONObject.msg);
                   }
@@ -436,7 +449,8 @@ window.treeTable = treeTable;
                   contentType: "application/json;charset-UTF-8",
                   success: function (resultJSONObject) {
                     if (resultJSONObject.success) {
-                      renderTreeTable();
+                      // renderTreeTable(res);
+                      getData(url)
                     }
                     layer.msg(resultJSONObject.msg);
                   }
@@ -476,7 +490,6 @@ window.treeTable = treeTable;
                   var node = zTreeObj.getNodeByParam("id", 0, null);
                   zTreeObj.reAsyncChildNodes(node, "refresh");
                   tableLoad(table);
-
                 }
                 layer.msg(data.msg);
 
@@ -485,14 +498,23 @@ window.treeTable = treeTable;
           });
         }
       }
+     
+
       var idsSelect = [];
-      window.idsSelect = idsSelect;
+
+        $.each(window.functionData,function(index,ele){
+          idsSelect.push(els.id);
+        })
+      
       treeTable.on('checkbox(functionTable)', function (obj) {
           if(obj.checked == true){
             if(obj.type=="all"){
               idsSelect = [];
               $.each(window.functionData,function(index, ele){
                 idsSelect.push(ele.id);
+                $.each(ele.children,function(index1,ele1){
+                  idsSelect.push(ele1.id);
+                });
               });
             }
             else if (obj.data!=null) {
@@ -505,7 +527,10 @@ window.treeTable = treeTable;
             if(obj.type=="all"){
               idsSelect = [];
               $.each(window.functionData,function(index, ele){
-                idsSelect.push(ele.id);
+                idsSelect.pop(ele.id);
+                $.each(ele.children,function(index1,ele1){
+                  idsSelect.pop(ele1.id);
+                });
               });
             } else {
               // 去除勾选
