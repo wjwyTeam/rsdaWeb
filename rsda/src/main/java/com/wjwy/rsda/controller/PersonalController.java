@@ -78,14 +78,44 @@ public class PersonalController {
   */
  @ApiOperation(value = "跳转人员管理表单主页", notes = "personalId - 人员编号")
  @GetMapping("/personalFormPage")
- public ModelAndView personalFormPage(String personalId, @ApiIgnore ModelAndView model) {
-  if (StringUtil.isNotEmpty(personalId)) {
-   model.addObject("personalOne", personalService.getById(personalId));
+  public ModelAndView personalFormPage(String personalId, @ApiIgnore ModelAndView model) {
+    if (StringUtil.isNotEmpty(personalId)) {
+      model.addObject("personalOne", personalService.getById(personalId));
+    }
+    model.setViewName(prefix + "/personalForm");
+    return model;
   }
-  model.setViewName(prefix + "/personalForm");
-  return model;
- }
 
+ 
+  /**
+   * 跳转案卷管理列表主页
+   * 
+   * @param model
+   * @return ModelAndView
+   */
+  @GetMapping("/dossierListPage")
+  @ApiOperation(value = "跳转案卷管理列表主页")
+  public ModelAndView dossierListPage(@ApiIgnore ModelAndView model) {
+    model.setViewName(prefix + "/dossierList");
+    return model;
+  }
+
+  /**
+   * 跳转案卷管理表单主页
+   * 
+   * @param dossierId
+   * @param model
+   * @return ModelAndView
+   */
+  @ApiOperation(value = "跳转案卷管理表单主页", notes = "dossierId - 案卷编号")
+  @GetMapping("/dossierFormPage")
+  public ModelAndView dossierFormPage(String dossierId, @ApiIgnore ModelAndView model) {
+    if (StringUtil.isNotEmpty(dossierId)) {
+      model.addObject("dossierOne", personalService.getById(dossierId));
+    }
+    model.setViewName(prefix + "/dossierForm");
+    return model;
+  }
  /**
   * 列表数据查询
   * 

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @String: 2020-01-02 14:48:17
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 11:40:28
+ * @LastEditTime : 2020-01-14 16:48:50
  */
 package com.wjwy.rsda.entity;
 
@@ -104,4 +104,8 @@ public class Dossier {
  @ApiModelProperty("转出时间")
  @Column(name = "transferout_time")
  private String transferoutTime;
+
+
+
+ 
 }
