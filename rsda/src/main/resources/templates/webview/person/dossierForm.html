@@ -3,8 +3,8 @@
   @version: v0.0.1
   @Author: ZHANGQI
   @Date: 2019-12-12 08:17:42
- * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 11:21:29
+ * @LastEditors  : zgr
+ * @LastEditTime : 2020-01-14 14:33:24
  -->
  <!DOCTYPE html>
  <html>
@@ -44,8 +44,8 @@
         <div class="layui-form-item">
               <label class="layui-form-label"><i ></i>性别</label>
               <div class="layui-input-inline" >
-                  <input type="radio" name="gender" value="0" title="男" checked>
-                  <input type="radio" name="gender" value="1" title="女" >
+                  <input type="radio" name="personSex" value="0" title="男" checked>
+                  <input type="radio" name="personSex" value="1" title="女" >
               </div>
         </div>
      </div>
@@ -54,7 +54,7 @@
         <div class="layui-form-item">
               <label class="layui-form-label"><i ></i>籍贯</label>
               <div class="layui-input-inline" >
-                <input type="text" name="personName" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                <input type="text" name="nativePlace" placeholder="请输入姓名" autocomplete="off" class="layui-input">
               </div>
         </div>
      </div>
@@ -63,7 +63,7 @@
         <div class="layui-form-item">
               <label class="layui-form-label"><i ></i>政治面貌</label>
               <div class="layui-input-inline">
-                  <select name="dossierStatus" id="dossierStatus">
+                  <select name="politicalOutlook" id="politicalOutlook">
                       <option value="" selected="true">请选择</option>
                       <option value="0">中共党员</option>
                       <option value="1">中共预备党员</option>
@@ -88,7 +88,7 @@
         <div class="layui-form-item">
                 <label class="layui-form-label"><i ></i>身份证号</label>      
                 <div class="layui-input-inline" >
-                  <input type="text" name="personDuty"  placeholder="单位及职务" autocomplete="off"
+                  <input type="text" name="personNo"  placeholder="身份证号" autocomplete="off"
                     class="layui-input">
                 </div>
         </div>
@@ -98,7 +98,7 @@
     <div class="layui-form-item">
       <label class="layui-form-label"><i ></i>出生日期</label>
       <div class="layui-input-inline" >
-          <input type="text"  name="transferTime" class="layui-input"  id= "transferTime"  placeholder="yyyy-MM-dd">
+          <input type="text"  name="birthDate" class="layui-input"  id= "birthDate"  placeholder="yyyy-MM-dd">
       </div>
     </div>
   </div>
@@ -107,7 +107,7 @@
       <div class="layui-form-item">
             <label class="layui-form-label"><i ></i>人员类别</label>
             <div class="layui-input-inline">
-              <select name="personType">
+              <select name="personalType">
                 <option value="0" selected="ture">在职人员</option>
                 <option value="1">离退人员</option>
                 <option value="1">历史人员</option>
@@ -121,7 +121,7 @@
     <div class="layui-form-item">
           <label class="layui-form-label"><i ></i>管理类别</label>
           <div class="layui-input-inline">
-            <select name="managementType">
+            <select name="managementCategory">
               <option value="" selected="true">请选择</option>
               <option value="0">中管干部</option>
               <option value="1">省管干部</option>
@@ -157,7 +157,7 @@
         <div class="layui-form-item">
           <label class="layui-form-label"><i > </i>档案箱号</label>
           <div class="layui-input-inline" >
-              <input type="text" name="dossierBox"  placeholder="请输入档案箱号" autocomplete="off"
+              <input type="text" name="dossierBoxNo"  placeholder="请输入档案箱号" autocomplete="off"
                 class="layui-input">
             </div>
         </div>
@@ -167,7 +167,7 @@
       <div class="layui-form-item"> 
         <label class="layui-form-label"><i > </i>档案正副本</label>
         <div class="layui-input-inline">
-          <select name="managementType">
+          <select name="dossierCharter">
             <option value="" selected="true">请选择</option>
             <option value="0">正本</option>
             <option value="1">副本</option>
@@ -194,7 +194,7 @@
       <div class="layui-form-item"> 
         <label class="layui-form-label"><i > </i>档案份数</label>
         <div class="layui-input-inline" >
-            <input type="text"  name="dossierCharter" class="layui-input"  placeholder="请输入档案份数">
+            <input type="text"  name="dossierFs" class="layui-input"  placeholder="请输入档案份数">
         </div>
       </div>
     </div>  
@@ -203,7 +203,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label"><i > </i>档案卷数</label>
         <div class="layui-input-inline" >
-            <input type="text"  name="departmentName" class="layui-input"  placeholder="请输入档案卷数">
+            <input type="text"  name="dossierJs" class="layui-input"  placeholder="请输入档案卷数">
         </div>
       </div>
     </div>
@@ -213,7 +213,16 @@
       <div class="layui-form-item">
         <label class="layui-form-label"><i > </i>来档单位</label>
         <div class="layui-input-inline" >
-            <input type="text"  name="departmentName" class="layui-input"  placeholder="请输入来档单位">
+            <input type="text"  name="departmentName"  class="layui-input"  placeholder="请输入来档单位">
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-col-xs6 layui-hide">
+      <div class="layui-form-item">
+        <label class="layui-form-label"><i > </i>来档单位id</label>
+        <div class="layui-input-inline" >
+            <input type="text"  name="departmentId"  class="layui-input"  placeholder="请输入来档单位">
         </div>
       </div>
     </div>
@@ -222,7 +231,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label"><i > </i>转入时间</label>
         <div class="layui-input-inline">
-            <input type="text"  name="intoTime" class="layui-input"  id= "intoTime"  placeholder="yyyy-MM-dd">
+            <input type="text"  name="transferTime" class="layui-input"  id= "transferTime"  placeholder="yyyy-MM-dd">
         </div>
       </div>
     </div>  
@@ -231,7 +240,15 @@
         <div class="layui-form-item">
           <label class="layui-form-label"><i > </i>转出单位</label>
           <div class="layui-input-inline" >
-              <input type="text"  name="departmentName" class="layui-input"  placeholder="请输入转出单位">
+              <input type="text"  name="deptoutName" class="layui-input"  placeholder="请输入转出单位">
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-xs6 layui-hide">
+        <div class="layui-form-item">
+          <label class="layui-form-label"><i > </i>转出单位id</label>
+          <div class="layui-input-inline" >
+              <input type="text"  name="deptoutId" class="layui-input"  placeholder="请输入转出单位">
           </div>
         </div>
       </div>
@@ -240,7 +257,7 @@
         <div class="layui-form-item">
           <label class="layui-form-label"><i > </i>转出时间</label>
           <div class="layui-input-inline" >
-              <input type="text"  name="outTime" class="layui-input"  id= "outTime"  placeholder="yyyy-MM-dd">
+              <input type="text"  name="transferoutTime" class="layui-input"  id= "transferoutTime"  placeholder="yyyy-MM-dd">
           </div>
         </div>
       </div>
@@ -273,13 +290,13 @@
           
        layer.ready(function () {
             laydate.render({
+                elem: '#birthDate'
+            });
+            laydate.render({
                 elem: '#transferTime'
             });
             laydate.render({
-                elem: '#intoTime'
-            });
-            laydate.render({
-                elem: '#outTime'
+                elem: '#transferoutTime'
             });
         
           form.val('dossierForm', dossierOne);
@@ -288,9 +305,6 @@
           }else{
             return "转出"
           }
-
-
-
 
     //     //  if (!deptOne.isPipe) {
     //     //    $(".pipeType").hide();
@@ -302,25 +316,12 @@
     //     //  }
        
        });
-       
-  
-       //监听指定开关
-    //    form.on('switch(isPipeval)', function (data) {
-    //      $("#isPipe").val(this.checked);
-    //      if (this.checked) {
-    //        $("select[name=pipeType]").attr("lay-verify", "required");
-    //        $(".pipeType").show();
-    //      } else {
-    //        $("select[name=pipeType]").attr("lay-verify", "");
-    //        $(".pipeType").hide();
-    //      }
- 
-    //    });
-     })
+    })
  
  
    </script>
    <script>
+     
     //  获取选中的政治面貌
     //  function unitTypeChange(val) {
     //    $("#dossierStatus").find("option:selected").val();

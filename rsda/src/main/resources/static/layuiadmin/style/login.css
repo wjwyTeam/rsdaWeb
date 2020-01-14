@@ -11,48 +11,17 @@ html,body{
 .backgroudBg {
     position: relative;
     height: 38%;
-    /* right: 50%; */
+    min-height: 300px;
     top: 29%;
     left: 59%;
-    width: 100px;
-    min-width: 294px;
+    width: 15%;
+    min-width: 300px;
     background-size: 989px 593px;
     background-repeat: no-repeat;
-    /* box-shadow: 15px 5px 15px 7px #217cc2; */
     border-radius: 18px;
     border: 0.1px solid #fff;
     z-index: 9;
     background-color: rgb(255, 255, 255,0.8);
-}
-
-
-
-
-jianbian {
-/* z-index: 2; */
-  border: 1px solid red;
-  height: 60px;
-  margin: 0 auto;
-  position: relative;
-  /* top: 200px;
-  left: 200px; */
-  width: 600px;
-  border-radius: 1%;
-  padding-bottom: 15px;
-  background: -webkit-linear-gradient(left, #0b6dbb00 , #19194c2b,#0b6dbb00);
-/* Safari 5.1 - 6.0 */
-  background: -o-linear-gradient(right, #0b6dbb00 , #19194c2b,#0b6dbb00);
-/* Opera 11.1 - 12.0 */
-  background: -moz-linear-gradient(right, #0b6dbb00 , #19194c2b,#0b6dbb00);
-/* Firefox 3.6 - 15 */
-  background: linear-gradient(to right,#0b6dbb00 , #23137d80,#05d9efab);
-/* 标准的语法（必须放在最后） */
-}
-
-Toplog {
-  position: relative;
-  height: 70px;
-  text-align: center;
 }
 
 h1 {
@@ -94,12 +63,8 @@ h1 {
   position: relative;
   width: 99%;
   height: 100%;
-  margin: 0 auto;
   box-sizing: border-box;
-}
-
-.layadmin-user-login-box {
-  padding:10px 20px
+  padding:20px;
 }
 
 .layadmin-user-login-header {
@@ -172,12 +137,7 @@ h1 {
   .layadmin-user-login {
       padding-top: 60px
   }
-
-  .layadmin-user-login-main {
+  /* .layadmin-user-login-main {
       width: 300px
-  }
-
-  .layadmin-user-login-box {
-      padding: 10px
-  }
+  } */
 }
