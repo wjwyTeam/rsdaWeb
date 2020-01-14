@@ -3,14 +3,12 @@
 
 <head>
 	<th:block th:include="public :: header('人事档案阅档端管理系统登录入口')" />
-
 	<style>
 		html,
 		body {
 			height: 100%;
 			width: 100%;
 		}
-
 		.login {
 			background-repeat: no-repeat;
 			background-position: center;
@@ -18,7 +16,6 @@
 			/* border: 0.1px solid #fff; */
 			z-index: 10;
 			background-image: url('/image/background/login_background.jpg');
-
 		}
 	</style>
 
@@ -68,7 +65,7 @@
 				search = router.search;
 			form.render();
 			//提交
-		$("#LAY-user-login-username").focus().val("");
+		$("#LAY-user-login-username").val(" ").focus();
 
 		function login(){
 				var index = layer.load(1);
@@ -111,16 +108,26 @@
 		document.onkeydown = function (event) {
 			 e = event ? event : (window.event ? window.event : null);
 			  if (e.keyCode == 13 && flag == 1) {
-				$("#LAY-user-login-password").val("").focus();
+				  console.log($(this).attr("id"));
+				$("#LAY-user-login-password").val(" ").focus();
 				flag++
 		      }else if(e.keyCode == 13 && flag == 2){
 				login();
 			  }
 	    	}
 			$("#loginTo").click(function(){
-			//  alert(123);
-		     login();
-		})
+		        login();
+	    	})
+
+			// $(window).resize(function() {
+			// 		var cliHeights = $(window).height();
+			// 		var cliWidths = $(window).width();
+			// 		var divHeight = cliHeights/2
+			// 		var divWidths = cliWidths/2
+			// 		console.log(divHeight,divWidths)
+			// 		$("#backgroudBg").css("width",divWidths+"px")
+			// 		$("#backgroudBg").css("height",divWidths+"px")
+			// 	})
 		});
 	
 	</script>
