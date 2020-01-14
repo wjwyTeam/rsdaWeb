@@ -5,8 +5,8 @@ import com.wjwy.rsda.common.enums.Convert;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
-import com.wjwy.rsda.entity.DaCodeItem;
-import com.wjwy.rsda.services.DaCodeItemService;
+import com.wjwy.rsda.entity.DaMaterialtem;
+import com.wjwy.rsda.services.DaMaterialtemService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,67 +30,69 @@ import tk.mybatis.mapper.util.StringUtil;
  * @Descripttion: 
  * @version: 
  * @Author: ZHANGQI
- * @Date: 2020-01-14 09:00:45
+ * @Date: 2020-01-14 10:30:13
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-14 09:01:06
+ * @LastEditTime : 2020-01-14 10:32:02
  */
-@RequestMapping("/codeItem")
+@RequestMapping("/materialtem")
 @RestController
-@Api(value = "目录管理", tags = "L1-目录管理API维护")
-public class DaCodeItemController {
- @Autowired
- private DaCodeItemService daCodeItemService;
+@Api(value = "材料管理", tags = "N1-材料管理API维护")
+public class DaMaterialtemControler {
 
- public Logger logger = LoggerFactory.getLogger(DaCodeItemController.class);
+ @Autowired
+ private DaMaterialtemService daMaterialtemService;
+
+ public Logger logger = LoggerFactory.getLogger(DaMaterialtemControler.class);
 
  // 跳转界面前缀
  private String prefix = "/webview/person";
 
+
  /**
-  * 跳转目录管理列表主页
+  * 跳转材料管理列表主页
   * 
   * @param model
   * @return ModelAndView
   */
- @GetMapping("/daCodeItemListPage")
- @ApiOperation(value = "跳转目录管理列表主页")
- public ModelAndView daCodeItemListPage(@ApiIgnore ModelAndView model) {
-  model.setViewName(prefix + "/daCodeItemList");
+ @GetMapping("/daMaterialtemListPage")
+ @ApiOperation(value = "跳转材料管理列表主页")
+ public ModelAndView DaMaterialtemListPage(@ApiIgnore ModelAndView model) {
+  model.setViewName(prefix + "/daMaterialtemList");
   return model;
  }
 
  /**
-  * 跳转目录管理表单主页
+  * 跳转材料管理表单主页
   * 
-  * @param DaCodeItemId
+  * @param DaMaterialtemId
   * @param model
   * @return ModelAndView
   */
- @ApiOperation(value = "跳转目录管理表单主页", notes = "DaCodeItemId - 目录编号")
- @GetMapping("/DaCodeItemFormPage")
- public ModelAndView DaCodeItemFormPage(String id, @ApiIgnore ModelAndView model) {
+ @ApiOperation(value = "跳转材料管理表单主页", notes = "DaMaterialtemId - 材料编号")
+ @GetMapping("/daMaterialtemFormPage")
+ public ModelAndView DaMaterialtemFormPage(String id, @ApiIgnore ModelAndView model) {
   if (StringUtil.isNotEmpty(id)) {
-   model.addObject("daCodeItemOne", daCodeItemService.getById(id));
+   model.addObject("DaMaterialtemOne", daMaterialtemService.getById(id));
   }
-  model.setViewName(prefix + "/daCodeItemForm");
+  model.setViewName(prefix + "/daMaterialtemForm");
   return model;
  }
 
  /**
   * 列表数据查询
   * 
-  * @param DaCodeItem
+  * @param DaMaterialtem
   * @param page
   * @param limit
   * @return ResponseWrapper
   */
- @ApiOperation(value = "目录管理列表数据查询", notes = "参数:DaCodeItem-对象")
- @PostMapping("/daCodeItemFindList")
- public ResponseWrapper DaCodeItemFindList(@RequestBody DaCodeItem daCodeItem,
+ @ApiOperation(value = "材料管理列表数据查询", notes = "参数:DaMaterialtem-对象")
+ @PostMapping("/daMaterialtemFindList")
+ public ResponseWrapper DaMaterialtemFindList(@RequestBody DaMaterialtem daMaterialtem,
    @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
    @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
   try {
-   PageInfo<DaCodeItem> pageInfos = daCodeItemService.findList(daCodeItem, page, limit);
+   PageInfo<DaMaterialtem> pageInfos = daMaterialtemService.findList(daMaterialtem, page, limit);
    return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
      Integer.parseInt(String.valueOf(pageInfos.getTotal())));
   } catch (Exception e) {
@@ -101,18 +103,18 @@ public class DaCodeItemController {
  }
 
  /**
-  * 目录管理表单数据新增
+  * 材料管理表单数据新增
   * 
-  * @param DaCodeItem
+  * @param DaMaterialtem
   * @return ResponseWrapper
   */
- @PostMapping("/daCodeItemInsert")
- @Log(title = "目录管理", businessType = EnumEntitys.INSERT)
- @ApiOperation(value = "目录管理表单数据新增", notes = "参数:DaCodeItem-对象")
- public ResponseWrapper DaCodeItemInsert(@RequestBody DaCodeItem daCodeItem) {
+ @PostMapping("/daMaterialtemInsert")
+ @Log(title = "材料管理", businessType = EnumEntitys.INSERT)
+ @ApiOperation(value = "材料管理表单数据新增", notes = "参数:DaMaterialtem-对象")
+ public ResponseWrapper DaMaterialtemInsert(@RequestBody DaMaterialtem daMaterialtem) {
 
   try {
-   int resultTotal = daCodeItemService.daCodeItemInsert(daCodeItem);
+   int resultTotal = daMaterialtemService.daMaterialtemInsert(daMaterialtem);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
    }
@@ -125,17 +127,17 @@ public class DaCodeItemController {
  }
 
  /**
-  * 目录管理表单数据更新
+  * 材料管理表单数据更新
   * 
-  * @param DaCodeItem
+  * @param DaMaterialtem
   * @return ResponseWrapper
   */
- @PostMapping("/daCodeItemUpdate")
- @Log(title = "目录管理", businessType = EnumEntitys.UPDATE)
- @ApiOperation(value = "目录管理表单数据更新", notes = "参数:DaCodeItem-对象")
- public ResponseWrapper DaCodeItemUpdate(@RequestBody DaCodeItem daCodeItem) {
+ @PostMapping("/daMaterialtemUpdate")
+ @Log(title = "材料管理", businessType = EnumEntitys.UPDATE)
+ @ApiOperation(value = "材料管理表单数据更新", notes = "参数:DaMaterialtem-对象")
+ public ResponseWrapper DaMaterialtemUpdate(@RequestBody DaMaterialtem daMaterialtem) {
   try {
-   int resultTotal = daCodeItemService.daCodeItemUpdate(daCodeItem);
+   int resultTotal = daMaterialtemService.daMaterialtemUpdate(daMaterialtem);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
    }
@@ -148,18 +150,18 @@ public class DaCodeItemController {
  }
 
  /**
-  * 目录管理移除数据
+  * 材料管理移除数据
   * 
   * @param ids
   * @return ResponseWrapper
   */
  @ResponseBody
- @PostMapping("/daCodeItemRemove")
- @Log(title = "目录管理", businessType = EnumEntitys.DELETE)
- @ApiOperation(value = "目录管理移除数据", notes = "参数：数组-ids")
+ @PostMapping("/daMaterialtemRemove")
+ @Log(title = "材料管理", businessType = EnumEntitys.DELETE)
+ @ApiOperation(value = "材料管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {
-   int resultTotal = daCodeItemService.daCodeItemRemove(Convert.toStrArray(ids));
+   int resultTotal = daMaterialtemService.daMaterialtemRemove(Convert.toStrArray(ids));
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
    }
@@ -172,4 +174,5 @@ public class DaCodeItemController {
     HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
  }
 
+ 
 }

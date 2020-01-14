@@ -1,13 +1,11 @@
 package com.wjwy.rsda.controller;
-
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.enums.Convert;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
-import com.wjwy.rsda.entity.DaCodeItem;
-import com.wjwy.rsda.services.DaCodeItemService;
-
+import com.wjwy.rsda.entity.DaElectronic;
+import com.wjwy.rsda.services.DaElectronicService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,77 +18,75 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 import tk.mybatis.mapper.util.StringUtil;
-
 /*
  * @Descripttion: 
  * @version: 
  * @Author: ZHANGQI
- * @Date: 2020-01-14 09:00:45
+ * @Date: 2020-01-14 10:15:13
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-14 09:01:06
+ * @LastEditTime : 2020-01-14 10:16:09
  */
-@RequestMapping("/codeItem")
+@RequestMapping("/electronic")
 @RestController
-@Api(value = "目录管理", tags = "L1-目录管理API维护")
-public class DaCodeItemController {
+@Api(value = "图像管理", tags = "M1-图像管理API维护")
+public class DaElectronicController {
  @Autowired
- private DaCodeItemService daCodeItemService;
+ private DaElectronicService daElectronicService;
 
- public Logger logger = LoggerFactory.getLogger(DaCodeItemController.class);
+ public Logger logger = LoggerFactory.getLogger(DaElectronicController.class);
 
  // 跳转界面前缀
  private String prefix = "/webview/person";
 
  /**
-  * 跳转目录管理列表主页
+  * 跳转图像管理列表主页
   * 
   * @param model
   * @return ModelAndView
   */
- @GetMapping("/daCodeItemListPage")
- @ApiOperation(value = "跳转目录管理列表主页")
- public ModelAndView daCodeItemListPage(@ApiIgnore ModelAndView model) {
-  model.setViewName(prefix + "/daCodeItemList");
+ @GetMapping("/daElectronicListPage")
+ @ApiOperation(value = "跳转图像管理列表主页")
+ public ModelAndView daElectronicListPage(@ApiIgnore ModelAndView model) {
+  model.setViewName(prefix + "/daElectronicList");
   return model;
  }
 
  /**
-  * 跳转目录管理表单主页
+  * 跳转图像管理表单主页
   * 
-  * @param DaCodeItemId
+  * @param DaElectronicId
   * @param model
   * @return ModelAndView
   */
- @ApiOperation(value = "跳转目录管理表单主页", notes = "DaCodeItemId - 目录编号")
- @GetMapping("/DaCodeItemFormPage")
- public ModelAndView DaCodeItemFormPage(String id, @ApiIgnore ModelAndView model) {
+ @ApiOperation(value = "跳转图像管理表单主页", notes = "DaElectronicId - 图像编号")
+ @GetMapping("/daElectronicFormPage")
+ public ModelAndView daElectronicFormPage(String id, @ApiIgnore ModelAndView model) {
   if (StringUtil.isNotEmpty(id)) {
-   model.addObject("daCodeItemOne", daCodeItemService.getById(id));
+   model.addObject("daElectronicOne", daElectronicService.getById(id));
   }
-  model.setViewName(prefix + "/daCodeItemForm");
+  model.setViewName(prefix + "/daElectronicForm");
   return model;
  }
 
  /**
   * 列表数据查询
   * 
-  * @param DaCodeItem
+  * @param DaElectronic
   * @param page
   * @param limit
   * @return ResponseWrapper
   */
- @ApiOperation(value = "目录管理列表数据查询", notes = "参数:DaCodeItem-对象")
- @PostMapping("/daCodeItemFindList")
- public ResponseWrapper DaCodeItemFindList(@RequestBody DaCodeItem daCodeItem,
+ @ApiOperation(value = "图像管理列表数据查询", notes = "参数:DaElectronic-对象")
+ @PostMapping("/daElectronicFindList")
+ public ResponseWrapper daElectronicFindList(@RequestBody DaElectronic daElectronic,
    @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
    @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
   try {
-   PageInfo<DaCodeItem> pageInfos = daCodeItemService.findList(daCodeItem, page, limit);
+   PageInfo<DaElectronic> pageInfos = daElectronicService.findList(daElectronic, page, limit);
    return ResponseWrapper.success(HttpStatus.OK.value(), "获取成功", pageInfos.getList(), null,
      Integer.parseInt(String.valueOf(pageInfos.getTotal())));
   } catch (Exception e) {
@@ -101,18 +97,18 @@ public class DaCodeItemController {
  }
 
  /**
-  * 目录管理表单数据新增
+  * 图像管理表单数据新增
   * 
-  * @param DaCodeItem
+  * @param DaElectronic
   * @return ResponseWrapper
   */
- @PostMapping("/daCodeItemInsert")
- @Log(title = "目录管理", businessType = EnumEntitys.INSERT)
- @ApiOperation(value = "目录管理表单数据新增", notes = "参数:DaCodeItem-对象")
- public ResponseWrapper DaCodeItemInsert(@RequestBody DaCodeItem daCodeItem) {
+ @PostMapping("/daElectronicInsert")
+ @Log(title = "图像管理", businessType = EnumEntitys.INSERT)
+ @ApiOperation(value = "图像管理表单数据新增", notes = "参数:DaElectronic-对象")
+ public ResponseWrapper daElectronicInsert(@RequestBody DaElectronic daElectronic) {
 
   try {
-   int resultTotal = daCodeItemService.daCodeItemInsert(daCodeItem);
+   int resultTotal = daElectronicService.daElectronicInsert(daElectronic);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "新增失败", null, null, null);
    }
@@ -125,17 +121,17 @@ public class DaCodeItemController {
  }
 
  /**
-  * 目录管理表单数据更新
+  * 图像管理表单数据更新
   * 
-  * @param DaCodeItem
+  * @param DaElectronic
   * @return ResponseWrapper
   */
- @PostMapping("/daCodeItemUpdate")
- @Log(title = "目录管理", businessType = EnumEntitys.UPDATE)
- @ApiOperation(value = "目录管理表单数据更新", notes = "参数:DaCodeItem-对象")
- public ResponseWrapper DaCodeItemUpdate(@RequestBody DaCodeItem daCodeItem) {
+ @PostMapping("/daElectronicUpdate")
+ @Log(title = "图像管理", businessType = EnumEntitys.UPDATE)
+ @ApiOperation(value = "图像管理表单数据更新", notes = "参数:DaElectronic-对象")
+ public ResponseWrapper daElectronicUpdate(@RequestBody DaElectronic daElectronic) {
   try {
-   int resultTotal = daCodeItemService.daCodeItemUpdate(daCodeItem);
+   int resultTotal = daElectronicService.daElectronicUpdate(daElectronic);
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "更新失败", null, null, null);
    }
@@ -148,18 +144,18 @@ public class DaCodeItemController {
  }
 
  /**
-  * 目录管理移除数据
+  * 图像管理移除数据
   * 
   * @param ids
   * @return ResponseWrapper
   */
  @ResponseBody
- @PostMapping("/daCodeItemRemove")
- @Log(title = "目录管理", businessType = EnumEntitys.DELETE)
- @ApiOperation(value = "目录管理移除数据", notes = "参数：数组-ids")
+ @PostMapping("/daElectronicRemove")
+ @Log(title = "图像管理", businessType = EnumEntitys.DELETE)
+ @ApiOperation(value = "图像管理移除数据", notes = "参数：数组-ids")
  public ResponseWrapper remove(String ids) {
   try {
-   int resultTotal = daCodeItemService.daCodeItemRemove(Convert.toStrArray(ids));
+   int resultTotal = daElectronicService.daElectronicRemove(Convert.toStrArray(ids));
    if (resultTotal == 0) {
     return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
    }
