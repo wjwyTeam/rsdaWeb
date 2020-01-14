@@ -59,16 +59,25 @@
       overflow: auto;
     }
 
-    .rightGrid {
+    .bg{
       width: 100%;
-      height: 100%;
-      padding: 15px;
-      border: 1px solid red;
+      background: #f2f2f2;
+      /* border: 1px solid red; */
+    }
+
+    .rightGrid {
+      width: 95%;
+      margin: 15px;
+      background: #ffffff;
+      padding:0px 15px;
     }
 
     .userTableSearch {
       width: calc(100% - 180px);
       text-align: right;
+    }
+    .layui-table-view{
+        background: #ffffff;
     }
     
   </style>
@@ -90,52 +99,51 @@
       </div>
       <ul id="deptTree" class="ztree"></ul>
     </div>
-    <div class="rightGrid">
-      <div style="width: 99%;height: 40px;  padding: 5px; text-align: center;display: inline-flex;align-items: center;background-color: #fff; border: 1px solid red; " th:if="${type}" >
-        <div>
-          <button class="layui-btn" data-type="add">添加</button>
-          <button class="layui-btn" data-type="batchdel">批量删除</button>
+    <div class="bg">
+        <div class="rightGrid">
+              <div class="layui-row">
+                <div style="width: 99%;height: 40px;padding:5px; text-align: center;display: inline-flex;align-items: center;background-color: #fff; " th:if="${type}" >
+                    <div>
+                      <button class="layui-btn" data-type="add">添加</button>
+                      <button class="layui-btn" data-type="batchdel">批量删除</button>
+                    </div>
+                    <div class="userTableSearch layui-form">
+                      <input type="text" name="userName" id="userName" placeholder="请输入用户名" autocomplete="off" class="layui-input"
+                        style="display: inline-block;width: auto;" />
+            
+                      <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
+                        <select name="userType">
+                          <option value="" selected="true">请选择</option>
+                          <option value="0">固定账号</option>
+                          <option value="1">临时账号</option>
+                          <option value="2">游客</option>
+                        </select>
+                      </div>
+            
+                      <button class="layui-btn" lay-submit lay-filter="user-front-search">
+                        搜索
+                      </button>
+                    </div>
+                  </div>
+                  <table id="userList" lay-filter="userList" class="layui-hide"></table>
+                  <input id="roleId" hidden th:value="${roleId}">
+                  <script type="text/html" id="table-toolbar" th:inline="none" >
+                      <div th:if="${type}">
+                           <a class="layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                           <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                           <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="authorization"><i class="layui-icon layui-icon-auz"></i>授权</a>
+                      </div>
+                      {{# if(d.isrole==true){ }}
+                         <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="cancelAuthorization"><i class="layui-icon layui-icon-auz"></i>取消授权</a>
+                      {{# } }}
+                      {{# if(d.isrole==null){ }}
+                         <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="authorizationRole"><i class="layui-icon layui-icon-auz"></i>授权</a>
+                      {{# } }}
+            
+                    </script>
+             
+            </div>
         </div>
-        <div class="userTableSearch layui-form">
-          <input type="text" name="userName" id="userName" placeholder="请输入用户名" autocomplete="off" class="layui-input"
-            style="display: inline-block;width: auto;" />
-
-          <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
-            <select name="userType">
-              <option value="" selected="true">请选择</option>
-              <option value="0">固定账号</option>
-              <option value="1">临时账号</option>
-              <option value="2">游客</option>
-            </select>
-          </div>
-
-          <button class="layui-btn" lay-submit lay-filter="user-front-search">
-            搜索
-          </button>
-        </div>
-
-
-
-        
-      </div>
-      <table id="userList" lay-filter="userList" class="layui-hide"></table>
-      <input id="roleId" hidden th:value="${roleId}">
-      <div>
-      <script type="text/html" id="table-toolbar" th:inline="none" >
-          <div th:if="${type}">
-               <a class="layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-               <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
-               <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="authorization"><i class="layui-icon layui-icon-auz"></i>授权</a>
-          </div>
-          {{# if(d.isrole==true){ }}
-             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="cancelAuthorization"><i class="layui-icon layui-icon-auz"></i>取消授权</a>
-          {{# } }}
-          {{# if(d.isrole==null){ }}
-             <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="authorizationRole"><i class="layui-icon layui-icon-auz"></i>授权</a>
-          {{# } }}
-
-        </script>
-      </div>
     </div>
   </div>
   <input type="hidden" id="deptId" />
@@ -238,7 +246,7 @@
         table.render({
           elem: "#userList",
           even: true,
-          height: "full-60",
+          height: "full-80",        
           title: "用户数据表",
           cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
           method: "post",
