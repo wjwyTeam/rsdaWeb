@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
  * @LastEditors  : zgr
- * @LastEditTime : 2020-01-13 18:35:44
+ * @LastEditTime : 2020-01-14 11:33:03
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
@@ -106,7 +106,7 @@
         <button class="layui-btn layui-btn-disabled"  data-type="foldAll" id="foldAll">折叠全部</button>
     </div>
   <div>
-    <table class="layui-hide" id="functionTable" lay-filter="functionTable"></table>
+    <table class="layui-hide layui-table" id="functionTable" lay-filter="functionTable"></table>
     <!-- 表格操作列 -->
     <script type="text/html" id="demoTreeTableBar1">
       <a class="layui-btn layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
@@ -292,6 +292,7 @@
           window.functionData = res;
           $(".ew-tree-icon").css("display", "none");
           idsSelect = [];
+          console.log(window.functionData);
           $.each(window.functionData,function(index,ele){
             idsSelect.push(ele.id);
             $.each(ele.children,function(index3,ele3){
@@ -530,7 +531,7 @@
           console.log(obj);
           if(obj.checked == true){
             if(obj.type=="all"){
-              // idsSelect = [];
+              idsSelect = [];
               $.each(window.functionData,function(index, ele){
                 idsSelect.push(ele.id);
                 $.each(ele.children,function(index1,ele1){
@@ -546,7 +547,6 @@
             }         
           }else{
             if(obj.type=="all"){
-              // idsSelect = [];
               $.each(window.functionData,function(index, ele){
                 idsSelect.pop(ele.id);
                 $.each(ele.children,function(index1,ele1){
@@ -555,16 +555,17 @@
               });
             } else {
               // 去除勾选
-              $.each(idsSelect, function (k, v) {
-                if (v == obj.data.id) {
-                  idsSelect.splice(k,1)
-                }
-                // $.each(obj.data.children, function (index, ele) {
-                //   if (v == ele.id) {
-                //     idsSelect.pop(ele.id)
-                //   }
-                // });
-              });
+              if(obj.data.pid != "0"){    //不为父级 
+                var index =  idsSelect.indexOf(obj.data.id);
+               idsSelect.splice(index,1);
+              }else{  // 为父级，遍历子集的元素，匹配者删除
+                  var index2 =  idsSelect.indexOf(obj.data.id);
+                  idsSelect.splice(index2,1);
+                  $.each(obj.data.children, function (index, ele) {
+                     var index3 =  idsSelect.indexOf(ele.id);
+                    idsSelect.splice(index3,1);
+                  });
+              }
             }
           }
           $("#seleceIds").val(idsSelect);

@@ -70,9 +70,9 @@
 		function login(){
 				var index = layer.load(1);
 				// 加密前的原文
-				var passWord = $("#LAY-user-login-password").val();
+				var passWord = $("#LAY-user-login-password").val().trim();
 				var jsonData = {
-					"loginName": $("#LAY-user-login-username").val(),
+					"loginName": $("#LAY-user-login-username").val().trim(),
 					"passwordMd5": hex_md5(passWord)
 				};
 				$.ajax({
@@ -108,8 +108,7 @@
 		document.onkeydown = function (event) {
 			 e = event ? event : (window.event ? window.event : null);
 			  if (e.keyCode == 13 && flag == 1) {
-				  console.log($(this).attr("id"));
-				$("#LAY-user-login-password").val(" ").focus();
+				$("#LAY-user-login-password").val("").focus();
 				flag++
 		      }else if(e.keyCode == 13 && flag == 2){
 				login();

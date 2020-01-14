@@ -280,6 +280,8 @@
                 , submitID = 'seleceIds'
                 , submit = layero.find('iframe').contents().find('#' + submitID);
                 var ids = [layero.find('iframe').contents().find('#seleceIds').val()];
+                // console.lgo*
+                // console.log(ids.length+"选中的ids")
                 //提交授权的数据的对应id;
                 $.ajax({
                   type: "get",
