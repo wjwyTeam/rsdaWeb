@@ -2,6 +2,7 @@ package com.wjwy.rsda.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -207,7 +208,7 @@ public class FunctionService extends BaseService {
             for (RoleFunction roleFunctionList : roleFunctions) {
                 Example exampleF = new Example(Function.class);
                 Criteria criteriaF = exampleF.createCriteria();
-                exampleF.setOrderByClause("forder ASC");
+                // exampleF.setOrderByClause("forder ASC");
                 criteriaF.andEqualTo("visible", true);
                 criteriaF.andEqualTo("id", roleFunctionList.getFunctionId());
                 List<Function> functions = functionMapper.selectByExample(exampleF);
@@ -220,23 +221,33 @@ public class FunctionService extends BaseService {
                     // criteriaFs.andEqualTo("pid", fun.getId());
                     // List<Function> functionList = functionMapper.selectByExample(exampleFs);
                     // for (Function funT : functionList) {
-                    //     Function fft = new Function();
-                    //     fft = funT;
-                    //     f.add(fft);
+                    // Function fft = new Function();
+                    // fft = funT;
+                    // f.add(fft);
                     // }
 
                 }
             }
         }
         LinkedHashSet<Function> hashSet = new LinkedHashSet<Function>(f);
+
         ArrayList<Function> listW = new ArrayList<Function>(hashSet);
+
+        // 这里就会自动根据规则进行排序
+        Collections.sort(listW);
+
+        // 输出查看结果
+        // for (int i = 0; i < listW.size(); i++) {
+        //     Function stu = listW.get(i);
+        //     System.out.println("排序:" + stu.getForder() + "   时间:" + stu.getCreateTime() + "   主键:" + stu.getId());
+        // }
         return listW;
 
     }
 
-
     /**
      * 角色查询菜单Id
+     * 
      * @param roleid
      * @return
      */
@@ -245,6 +256,6 @@ public class FunctionService extends BaseService {
         Criteria criteriaU = exampleU.createCriteria();
         criteriaU.andEqualTo("roleId", roleid);
         return roleFunctionMapper.selectByExample(exampleU);
-	}
+    }
 
 }

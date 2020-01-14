@@ -3192,6 +3192,20 @@ a cite {
   border-width: 0 0 1px
 }
 
+.table-tool-mini .layui-table-tool {
+  position: absolute;
+  min-height: unset;
+  height: auto;
+  padding: 3px 10px;
+  width: auto;
+  top: -38px;
+  right: -1px;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  border: 1px solid #e6e6e6;
+  border-bottom: 0;
+}
+
 .layui-table-tool .layui-btn-container {
   margin-bottom: -10px
 }

@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 15:08:01
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-13 10:14:05
+ * @LastEditTime : 2020-01-14 15:52:31
  */
 package com.wjwy.rsda.entity;
 import java.util.Date;
@@ -29,7 +29,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ApiModel("F1-菜单管理=>实体类")
 @Table(name = "sys_function")
-public class Function{
+public class Function implements Comparable<Function> {
 
     @ApiModelProperty("主键id")
     @Column(name = "id")
@@ -96,5 +96,31 @@ public class Function{
     @JsonProperty("LAY_CHECKED")
     private Boolean LAY_CHECKED;
     private List<Function> children;
+
+
+    public int compareTo(Function o) {
+        if (forder != o.getForder()) {
+            return forder - o.getForder();
+        } else if (!createTime.equals(o.getCreateTime())) {
+            return createTime.compareTo(o.getCreateTime());
+        } else {
+            return Integer.parseInt(id)  - Integer.parseInt(o.getId());
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Function) {
+            Function stu = (Function) obj;
+            if ((forder == stu.getForder()) && (createTime.equals(stu.getCreateTime()))
+                    && (Integer.parseInt(id) == Integer.parseInt(stu.getId()))) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
 }
