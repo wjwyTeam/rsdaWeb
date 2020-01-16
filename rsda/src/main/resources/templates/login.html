@@ -123,23 +123,7 @@
 						layer.msg("账号/密码不能为空！", { icon: 2 });
 					}
 				}
-				var flag = 1;
-				document.onkeydown = function (event) {
-					e = event ? event : window.event ? window.event : null;
-					if (e.keyCode == 13 && flag == 1) {
-						$("#LAY-user-login-password")
-							.val("")
-							.focus();
-						flag++;
-					} else if (e.keyCode == 13 && flag == 2) {
-						login();
-					}
-				};
-				$("#loginTo").click(function () {
-					login();
-				});
-<<<<<<< HEAD
-			}
+
 
 			$('#LAY-user-login-username').on('keydown', function (event) {
                    if (event.keyCode == 13) {
@@ -159,10 +143,6 @@
 		        login();
 	    	})
 		});
-	
-=======
-			});
->>>>>>> 61183bb7e5fdf354353c0f8f2d4c3e024fafef61
 	</script>
 </body>
 
