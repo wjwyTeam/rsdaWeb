@@ -1,5 +1,6 @@
 package com.wjwy.rsda.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,6 +91,7 @@ public class PersonalService {
     */
    public int personalInsert(Personal personal) {
       personal.setPersonalId(UUID.randomUUID().toString().toLowerCase());
+      personal.setCreateTime(new Date());
       return personalMapper.insertSelective(personal);
    }
 

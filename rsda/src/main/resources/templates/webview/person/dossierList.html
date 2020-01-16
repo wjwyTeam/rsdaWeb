@@ -153,7 +153,7 @@
         window.tableObj.reload(
           "dossierList", {
             where: {
-              id: treeNode.id
+              deptId: treeNode.id
             }
           },
           "data"
@@ -279,7 +279,7 @@
               title: "档案号"
             },
             {
-              field: "dossierBox",
+              field: "dossierBoxNo",
               align: "center",
               title: "档案箱号"
             },
@@ -372,8 +372,8 @@
           layer.confirm("确定要删除吗？", function (index) {
             layer.close(index);
             $.post(
-              "/dossier/dossierRemove", {
-                ids: data.dossierId
+              "/person/personalRemove", {
+                ids: data.personalId
               },
               function (resultJSONObject) {
                 if (resultJSONObject.success) {
@@ -405,7 +405,7 @@
             btn: ["保存", "取消"],
             shadeClose: false,
             shade: 0.2,
-            content: '/person/dossierFormPage?personalId=' + data.personalId,
+            content: '/person/dossierFormPage?dossierId=' + data.personalId,
             yes: function (index, layero) {
               var iframeWindow = window["layui-layer-iframe" + index],
                 submitID = "dossierconfirm",
@@ -430,13 +430,10 @@
                 dataLog
               ) {
                 var field = dataLog.field;
-                // field.unitTypeName = unitTypeName;
-                // field.pipeTypeName = pipeTypeName;
-
-                // if (field.isPipe == "true")
-                //   field.isPipe = true;
-                // else
-                //   field.isPipe = false;
+                field.personalId = data.personalId
+                if ($("#deptId").val().trim() != "") {
+                  field.deptId = $("#deptId").val();
+                }
                 //获取提交的字段
                 //提交 Ajax 成功后，静态更新表格中的数据
                 $.ajax({
@@ -573,14 +570,18 @@
           var ids = "";
           if (checkData.length > 0) {
             for (var i = 0; i < checkData.length; i++) {
-              ids += checkData[i].dossierId + ",";
+              ids += checkData[i].personalId + ",";
             }
           }
           layer.confirm("确定删除吗？", function (index) {
             //执行 Ajax 后重载
             $.ajax({
               type: "post",
+<<<<<<< HEAD
               url: "/dossier/dossierRemove", 
+=======
+              url:   "/person/personalRemove",
+>>>>>>> 61183bb7e5fdf354353c0f8f2d4c3e024fafef61
               data: {
                 ids: ids
               },
@@ -703,7 +704,7 @@
       table.reload(
         "dossierList", {
           where: {
-            id: $("#deptId").val(),
+            deptId: $("#deptId").val(),
             name: $("#unitName").val()
           }
         },

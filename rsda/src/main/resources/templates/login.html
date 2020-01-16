@@ -9,17 +9,16 @@
 			height: 100%;
 			width: 100%;
 		}
+
 		.login {
 			background-repeat: no-repeat;
 			background-position: center;
 			background-size: cover;
 			/* border: 0.1px solid #fff; */
 			z-index: 10;
-			background-image: url('/image/background/login_background.jpg');
+			background-image: url("/image/background/login_background.jpg");
 		}
 	</style>
-
-
 </head>
 
 <body class="login">
@@ -32,71 +31,114 @@
 				</div>
 				<div class="layui-form-item">
 					<label class="layadmin-user-login-icon layui-icon layui-icon-username"
-						for="LAY-user-login-username"></label> <input type="text" autocomplete="on" name="userName"
-						id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input">
+						for="LAY-user-login-username"></label>
+					<input type="text" autocomplete="on" name="userName" id="LAY-user-login-username"
+						lay-verify="required" placeholder="用户名" class="layui-input" />
 				</div>
 				<div class="layui-form-item">
 					<label class="layadmin-user-login-icon layui-icon layui-icon-password"
-						for="LAY-user-login-password"></label> <input type="password" name="passWord"
-						id="LAY-user-login-password" lay-verify="required" autocomplete="on" placeholder="密码"
-						class="layui-input">
+						for="LAY-user-login-password"></label>
+					<input type="password" name="passWord" id="LAY-user-login-password" lay-verify="required"
+						autocomplete="on" placeholder="密码" class="layui-input" />
 				</div>
 				<div class="layui-form-item">
-					<button class="layui-btn layui-btn-fluid" @click="login" lay-submit lay-filter="LAY-user-login-submit" id="loginTo">登陆</button>
+					<button class="layui-btn layui-btn-fluid" @click="login" lay-submit
+						lay-filter="LAY-user-login-submit" id="loginTo">
+						登陆 
+					</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script>
-		layui.config({
-			base: 'layuiadmin/' //静态资源所在路径
-		}).extend({
-			index: 'lib/index' //主入口模块
-		}).use(['index', 'user'], function () {
-			var $ = layui.$,
-				setter = layui.setter,
-				form = layui.form,
-				router = layui.router(),
-				search = router.search;
-			form.render();
-			//提交
-		$("#LAY-user-login-username").val(" ").focus();
+		layui
+			.config({
+				base: "layuiadmin/" //静态资源所在路径
+			})
+			.extend({
+				index: "lib/index" //主入口模块
+			})
+			.use(["index", "user"], function () {
+				var $ = layui.$,
+					setter = layui.setter,
+					form = layui.form,
+					router = layui.router(),
+					search = router.search;
+				 form.render();
+				//提交
+				// $("#LAY-user-login-username")
+				// 	.val(" ")
+				// 	.focus();
+				function login() {
 
-		function login(){
-				var index = layer.load(1);
-				// 加密前的原文
-				var passWord = $("#LAY-user-login-password").val().trim();
-				var jsonData = {
-					"loginName": $("#LAY-user-login-username").val().trim(),
-					"passwordMd5": hex_md5(passWord)
-				};
-				$.ajax({
-					url: "/login",
-					data: jsonData,
-					type: "post",
-					dataType: "json",
-					success: function (data) {
-						if (!data.success)
-							icontype = 2;
-						else {
-							icontype = 16;
-						}
-						layer.msg(data.msg, {
-							offset: ['10%', '45%'],//设置位移
-							icon: icontype,
-							time: 500
-						}, function () {
-							if (data.success) {
-								location.href = data.indexUrl //后台主页
+					var username = $("#LAY-user-login-username").val();
+					// 加密前的原文
+					var passWord = $("#LAY-user-login-password").val().trim();
+			
+					var jsonData = {
+						loginName: username.trim(),
+						passwordMd5: hex_md5(passWord)
+					};
+		
+					if (username.trim() != "" &&passWord != ""
+					) {
+						var index;
+						$.ajax({
+							url: "/login",
+							data: jsonData,
+							type: "post",
+							dataType: "json",
+							success: function (data) {
+								if (!data.success) 
+								 icontype = 2;
+								else {
+									icontype = 16;
+								}
+								// index = layer.load(0, { shade: false });
+								layer.msg(
+									data.msg,
+									{
+										offset: ["10%", "45%"], //设置位移
+										icon: icontype,
+										time: 1000
+									},
+									function () {
+										if (data.success) {
+										
+											location.href = data.indexUrl; //后台主页
+										}
+									}
+								);
+							},
+							error: function (data) {
+								layer.msg("登录超时，请重新登录或联系系统管理员！", {
+									icon: 2
+								});
+							},
+							complete: function () {
+								layer.close(index);
 							}
 						});
-					},
-					error: function (data) {
-						layer.msg("登录超时，请重新登录或联系系统管理员！", { icon: 2 });
-					}, complete: function () {
-						layer.close(index);
+					} else {
+						layer.msg("账号/密码不能为空！", { icon: 2 });
 					}
+				}
+				var flag = 1;
+				document.onkeydown = function (event) {
+					e = event ? event : window.event ? window.event : null;
+					if (e.keyCode == 13 && flag == 1) {
+						$("#LAY-user-login-password")
+							.val("")
+							.focus();
+						flag++;
+					} else if (e.keyCode == 13 && flag == 2) {
+						login();
+					}
+				};
+				$("#loginTo").click(function () {
+					login();
 				});
+<<<<<<< HEAD
 			}
 
 			$('#LAY-user-login-username').on('keydown', function (event) {
@@ -118,6 +160,9 @@
 	    	})
 		});
 	
+=======
+			});
+>>>>>>> 61183bb7e5fdf354353c0f8f2d4c3e024fafef61
 	</script>
 </body>
 

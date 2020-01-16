@@ -20,7 +20,7 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
 server:
-    port: 8080
+    port: 80
     servlet:
         context-path: /
     tomcat:
@@ -65,6 +65,7 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
     devtools:
         restart:
+            # exclude:  static/**,public/**
             enabled: true
     http:
         converters:

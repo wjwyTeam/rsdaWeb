@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-11 09:15:02
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-11 09:29:37
+ * @LastEditTime : 2020-01-15 09:51:18
  */
 package com.wjwy.rsda.common.tool.except;
 
@@ -34,9 +34,12 @@ public class MyException implements ErrorController {
   case 500:
    return "/500";
   case 404:
-   return "/404";
+    return "/404";
+  case 302:
+    return "/302";
   default:
-   return "/500";
+    return "/500";
+
   }
 
  }
