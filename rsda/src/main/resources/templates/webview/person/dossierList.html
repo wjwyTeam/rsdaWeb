@@ -134,8 +134,8 @@
       <table id="dossierList" lay-filter="dossierList" class="layui-hide" style="border: 1px solid red;"></table>
       <script type="text/html" id="barDemo" th:inline="none">
         <a class="layui-btn  layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="infoDetails"><i
-            class="layui-icon layui-icon-tips"></i>查看</a>
+        <!-- <a lay-href="/webviews/set/user/password.html">修改密码</a> -->
+          <a class="layui-btn layui-btn-normal layui-btn-sm"  lay-event="infoDetails" id="infoDetails"><i class="layui-icon layui-icon-tips"></i>查看</a>
 
         <!-- <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="del"><i class="layui-icon ayui-icon-tips"></i>删除</a> -->
       </script>
@@ -555,6 +555,9 @@
               }
             });
           }
+        }else if(obj.event = "infoDetails"){
+           window.open("/readFile/index.html");
+          // <iframe src="/readFile/index" frameborder="0" class="layadmin-iframe" name="myIframeIcon" style="width: 100%;"></iframe>
         }
       });
       //批量删除事件
@@ -577,14 +580,14 @@
             //执行 Ajax 后重载
             $.ajax({
               type: "post",
-              url: "/dossier/dossierRemove",
+              url: "/dossier/dossierRemove", 
               data: {
                 ids: ids
               },
               success: function (data) {
                 if (data.success) {
                   var node = zTreeObj.getNodeByParam("id", 0, null);
-                  zTreeObj.reAsyncChildNodes(node, "refresh");
+                  zTreeObj.reAsyncChildNodes(node, "refresh");  
                   tableLoad(table);
                 }
                 layer.msg(data.msg);

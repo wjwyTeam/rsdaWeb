@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="./js/jquery.min.1.7.js"></script>
+    <script type="text/javascript" src="./js/modernizr.2.5.3.min.js"></script>
+    <script type="text/javascript" src="./js/hash.js"></script>
+    <script type="text/javascript" src="./js/turn.js"></script>
+    <script type="text/javascript" src="./js/zoom.js"></script>
+    <title>阅档</title>
+    <style>
+        html,body{
+            margin: 0;
+            padding: 0;
+            overflow:hidden;
+            background-color:#fcfcfc;
+        }
+        .person,.shrik,.singlePage,.doublePage,.catalog,.next-button,.previous-button,.content,.high-definition,.low-definition,.resumeName,.currentPage,.back:hover{
+            cursor:pointer;
+        }
+        .active{
+            color: #5ba4ed;
+        }
+        .active-definition{
+            color:#5ba4ed ;
+            background: white;
+        }
+        .directoryContents::-webkit-scrollbar{
+            display: none;
+        }
+        .gray {
+            -webkit-filter: grayscale(100%);
+            -moz-filter: grayscale(100%);
+            -ms-filter: grayscale(100%);
+            -o-filter: grayscale(100%);
+            filter: grayscale(100%);
+            filter: gray;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+        <img src="./images/bg2.jpg" alt="" style="position: absolute;bottom: 0;" class="gray">
+        <!--人员信息-->
+        <!-- <div class = "context" style="position: absolute; width:100%;height:100%;">
+            <div style="width: 100%;height:50px;line-height: 50px;background: #5ba4ed;color: #ffffff;font-size: 18px;">
+                <span style="padding-left: 30px;font-size: 22px;font-weight: bold;">干部阅档系统</span>
+                <div class="status" style="float: right; padding-right: 20px;">退 出</div>
+
+            </div>
+            <div style="width: 100%;height: calc(100% - 50px);display: flex;flex-wrap: wrap;margin: 0 auto; overflow-y: scroll;" class="outter">
+
+            </div>
+
+        </div> -->
+
+        <!--目录-->
+        <div class="catalog" style=" overflow: hidden; opacity: 0.85; background: #ffffff; z-index:10; display: none; width: 24%;height: 100%;left: 3.3%; position: absolute;border-right: 2px solid #cccccc; ">
+            <div style="height: 58.78px;width: 100%;border-bottom: 1px solid #cccccc; display: flex;align-items: center;font-size: 20px;font-weight: bold;justify-content: center; ">&nbsp;目录</div>
+            <div  style="height: 95%; width: 100%;padding-left: 10px;overflow-y: scroll;" class="directoryContents">
+                <div style="height: 100%; width: 100%;" class="directoryInfo">
+                </div>
+            </div>
+        </div>
+
+        <!--阅档对话框-->
+        <div class = "readFile" style=" width:100%;height:100%;position: absolute;" id="full">
+             <!--左侧功能图标-->
+            <div style="width: 60px;height: 100%;position: absolute;border-right: 1px solid #cccccc;display: flex;flex-direction: column ">
+                <img style="width: 30px;height: 30px;  padding: 25%; " class="shrik" src="./images/mulu.png" alt="" >
+                <img style="width: 30px;height: 30px;  padding: 25%;  display: none; background: #5ba4ed;" class="shrik activeShrik" src="./images/mulu-1.png" alt="" >
+                <img style="width: 30px;height: 30px;  padding: 25%;" class="singlePage" src="./images/danye.png" alt="" >
+                <img style="width: 30px;height: 30px;  padding: 25%; background: #5ba4ed; display: none;" class="singlePage activeSinglePage" src="./images/danye-1.png" alt="" >
+                <img style="width: 30px;height: 30px;  padding: 25%;display: none;" class="doublePage" src="./images/shuangye.png" alt="" >
+                <img style="width: 30px;height: 30px;  padding: 25%; background: #5ba4ed;" class="doublePage activeDoublePage " src="./images/shuangye-1.png" alt="" >
+            </div>
+            <div class="personInfo" style="height: 100%;width: 80px; right: 0; position: absolute;background: #5ba4ed; color: #ffffff; border-bottom: 1px solid #cccccc;vertical-align: middle; text-align: center; font-size: 20px;font-weight: bold;">
+                <div class="resumeName" style="margin-top: 50px; width: 30%;height: 40%; margin: 0 auto;padding: 5px;text-align: center;line-height:30px;" >当前正在阅览<span style="width: 100%; color: blue;font-weight: bold;font-size: 26px;">  </span> 档案</div>
+                <div style="position: absolute;bottom:60px;width: 100%;color: #ffffff; font-size: 17px;text-align: center;"|>
+                    <div class="low-definition active-definition" style="border: 2px solid #ffffff;border-radius: 5px; margin: 0 3px;padding: 10px 0;">普清阅档</div>
+                    <div class="high-definition" style="border: 2px solid #ffffff;border-radius: 5px; margin: 25px 3px;padding: 10px 0;">高清阅档</div>
+                    <div class="previous-button" style="border: 2px solid #ffffff;border-radius: 5px; margin: 25px 3px;padding: 10px 0;">上一页</div>
+                    <div class="next-button" style="border: 2px solid #ffffff;border-radius: 5px; margin: 25px 3px; padding: 10px 0;">下一页</div>
+                    <div class="currentPage" style="border: 2px solid #ffffff;border-radius: 5px; margin: 25px 3px;padding: 10px 0;">封面</div>
+                </div>
+            </div>
+            <!--书籍-->
+            <div style="width: calc(100% - 140px) ;height: 100%;position: absolute;left: 60px; border: 1px solid red;" class="books">
+
+                <div class="flipbook-viewport" >
+                    <div class="container">
+                        <div class="flipbook">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script>
+             var h =  $(window).height()+26;
+             var w =  h*1.414;
+             var book= $(".flipbook");
+             var page = 1 ;
+             var typeDefinition = "";
+             window.lastpagenum = 2;
+            // 请求人员数据
+            //   $.ajax({
+            //       type:"get",
+            //       url:"http://192.168.1.81:5000/api/GetItembyIp",
+            //       dataType:"json",
+            //       success:function(data){
+            //           currentPersonId = data.currentPid;
+            //           resumeRoot = data.person;
+            //           var personInfo = "";
+            //           $.each(data.person,function (k,v) {
+            //               //渲染人员信息
+            //               personInfo +=
+            //                   '<div class="person"  persid="'+v.persid+'" style=" margin: 30px; width:240px;background: #cdaf94; height: 330px;text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
+            //                   '<div style="padding-top: 60px;font-size: 32px;color: #C01919;font-family: Serif ;">干部人事档案</div>'+
+            //                   '<div style="padding-top: 110px;font-size: 20px;color: #C01919;font-family: Serif ; position: relative">单位：_________<span style="position: absolute;left: 115px;">'+v.unit+'</span></div>'+
+            //                   '<div style="padding-top: 10px;font-size: 20px;color: #C01919;font-family: Serif ; position: relative">姓名：_________<span style="position: absolute;left: 115px;">'+v.name+'</span></div>'+
+            //                   '</div>'
+            //               $(".outter").html(personInfo);
+            //           })
+            //       }
+            //   });
+
+              //点击人员进行图片请求和渲染
+            //   $(".outter").on("click",".person",function () {
+            //       personId = $(this).attr("persid");
+            //       $.each(resumeRoot,function(k,v){
+            //           if(personId == v.persid){
+            //               personResume(v.ydqx);
+            //           }
+            //       })
+            //       var name = $(this).find("span").eq(1).text();
+            //       var unit = $(this).find("span").eq(0).text();
+            //     //   $(".context").css("display","none");
+            //       $(".resumeName").children().text(name);
+            //       var hard =
+            //           '<div class="hard page">'+
+            //               '<div class="" style="width:100%; background: #cdaf94;height: 100%; text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
+            //                   '<div style="padding-top: 150px;font-size: 40px;color: #C01919;font-family: Serif ;">干部人事档案</div>'+
+            //                   '<div style="top: 490px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">单位：_________'+
+            //                      '<span class="unit" style="position: absolute;left: 50%;"></span>'+
+            //                   '</div>'+
+            //                   '<div style="top: 520px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">姓名：_________'+
+            //                     '<span class="personName" style="position: absolute;left: 50%;"></span>'+
+            //                   '</div>'+
+            //               '</div>'+
+            //       '</div>'
+            //       $(".flipbook").append(hard);
+            //       $(".unit").text(unit);
+            //       $(".personName").text(name);
+            //       //初始化
+            //       picDouble(personId)
+            //   })
+
+            var hard =
+                      '<div class="hard page">'+
+                          '<div class="" style="width:100%; background: #cdaf94;height: 100%; text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
+                              '<div style="padding-top: 150px;font-size: 40px;color: #C01919;font-family: Serif ;">干部人事档案</div>'+
+                              '<div style="top: 490px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">单位：_________'+
+                                 '<span class="unit" style="position: absolute;left: 50%;"></span>'+
+                              '</div>'+
+                              '<div style="top: 520px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">姓名：_________'+
+                                '<span class="personName" style="position: absolute;left: 50%;"></span>'+
+                              '</div>'+
+                          '</div>'+
+                  '</div>'
+                  $(".flipbook").append(hard);
+        
+
+            picDouble()
+
+
+
+             function picDouble() {
+                            //   page =  v.materialcount
+                            //   $.each(v.children,function (k1,v1) {
+                            //       var base = "http://192.168.1.81:5000"
+                            //       var imgurl  = base+v1.filename;
+                            //       var imgurl2 = base+v1.betterfilename
+                            //       var moren = "./pages/loss.JPG";
+                            //       $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img id="'+v.materialid+'" onerror="showDefaultImg(this)" currentpage="'+v1.currentpage+'"  data-src2="'+imgurl2+'"  data-src1="'+imgurl+'" src= "'+moren+'" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
+                            //   })
+                            //   if(k == 0){
+                            //       $(".directoryInfo").find("span[materialidPageNum ='"+v.materialid+"']").text(2)
+                            //       window.lastpagenum += page;
+                            //   }else{
+                            //       $(".directoryInfo").find("span[materialidPageNum ='"+v.materialid+"']").text((window.lastpagenum))
+                            //       window.lastpagenum += page;
+                            //   }
+                        //   $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img id="'+v.materialid+'" onerror="showDefaultImg(this)" currentpage="'+v1.currentpage+'"  data-src2="'+imgurl2+'"  data-src1="'+imgurl+'" src= "./pages/1-1_1_00000001.JPG" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
+                          $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img  onerror="showDefaultImg(this)"  src= "./pages/1-1_1_00000001.JPG" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
+                          $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img  onerror="showDefaultImg(this)"  src= "./pages/1-1_2_00000002.JPG" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
+                          
+                          //   $('.flipbook .double').scissor();
+                        //   loadApp(data.count,w,h);
+                          loadApp(8,w,h);
+                          $(".readFile").css("display","block");
+                          full();
+              }
+
+             //阅档类型
+             $(".high-definition").on("click",function () {
+                 $.each(current,function (k,v) {
+                     $(".p"+ (v)).children().attr("src",$(".p"+ (v)).children().eq(1).attr("data-src2"))
+                 })
+                  $(this).removeClass("active-definition");
+                  $(this).addClass("active-definition");
+                  $(".low-definition").removeClass("active-definition");
+             })
+             $(".low-definition").on("click",function () {
+                 $.each(current,function (k,v) {
+                     $(".p"+ (v)).children().attr("src",$(".p"+ (v)).children().eq(1).attr("data-src1"));
+                 })
+                 $(this).removeClass("active-definition");
+                 $(this).addClass("active-definition");
+                 $(".high-definition").removeClass("active-definition");
+             })
+             //图片加载失败情况
+             function showDefaultImg(img){
+                 img.src = "./pages/loss.JPG";
+             }
+              // 渲染目录结构
+              function personResume(resume) {
+                  $.each(resume,function (k,v) {
+                      var directory = "";
+                      directory +=
+                          '<div style="padding: 15px 5px 0 5px;" >'+
+                           '<span style="display: inline-block; font-weight: bold;font-size: 18px;">'+v.title+'</span>'+
+                           '<div style="width: 100%;margin-top: 10px;" class="readMenus"> </div>'+
+                          '</div>'
+                      $(".directoryInfo").append(directory);
+                      //目录的具体信息
+                      if(v.children.length != 0 ){
+                          sonDirectory(v.children);
+                      }
+                  })
+              }
+              //渲染子级目录节点
+              function  sonDirectory(ch) {
+                  $.each(ch,function (k,v) {
+                      if(v.children.length>0){  //二级节点
+                          var secondRoot =
+                              '<div style="padding-top: 15px;">'+
+                              '<div style="width: 90%;height: 25px; display: inline-block;overflow: hidden;">'+
+                              '&nbsp;<span style="font-weight: bold;font-size: 18px;">'+v.title+'</span>'+
+                              '</div>'+
+                              '</div>';
+                          $(".directoryInfo").append(secondRoot);
+                          sonDirectory(v.children);
+                      }else{
+                          var readMenus = "";
+                          readMenus +=
+                              '<div style="padding-top: 15px;" class="content">'+
+                                  '<div style="width: 90%;height: 25px; display: inline-block;overflow: hidden;">'+
+                                      '&nbsp; &nbsp;<span>'+(k+1)+'、'+v.title+'</span>'+
+                                      '<span>-----------------------------------------------------------</span>'+
+                                  '</div>'+
+                                  '<span  materialidPageNum="'+(v.id)+'" class="pageNum" pageNum = "'+v.pageNum+'"  style="display: inline-block;height: 25px;float: right; width:9%;">'+(v.pageNum)+'</span>'+
+                              '</div>'
+                          $(".directoryInfo").append(readMenus);
+                      }
+
+                  });
+              }
+               function loadApp(m,w,h){
+                   if (book.width()==0 || book.height()==0) {
+                       setTimeout(loadApp(m,w,h), 10);
+                       return;
+                   }
+                   book.turn({
+                       height:h,
+                       width:w,
+                       display:"double",
+                       duration: 1000,
+                       autoCenter: true,
+                       elevation: 50,
+                       gradients: true,
+                       pages:m,
+                       when:{
+                           turning: function(event, page, view) {
+                               $(".catalog").css("display","none");
+                               current = view
+                               typeDefinition = $(".active-definition").text();
+                                   $.each(view,function (k,v) {
+                                       if(typeDefinition == "普清阅档"){
+                                           $(".p"+ (v)).children().eq(1).attr("src",$(".p"+ (v)).children().eq(1).attr("data-src1"));
+                                       } else if(typeDefinition == "高清阅档"){
+                                           $(".p"+ (v)).children().eq(1).attr("src",$(".p"+ (v)).children().eq(1).attr("data-src2"));
+                                       }
+                                   })
+                               //回退到封面界面
+                               if(current[0] == 0 && current.length == 2 || current.length ==1 && current[0] == 1){
+                                    $(".currentPage").text("封面");
+                               }else{
+                                   var currentMaterialidTotal = $(".directoryInfo").find("span[materialidPageNum ='"+ $(".p"+ (current[0])).children().eq(1).attr("id") +"']").attr("pageNum");
+                                   currentNum = $(".p"+ (current[0])).children().eq(1).attr("currentpage");
+                                   $(".currentPage").text($(".p"+ (current[0])).children().eq(1).attr("currentpage") +"/"+currentMaterialidTotal);
+                               }
+
+
+                           },
+                           turned: function(event, page, view) {
+                               $(".catalog").css("display","none");
+                               current = view
+                               typeDefinition = $(".active-definition").text();
+                               $.each(view,function (k,v) {
+                                   if(typeDefinition == "普清阅档"){
+                                       $(".p"+ (v)).children().eq(1).attr("src",$(".p"+ (v)).children().eq(1).attr("data-src1"));
+                                   } else if(typeDefinition == "高清阅档"){
+                                       $(".p"+ (v)).children().eq(1).attr("src",$(".p"+ (v)).children().eq(1).attr("data-src2"));
+                                   }
+                               })
+                               //回退到封面界面
+                               if(current[0] == 0 && current.length == 2 || current.length ==1 && current[0] == 1){
+                                   $(".currentPage").text("封面");
+                               }else{
+                                   var currentMaterialidTotal = $(".directoryInfo").find("span[materialidPageNum ='"+ $(".p"+ (current[0])).children().eq(1).attr("id") +"']").attr("pageNum");
+                                   currentNum = $(".p"+ (current[0])).children().eq(1).attr("currentpage");
+                                   $(".currentPage").text($(".p"+ (current[0])).children().eq(1).attr("currentpage") +"/"+currentMaterialidTotal);
+                               }
+                           }
+                       }
+                   });
+                   // Zoom.js
+                   $('.flipbook-viewport').zoom({
+                       flipbook: $('.flipbook'),
+                       max: function() {
+                           return largeBookWidth()/$('.flipbook').width();
+                       },
+                       when: {
+                           swipeLeft: function() {
+                               $(this).zoom('flipbook').turn('next');
+                           },
+                           swipeRight: function() {
+                               $(this).zoom('flipbook').turn('previous');
+                           },
+                           //放大
+                           zoomIn: function () {
+                               $('.made').hide();
+                               $('.flipbook').removeClass('animated').addClass('zoom-in');
+                               if (!window.escTip && !$.isTouch) {
+                                   escTip = true;
+                                   $('<div />', {'class': 'exit-message'}).
+                                   html('<div>Press ESC to exit</div>').
+                                   appendTo($('body')).
+                                   delay(2000).
+                                   animate({opacity:0}, 500, function() {
+                                       $(this).remove();
+                                   });
+                               }
+                           },
+                           //缩小
+                           zoomOut: function () {
+                               $('.exit-message').hide();
+                               $('.made').fadeIn();
+                               setTimeout(function(){
+                                   $('.flipbook').addClass('animated').removeClass('zoom-in');
+                                   resizeViewport();
+                               }, 0);
+                           }
+                       },
+                   });
+
+                   $(window).resize(function() {
+                       resizeViewport();
+                   }).bind('orientationchange', function() {
+                       resizeViewport();
+                   });
+               }
+               $(".next-button").click(function () {
+                   $('.flipbook').turn('next');
+
+               })
+               $(".previous-button").click(function () {
+                 $('.flipbook').turn('previous');
+               })
+              //键盘控制翻页
+              $(document).keydown(function(e){
+                  var previous = 37, next = 39,fullScreen=122;
+                  switch (e.keyCode) {
+                      case previous:
+                          $('.flipbook').turn('previous');
+                          e.preventDefault();
+                          break;
+                      case next:
+                          $('.flipbook').turn('next');
+                          e.preventDefault();
+                          break;
+                      case fullScreen:
+                          e.preventDefault();
+                          full();
+                          break;
+                  }
+              });
+              yepnope({
+                    test : Modernizr.csstransforms,
+                    yep:  ['./js/turn.js'],
+                    nope: ['./js/turn.html4.min.js'],
+                    both: ['./js/zoom.min.js','./js/scissor.min.js', 'css/book.css','js/book.js'],
+              });
+
+             $('.catalog').on('mouseout',function () {
+                 $(this).css("display","none");
+                 $(".shrik").css("display","block");
+                 $(".activeShrik").css("display","none");
+             });
+             $('.catalog').on('mouseover',function () {
+                 $(this).css("display","block");
+                 $(".shrik").css("display","none");
+                 $(".activeShrik").css("display","block");
+             });
+             var doubleWidth = w;
+             var singleWidth = doubleWidth/2
+             $(".shrik").on("click",function(){
+                 $(".singlePage").css("display","block");
+                 $(".activeSinglePage").css("display","none");
+                 $(".doublePage").css("display","block");
+                 $(".activeDoublePage").css("display","none");
+                 $(".people").css("display","block");
+                 $(".peopleActive").css("display","none");
+                 $(".catalog").css("display","block");
+                 $(".shrik").css("display","none");
+                 $(".activeShrik").css("display","block");
+                 resizeViewport();
+             })
+             $(".singlePage").on("click",function () {
+                 book.turn("display","single");
+                 var options = book.turn("options");
+                 options.width = singleWidth;
+                 $(".catalog").css("display","none");
+                 $(".shrik").css("display","block");
+                 $(".activeShrik").css("display","none");
+                 $(".doublePage").css("display","block");
+                 $(".activeDoublePage").css("display","none");
+                 $(".singlePage").css("display","none");
+                 $(".activeSinglePage").css("display","block");
+                 $(".people").css("display","block");
+                 $(".peopleActive").css("display","none");
+                 resizeViewport();
+             })
+
+             $(".doublePage").on("click",function () {
+                 book.turn("display","double");
+                 var options = book.turn("options");
+                 options.width = doubleWidth;
+                 $(".catalog").css("display","none");
+                 $(".shrik").css("display","block");
+                 $(".activeShrik").css("display","none");
+                 $(".singlePage").css("display","block");
+                 $(".activeSinglePage").css("display","none");
+                 $(".doublePage").css("display","none");
+                 $(".activeDoublePage").css("display","block");
+                 resizeViewport();
+             })
+             //全屏显示
+             function full(){
+                 var docElm = document.documentElement;
+                 //W3C
+                 if (docElm.requestFullscreen) {
+                     docElm.requestFullscreen();
+                 }
+                 //FireFox
+                 else if (docElm.mozRequestFullScreen) {
+                     docElm.mozRequestFullScreen();
+                 }
+                 //Chrome等
+                 else if (docElm.webkitRequestFullScreen) {
+                     docElm.webkitRequestFullScreen();
+                 }
+                 //IE11
+                 else if (elem.msRequestFullscreen) {
+                     elem.msRequestFullscreen();
+                 }
+             }
+             //退出全屏
+             function exitFullScreen() {
+                 var el= document,
+                     cfs = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullScreen,
+                     wscript;
+
+                 if (typeof cfs != "undefined" && cfs) {
+                     cfs.call(el);
+                     return;
+                 }
+
+                 if (typeof window.ActiveXObject != "undefined") {
+                     wscript = new ActiveXObject("WScript.Shell");
+                     if (wscript != null) {
+                         wscript.SendKeys("{F11}");
+                     }
+                 }
+             }
+             // 点击定位到具体页
+             $(".directoryInfo").on("click",".content",function(){
+                 $(".content").removeClass("active");
+                 var page = $(this).children().eq(1).html();
+                 book.turn("page",page);
+                 $(this).addClass("active");
+             })
+
+
+    </script>
+</body>
+</html>
