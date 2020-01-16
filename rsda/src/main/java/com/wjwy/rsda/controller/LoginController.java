@@ -146,7 +146,7 @@ public class LoginController {
 							if (loginName.equals(onlineSession.getLoginName())) { // 这里的username也就是当前登录的username
 								session.setTimeout(0); // 这里就把session清除，
 								userOnlineService.deleteOnlineById(on.getSessionId());
-								sendmsg("[ IP:" + onlineSession.getHost() + ",因异地登录，您已强制下线!]", onlineSession.getLoginName());
+								sendmsg("[因异地登录，您已强制下线!]", onlineSession.getLoginName());
 								logger.info(
 										"[ IP:" + onlineSession.getHost() + "《=================》用户" + onlineSession.getLoginName() + "] 已下线...");
 							}
