@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-12-03 14:49:36
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-13 13:59:57
+ * @LastEditTime : 2020-01-15 10:52:03
  */
 package com.wjwy.rsda.services;
 
@@ -389,7 +389,7 @@ public class UserService {
 		if (passWord.length() < MessageConstant.PASSWORD_MIN_LENGTH
 				|| passWord.length() > MessageConstant.PASSWORD_MAX_LENGTH) {
 			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
-					MessageUtils.message("user.passWord.not.match")));
+					"密码如果不在指定范围内"));
 			throw new UserPasswordNotMatchException();
 		}
 
@@ -397,7 +397,7 @@ public class UserService {
 		if (userName.length() < MessageConstant.USERNAME_MIN_LENGTH
 				|| userName.length() > MessageConstant.USERNAME_MAX_LENGTH) {
 			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, MessageConstant.LOGIN_FAIL,
-					MessageUtils.message("user.passWord.not.match")));
+					"用户名不在指定范围内"));
 			throw new UserPasswordNotMatchException();
 		}
 		// 查询用户信息

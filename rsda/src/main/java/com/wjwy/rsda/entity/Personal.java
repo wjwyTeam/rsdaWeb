@@ -1,5 +1,7 @@
 package com.wjwy.rsda.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Table;
 import io.swagger.annotations.ApiModel;
@@ -153,7 +155,7 @@ public class Personal {
 
  @ApiModelProperty("创建时间")
  @Column(name = "create_time")
- private String createTime;
+ private Date createTime;
  @ApiModelProperty("是否删除")
  @Column(name = "del_flag")
  private Boolean delFlag;

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-04 13:00:09
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-11 09:06:24
+ * @LastEditTime : 2020-01-15 10:57:17
  */
 package com.wjwy.rsda.common.config;
 
@@ -210,8 +210,9 @@ public class ShiroConfiguration {
         // 需要验证的写 authc 不需要的写 anon
         filterChainDefinitionMap.put("/templates/**", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
-        filterChainDefinitionMap.put("/swagger-ui/**", "anon");
-        // anon：它对应的过滤器里面是空的,什么都没做
+     
+       
+        // anon：它对应的过滤器里面是空的,什么都没做/websocket/** = anon
 
         // 不用注解也可以通过 API 方式加载权限规则
         // Map<String, String> permissions = new LinkedHashMap<>();
@@ -227,6 +228,8 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/socketServer/**", "anon");
+        filterChainDefinitionMap.put("/swagger-ui/**", "anon");
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
 

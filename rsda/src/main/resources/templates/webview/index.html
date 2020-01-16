@@ -30,6 +30,7 @@
 </head>
 
 <body class="layui-layout-body">
+
   <div id="LAY_app">
     <div class="layui-layout layui-layout-admin">
       <div class="layui-header">
@@ -54,7 +55,7 @@
               <i class="layui-icon layui-icon-note"></i>
             </a>
           </li>
-          
+
           <li class="layui-nav-item" lay-unselect>
             <a lay-href="/webviews/app/message/index.html" layadmin-event="message" lay-text="消息中心">
               <i class="layui-icon layui-icon-notice"></i>
@@ -88,7 +89,7 @@
             </dl>
           </li>
 
-      
+
 
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="fullscreen">
@@ -148,6 +149,7 @@
                 <dd layadmin-event="closeAllTabs">
                   <a href="javascript:;">关闭全部标签页</a>
                 </dd>
+                <dd><button data-method="notice" class="layui-btn">示范一个公告层</button></dd>
               </dl>
             </li>
           </ul>
@@ -170,17 +172,74 @@
 
       <!-- 辅助元素，一般用于移动设备下遮罩 -->
       <div class="layadmin-body-shade" layadmin-event="shade"></div>
+      <input type="hidden" id="userName" th:value="${userName}">
     </div>
   </div>
 
 
   <script>
+
     layui.config({
       base: 'layuiadmin/' //静态资源所在路径
     }).extend({
       index: 'lib/index' //主入口模块
-    }).use(['index'], function () {
+    }).use(['index', 'layer'], function () {
+      var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+      var ws = null;
+      var username = $("#userName").val();
+      var host = document.location.host;
+      if ("WebSocket" in window) {
+        ws = new WebSocket(
+          "ws://" +
+          host +
+          "/socketServer/" + username
+        );
+      } else if ("MozWebSocket" in window) {
+        ws = new MozWebSocket(
+          "ws://" +
+          host +
+          "/socketServer/" + username
+        );
+      } else {
+        alert("该浏览器不支持websocket");
+      }
+
+      ws.onmessage = function (evt) {
+        // console.log((evt.currentTarget.url).substring((evt.currentTarget.url).lastIndexOf("/") + 1, (evt.currentTarget.url).length));
+     
+          //示范一个公告层
+          layer.open({
+            type: 1
+            , title: "强制下线通知" //不显示标题栏
+            , closeBtn: false
+            , area: '300px;'
+            , shade: 0.3
+            , id: 'LAY_layuipro' //设定一个id，防止重复弹出
+            , btn: ['确定']
+            , btnAlign: 'c'
+            // , moveType: 0 //拖拽模式，0或者1
+            , content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">'+ evt.data+'</div>'
+            , yes: function (index,layero) {
+              var btn = layero.find('.layui-layer-btn');
+              btn.find('.layui-layer-btn0').attr({
+                href: host
+                , target: 'self'
+              });
+            }
+          });
+  
+    
+      };
    
+
+
+
+      $('.layui-btn').on('click', function () {
+        var othis = $(this), method = othis.data('method');
+        active[method] ? active[method].call(this, othis) : '';
+      });
+
     });
   </script>
 </body>
