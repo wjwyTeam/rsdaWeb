@@ -1,9 +1,12 @@
 package com.wjwy.rsda.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import io.swagger.annotations.ApiModel;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -170,5 +173,9 @@ public class Personal {
  @ApiModelProperty("所属机构")
  @Column(name = "dept_id")
  private String deptId;
+
+ @Transient
+ @ApiModelProperty("阅档权限")
+ private List<DaMaterialtem>  ydqx;
 
 }

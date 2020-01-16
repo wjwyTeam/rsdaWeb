@@ -1,9 +1,19 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: ZHANGQI
+ * @Date: 2020-01-14 08:57:31
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-16 11:13:58
+ */
 package com.wjwy.rsda.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -67,5 +77,9 @@ public class DaMaterialtem {
  @ApiModelProperty("创建人")
  @Column(name = "create_by")
  private String createBy;
+
+ @Transient
+ @ApiModelProperty("阅档权限子类")
+ private List<DaMaterialtem> children;
 
 }

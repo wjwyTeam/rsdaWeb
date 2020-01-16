@@ -4,13 +4,23 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-15 10:32:02
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-15 10:33:43
+ * @LastEditTime : 2020-01-16 10:44:26
  */
 package com.wjwy.rsda.entity;
 
 import javax.websocket.Session;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.io.Serializable;
 
+@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Client implements Serializable {
 
     private static final long serialVersionUID = 8957107006902627635L;
@@ -19,27 +29,4 @@ public class Client implements Serializable {
 
     private Session session;
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
-    }
-
-    public Client(String userName, Session session) {
-        this.userName = userName;
-        this.session = session;
-    }
-
-    public Client() {
-    }
 }

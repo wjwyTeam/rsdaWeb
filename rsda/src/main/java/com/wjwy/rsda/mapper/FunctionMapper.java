@@ -38,7 +38,7 @@ public  interface FunctionMapper extends TkMapper<Function> {
 		* 
 		* @return
 	 */
-@Select("select * from sys_function where visible=true ORDER BY  forder ASC")
+@Select("select * from sys_function  ORDER BY  forder ASC")
 	List<Function> findList();
 				
 

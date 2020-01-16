@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 17:50:35
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-13 14:19:43
+ * @LastEditTime : 2020-01-16 10:58:55
  */
 package com.wjwy.rsda.controller;
 
@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,7 +71,7 @@ public class OnlineController {
    */
   @PostMapping("/listTwo")
   @ApiOperation(value = "列表数据查询", notes = "userOnline-object")
-  public ResponseWrapper list(Online userOnline,
+  public ResponseWrapper list(@RequestBody Online userOnline,
       @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
       @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit) {
     try {
