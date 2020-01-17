@@ -106,27 +106,34 @@
              var page = 1 ;
              var typeDefinition = "";
              window.lastpagenum = 2;
+
+             // 获取父窗口中点击人员的id
+             var personalId = window.opener.document.getElementById("txtName")
+
             // 请求人员数据
-            //   $.ajax({
-            //       type:"get",
-            //       url:"http://192.168.1.81:5000/api/GetItembyIp",
-            //       dataType:"json",
-            //       success:function(data){
-            //           currentPersonId = data.currentPid;
-            //           resumeRoot = data.person;
-            //           var personInfo = "";
-            //           $.each(data.person,function (k,v) {
-            //               //渲染人员信息
-            //               personInfo +=
-            //                   '<div class="person"  persid="'+v.persid+'" style=" margin: 30px; width:240px;background: #cdaf94; height: 330px;text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
-            //                   '<div style="padding-top: 60px;font-size: 32px;color: #C01919;font-family: Serif ;">干部人事档案</div>'+
-            //                   '<div style="padding-top: 110px;font-size: 20px;color: #C01919;font-family: Serif ; position: relative">单位：_________<span style="position: absolute;left: 115px;">'+v.unit+'</span></div>'+
-            //                   '<div style="padding-top: 10px;font-size: 20px;color: #C01919;font-family: Serif ; position: relative">姓名：_________<span style="position: absolute;left: 115px;">'+v.name+'</span></div>'+
-            //                   '</div>'
-            //               $(".outter").html(personInfo);
-            //           })
-            //       }
-            //   });
+              $.ajax({
+                  type:"post",
+                  url:"http://192.168.1.58:8080/person/personalList",
+                  dataType:"json",
+                  data: {
+                    personalId: personalId
+                  },
+                  success:function(data){
+                      currentPersonId = data.currentPid;
+                      resumeRoot = data.person;
+                      var personInfo = "";
+                      $.each(data.person,function (k,v) {
+                          //渲染人员信息
+                          personInfo +=
+                              '<div class="person"  persid="'+v.persid+'" style=" margin: 30px; width:240px;background: #cdaf94; height: 330px;text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
+                              '<div style="padding-top: 60px;font-size: 32px;color: #C01919;font-family: Serif ;">干部人事档案</div>'+
+                              '<div style="padding-top: 110px;font-size: 20px;color: #C01919;font-family: Serif ; position: relative">单位：_________<span style="position: absolute;left: 115px;">'+v.unit+'</span></div>'+
+                              '<div style="padding-top: 10px;font-size: 20px;color: #C01919;font-family: Serif ; position: relative">姓名：_________<span style="position: absolute;left: 115px;">'+v.name+'</span></div>'+
+                              '</div>'
+                          $(".outter").html(personInfo);
+                      })
+                  }
+              });
 
               //点击人员进行图片请求和渲染
             //   $(".outter").on("click",".person",function () {
