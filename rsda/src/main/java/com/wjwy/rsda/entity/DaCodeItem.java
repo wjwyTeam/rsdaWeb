@@ -4,18 +4,16 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-14 08:48:44
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-16 11:10:43
+ * @LastEditTime : 2020-01-16 17:01:19
  */
 package com.wjwy.rsda.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -27,7 +25,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @LastEditors  : ZHANGQI
  * @LastEditTime : 2020-01-14 08:49:05
  */
-
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -43,28 +40,11 @@ import lombok.ToString;
 @Table(name = "da_codeitem")
 public class DaCodeItem {
 
- @Transient
- @ApiModelProperty("当前用户ID")
- private String currentPid;
- @Transient
- @ApiModelProperty("当前用户名称")
- private String currentName;
- @Transient
- @ApiModelProperty("当前用户IP")
- private String currentIp;
- @Transient
- @ApiModelProperty("人员档案")
- private Personal person;
-
-
-
 
  @ApiModelProperty("主键ID")
  @Column(name = "id")
  private String id;
- @ApiModelProperty("编号")
- @Column(name = "code")
- private String code;
+
  @ApiModelProperty("名称")
  @Column(name = "name")
  private String name;
@@ -73,7 +53,7 @@ public class DaCodeItem {
  private String pid;
  @ApiModelProperty("子级")
  @Column(name = "cid")
- private String cid;
+ private Boolean cid;
  @ApiModelProperty("拼写")
  @Column(name = "spell")
  private String spell;
@@ -92,16 +72,8 @@ public class DaCodeItem {
  @ApiModelProperty("创建人")
  @Column(name = "create_by")
  private String createBy;
-
- public DaCodeItem(String currentPid, String currentName, String currentIp) {
-  Subject subject = SecurityUtils.getSubject();
-  if (subject.getPrincipal() != null) {
-   User user = subject.getPrincipals().oneByType(User.class);
-   if (user != null) {
-    this.currentPid = user.getUserId();
-    this.currentName = user.getUserName();
-    this.currentIp = user.getUserIp();
-   }
-  }
- }
+ @Transient
+ @ApiModelProperty("阅档权限子类")
+ private List<DaCodeItem> children;
+ 
 }

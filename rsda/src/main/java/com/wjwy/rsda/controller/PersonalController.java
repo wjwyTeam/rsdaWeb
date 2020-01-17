@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.ResponseWrapper;
+import com.wjwy.rsda.entity.DossierCatalogue;
 import com.wjwy.rsda.entity.Personal;
 import com.wjwy.rsda.common.enums.Convert;
 import com.wjwy.rsda.common.enums.EnumEntitys;
@@ -194,18 +195,42 @@ public class PersonalController {
  @PostMapping("/personalRemove")
  @Log(title = "人员管理", businessType = EnumEntitys.DELETE)
  @ApiOperation(value = "人员管理移除数据", notes = "参数：数组-ids")
- public ResponseWrapper remove(String ids) {
-  try {
-   int resultTotal = personalService.personalRemove(Convert.toStrArray(ids));
-   if (resultTotal == 0) {
-    return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
-   }
-   return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
-  } catch (Exception e) {
-   e.printStackTrace();
-   logger.error(e.getMessage());
+  public ResponseWrapper remove(String ids) {
+    try {
+      int resultTotal = personalService.personalRemove(Convert.toStrArray(ids));
+      if (resultTotal == 0) {
+        return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "删除失败", null, null, null);
+      }
+      return ResponseWrapper.success(HttpStatus.OK.value(), "删除成功", null, null, null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
   }
-  return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-    HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
- }
+ 
+
+
+  /**
+   * 人员管理阅览
+   * 
+   * @param personal
+   * @return ResponseWrapper
+   */
+  @PostMapping("/personalList")
+  @ApiOperation(value = "人员管理阅览", notes = "参数:personal-对象")
+  public ResponseWrapper personalList(String personalId) {
+    try {
+      DossierCatalogue dossierCatalogue = personalService.getByJson(personalId);
+      return ResponseWrapper.success(HttpStatus.OK.value(), "查询成功", dossierCatalogue, null, null);
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+    }
+    return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+  }
+
+
+
 }

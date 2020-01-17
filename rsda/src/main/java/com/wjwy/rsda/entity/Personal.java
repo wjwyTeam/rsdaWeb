@@ -1,18 +1,15 @@
 package com.wjwy.rsda.entity;
 
 import java.util.Date;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import io.swagger.annotations.ApiModel;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.ToString;
 
 /*
@@ -25,7 +22,8 @@ import lombok.ToString;
  */
 
 @ToString
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("E2-人员管理=>实体类")
@@ -174,8 +172,5 @@ public class Personal {
  @Column(name = "dept_id")
  private String deptId;
 
- @Transient
- @ApiModelProperty("阅档权限")
- private List<DaMaterialtem>  ydqx;
 
 }

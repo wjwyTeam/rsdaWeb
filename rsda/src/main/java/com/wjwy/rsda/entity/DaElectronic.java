@@ -31,15 +31,16 @@ public class DaElectronic {
  @ApiModelProperty("主键ID")
  @Column(name = "id")
  private String id;
- @ApiModelProperty("关联ID")
- @Column(name = "elec_id")
- private String elecId;
+ @ApiModelProperty("关联目录ID")
+ @Column(name = "item_code")
+ private String itemCode;
+ @ApiModelProperty("材料ID")
+ @Column(name = "material_id")
+ private String materialId;
  @ApiModelProperty("人员ID")
  @Column(name = "pers_id")
  private String persId;
- @ApiModelProperty("类型")
- @Column(name = "type_id")
- private String typeId;
+
  @ApiModelProperty("排序")
  @Column(name = "sort")
  private Integer sort;

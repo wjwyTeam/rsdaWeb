@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:27:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-13 13:57:59
+ * @LastEditTime : 2020-01-17 08:17:43
  */
 package com.wjwy.rsda.common.enums;
 import io.swagger.annotations.ApiModel;
@@ -90,6 +90,8 @@ public enum EnumEntitys {
     YES(true, "启动分页"), NO(false, "停用分页"),
 
     BOY(0, "男"), GIRL(1, "女"),
+
+    LB(false,"目录联表"),BB(true, "目录本表"),
 
     SCUUESS(1, "成功"), FAILED(2, "失败"), OK("0", "正常"), DISABLE("1", "停用"), DELETED(true, "删除");
 

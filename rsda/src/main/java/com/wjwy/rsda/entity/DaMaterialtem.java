@@ -4,16 +4,14 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-14 08:57:31
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-16 11:13:58
+ * @LastEditTime : 2020-01-16 16:30:36
  */
 package com.wjwy.rsda.entity;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -42,11 +40,11 @@ public class DaMaterialtem {
  @Column(name = "id")
  private String id;
  @ApiModelProperty("人员ID")
- @Column(name = "pers_id")
- private String persId;
+ @Column(name = "person_id")
+ private String personId;
  @ApiModelProperty("类型")
- @Column(name = "type")
- private String type;
+ @Column(name = "item_code")
+ private String itemCode;
  @ApiModelProperty("排序")
  @Column(name = "sort")
  private Integer sort;
@@ -78,8 +76,6 @@ public class DaMaterialtem {
  @Column(name = "create_by")
  private String createBy;
 
- @Transient
- @ApiModelProperty("阅档权限子类")
- private List<DaMaterialtem> children;
+
 
 }

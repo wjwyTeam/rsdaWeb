@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.wjwy.rsda.entity.DaJson;
+import com.wjwy.rsda.entity.DossierCatalogue;
+import com.wjwy.rsda.entity.Person;
 import com.wjwy.rsda.entity.Personal;
 import com.wjwy.rsda.mapper.PersonalMapper;
 
@@ -30,7 +33,8 @@ import tk.mybatis.mapper.util.StringUtil;
 public class PersonalService {
    @Autowired
    private PersonalMapper personalMapper;
-
+   @Autowired
+   private DaCodeItemService daCodeItemService;
    /**
     * 获取List对象
     * 
@@ -124,4 +128,30 @@ public class PersonalService {
       }
       return res;
    }
+
+
+   /**
+    * 
+    * @param personalId
+    * @return
+    */
+   public DossierCatalogue getByJson(String personalId) {
+      DossierCatalogue dossierCatalogue = new DossierCatalogue();
+      dossierCatalogue.getField();
+      //人员数据
+         Person person = new Person();
+         Personal pr = getById(personalId);
+         person.setName(pr.getPersonalName());
+         person.setPersid(pr.getPersonalId());
+         person.setUnit(pr.getDeptId());
+         List<DaJson> dcs = daCodeItemService.treeJsonsFunctions(personalId);
+         person.setYdqx(dcs);
+         dossierCatalogue.setPerson(person);
+      return dossierCatalogue;
+   }
+
+   
+
+ 
+
 }
