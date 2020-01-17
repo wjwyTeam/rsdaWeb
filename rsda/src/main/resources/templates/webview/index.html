@@ -9,15 +9,18 @@
 
   </script>
   <style>
+    .layui-layout-admin .layui-logo {
+        width: 423px;
+        text-align: left;
+    }
     .Toplog {
-      width: 50px;
-      height: 45px;
+      width: 28px;
+      height: 28px;
       float: left;
-      margin-top: 7px;
-      margin-bottom: 5px;
+      margin-top: 10px;
       background-image: url(image/danghui.png);
       background-repeat: no-repeat;
-      background-size: 40px 35px;
+      background-size: 28px 28px;
     }
 
     i {
@@ -25,6 +28,9 @@
       top: 72%;
       left: 20px;
       margin-top: -19px;
+    }
+    .layui-layout-admin .layui-layout-left .layui-nav-item {
+        margin: 0px;
     }
   </style>
 </head>
@@ -42,13 +48,19 @@
             </a>
           </li>
 
-          <li class="layui-nav-item" lay-unselect>
+          <!-- <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;" layadmin-event="refresh" title="刷新">
               <i class="layui-icon layui-icon-refresh-3"></i>
             </a>
-          </li>
+          </li> -->
         </ul>
         <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+            
+            <li class="layui-nav-item" lay-unselect>
+              <a href="javascript:;" layadmin-event="refresh" title="刷新">
+                <i class="layui-icon layui-icon-refresh-3"></i>
+              </a>
+            </li>
 
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="note">
@@ -102,11 +114,9 @@
       <!-- 侧边菜单 -->
       <div class="layui-side layui-side-menu">
         <div class="layui-side-scroll">
-          <div class="layui-logo">
+          <div class="layui-logo" layadmin-event="flexible">
             <div class="Toplog"></div>
-            <span>
-              干部人事档案系统
-            </span>
+            <span> &nbsp;干部人事档案系统 </span>
           </div>
 
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
