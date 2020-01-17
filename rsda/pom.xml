@@ -281,6 +281,12 @@
 		<artifactId>aspectjweaver</artifactId>
 		<version>1.9.2</version>
 </dependency>
+		<!-- springBoot实现上传功能 ftpclient -->
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

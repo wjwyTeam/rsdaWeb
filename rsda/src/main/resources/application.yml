@@ -20,7 +20,7 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
 server:
-    port: 80
+    port: 8080
     servlet:
         context-path: /
     tomcat:
