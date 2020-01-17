@@ -32,6 +32,31 @@
     .layui-layout-admin .layui-layout-left .layui-nav-item {
         margin: 0px;
     }
+    .fa-circle:before {
+        content: "\f111";
+        POSITION: relative;
+        right: 24px;
+        top: 3px;
+        color: #51ff00;
+    }
+    .fa-sign-out:before {
+      content: "\f08b";
+      color: #ffe500;
+    }
+    i {
+      position: absolute;
+      top: 72%;
+      left: 20px;
+      margin-top: -19px;
+    }
+
+    .layui-nav .layui-nav-iT a {
+        color: #ffffff;
+        position: relative;
+        padding: 14px;
+        left: 45px;
+        line-height: 30px;
+    }
   </style>
 </head>
 
@@ -121,7 +146,10 @@
 
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
             lay-filter="layadmin-system-side-menu">
-
+            <li class="layui-nav-iT">
+              <a href="#"><i class="fa fa-circle text-success"></i> <cite>在线</cite></a>
+              <a th:href="@{logout}" <i class="fa fa-sign-out text-danger"></i> <cite>注销</cite></a>
+            </li>
             <!--ZHANGQI -->
             <li data-name="set" class="layui-nav-item" th:each="m : ${manuList}">
               <a th:attr="lay-tips=${m.functionName}" lay-direction="1" th:if="${m.pid eq '0'}">
