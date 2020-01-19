@@ -136,7 +136,7 @@
         <a class="layui-btn  layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
         <!-- <a lay-href="/webviews/set/user/password.html">修改密码</a> -->
           <a class="layui-btn layui-btn-normal layui-btn-sm"  lay-event="infoDetails" id="infoDetails"><i class="layui-icon layui-icon-tips"></i>查看</a>
-
+           <input type="text" id="selectPersonId" class="layui-hide">
         <!-- <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="del"><i class="layui-icon ayui-icon-tips"></i>删除</a> -->
       </script>
     </div>
@@ -553,7 +553,8 @@
             });
           }
         }else if(obj.event = "infoDetails"){
-           window.open("/readFile/index.html?personalId="+data.personalId);
+           $("#selectPersonId").val(data.personalId)
+           window.open("/readFile/index.html");
         }
       });
       //批量删除事件
