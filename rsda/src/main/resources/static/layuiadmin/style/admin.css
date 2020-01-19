@@ -25,7 +25,7 @@ html {
     top: 0;
     left: 0;
     width: 100%;
-    height: 50px
+    height: 70px;
 }
 
 .layui-layout-admin .layui-header .layui-nav .layui-nav-child a {
@@ -34,7 +34,7 @@ html {
 
 .layui-layout-admin .layui-side {
     width: 220px;
-    top: 0;
+    top: -7px;
     z-index: 1001
 }
 
@@ -280,7 +280,7 @@ html {
 }
 
 .layui-side-menu .layui-side-scroll {
-    width: 240px
+    width: 220px;
 }
 
 .layui-side-menu .layui-nav {
@@ -292,7 +292,7 @@ html {
 .layui-side-menu .layui-nav .layui-nav-item a {
     height: 40px;
     line-height: 40px;
-    padding-left: 45px;
+    padding-left: 55px;
     padding-right: 30px
 }
 
@@ -411,7 +411,10 @@ html {
     padding: 0 80px 0 40px;
     background-color: #fff;
     box-sizing: border-box;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.1)
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+    position: relative;
+    top: 50px;
+    width: 88.5%;
 }
 
 .layadmin-pagetabs .layadmin-tabs-control {
@@ -563,7 +566,7 @@ html {
 .layui-layout-admin .layui-header {
     border-bottom: 1px solid #f6f6f6;
     /* box-sizing: border-box; */
-    background-color: #03152A;
+    background-color: #0B70E6;
 }
 
 .layui-layout-admin .layui-header a,.layui-layout-admin .layui-header a cite {
@@ -588,7 +591,7 @@ html {
 }
 
 .layui-layout-admin .layui-logo {
-    background-color: #03152A;
+    background-color: #0B70E6;
     /* box-shadow: 0 1px 2px 0 rgba(0,0,0,.15) */
 }
 
@@ -622,7 +625,7 @@ html {
 }
 
 .layui-fluid {
-    padding: 15px
+    padding: 15px;
 }
 
 .layadmin-header {

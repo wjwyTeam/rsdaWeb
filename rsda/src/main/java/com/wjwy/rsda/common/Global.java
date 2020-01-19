@@ -4,16 +4,18 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-19 15:50:08
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-08 14:51:01
+ * @LastEditTime : 2020-01-18 10:30:21
  */
 package com.wjwy.rsda.common;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
  * 全局配置类
  */
 @Component
+@ConfigurationProperties(prefix = "wjwy")
 public class Global {
     /** 项目名称 */
     private static String name;

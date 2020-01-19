@@ -35,11 +35,7 @@
       margin: unset;
     }
 
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-    }
+
 
     .container {
       width: 100%;
@@ -65,9 +61,7 @@
 </head>
 
 <body>
-  <div class="container">
 
-    <div class="rightGrid">
       <div style="width: 99%;
                padding: 5px;
               text-align: center;
@@ -108,16 +102,15 @@
                   <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="impower"><i class="layui-icon layui-icon-auz"></i>授权</a> 
                   
                   {{#if(d.roleStatus == true){ }} 
-                      <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="assignRoles"><i class="layui-icon layui-icon-user"></i>分配用户</a>
+                      <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="assignRoles"><i class="layui-icon layui-icon-user"></i>分配</a>
                   {{# } }}
                   {{# if(d.roleStatus==false){ }}
-                      <a class="layui-btn layui-btn-disabled layui-btn-sm" ><i class="layui-icon layui-icon-user"></i>分配用户</a>
+                      <a class="layui-btn layui-btn-disabled layui-btn-sm" ><i class="layui-icon layui-icon-user"></i>分配</a>
                   {{# } }}
 
       </script>
       <!-- <input type="text" id="seleceIds" class="layui-hide"> -->
-    </div>
-  </div>
+
 
 
   <input type="hidden" id="deptId">
@@ -144,7 +137,7 @@
       table.render({
         elem: '#userList'
         , even: true
-        , height: "full-60"
+        , height: "full-70"
         , title: '用户数据表'
         , id: 'userList'
         , cellMinWidth: 80

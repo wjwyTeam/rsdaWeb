@@ -2,6 +2,7 @@
 html,body{
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 #LAY_app,body,html {
@@ -21,6 +22,7 @@ html,body{
     border-radius: 18px;
     border: 0.1px solid #fff;
     z-index: 9;
+    box-shadow: 0 0 200px #d2c8c8;
     background-color: rgb(255, 255, 255,0.8);
 }
 

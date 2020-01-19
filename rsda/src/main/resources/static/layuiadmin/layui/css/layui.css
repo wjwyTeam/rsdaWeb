@@ -2,7 +2,10 @@
   display: inline-block;
   vertical-align: middle
 }
-
+body{
+  position: relative;
+  top: 20px;
+}
 h1,h2,h3,h4,h5,h6 {
   font-weight: 400
 }
@@ -829,7 +832,7 @@ a cite {
 .layui-side-scroll {
   position: relative;
   width: 220px;
-  height: 100%;
+  top: 27px;
   overflow-x: hidden
 }
 
@@ -1503,7 +1506,7 @@ a cite {
 }
 
 .layui-col-space25>* {
-  padding: 12.5px
+ padding: 5px;
 }
 
 .layui-col-space30 {

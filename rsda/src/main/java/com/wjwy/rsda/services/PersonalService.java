@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wjwy.rsda.entity.DaJson;
+import com.wjwy.rsda.entity.Department;
 import com.wjwy.rsda.entity.DossierCatalogue;
 import com.wjwy.rsda.entity.Person;
 import com.wjwy.rsda.entity.Personal;
@@ -35,6 +36,9 @@ public class PersonalService {
    private PersonalMapper personalMapper;
    @Autowired
    private DaCodeItemService daCodeItemService;
+   
+   @Autowired
+   private DepartmentService deptService;
    /**
     * 获取List对象
     * 
@@ -143,7 +147,10 @@ public class PersonalService {
          Personal pr = getById(personalId);
          person.setName(pr.getPersonalName());
          person.setPersid(pr.getPersonalId());
-         person.setUnit(pr.getDeptId());
+         Department d = deptService.getDept(pr.getDeptId());
+         if(d !=null){
+            person.setUnit(d.getName());
+         }
          List<DaJson> dcs = daCodeItemService.treeJsonsFunctions(personalId);
          person.setYdqx(dcs);
          dossierCatalogue.setPerson(person);

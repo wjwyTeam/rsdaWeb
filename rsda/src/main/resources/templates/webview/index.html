@@ -10,17 +10,21 @@
   </script>
   <style>
     .layui-layout-admin .layui-logo {
-        width: 423px;
-        text-align: left;
+      width: 500px;
+      text-align: left;
+      height: 70px;
     }
+
     .Toplog {
-      width: 28px;
-      height: 28px;
+      width: 60px;
+      height: 60px;
       float: left;
-      margin-top: 10px;
+      margin-top: 8px;
       background-image: url(image/danghui.png);
       background-repeat: no-repeat;
-      background-size: 28px 28px;
+      background-size: 55px 55px;
+      position: relative;
+      right: 10px;
     }
 
     i {
@@ -29,33 +33,40 @@
       left: 20px;
       margin-top: -19px;
     }
+
     .layui-layout-admin .layui-layout-left .layui-nav-item {
-        margin: 0px;
+      margin: 0px;
     }
-    .fa-circle:before {
-        content: "\f111";
-        POSITION: relative;
-        right: 24px;
-        top: 3px;
-        color: #51ff00;
+
+    .fa-user-secret:before{
+      color: #51ff00; 
+      position: relative;
     }
     .fa-sign-out:before {
       content: "\f08b";
       color: #ffe500;
     }
-    i {
-      position: absolute;
-      top: 72%;
-      left: 20px;
-      margin-top: -19px;
+
+    .layui-nav .layui-nav-iT {
+      background:#061d38;
+
     }
 
     .layui-nav .layui-nav-iT a {
-        color: #ffffff;
-        position: relative;
-        padding: 14px;
-        left: 45px;
-        line-height: 30px;
+      color: #ffffff;
+      position: relative;
+      padding: 0px 0px 15px 0px
+
+    }
+
+    .layui-nav-imgT {
+      /* border: 4px solid #16181b; */
+      position: relative;
+      display: block;
+      width: 25%;
+      left: 19px;
+      border-radius: 100%;
+      top: 15px;
     }
   </style>
 </head>
@@ -79,20 +90,20 @@
             </a>
           </li> -->
         </ul>
-        <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
-            
-            <li class="layui-nav-item" lay-unselect>
-              <a href="javascript:;" layadmin-event="refresh" title="刷新">
-                <i class="layui-icon layui-icon-refresh-3"></i>
-              </a>
-            </li>
+        <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right" style="position:relative;top:10px">
+
+
 
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="note">
               <i class="layui-icon layui-icon-note"></i>
             </a>
           </li>
-
+          <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:;" layadmin-event="refresh" title="刷新">
+              <i class="layui-icon layui-icon-refresh-3"></i>
+            </a>
+          </li>
           <li class="layui-nav-item" lay-unselect>
             <a lay-href="/webviews/app/message/index.html" layadmin-event="message" lay-text="消息中心">
               <i class="layui-icon layui-icon-notice"></i>
@@ -101,32 +112,6 @@
               <span class="layui-badge-dot"></span>
             </a>
           </li>
-
-          <!-- <li class="layui-nav-item layui-hide-xs" lay-unselect>
-            <a href="javascript:;" layadmin-event="theme">
-              <i class="layui-icon layui-icon-theme"></i>
-            </a>
-          </li> -->
-
-
-          <li class="layui-nav-item" lay-unselect>
-            <a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img" />
-              <cite style="color:#f9f6f6" th:text=" ${user.userRealName}"></cite></a>
-            <dl class="layui-nav-child">
-              <dd>
-                <a th:attr="lay-href=@{'/user/personInfo?userId='+${user.userId}}">基本资料</a>
-              </dd>
-              <dd>
-                <a lay-href="/webviews/set/user/password.html">修改密码</a>
-              </dd>
-              <hr />
-              <dd layadmin-event="logout" style="text-align: center;">
-                <a>退出</a>
-              </dd>
-            </dl>
-          </li>
-
-
 
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="fullscreen">
@@ -141,14 +126,24 @@
         <div class="layui-side-scroll">
           <div class="layui-logo" layadmin-event="flexible">
             <div class="Toplog"></div>
-            <span> &nbsp;干部人事档案系统 </span>
+            <span>
+              <h1>&nbsp;干部人事档案管理系统</h1>
+            </span>
           </div>
 
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
             lay-filter="layadmin-system-side-menu">
+
             <li class="layui-nav-iT">
-              <a href="#"><i class="fa fa-circle text-success"></i> <cite>在线</cite></a>
-              <a th:href="@{logout}" <i class="fa fa-sign-out text-danger"></i> <cite>注销</cite></a>
+
+              <a lay-href="/webviews/set/user/password.html">
+                <img src="image/character.jpg" class="layui-nav-imgT" />
+              </a>
+              <a th:attr="lay-href=@{'/user/personInfo?userId='+${user.userId}}"><i
+                  class="fa fa-user-secret  text-success"></i></a>
+
+              <a th:href="@{logout}" style="position: relative;left: 100px;" <i class="fa fa-sign-out text-danger"></i>
+                <cite>注销</cite></a>
             </li>
             <!--ZHANGQI -->
             <li data-name="set" class="layui-nav-item" th:each="m : ${manuList}">
@@ -187,7 +182,6 @@
                 <dd layadmin-event="closeAllTabs">
                   <a href="javascript:;">关闭全部标签页</a>
                 </dd>
-                <dd><button data-method="notice" class="layui-btn">示范一个公告层</button></dd>
               </dl>
             </li>
           </ul>
@@ -212,17 +206,18 @@
       <div class="layadmin-body-shade" layadmin-event="shade"></div>
       <input type="hidden" id="userName" th:value="${userName}">
     </div>
+
   </div>
 
 
   <script>
-
     layui.config({
       base: 'layuiadmin/' //静态资源所在路径
     }).extend({
       index: 'lib/index' //主入口模块
     }).use(['index', 'layer'], function () {
-      var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+      var $ = layui.jquery,
+        layer = layui.layer; //独立版的layer无需执行这一句
 
       var ws = null;
       var username = $("#userName").val();
@@ -245,36 +240,41 @@
 
       ws.onmessage = function (evt) {
         // console.log((evt.currentTarget.url).substring((evt.currentTarget.url).lastIndexOf("/") + 1, (evt.currentTarget.url).length));
-     
-          //示范一个公告层
-          layer.open({
-            type: 1
-            , title: "强制下线通知" //不显示标题栏
-            , closeBtn: false
-            , area: '300px;'
-            , shade: 0.3
-            , id: 'LAY_layuipro' //设定一个id，防止重复弹出
-            , btn: ['确定']
-            , btnAlign: 'c'
+
+        //示范一个公告层
+        layer.open({
+          type: 1,
+          title: "强制下线通知" //不显示标题栏
+            ,
+          closeBtn: false,
+          area: '300px;',
+          shade: 0.3,
+          id: 'LAY_layuipro' //设定一个id，防止重复弹出
+            ,
+          btn: ['确定'],
+          btnAlign: 'c'
             // , moveType: 0 //拖拽模式，0或者1
-            , content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">'+ evt.data+'</div>'
-            , yes: function (index,layero) {
-              var btn = layero.find('.layui-layer-btn');
-              btn.find('.layui-layer-btn0').attr({
-                href: host
-                , target: 'self'
-              });
-            }
-          });
-  
-    
+            ,
+          content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">' +
+            evt.data + '</div>',
+          yes: function (index, layero) {
+            var btn = layero.find('.layui-layer-btn');
+            btn.find('.layui-layer-btn0').attr({
+              href: host,
+              target: 'self'
+            });
+          }
+        });
+
+
       };
-   
+
 
 
 
       $('.layui-btn').on('click', function () {
-        var othis = $(this), method = othis.data('method');
+        var othis = $(this),
+          method = othis.data('method');
         active[method] ? active[method].call(this, othis) : '';
       });
 

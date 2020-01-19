@@ -3,18 +3,15 @@
  * @version: v0.0.1
  * @Author: ZHANGQI
  * @Date: 2019-12-17 19:08:33
- * @LastEditors  : zgr
- * @LastEditTime : 2020-01-09 10:38:44
+ * @LastEditors  : ZHANGQI
+ * @LastEditTime : 2020-01-19 14:04:30
  -->
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
   <head>
     <th:block th:include="include :: header('服务器监控')" />
     <style>
-        body{
-          height: 100%;
-          width: 100%;
-        }
+     
         .layui-table,
         .layui-table-view {
           margin: unset;
@@ -25,7 +22,7 @@
     </style>
   </head>
 
-  <body>
+  <body style=" overflow: hidden;">
     <div>
       <div class="userTableSearch layui-form">
         <input
@@ -67,7 +64,7 @@
         table.render({
           elem: "#logTable",
           even: true,
-          height: "full-60",
+          height: "full-70",
           title: "用户数据表",
           cellMinWidth: 80,
           method: "post",

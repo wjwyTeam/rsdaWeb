@@ -5,11 +5,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.github.pagehelper.PageInfo;
+import com.wjwy.rsda.common.util.FileUploadUtils;
 import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.MD5Util;
 import com.wjwy.rsda.common.util.ResponseWrapper;
+import com.wjwy.rsda.common.util.ShiroUtils;
 import com.wjwy.rsda.entity.Role;
 import com.wjwy.rsda.entity.User;
+import com.wjwy.rsda.common.Global;
 import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.services.RoleService;
 import com.wjwy.rsda.services.UserService;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -108,6 +112,41 @@ public class UserController {
 		model.addObject("user", user);
 		model.setViewName(prefix + "userInfo");
 		return model;
+	}
+
+	/**
+	 * 修改头像
+	 */
+	@GetMapping("/personPhoto")
+	public ModelAndView personPhoto(@ApiIgnore ModelAndView model) {
+		User user = ShiroUtils.getUser();
+		model.addObject("user", userService.getPersonInfo(user.getUserId()));
+		model.setViewName(prefix + "userAvatar");
+		return model;
+	}
+
+	/**
+	 * 保存头像
+	 */
+	@Log(title = "个人信息", businessType = EnumEntitys.UPDATE)
+	@PostMapping("/updateAvatar")
+	@ResponseBody
+	public ResponseWrapper updateAvatar(@RequestParam("file") MultipartFile file) {
+		User currentUser = ShiroUtils.getUser();
+		try {
+			if (!file.isEmpty()) {
+				String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file);
+				currentUser.setBase64Photo(avatar);
+				if (userService.update(currentUser) > 0) {
+					ShiroUtils.setSysUser(userService.getPersonInfo(currentUser.getUserId()));
+					return ResponseWrapper.success(HttpStatus.OK.value(), "修改头像失败成功", ShiroUtils.getUser(), null,null);
+				}
+			}
+			return ResponseWrapper.success(HttpStatus.BAD_REQUEST.value(), "修改头像失败失败", null, null, null);
+		} catch (Exception e) {
+			return ResponseWrapper.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "服务错误，请联系管理员");
+		}
 	}
 
 	/**

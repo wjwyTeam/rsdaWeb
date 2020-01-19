@@ -16,6 +16,7 @@
       position: relative;
       top: 6px;
     }
+     
     .layui-table,
     .layui-table-view {
       margin: unset;
@@ -27,7 +28,7 @@
   </style>
 </head>
 
-<body>
+<body style=" overflow: hidden;">
   <div>
     <div class="dictTableSearch layui-form">
       <div style="float: left;padding-left: 5px;">
@@ -68,7 +69,7 @@
       table.render({
         elem: "#dictTable",
         even: true,
-        height: "full-60",
+        height: "full-70",
         title: "用户数据表",
         cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
         method: "post",

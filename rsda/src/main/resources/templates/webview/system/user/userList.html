@@ -39,6 +39,9 @@
     body {
       width: 100%;
       height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
 
     .container {
@@ -51,7 +54,7 @@
     .leftTree {
       width: 320px;
       height: 100%;
-      border-right:1px solid #efefef;
+      border-right: 1px solid #efefef;
     }
 
     .ztree {
@@ -59,34 +62,32 @@
       overflow: auto;
     }
 
-    .bg{
+    .bg {
       width: 100%;
       background: #f2f2f2;
       /* border: 1px solid red; */
     }
 
     .rightGrid {
-      width: 95%;
-      margin: 15px;
-      background: #ffffff;
-      padding:0px 15px;
+      width: 100%;
+      height: 100%;
     }
 
     .userTableSearch {
       width: calc(100% - 180px);
       text-align: right;
     }
-    .layui-table-view{
-        background: #ffffff;
+
+    .layui-table-view {
+      background: #ffffff;
     }
-    
   </style>
 </head>
 
 <body>
   <div class="container">
     <div class="leftTree" th:if="${type}">
-      <div   style="width: 100%;
+      <div style="width: 100%;
                                   height: 40px;
                                   text-align: center;
                                   border-bottom: solid 1px #efefef;
@@ -100,34 +101,36 @@
       <ul id="deptTree" class="ztree"></ul>
     </div>
     <div class="bg">
-        <div class="rightGrid">
-              <div class="layui-row">
-                <div style="width: 99%;height: 40px;padding:5px; text-align: center;display: inline-flex;align-items: center;background-color: #fff; " th:if="${type}" >
-                    <div>
-                      <button class="layui-btn" data-type="add">添加</button>
-                      <button class="layui-btn" data-type="batchdel">批量删除</button>
-                    </div>
-                    <div class="userTableSearch layui-form">
-                      <input type="text" name="userName" id="userName" placeholder="请输入用户名" autocomplete="off" class="layui-input"
-                        style="display: inline-block;width: auto;" />
-            
-                      <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
-                        <select name="userType">
-                          <option value="" selected="true">请选择</option>
-                          <option value="0">固定账号</option>
-                          <option value="1">临时账号</option>
-                          <option value="2">游客</option>
-                        </select>
-                      </div>
-            
-                      <button class="layui-btn" lay-submit lay-filter="user-front-search">
-                        搜索
-                      </button>
-                    </div>
-                  </div>
-                  <table id="userList" lay-filter="userList" class="layui-hide"></table>
-                  <input id="roleId" hidden th:value="${roleId}">
-                  <script type="text/html" id="table-toolbar" th:inline="none" >
+      <div class="rightGrid">
+        <div class="layui-row">
+          <div
+            style="width: 99%;height: 40px;padding:5px; text-align: center;display: inline-flex;align-items: center;background-color: #fff; "
+            th:if="${type}">
+            <div>
+              <button class="layui-btn" data-type="add">添加</button>
+              <button class="layui-btn" data-type="batchdel">批量删除</button>
+            </div>
+            <div class="userTableSearch layui-form">
+              <input type="text" name="userName" id="userName" placeholder="请输入用户名" autocomplete="off"
+                class="layui-input" style="display: inline-block;width: auto;" />
+
+              <div class="layui-form-item" style="display: inline-block;width: auto;text-align: left;margin:0;">
+                <select name="userType">
+                  <option value="" selected="true">请选择</option>
+                  <option value="0">固定账号</option>
+                  <option value="1">临时账号</option>
+                  <option value="2">游客</option>
+                </select>
+              </div>
+
+              <button class="layui-btn" lay-submit lay-filter="user-front-search">
+                搜索
+              </button>
+            </div>
+          </div>
+          <table id="userList" lay-filter="userList" class="layui-hide"></table>
+          <input id="roleId" hidden th:value="${roleId}">
+          <script type="text/html" id="table-toolbar" th:inline="none">
                       <div th:if="${type}">
                            <a class="layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -141,9 +144,9 @@
                       {{# } }}
             
                     </script>
-             
-            </div>
+
         </div>
+      </div>
     </div>
   </div>
   <input type="hidden" id="deptId" />
@@ -154,11 +157,11 @@
     //Ztree
     function zTreeOnClick(event, treeId, treeNode) {
       if (treeNode.id != "" || treeNode.id != "undefined") {
-        window.tableObj.reload("userList",{
-            where: {
-              deptId: treeNode.id
-            }
-          }, "data");
+        window.tableObj.reload("userList", {
+          where: {
+            deptId: treeNode.id
+          }
+        }, "data");
         $("#deptId").val(treeNode.id);
       }
     }
@@ -232,26 +235,26 @@
       .extend({
         index: "lib/index" //主入口模块
       })
-      .use(["table", "form", "util", 'transfer','layer'], function () {
+      .use(["table", "form", "util", 'transfer', 'layer'], function () {
         var $ = layui.$,
           form = layui.form,
           table = layui.table,
           transfer = layui.transfer
-          ,layer = layui.layer
-          ,util = layui.util;
-        
+          , layer = layui.layer
+          , util = layui.util;
+
         window.tableObj = layui.table;
 
         //第一个实例
         table.render({
           elem: "#userList",
           even: true,
-          height: "full-80",        
+          height: "full-70",
           title: "用户数据表",
           cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增  列宽自动分配
           method: "post",
           id: "userList",
-          url: "/user/userPageInfoList?roleId="+$("#roleId").val(), //数据接口
+          url: "/user/userPageInfoList?roleId=" + $("#roleId").val(), //数据接口
           cols: [
             [
               //表头
@@ -262,31 +265,33 @@
                 align: "center",
                 filter: "test"
               },
-  
-              { field: "userName", title: "用户名" , align: "center" },
+
+              { field: "userName", title: "用户名", align: "center" },
               {
                 field: "userRealName",
                 title: "姓名",
                 align: "center",
               },
-              { field: "deptId", title: "所在单位Id" ,hide:true},
-              { field: "roles", title: "角色", align: "center", templet:function (data){
-                var rst= [];
+              { field: "deptId", title: "所在单位Id", hide: true },
+              {
+                field: "roles", title: "角色", align: "center", templet: function (data) {
+                  var rst = [];
                   if (data.roles != "NaN" && data.roles != null) {
-                    $.each(data.roles,function(k,v){
-                      if(v!=null){
+                    $.each(data.roles, function (k, v) {
+                      if (v != null) {
                         rst.push(v.name);
                       }
                     })
                   }
                   return rst;
-                 
-              }},
-              { field: "duty",align: "center", title: "职务"  },
+
+                }
+              },
+              { field: "duty", align: "center", title: "职务" },
               {
                 field: "userType",
                 title: "账号类型",
-                width:100,
+                width: 100,
                 align: "center",
               },
               {
@@ -308,7 +313,7 @@
                 title: "操作",
                 align: "center",
                 toolbar: "#table-toolbar"
-                ,width:230
+                , width: 230
               }
             ]
           ],
@@ -397,24 +402,24 @@
                 submit.trigger("click");
               }
             });
-          }else if(obj.event === "cancelAuthorization"){
+          } else if (obj.event === "cancelAuthorization") {
             // 取消固定角色授权
             layer.confirm("确定要取消对该用户的授权吗？", function (index) {
               layer.close(index);
               $.get(
-                "/user/userDelRole?roleId="+$("#roleId").val()+"&userId="+data.userId,
+                "/user/userDelRole?roleId=" + $("#roleId").val() + "&userId=" + data.userId,
                 function (resultJSONObject) {
                   console.log(resultJSONObject);
                   if (resultJSONObject.success) {
                     tableLoad(table);
                   }
-                  layer.msg(resultJSONObject.msg, {icon: 1, time: 2000,});
+                  layer.msg(resultJSONObject.msg, { icon: 1, time: 2000, });
                 },
                 "json"
               );
             });
 
-          }else if(obj.event === "authorization"){
+          } else if (obj.event === "authorization") {
             // 授权
             layer.open({
               type: 2,
@@ -440,14 +445,14 @@
                     var field = dataLog.field;
                     var obj = JSON.parse(field.bootString);
                     var arr = []
-                    $.each(obj,function(k,v){
-                       arr.push(v.id);
+                    $.each(obj, function (k, v) {
+                      arr.push(v.id);
                     })
                     //获取提交的字段
                     //提交 Ajax 成功后，静态更新表格中的数据
                     $.ajax({
                       type: "get",
-                      url: "/user/userSelRole?userId="+data.userId+"&ids="+arr,
+                      url: "/user/userSelRole?userId=" + data.userId + "&ids=" + arr,
                       dataType: "json",
                       contentType: "application/json;charset-UTF-8",
                       success: function (resultJSONObject) {
@@ -463,18 +468,18 @@
                 submit.trigger("click");
               }
             });
-          }else if(obj.event == "authorizationRole"){
+          } else if (obj.event == "authorizationRole") {
             // 角色授权
             layer.confirm("确定对该用户的授权吗？", function (index) {
               layer.close(index);
               var arrRole = $("#roleId").val();
               $.get(
-                "/user/userInRole?roleId="+arrRole+"&userId="+data.userId,
+                "/user/userInRole?roleId=" + arrRole + "&userId=" + data.userId,
                 function (resultJSONObject) {
                   if (resultJSONObject.success) {
                     tableLoad(table);
                   }
-                  layer.msg(resultJSONObject.msg, {icon: 1, time: 2000,});
+                  layer.msg(resultJSONObject.msg, { icon: 1, time: 2000, });
                 },
                 "json"
               );
@@ -577,7 +582,7 @@
             });
           }
         };
-        $(".layui-table-total").empty();  
+        $(".layui-table-total").empty();
 
         $(".layui-btn").on("click", function () {
           var type = $(this).data("type");
