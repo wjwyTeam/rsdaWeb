@@ -40,6 +40,16 @@
             filter: gray;
             opacity: 0.6;
         }
+        #myCanvas{
+            position: absolute;
+            z-index: 100;
+            left: 0;
+            bottom: 0;
+            top: 0;
+            right: 0;
+            margin: auto;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -65,9 +75,16 @@
                 </div>
             </div>
         </div>
+        
+           <!--放大缩小-->
+
+           <img class="close" style="z-index: 999; display: none;  position: absolute;right: 10px;top: 10px;  width: 30px;height: 30px;" src="./images/guanbi.png" alt="" >
+           <canvas id="myCanvas" width="1920" height="1080" style="background-color: #cccccc"></canvas>
+
+
 
         <!--阅档对话框-->
-        <div class = "readFile" style=" width:100%;height:100%;position: absolute;" id="full">
+        <div class = "readFile" style=" width:100%;height:100%;position: absolute;" >
              <!--左侧功能图标-->
             <div style="width: 60px;height: 100%;position: absolute;border-right: 1px solid #cccccc;display: flex;flex-direction: column ">
                 <img style="width: 30px;height: 30px;  padding: 25%; " class="shrik" src="./images/mulu.png" alt="" >
@@ -88,7 +105,7 @@
                 </div>
             </div>
             <!--书籍-->
-            <div style="width: calc(100% - 140px) ;height: 100%;position: absolute;left: 60px; border: 1px solid red;" class="books">
+            <div style="width: calc(100% - 140px) ;height: 100%;position: absolute;left: 60px; " class="books">
 
                 <div class="flipbook-viewport" >
                     <div class="container">
@@ -100,116 +117,58 @@
             </div>
         </div>
     <script>
-             var h =  $(window).height()+26;
+             var h =  $(window).height()-100;
              var w =  h*1.414;
              var book= $(".flipbook");
              var page = 1 ;
              var typeDefinition = "";
              window.lastpagenum = 2;
+             var hard ="" ;
 
              // 获取父窗口中点击人员的id
-             var personalId = window.opener.document.getElementById("txtName")
-
+             var personalIdTag = window.opener.document.getElementById("selectPersonId");
             // 请求人员数据
               $.ajax({
                   type:"post",
-                  url:"http://192.168.1.58:8080/person/personalList",
+                  url:"/person/personalList",
                   dataType:"json",
                   data: {
-                    personalId: personalId
+                    personalId: $(personalIdTag).val()
                   },
                   success:function(data){
-                      currentPersonId = data.currentPid;
-                      resumeRoot = data.person;
-                      var personInfo = "";
-                      $.each(data.person,function (k,v) {
-                          //渲染人员信息
-                          personInfo +=
-                              '<div class="person"  persid="'+v.persid+'" style=" margin: 30px; width:240px;background: #cdaf94; height: 330px;text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
-                              '<div style="padding-top: 60px;font-size: 32px;color: #C01919;font-family: Serif ;">干部人事档案</div>'+
-                              '<div style="padding-top: 110px;font-size: 20px;color: #C01919;font-family: Serif ; position: relative">单位：_________<span style="position: absolute;left: 115px;">'+v.unit+'</span></div>'+
-                              '<div style="padding-top: 10px;font-size: 20px;color: #C01919;font-family: Serif ; position: relative">姓名：_________<span style="position: absolute;left: 115px;">'+v.name+'</span></div>'+
-                              '</div>'
-                          $(".outter").html(personInfo);
-                      })
+                        resumeRoot = data.data.person;
+                        var personInfo = "";
+                        // 渲染目录结构
+                        name = resumeRoot.name;
+                        $(".resumeName").children("span").text(name);
+                        unit = resumeRoot.unit;
+                        personResume(resumeRoot.ydqx);
                   }
               });
 
-              //点击人员进行图片请求和渲染
-            //   $(".outter").on("click",".person",function () {
-            //       personId = $(this).attr("persid");
-            //       $.each(resumeRoot,function(k,v){
-            //           if(personId == v.persid){
-            //               personResume(v.ydqx);
-            //           }
-            //       })
-            //       var name = $(this).find("span").eq(1).text();
-            //       var unit = $(this).find("span").eq(0).text();
-            //     //   $(".context").css("display","none");
-            //       $(".resumeName").children().text(name);
-            //       var hard =
-            //           '<div class="hard page">'+
-            //               '<div class="" style="width:100%; background: #cdaf94;height: 100%; text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
-            //                   '<div style="padding-top: 150px;font-size: 40px;color: #C01919;font-family: Serif ;">干部人事档案</div>'+
-            //                   '<div style="top: 490px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">单位：_________'+
-            //                      '<span class="unit" style="position: absolute;left: 50%;"></span>'+
-            //                   '</div>'+
-            //                   '<div style="top: 520px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">姓名：_________'+
-            //                     '<span class="personName" style="position: absolute;left: 50%;"></span>'+
-            //                   '</div>'+
-            //               '</div>'+
-            //       '</div>'
-            //       $(".flipbook").append(hard);
-            //       $(".unit").text(unit);
-            //       $(".personName").text(name);
-            //       //初始化
-            //       picDouble(personId)
-            //   })
-
-            var hard =
-                      '<div class="hard page">'+
-                          '<div class="" style="width:100%; background: #cdaf94;height: 100%; text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
-                              '<div style="padding-top: 150px;font-size: 40px;color: #C01919;font-family: Serif ;">干部人事档案</div>'+
-                              '<div style="top: 490px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">单位：_________'+
-                                 '<span class="unit" style="position: absolute;left: 50%;"></span>'+
-                              '</div>'+
-                              '<div style="top: 520px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">姓名：_________'+
-                                '<span class="personName" style="position: absolute;left: 50%;"></span>'+
-                              '</div>'+
-                          '</div>'+
-                  '</div>'
-                  $(".flipbook").append(hard);
-        
-
-            picDouble()
-
-
-
-             function picDouble() {
-                            //   page =  v.materialcount
-                            //   $.each(v.children,function (k1,v1) {
-                            //       var base = "http://192.168.1.81:5000"
-                            //       var imgurl  = base+v1.filename;
-                            //       var imgurl2 = base+v1.betterfilename
-                            //       var moren = "./pages/loss.JPG";
-                            //       $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img id="'+v.materialid+'" onerror="showDefaultImg(this)" currentpage="'+v1.currentpage+'"  data-src2="'+imgurl2+'"  data-src1="'+imgurl+'" src= "'+moren+'" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
-                            //   })
-                            //   if(k == 0){
-                            //       $(".directoryInfo").find("span[materialidPageNum ='"+v.materialid+"']").text(2)
-                            //       window.lastpagenum += page;
-                            //   }else{
-                            //       $(".directoryInfo").find("span[materialidPageNum ='"+v.materialid+"']").text((window.lastpagenum))
-                            //       window.lastpagenum += page;
-                            //   }
-                        //   $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img id="'+v.materialid+'" onerror="showDefaultImg(this)" currentpage="'+v1.currentpage+'"  data-src2="'+imgurl2+'"  data-src1="'+imgurl+'" src= "./pages/1-1_1_00000001.JPG" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
-                          $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img  onerror="showDefaultImg(this)"  src= "./pages/1-1_1_00000001.JPG" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
-                          $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img  onerror="showDefaultImg(this)"  src= "./pages/1-1_2_00000002.JPG" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
-                          
-                          //   $('.flipbook .double').scissor();
-                        //   loadApp(data.count,w,h);
-                          loadApp(8,w,h);
-                          $(".readFile").css("display","block");
-                          full();
+            //目录信息页数
+             var imgIdsPage = [];
+             function picDouble(book) {
+               var moren = "./pages/loss.JPG";
+               $.each(book,function(k,v){
+                    if(v.pid != "04" && v.pid !="09"){
+                            // 照片状态
+                        if(v.photos.length == 0){
+                            $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img class="imgId" id="'+v.id+'" onerror="showDefaultImg(this)" currentpage=""  src= "'+moren+'" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
+                        }else{
+                            $.each(v.photos,function (k1,v1) {
+                                var imgurl  = v1.fileName;
+                                // var imgurl2 = base+v1.betterfilename
+                                $(".flipbook").append('<div class="pageInfo"><div class="gradient"></div><img id="'+v.id+'" onerror="showDefaultImg(this)" currentpage=""   data-src1="'+imgurl+'" src= "'+moren+'" alt="图片加载失败" style="height:100%;width: 100%;"></div>');
+                            })
+                        }
+                        var obj = {
+                            page:v.pageNum,
+                            imgId:v.id
+                        }
+                        imgIdsPage.push(obj);
+                    }
+                })
               }
 
              //阅档类型
@@ -235,7 +194,22 @@
              }
               // 渲染目录结构
               function personResume(resume) {
-                  $.each(resume,function (k,v) {
+                 hard =
+                            '<div class="hard page">'+
+                                '<div class="" style="width:100%; background: #cdaf94;height: 100%; text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
+                                    '<div style="padding-top: 150px;font-size: 40px;color: #C01919;font-family: Serif ;">干部人事档案</div>'+
+                                    '<div style="top: 490px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">单位：_________'+
+                                        '<span class="unit" style="position: absolute;left: 50%;"></span>'+
+                                    '</div>'+
+                                    '<div style="top: 520px;font-size: 25px;width:100%;text-align: center; color: #C01919;font-family: Serif ; position: relative">姓名：_________'+
+                                        '<span class="personName" style="position: absolute;left: 50%;"></span>'+
+                                    '</div>'+
+                                '</div>'+
+                        '</div>'
+                      $(".flipbook").append(hard);
+                      $(".unit").text(unit);
+                      $(".personName").text(name);
+                      $.each(resume,function (k,v) {
                       var directory = "";
                       directory +=
                           '<div style="padding: 15px 5px 0 5px;" >'+
@@ -243,16 +217,31 @@
                            '<div style="width: 100%;margin-top: 10px;" class="readMenus"> </div>'+
                           '</div>'
                       $(".directoryInfo").append(directory);
+                      
+                      picDouble(v.children);
+                      
                       //目录的具体信息
                       if(v.children.length != 0 ){
                           sonDirectory(v.children);
                       }
                   })
+                //渲染右侧目录页数
+                $.each(imgIdsPage,function(k1,v1){
+                   if(k1 == 0){
+                        $(".directoryInfo").find("span[materialidPageNum ='"+v1.imgId+"']").text(2)
+                        window.lastpagenum += v1.page;
+                    }else{
+                        $(".directoryInfo").find("span[materialidPageNum ='"+v1.imgId+"']").text((window.lastpagenum))
+                        window.lastpagenum += v1.page;
+                    } 
+                })
+                loadApp(9,w,h);
               }
               //渲染子级目录节点
               function  sonDirectory(ch) {
                   $.each(ch,function (k,v) {
-                      if(v.children.length>0){  //二级节点
+                    // 判断孩子不能为空
+                        if(v.children != null&&v.children.length>0){  //二级节点
                           var secondRoot =
                               '<div style="padding-top: 15px;">'+
                               '<div style="width: 90%;height: 25px; display: inline-block;overflow: hidden;">'+
@@ -261,6 +250,7 @@
                               '</div>';
                           $(".directoryInfo").append(secondRoot);
                           sonDirectory(v.children);
+                          picDouble(v.children);
                       }else{
                           var readMenus = "";
                           readMenus +=
@@ -273,10 +263,21 @@
                               '</div>'
                           $(".directoryInfo").append(readMenus);
                       }
-
                   });
+                 
               }
+
+
+
+
                function loadApp(m,w,h){
+                // 书籍最后一页硬纸壳
+                    var hard1 =
+                        '<div class="hard page">'+
+                            '<div class="" style="width:100%; background: #cdaf94;height: 100%; text-align: center; box-shadow:5px 5px 10px #776a5f;" >'+
+                            '</div>'+
+                        '</div>'
+                    $(".flipbook").append(hard1);
                    if (book.width()==0 || book.height()==0) {
                        setTimeout(loadApp(m,w,h), 10);
                        return;
@@ -325,13 +326,13 @@
                                    }
                                })
                                //回退到封面界面
-                               if(current[0] == 0 && current.length == 2 || current.length ==1 && current[0] == 1){
-                                   $(".currentPage").text("封面");
-                               }else{
-                                   var currentMaterialidTotal = $(".directoryInfo").find("span[materialidPageNum ='"+ $(".p"+ (current[0])).children().eq(1).attr("id") +"']").attr("pageNum");
-                                   currentNum = $(".p"+ (current[0])).children().eq(1).attr("currentpage");
-                                   $(".currentPage").text($(".p"+ (current[0])).children().eq(1).attr("currentpage") +"/"+currentMaterialidTotal);
-                               }
+                            //    if(current[0] == 0 && current.length == 2 || current.length ==1 && current[0] == 1){
+                            //        $(".currentPage").text("封面");
+                            //    }else{
+                            //        var currentMaterialidTotal = $(".directoryInfo").find("span[materialidPageNum ='"+ $(".p"+ (current[0])).children().eq(1).attr("id") +"']").attr("pageNum");
+                            //        currentNum = $(".p"+ (current[0])).children().eq(1).attr("currentpage");
+                            //        $(".currentPage").text($(".p"+ (current[0])).children().eq(1).attr("currentpage") +"/"+currentMaterialidTotal);
+                            //    }
                            }
                        }
                    });
@@ -390,7 +391,8 @@
                })
               //键盘控制翻页
               $(document).keydown(function(e){
-                  var previous = 37, next = 39,fullScreen=122;
+                // fullScreen=122
+                  var previous = 37, next = 39;
                   switch (e.keyCode) {
                       case previous:
                           $('.flipbook').turn('previous');
@@ -400,18 +402,133 @@
                           $('.flipbook').turn('next');
                           e.preventDefault();
                           break;
-                      case fullScreen:
-                          e.preventDefault();
-                          full();
-                          break;
+                    //   case fullScreen:
+                    //       e.preventDefault();
+                    //       full();
+                    //       break;
                   }
               });
+
+
+
+
               yepnope({
                     test : Modernizr.csstransforms,
                     yep:  ['./js/turn.js'],
                     nope: ['./js/turn.html4.min.js'],
                     both: ['./js/zoom.min.js','./js/scissor.min.js', 'css/book.css','js/book.js'],
               });
+
+
+
+              if ($.isTouch) {
+                 $('.flipbook').bind('touchstart',zoomScale);
+             } else {
+                 $('.flipbook').click(zoomScale);
+             }
+             var canvas,context;
+             var img,imgX=0,imgY=0,imgScale = 4;
+             function zoomScale(event){
+                 event.stopPropagation()
+                 var region = $(event.target);
+                 var imgUrl = $(region).next()[0].currentSrc;
+                 console.log(imgUrl);
+                 $(".close").css("display","block");
+                 $("#myCanvas").css("display","block");
+                 loadImg(imgUrl);
+                 canvasEventsInit();
+             }
+             //加载图片
+             function loadImg(src){
+                 canvas = document.getElementById('myCanvas'); //画布对象
+                 context = canvas.getContext('2d');//画布显示二维图片
+                 img = new Image();
+                 full();
+                 img.onload = function () {
+                     drawImage();
+                 }
+                 img.src = src
+             }
+             //绘制图片
+             function drawImage(){
+                 context.clearRect(0, 0, canvas.width, canvas.height);
+                 context.drawImage(
+                     img, //规定要使用的图像、画布或视频。
+                     0, 0, //开始剪切的 x 坐标位置。
+                     img.width, img.height,  //被剪切图像的高度。
+                     imgX, imgY,//在画布上放置图像的 x 、y坐标位置。
+                     img.width * imgScale, img.height * imgScale  //要使用的图像的宽度、高度
+                 );
+             }
+             window.moveflag = false;
+             window.realx = 0;
+             window.realy = 0;
+             /*事件注册*/
+             function canvasEventsInit() {
+                 canvas.onmousedown = function (event) {
+                     //当前图片的位置
+                     window.clickpoint = windowToCanvas(event.clientX, event.clientY);  //坐标转换，将窗口坐标转换成canvas的坐标
+                     window.moveflag = true;
+                     canvas.onmousemove = function (evt) {  //移动
+                         if(window.moveflag){
+                             canvas.style.cursor = 'move';
+                             var pos = windowToCanvas(evt.clientX, evt.clientY);
+                             var x = pos.x - window.clickpoint.x;
+                             var y = pos.y - window.clickpoint.y;
+                             pos = window.clickpoint;
+                             imgX  = x  + window.realx
+                             imgY  = y  + window.realy;
+                             drawImage();  //重新绘制图片
+                         }
+                     };
+                     canvas.onmouseup = function () {
+                         canvas.onmousemove = null;
+                         canvas.onmouseup = null;
+                         canvas.style.cursor = 'default';
+                         window.moveflag = false;
+                         window.realx = imgX;
+                         window.realy= imgY;
+                     };
+                 };
+                 canvas.onmousewheel = canvas.onwheel = function (event) {    //滚轮放大缩小
+                     var b = 1.2
+                     var pos = windowToCanvas (event.clientX, event.clientY);
+                     event.wheelDelta = event.wheelDelta ? event.wheelDelta : (event.deltalY * (-40));  //获取当前鼠标的滚动情况
+                     if (event.wheelDelta > 0) {  //放大
+                         if (imgScale > 2.5) {
+                             // alert("不能再放大了！");
+                             return;
+                         }
+                         imgScale *= b;
+                         imgX = pos.x - (pos.x - imgX) * b;
+                         imgY = pos.y - (pos.y - imgY) * b;
+                     } else {                  //缩小
+                         if (imgScale < 0.1) {
+                             // alert("不能再缩小了！");
+                             return;
+                         }
+                         imgScale /= b;
+                         imgX = pos.x - (pos.x - imgX) / b;
+                         imgY = pos.y - (pos.y - imgY) / b;
+                     }
+                     drawImage();   //重新绘制图片
+                 };
+             }
+             /*坐标转换*/
+             function windowToCanvas(x,y) {
+                 var box = canvas.getBoundingClientRect();  //这个方法返回一个矩形对象，包含四个属性：left、top、right和bottom。分别表示元素各边与页面上边和左边的距离
+                 return {
+                     x: x - box.left - (box.width - canvas.width) / 2,
+                     y: y - box.top - (box.height - canvas.height) / 2
+                 };
+             }
+
+             //关闭画布阅览
+             $(".close").on("click",function () {
+                 $(".close").css("display","none");
+                 $("#myCanvas").css("display","none");
+             })
+
 
              $('.catalog').on('mouseout',function () {
                  $(this).css("display","none");
