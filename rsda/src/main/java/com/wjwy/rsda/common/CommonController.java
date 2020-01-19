@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-17 15:35:16
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-19 16:06:25
+ * @LastEditTime : 2020-01-19 16:12:58
  */
 package com.wjwy.rsda.common;
 
@@ -18,12 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.wjwy.rsda.common.config.ServerConfig;
 import com.wjwy.rsda.common.enums.AjaxResult;
+import com.wjwy.rsda.common.enums.EnumEntitys;
 import com.wjwy.rsda.common.enums.MessageConstant;
 import com.wjwy.rsda.common.util.FileUploadUtils;
 import com.wjwy.rsda.common.util.FileUtils;
+import com.wjwy.rsda.common.util.Log;
 import com.wjwy.rsda.common.util.StringUtils;
-import com.wjwy.rsda.entity.User;
-import com.wjwy.rsda.services.UserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +36,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 通用请求处理
@@ -51,8 +53,8 @@ public class CommonController {
     /**
      * 用户中心业务
      */
-    @Autowired
-    private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
     /**
      * 通用下载请求
@@ -61,7 +63,9 @@ public class CommonController {
      * @param delete   是否删除
      */
     @GetMapping("common/download")
-    public void fileDownload(String fileName, Boolean delete, HttpServletResponse response,
+    @Log(title = "文件管理", businessType = EnumEntitys.ONLOAD)
+    @ApiOperation(value = "通用下载请求", notes = "参数:fileName-对象 delete ")
+    public void fileDownload(String fileName, Boolean delete, @ApiIgnore HttpServletResponse response,
             HttpServletRequest request) {
         try {
             if (!FileUtils.isValidFilename(fileName)) {
@@ -88,6 +92,8 @@ public class CommonController {
      */
     @PostMapping("/common/upload")
     @ResponseBody
+    @Log(title = "文件管理", businessType = EnumEntitys.UPLOAD)
+    @ApiOperation(value = "通用上传请求", notes = "参数:file-对象  ")
     public AjaxResult uploadFile(MultipartFile file) throws Exception {
         try {
             // 上传文件路径
@@ -108,6 +114,8 @@ public class CommonController {
      * 本地资源通用下载
      */
     @GetMapping("/common/download/resource")
+    @Log(title = "文件管理", businessType = EnumEntitys.ONLOAD)
+    @ApiOperation(value = "本地资源通用下载", notes = "参数:resource-对象  ")
     public void resourceDownload(String resource, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         // 本地资源路径

@@ -4,7 +4,7 @@
  * @Author: ZHANGQI
  * @Date: 2019-12-04 08:27:14
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-17 08:17:43
+ * @LastEditTime : 2020-01-19 16:09:41
  */
 package com.wjwy.rsda.common.enums;
 import io.swagger.annotations.ApiModel;
@@ -74,6 +74,10 @@ public enum EnumEntitys {
      * 强退
      */
     FORCE("FORCE", "强退"),
+
+    ONLOAD("ONLOAD", "下载"),
+    
+    UPLOAD("UPLOAD", "上传"),
 
     /**
      * 生成代码
