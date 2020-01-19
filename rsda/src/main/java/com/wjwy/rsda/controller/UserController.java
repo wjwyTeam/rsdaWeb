@@ -118,6 +118,7 @@ public class UserController {
 	 * 修改头像
 	 */
 	@GetMapping("/personPhoto")
+	@ApiOperation(value = "修改头像页面")
 	public ModelAndView personPhoto(@ApiIgnore ModelAndView model) {
 		User user = ShiroUtils.getUser();
 		model.addObject("user", userService.getPersonInfo(user.getUserId()));
@@ -129,6 +130,7 @@ public class UserController {
 	 * 保存头像
 	 */
 	@Log(title = "个人信息", businessType = EnumEntitys.UPDATE)
+	@ApiOperation(value = "保存头像")
 	@PostMapping("/updateAvatar")
 	@ResponseBody
 	public ResponseWrapper updateAvatar(@RequestParam("file") MultipartFile file) {
