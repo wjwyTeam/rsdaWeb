@@ -4,9 +4,14 @@
  * @Author: ZHANGQI
  * @Date: 2020-01-17 15:35:16
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-17 15:44:53
+ * @LastEditTime : 2020-01-19 16:06:25
  */
 package com.wjwy.rsda.common;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +22,8 @@ import com.wjwy.rsda.common.enums.MessageConstant;
 import com.wjwy.rsda.common.util.FileUploadUtils;
 import com.wjwy.rsda.common.util.FileUtils;
 import com.wjwy.rsda.common.util.StringUtils;
+import com.wjwy.rsda.entity.User;
+import com.wjwy.rsda.services.UserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,16 +35,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.annotations.Api;
+
 /**
  * 通用请求处理
  */
 @RequestMapping("/upload")
 @RestController
+@Api(value = "文件管理", tags = "A1-文件管理API维护")
 public class CommonController {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
 
     @Autowired
     private ServerConfig serverConfig;
+    /**
+     * 用户中心业务
+     */
+    @Autowired
+    private UserService userService;
 
     /**
      * 通用下载请求
@@ -107,4 +122,41 @@ public class CommonController {
                 "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, downloadName));
         FileUtils.writeBytes(downloadPath, response.getOutputStream());
     }
+
+    // public void save() {
+    //     // 创建实体
+    //     User board = new User();
+    //     // byte[] exportBoard;
+    //     try {
+    //         // exportBoard = InputStream2ByteArray("D:\\ceshi.png");
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     }
+    //     // board.setImg(exportBoard);
+    //     // 调用保存方法
+    //     userService.insert(board);
+    //     // 具体业务~略
+    // }
+
+    // 主要的工具方法
+    public byte[] InputStream2ByteArray(String filePath) throws IOException {
+
+        InputStream in = new FileInputStream(filePath);
+        byte[] data = toByteArray(in);
+        in.close();
+
+        return data;
+    }
+
+    public byte[] toByteArray(InputStream in) throws IOException {
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024 * 4];
+        int n = 0;
+        while ((n = in.read(buffer)) != -1) {
+            out.write(buffer, 0, n);
+        }
+        return out.toByteArray();
+    }
+ 
 }

@@ -4,7 +4,7 @@
  * @Author: zgr
  * @Date: 2019-11-30 22:58:25
  * @LastEditors  : ZHANGQI
- * @LastEditTime : 2020-01-06 17:48:16
+ * @LastEditTime : 2020-01-19 15:57:44
  */
 package com.wjwy.rsda.entity;
 
@@ -127,6 +127,8 @@ public class User implements Serializable {
 		return isAdmin(this.userId);
 	}
 
+	@Transient
+	private byte[] img;
 	public static boolean isAdmin(String userId) {
 		return userId != null;
 	}
